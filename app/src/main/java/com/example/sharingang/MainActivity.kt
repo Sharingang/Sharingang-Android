@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding: ActivityMainBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_main)
-       binding.description = intent.getStringExtra("LAST_DESCRIPTION")
+        binding.description = intent.getStringExtra(Intent.EXTRA_TEXT)
     }
 
     fun createNewItem(view: View) {
