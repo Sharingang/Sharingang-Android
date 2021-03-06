@@ -15,19 +15,16 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class NewItemActivityTest {
+    // We start with the main activity, and then navigate where we want
     @get:Rule
-    val activityRule = ActivityScenarioRule(NewItemActivity::class.java)
+    val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
     private val expectedString = "Hello World!"
 
     @Test
-    fun newItemPromptIsVisible() {
-        onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
-    }
-
-    @Test
     fun aDescriptionCanBeEnteredAndSeenOnMainActivity() {
-        Intents.init()
+        onView(withId(R.id.newItemButton)).perform(click())
+        onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
         onView(withId(R.id.editItemDescription)).perform(
             typeText(expectedString),
             closeSoftKeyboard()
@@ -35,8 +32,6 @@ class NewItemActivityTest {
         val button = onView(withId(R.id.createItemButton))
         button.check(matches(withText("Create Item")))
         button.perform(click())
-        Intents.intended(IntentMatchers.hasComponent(MainActivity::class.qualifiedName))
         onView(withId(R.id.lastDescription)).check(matches(withText(expectedString)))
-        Intents.release()
     }
 }

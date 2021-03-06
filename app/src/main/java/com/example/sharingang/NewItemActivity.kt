@@ -1,5 +1,6 @@
 package com.example.sharingang
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -18,6 +19,7 @@ class NewItemActivity : AppCompatActivity() {
     fun createNewItem(view: View) {
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra(Intent.EXTRA_TEXT, binding.description)
-        startActivity(intent)
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 }
