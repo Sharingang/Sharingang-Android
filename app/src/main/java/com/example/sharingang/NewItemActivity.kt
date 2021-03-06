@@ -17,10 +17,7 @@ class NewItemActivity : AppCompatActivity() {
 
     fun createNewItem(view: View) {
         val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra(
-            "LAST_DESCRIPTION",
-            binding.description
-        )
+        intent.putExtra(Intent.EXTRA_TEXT, binding.description)
         startActivity(intent)
     }
 }
