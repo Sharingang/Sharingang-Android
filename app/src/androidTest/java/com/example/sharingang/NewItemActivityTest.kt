@@ -3,8 +3,6 @@ package com.example.sharingang
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -32,6 +30,6 @@ class NewItemActivityTest {
         val button = onView(withId(R.id.createItemButton))
         button.check(matches(withText("Create Item")))
         button.perform(click())
-        onView(withId(R.id.lastDescription)).check(matches(withText(expectedString)))
+        onView(withId(R.id.lastItem)).check(matches(withText(expectedString)))
     }
 }
