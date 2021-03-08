@@ -29,4 +29,9 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, NewItemActivity::class.java)
         resultLauncher.launch(intent)
     }
+
+    fun setItemPrice(view: View) {
+        val intent = Intent(this, SetPriceActivity::class.java)
+        startActivity(intent)
+    }
 }

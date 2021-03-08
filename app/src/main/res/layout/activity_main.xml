@@ -28,5 +28,12 @@
             android:onClick="createNewItem"
             android:text="@string/new_item" />
 
+        <Button
+            android:id="@+id/buttonSetPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="setItemPrice"
+            android:text="Set Price" />
+
     </LinearLayout>
 </layout>
