@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.sharingang.databinding.ActivityMainBinding
 import com.example.sharingang.items.Item
+import com.example.sharingang.items.ItemsAdapter
 import com.example.sharingang.items.ItemsViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -29,6 +30,13 @@ class MainActivity : AppCompatActivity() {
             DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+        val adapter = ItemsAdapter()
+        binding.itemList.adapter = adapter
+        viewModel.items.observe(this, {
+            it?.let {
+                adapter.data = it
+            }
+        })
     }
 
     fun createNewItem(view: View) {
