@@ -12,7 +12,7 @@
         android:layout_height="56dp"
         android:layout_marginTop="206dp"
         android:ems="10"
-        android:hint="Item Price"
+        android:hint="Default: 0.0"
         android:inputType="numberDecimal"
         app:layout_constraintEnd_toStartOf="@+id/textView"
         app:layout_constraintHorizontal_bias="0.5"
