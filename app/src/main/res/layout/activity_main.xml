@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="description"
-            type="String" />
+            name="viewModel"
+            type="com.example.sharingang.items.ItemsViewModel" />
     </data>
 
     <LinearLayout
@@ -16,17 +16,17 @@
         tools:context=".MainActivity">
 
         <TextView
-            android:id="@+id/lastDescription"
+            android:id="@+id/lastItem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{description}" />
+            android:text="@{viewModel.lastItem.description}"
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/newItemButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="createNewItem"
             android:text="@string/new_item" />
-
     </LinearLayout>
 </layout>

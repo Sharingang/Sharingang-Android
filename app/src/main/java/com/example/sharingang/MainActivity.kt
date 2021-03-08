@@ -8,6 +8,8 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.sharingang.databinding.ActivityMainBinding
+import com.example.sharingang.items.Item
+import com.example.sharingang.items.ItemsViewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -15,14 +17,16 @@ class MainActivity : AppCompatActivity() {
     private val resultLauncher =
         registerForActivityResult(StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                binding.description = result.data?.getStringExtra(Intent.EXTRA_TEXT) ?: ""
+                val description = result.data?.getStringExtra(Intent.EXTRA_TEXT) ?: ""
+                binding.viewModel!!.addItem(Item(description))
             }
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        binding.description = intent.getStringExtra(Intent.EXTRA_TEXT)
+        binding.lifecycleOwner = this
+        binding.viewModel = ItemsViewModel()
     }
 
     fun createNewItem(view: View) {
