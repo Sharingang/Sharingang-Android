@@ -17,7 +17,7 @@ class NewItemActivity : AppCompatActivity() {
     }
 
     fun createNewItem(view: View) {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent()
         intent.putExtra(Intent.EXTRA_TEXT, binding.description)
         setResult(Activity.RESULT_OK, intent)
         finish()
