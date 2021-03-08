@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.sharingang.databinding.ActivityMainBinding
@@ -12,21 +13,22 @@ import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsViewModel
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+    private val viewModel: ItemsViewModel by viewModels()
 
     private val resultLauncher =
         registerForActivityResult(StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val description = result.data?.getStringExtra(Intent.EXTRA_TEXT) ?: ""
-                binding.viewModel!!.addItem(Item(description))
+                viewModel.addItem(Item(description))
             }
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        val binding: ActivityMainBinding =
+            DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
-        binding.viewModel = ItemsViewModel()
+        binding.viewModel = viewModel
     }
 
     fun createNewItem(view: View) {
