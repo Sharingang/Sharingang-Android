@@ -26,7 +26,7 @@ class SetPriceActivity : AppCompatActivity() {
             if(editTextPrice.text.isNullOrBlank()) defaultPrice // if no price has been entered
             else editTextPrice.text.toString().toDouble()
 
-        intent.putExtra(EXTRA_PRICE, "The price you set is: $price $CHOSEN_CURRENCY")
+        intent.putExtra(EXTRA_PRICE, "The price you set is: $price $CHOSEN_CURRENCY.")
         startActivity(intent)
     }
 }

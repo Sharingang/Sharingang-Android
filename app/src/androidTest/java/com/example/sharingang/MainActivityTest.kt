@@ -29,4 +29,14 @@ class MainActivityTest {
         intended(hasComponent(NewItemActivity::class.qualifiedName))
         Intents.release()
     }
+
+    @Test
+    fun clickingOnSetPriceStartsSetPriceActivity() {
+        Intents.init()
+        val button = onView(withId(R.id.buttonSetPrice))
+        button.check(matches(withText("Set Price")))
+        button.perform(click())
+        intended(hasComponent(SetPriceActivity::class.qualifiedName))
+        Intents.release()
+    }
 }
