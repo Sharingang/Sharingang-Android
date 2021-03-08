@@ -3,8 +3,7 @@ package com.example.sharingang
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
@@ -17,19 +16,31 @@ class NewItemActivityTest {
     @get:Rule
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
-    private val expectedString = "Hello World!"
+    private val firstItem = "First Item"
+    private val secondItem = "Second Item"
 
     @Test
     fun aDescriptionCanBeEnteredAndSeenOnMainActivity() {
         onView(withId(R.id.newItemButton)).perform(click())
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
         onView(withId(R.id.editItemDescription)).perform(
-            typeText(expectedString),
+            typeText(firstItem),
             closeSoftKeyboard()
         )
         val button = onView(withId(R.id.createItemButton))
         button.check(matches(withText("Create Item")))
         button.perform(click())
-        onView(withId(R.id.lastItem)).check(matches(withText(expectedString)))
+
+        onView(withText(firstItem)).check(matches(isDisplayed()))
+
+        onView(withId(R.id.newItemButton)).perform(click())
+        onView(withId(R.id.editItemDescription)).perform(
+            typeText(secondItem),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.createItemButton)).perform(click())
+
+        onView(withText(firstItem)).check(matches(isDisplayed()))
+        onView(withText(secondItem)).check(matches(isDisplayed()))
     }
 }

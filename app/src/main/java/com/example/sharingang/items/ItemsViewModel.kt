@@ -9,13 +9,18 @@ import androidx.lifecycle.ViewModel
  */
 class ItemsViewModel : ViewModel() {
 
-    private val _lastItem = MutableLiveData<Item?>()
+    private val itemsList = ArrayList<Item>()
+    private val _items = MutableLiveData<List<Item>>()
+
+    init {
+        _items.value = itemsList
+    }
 
     /**
      * The last item created
      */
-    val lastItem: LiveData<Item?>
-        get() = _lastItem
+    val items: LiveData<List<Item>>
+        get() = _items
 
     /**
      * Add a new item.
@@ -23,6 +28,7 @@ class ItemsViewModel : ViewModel() {
      * @param item the item to be added
      */
     fun addItem(item: Item) {
-        _lastItem.value = item
+        itemsList.add(item)
+        _items.value = itemsList
     }
 }
