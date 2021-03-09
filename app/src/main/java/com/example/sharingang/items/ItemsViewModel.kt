@@ -1,7 +1,6 @@
 package com.example.sharingang.items
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 /**
@@ -9,18 +8,14 @@ import androidx.lifecycle.ViewModel
  */
 class ItemsViewModel : ViewModel() {
 
-    private val itemsList = ArrayList<Item>()
-    private val _items = MutableLiveData<List<Item>>()
-
-    init {
-        _items.value = itemsList
-    }
+    // TODO use dependency injection, maybe Hilt
+    private val itemRepository: ItemRepository = FirestoreItemRepository()
 
     /**
      * The last item created
      */
     val items: LiveData<List<Item>>
-        get() = _items
+        get() = itemRepository.getAllItems()
 
     /**
      * Add a new item.
@@ -28,7 +23,6 @@ class ItemsViewModel : ViewModel() {
      * @param item the item to be added
      */
     fun addItem(item: Item) {
-        itemsList.add(item)
-        _items.value = itemsList
+        itemRepository.addItem(item)
     }
 }

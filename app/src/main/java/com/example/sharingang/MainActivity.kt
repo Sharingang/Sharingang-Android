@@ -12,6 +12,7 @@ import com.example.sharingang.databinding.ActivityMainBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsAdapter
 import com.example.sharingang.items.ItemsViewModel
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private val viewModel: ItemsViewModel by viewModels()
@@ -20,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         registerForActivityResult(StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val description = result.data?.getStringExtra(Intent.EXTRA_TEXT) ?: ""
-                viewModel.addItem(Item(description))
+                viewModel.addItem(Item("Title", description, listOf(), 0, Date()))
             }
         }
 
