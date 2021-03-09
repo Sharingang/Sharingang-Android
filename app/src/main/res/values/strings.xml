@@ -3,4 +3,5 @@
     <string name="new_item">New Item</string>
     <string name="description">Description</string>
     <string name="create_item">Create Item</string>
+    <string name="get_localisation">Get localisation</string>
 </resources>
