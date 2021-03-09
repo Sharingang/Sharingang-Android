@@ -23,6 +23,10 @@ A document is very similar to JSON object, it supports arrays, nested objects, n
   - where clause
   - order by clause
 
+Useful conditions for the where clause:
+- [whereIn](https://firebase.google.com/docs/firestore/query-data/queries?hl=en#in_not-in_and_array-contains-any) for example to get all items where the id is in the user's favorite list
+- [whereArrayContains](https://firebase.google.com/docs/firestore/query-data/queries?hl=en#array_membership) for example if items have an array of tags/categories
+
 Not a relational database so we cannot do joins, we have to manually fetch the referenced documents.
 
 All queries can either
