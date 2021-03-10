@@ -24,7 +24,6 @@ class SetPriceActivityTest {
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
 
-
     @Test
     fun priceEnteredIsSeenOnSummary() {
         val currency = SetPriceActivity.CHOSEN_CURRENCY

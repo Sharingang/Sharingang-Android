@@ -3,4 +3,8 @@
     <string name="new_item">New Item</string>
     <string name="description">Description</string>
     <string name="create_item">Create Item</string>
+    <string name="default_price">Default: 0.0</string>
+    <string name="text_usd">USD</string>
+    <string name="text_ok">OK</string>
+    <string name="text_SetPrice">Set Price</string>
 </resources>
