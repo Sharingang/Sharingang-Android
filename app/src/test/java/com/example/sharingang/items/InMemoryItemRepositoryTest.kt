@@ -12,7 +12,7 @@ class InMemoryItemRepositoryTest {
 
     @Test
     fun inMemoryItemRepositoryStartsEmpty() {
-        val repo = InMemoryItemRepository()
+        val repo: ItemRepository = InMemoryItemRepository()
         runBlocking {
             assert(repo.getAllItems().isEmpty())
         }
@@ -20,7 +20,7 @@ class InMemoryItemRepositoryTest {
 
     @Test
     fun inMemoryItemRepositoryCanRetrieveStoredData() {
-        val repo = InMemoryItemRepository()
+        val repo: ItemRepository = InMemoryItemRepository()
         runBlocking {
             val item = Item(title = "My title", description = "My description")
             // To be able to compare the items, we have to save the generated id
