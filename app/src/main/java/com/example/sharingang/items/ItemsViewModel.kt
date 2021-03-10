@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 class ItemsViewModel : ViewModel() {
 
     // TODO use dependency injection, maybe Hilt
-    private val itemRepository: ItemRepository = FirestoreItemRepository()
+    private val itemRepository: ItemRepository = FirestoreItemRepository(true)
 
     /**
      * The last item created
