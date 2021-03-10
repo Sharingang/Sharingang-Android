@@ -3,21 +3,26 @@ package com.example.sharingang.items
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.sharingang.BuildConfig
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 import java.lang.Exception
+import javax.inject.Inject
+import javax.inject.Singleton
 
 private const val TAG = "FirestoreItemRepository"
 
-class FirestoreItemRepository(useFirebaseEmulator: Boolean = false) : ItemRepository {
+@Singleton
+class FirestoreItemRepository @Inject constructor() :
+    ItemRepository {
     private val firestore = Firebase.firestore
     private val collectionName = "items"
 
     init {
-        if (useFirebaseEmulator) {
+        if (BuildConfig.DEBUG) {
             // 10.0.2.2 is the special IP address to connect to the 'localhost' of
             // the host computer from an Android emulator.
             firestore.useEmulator("10.0.2.2", 8080)

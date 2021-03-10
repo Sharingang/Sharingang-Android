@@ -12,8 +12,10 @@ import com.example.sharingang.databinding.ActivityMainBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsAdapter
 import com.example.sharingang.items.ItemsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val viewModel: ItemsViewModel by viewModels()
 

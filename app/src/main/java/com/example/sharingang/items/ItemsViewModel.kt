@@ -3,15 +3,17 @@ package com.example.sharingang.items
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * ItemsViewModel models the state of the fragment for viewing items
  */
-class ItemsViewModel(
-    // TODO use dependency injection, maybe Hilt
-    private val itemRepository: ItemRepository = FirestoreItemRepository(true)
+@HiltViewModel
+class ItemsViewModel @Inject constructor(
+    private val itemRepository: ItemRepository
 ) : ViewModel() {
 
     /**

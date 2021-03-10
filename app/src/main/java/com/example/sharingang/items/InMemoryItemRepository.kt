@@ -3,9 +3,10 @@ package com.example.sharingang.items
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.HashMap
 
-class MockItemRepository : ItemRepository {
+class InMemoryItemRepository @Inject constructor() : ItemRepository {
 
     private val itemsMap = HashMap<String, Item>()
     private val itemsLiveData = MutableLiveData<List<Item>>()
@@ -30,7 +31,7 @@ class MockItemRepository : ItemRepository {
         val id = UUID.randomUUID().toString()
         item.id = id
         itemsMap[id] = item
-        itemsLiveData.value = itemsMap.values.toList()
+        itemsLiveData.postValue(itemsMap.values.toList())
         return id
     }
 }

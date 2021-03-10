@@ -3,6 +3,7 @@
     package="com.example.sharingang">
 
     <application
+        android:name=".SharingangApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
