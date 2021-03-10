@@ -23,6 +23,7 @@ class FirestoreItemRepository @Inject constructor() :
 
     init {
         if (BuildConfig.DEBUG) {
+            Log.d(TAG, "Using Firebase emulator.")
             // 10.0.2.2 is the special IP address to connect to the 'localhost' of
             // the host computer from an Android emulator.
             firestore.useEmulator("10.0.2.2", 8080)
@@ -32,6 +33,8 @@ class FirestoreItemRepository @Inject constructor() :
             firestore.firestoreSettings = firestoreSettings {
                 isPersistenceEnabled = false
             }
+        } else {
+            Log.d(TAG, "Using production Firebase.")
         }
     }
 
