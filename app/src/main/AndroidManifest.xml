@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.sharingang">
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,6 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Sharingang">
+        <!---<service android:name=""
+            android:foregroundServiceType="location" />-->
         <activity android:name=".MainActivity" /> <!--TODO rechange MainActivity into MapActivity before merging-->
         <activity android:name=".NewItemActivity" />
         <activity android:name=".MapActivity">
