@@ -2,5 +2,3 @@ exclude_patterns:
   - "**/test/"
   - "**/androidTest/"
   - "**test"
-  - "app/src/main/java/com/example/sharingang/SharingangApplication.kt"
-  - "app/src/main/java/com/example/sharingang/items/ItemRepositoryModule.kt"
