@@ -3,8 +3,11 @@ package com.example.sharingang.items
 import androidx.lifecycle.LiveData
 
 interface ItemRepository {
-    fun getAllItems(): LiveData<List<Item>>
+    suspend fun getAllItems(): List<Item>
 
-    // TODO return promise maybe?
-    fun addItem(item: Item)
+    suspend fun addItem(item: Item): String?
+
+    suspend fun getItem(id: String): Item?
+
+    fun getAllItemsLiveData(): LiveData<List<Item>>
 }

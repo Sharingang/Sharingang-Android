@@ -16,5 +16,7 @@ data class Item(
     /** Price in cents */
     val price: Int = 0,
 
-    val createdAt: Date = Date()
+    val createdAt: Date = Date(),
+
+    var id: String? = null
 )

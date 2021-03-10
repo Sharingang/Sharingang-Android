@@ -7,6 +7,8 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.tasks.await
+import java.lang.Exception
 
 private const val TAG = "FirestoreItemRepository"
 
@@ -28,10 +30,32 @@ class FirestoreItemRepository(useFirebaseEmulator: Boolean = false) : ItemReposi
         }
     }
 
-    override fun getAllItems(): LiveData<List<Item>> {
+    override suspend fun getItem(id: String): Item? {
+        val document = firestore.collection(collectionName)
+            .document(id)
+            .get()
+            .await()
+
+        return if (document != null) {
+            document.toObject(Item::class.java)
+        } else {
+            Log.d(TAG, "No Item with ID = $id")
+            null
+        }
+    }
+
+    override suspend fun getAllItems(): List<Item> {
+        val result = firestore.collection(collectionName)
+            .orderBy("createdAt", Query.Direction.DESCENDING)
+            .get()
+            .await()
+
+        return result.map { it.toObject(Item::class.java) }
+    }
+
+    override fun getAllItemsLiveData(): LiveData<List<Item>> {
         val query = firestore.collection(collectionName)
             .orderBy("createdAt", Query.Direction.DESCENDING)
-            .limit(20)
 
         val itemsLiveData = MutableLiveData<List<Item>>()
 
@@ -46,14 +70,16 @@ class FirestoreItemRepository(useFirebaseEmulator: Boolean = false) : ItemReposi
         return itemsLiveData
     }
 
-    override fun addItem(item: Item) {
-        firestore.collection(collectionName)
-            .add(item)
-            .addOnSuccessListener { documentReference ->
-                Log.d(TAG, "Item added with ID: ${documentReference.id}")
-            }
-            .addOnFailureListener { e ->
-                Log.e(TAG, "Error adding new item to Firebase", e)
-            }
+    override suspend fun addItem(item: Item): String? {
+        return try {
+            val document = firestore.collection(collectionName)
+                .add(item)
+                .await()
+            Log.d(TAG, "Item added with ID: ${document.id}")
+            document.id
+        } catch (e: Exception) {
+            Log.e(TAG, "Error adding new item to Firebase", e)
+            null
+        }
     }
 }
