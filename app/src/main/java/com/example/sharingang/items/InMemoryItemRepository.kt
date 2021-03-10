@@ -6,6 +6,10 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.collections.HashMap
 
+/**
+ * In-memory implementation of the ItemRepository
+ * The data is not persisted.
+ */
 class InMemoryItemRepository @Inject constructor() : ItemRepository {
 
     private val itemsMap = HashMap<String, Item>()
@@ -28,6 +32,7 @@ class InMemoryItemRepository @Inject constructor() : ItemRepository {
     }
 
     override suspend fun addItem(item: Item): String {
+        require(item.id == null)
         val id = UUID.randomUUID().toString()
         item.id = id
         itemsMap[id] = item

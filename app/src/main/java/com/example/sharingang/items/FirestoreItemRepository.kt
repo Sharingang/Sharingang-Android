@@ -16,6 +16,11 @@ import javax.inject.Singleton
 private const val TAG = "FirestoreItemRepository"
 
 @Singleton
+/**
+ * Implementation of ItemRepository using the Firestore database
+ *
+ * During development it requires running the Firebase emulator (see README.md)
+ */
 class FirestoreItemRepository @Inject constructor() :
     ItemRepository {
     private val firestore = Firebase.firestore
@@ -79,6 +84,8 @@ class FirestoreItemRepository @Inject constructor() :
     }
 
     override suspend fun addItem(item: Item): String? {
+        require(item.id == null)
+        
         return try {
             val document = firestore.collection(collectionName)
                 .add(item)
