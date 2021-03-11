@@ -58,7 +58,7 @@ class MapActivityTest {
     @Test
     fun clickingOnButtonDisplaysLocation() {
         val button = onView(withId(R.id.button_get_location))
-        button.check(matches(withText("Get localisation")))
+        button.check(matches(withText("Get Location")))
         val text = onView(withId(R.id.location_display))
         text.check(matches(withText("")))
 
