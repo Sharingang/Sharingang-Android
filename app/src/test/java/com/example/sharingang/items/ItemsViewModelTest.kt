@@ -10,7 +10,7 @@ class ItemsViewModelTest {
     val rule = InstantTaskExecutorRule()
 
     @Test
-    fun itemsViewModelStartsEmpty() {
+    fun startsEmpty() {
         val model = ItemsViewModel(InMemoryItemRepository())
         val value = model.items.getOrAwaitValue()
         assert(value.isEmpty())

@@ -11,7 +11,7 @@ class InMemoryItemRepositoryTest {
     val rule = InstantTaskExecutorRule()
 
     @Test
-    fun inMemoryItemRepositoryStartsEmpty() {
+    fun startsEmpty() {
         val repo: ItemRepository = InMemoryItemRepository()
         runBlocking {
             assert(repo.getAllItems().isEmpty())
@@ -20,7 +20,7 @@ class InMemoryItemRepositoryTest {
     }
 
     @Test
-    fun inMemoryItemRepositoryCanAddItem() {
+    fun canAddItem() {
         val repo: ItemRepository = InMemoryItemRepository()
         runBlocking {
             val item = generateSampleItem()
@@ -30,7 +30,7 @@ class InMemoryItemRepositoryTest {
     }
 
     @Test
-    fun inMemoryItemRepositoryCanGetAddedItem() {
+    fun canGetAddedItem() {
         val repo: ItemRepository = InMemoryItemRepository()
         runBlocking {
             val item = generateSampleItem()
@@ -43,7 +43,7 @@ class InMemoryItemRepositoryTest {
     }
 
     @Test
-    fun inMemoryItemRepositoryCanGetAllAddedItems() {
+    fun canGetAllAddedItems() {
         val repo: ItemRepository = InMemoryItemRepository()
         runBlocking {
             val items = List(5) { generateSampleItem(it) }
@@ -57,7 +57,7 @@ class InMemoryItemRepositoryTest {
     }
 
     @Test
-    fun inMemoryItemRepositoryCanGetAllAddedItemsWithLiveData() {
+    fun canGetAllAddedItemsWithLiveData() {
         val repo: ItemRepository = InMemoryItemRepository()
         runBlocking {
             val itemsLiveData = repo.getAllItemsLiveData()
