@@ -20,7 +20,7 @@ class NewItemFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         val binding: FragmentNewItemBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_new_item, container, false)

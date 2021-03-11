@@ -2,13 +2,11 @@ package com.example.sharingang.items
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sharingang.databinding.ItemViewBinding
 
-class ItemViewHolder private constructor(val binding: ItemViewBinding) :
+class ItemViewHolder private constructor(private val binding: ItemViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
-    val editButton: Button = binding.itemListViewEditBtn
 
     fun bind(item: Item, clickListener: ItemListener) {
         binding.itemListViewTitle.text = item.description

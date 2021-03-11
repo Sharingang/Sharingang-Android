@@ -3,7 +3,7 @@ package com.example.sharingang.items
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 
-class ItemsAdapter(val clickListener: ItemListener) :
+class ItemsAdapter(private val clickListener: ItemListener) :
     ListAdapter<Item, ItemViewHolder>(ItemsDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
