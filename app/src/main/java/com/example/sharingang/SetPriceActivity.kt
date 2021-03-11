@@ -9,7 +9,7 @@ import android.widget.EditText
 class SetPriceActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_PRICE = "com.example.sharingang.EXTRA_PRICE"
-        var CHOSEN_CURRENCY = "USD"
+        const val CHOSEN_CURRENCY = "USD"
     }
 
     private val defaultPrice = 0.0
@@ -21,10 +21,11 @@ class SetPriceActivity : AppCompatActivity() {
 
     fun setPriceSummary(view: View) {
         val intent = Intent(this, SetPriceSummaryActivity::class.java)
-        val editTextPrice : EditText = findViewById(R.id.editTextSetPrice)
+        val editTextPrice: EditText = findViewById(R.id.editTextSetPrice)
         val price =
-            if(editTextPrice.text.isNullOrBlank()) defaultPrice // if no price has been entered
-            else editTextPrice.text.toString().toDouble()
+                if (editTextPrice.text.isNullOrBlank()) defaultPrice // if no price has been entered
+                else editTextPrice.text.toString().toDouble()
+        intent.putExtra(EXTRA_PRICE, Pair(price, CHOSEN_CURRENCY))
 
         intent.putExtra(EXTRA_PRICE, "The price you set is: $price $CHOSEN_CURRENCY.")
         startActivity(intent)

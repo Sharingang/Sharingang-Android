@@ -26,8 +26,8 @@ class NewItemActivityTest {
         onView(withId(R.id.newItemButton)).perform(click())
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
         onView(withId(R.id.editItemDescription)).perform(
-            typeText(expectedString),
-            closeSoftKeyboard()
+                typeText(expectedString),
+                closeSoftKeyboard()
         )
         val button = onView(withId(R.id.createItemButton))
         button.check(matches(withText("Create Item")))

@@ -9,7 +9,7 @@ class SetPriceSummaryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_set_price_summary)
-        val textViewSummary : TextView = findViewById(R.id.textViewSetPriceSummary)
+        val textViewSummary: TextView = findViewById(R.id.textViewSetPriceSummary)
         textViewSummary.text = intent.getStringExtra(SetPriceActivity.EXTRA_PRICE)
     }
 }
