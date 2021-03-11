@@ -3,9 +3,6 @@ package com.example.sharingang
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -20,12 +17,9 @@ class MainActivityTest {
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
-    fun clickingOnButtonStartsNewItemActivity() {
-        Intents.init()
-        val button = onView(withId(R.id.newItemButton))
-        button.check(matches(withText("New Item")))
-        button.perform(click())
-        intended(hasComponent(NewItemActivity::class.qualifiedName))
-        Intents.release()
+    fun clickingOnButtonStartsNewItemFragment() {
+        onView(withId(R.id.newItemButton)).perform(click())
+        onView(withId(R.id.newItemPrompt))
+            .check(matches(withText("New Item")))
     }
 }
