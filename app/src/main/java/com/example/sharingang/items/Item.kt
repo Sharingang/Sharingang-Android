@@ -1,6 +1,6 @@
 package com.example.sharingang.items
 
-import java.util.*
+import java.util.Date
 
 /**
  * Item represents an item available for sharing, or for sale.

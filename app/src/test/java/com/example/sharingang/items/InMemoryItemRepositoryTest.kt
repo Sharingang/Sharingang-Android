@@ -15,29 +15,65 @@ class InMemoryItemRepositoryTest {
         val repo: ItemRepository = InMemoryItemRepository()
         runBlocking {
             assert(repo.getAllItems().isEmpty())
+            assert(repo.getAllItemsLiveData().getOrAwaitValue().isEmpty())
         }
     }
 
     @Test
-    fun inMemoryItemRepositoryCanRetrieveStoredData() {
+    fun inMemoryItemRepositoryCanAddItem() {
         val repo: ItemRepository = InMemoryItemRepository()
         runBlocking {
-            val item = Item(title = "My title", description = "My description")
+            val item = generateSampleItem()
+            val id = repo.addItem(item)
+            assert(id != null)
+        }
+    }
+
+    @Test
+    fun inMemoryItemRepositoryCanGetAddedItem() {
+        val repo: ItemRepository = InMemoryItemRepository()
+        runBlocking {
+            val item = generateSampleItem()
+
             // To be able to compare the items, we have to save the generated id
             item.id = repo.addItem(item)
-            assert(item.id != null)
 
-            assert(repo.getAllItems()[0] == item)
             assert(repo.getItem(item.id!!) == item)
-            assert(repo.getAllItemsLiveData().getOrAwaitValue()[0] == item)
-
-            val item2 = Item(title = "My title 2", description = "My description 2")
-            item2.id = repo.addItem(item2)
-            assert(item2.id != null)
-
-            assert(repo.getAllItems().containsAll(listOf(item, item2)))
-            assert(repo.getItem(item2.id!!) == item2)
-            assert(repo.getAllItemsLiveData().getOrAwaitValue().containsAll(listOf(item, item2)))
         }
+    }
+
+    @Test
+    fun inMemoryItemRepositoryCanGetAllAddedItems() {
+        val repo: ItemRepository = InMemoryItemRepository()
+        runBlocking {
+            val items = List(5) { generateSampleItem(it) }
+
+            for (item in items) {
+                item.id = repo.addItem(item)
+            }
+
+            assert(repo.getAllItems().containsAll(items))
+        }
+    }
+
+    @Test
+    fun inMemoryItemRepositoryCanGetAllAddedItemsWithLiveData() {
+        val repo: ItemRepository = InMemoryItemRepository()
+        runBlocking {
+            val itemsLiveData = repo.getAllItemsLiveData()
+            assert(itemsLiveData.getOrAwaitValue().isEmpty())
+
+            val items = List(5) { generateSampleItem(it) }
+
+            for (item in items) {
+                item.id = repo.addItem(item)
+            }
+
+            assert(itemsLiveData.getOrAwaitValue().containsAll(items))
+        }
+    }
+
+    private fun generateSampleItem(index: Int = 0): Item {
+        return Item(title = "My title $index", description = "My description $index")
     }
 }

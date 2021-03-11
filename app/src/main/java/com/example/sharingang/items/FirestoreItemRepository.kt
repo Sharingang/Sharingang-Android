@@ -15,12 +15,12 @@ import javax.inject.Singleton
 
 private const val TAG = "FirestoreItemRepository"
 
-@Singleton
 /**
  * Implementation of ItemRepository using the Firestore database
  *
  * During development it requires running the Firebase emulator (see README.md)
  */
+@Singleton
 class FirestoreItemRepository @Inject constructor() :
     ItemRepository {
     private val firestore = Firebase.firestore
@@ -49,12 +49,10 @@ class FirestoreItemRepository @Inject constructor() :
             .get()
             .await()
 
-        return if (document != null) {
-            document.toObject(Item::class.java)
-        } else {
+        if (document == null) {
             Log.d(TAG, "No Item with ID = $id")
-            null
         }
+        return document?.toObject(Item::class.java)
     }
 
     override suspend fun getAllItems(): List<Item> {
@@ -75,6 +73,7 @@ class FirestoreItemRepository @Inject constructor() :
         query.addSnapshotListener { value, error ->
             if (error != null) {
                 Log.e(TAG, "Failed to get all items from Firebase.", error)
+                return@addSnapshotListener
             }
 
             itemsLiveData.value = value!!.map { it.toObject(Item::class.java) }
