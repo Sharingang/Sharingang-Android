@@ -17,17 +17,17 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: ItemsViewModel by viewModels()
 
     private val resultLauncher =
-        registerForActivityResult(StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val description = result.data?.getStringExtra(Intent.EXTRA_TEXT) ?: ""
-                viewModel.addItem(Item(description))
+            registerForActivityResult(StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val description = result.data?.getStringExtra(Intent.EXTRA_TEXT) ?: ""
+                    viewModel.addItem(Item(description))
+                }
             }
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ActivityMainBinding =
-            DataBindingUtil.setContentView(this, R.layout.activity_main)
+                DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
         val adapter = ItemsAdapter()
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                 adapter.data = it
             }
         })
-        binding.mapButton.setOnClickListener{
+        binding.mapButton.setOnClickListener {
             startActivity(Intent(this, MapActivity::class.java))
         }
     }
