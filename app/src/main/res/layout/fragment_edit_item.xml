@@ -5,10 +5,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <fragment
-            android:id="@+id/editItemFragment"
-            android:name="com.example.sharingang.EditItemFragment"
+
+        <TextView
+            android:id="@+id/editItemPrompt"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:text="@string/edit_item"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/editItemDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/description"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine|textPersonName"
+            android:singleLine="false" />
+
+        <Button
+            android:id="@+id/editItemButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick=""
+            android:text="@string/edit" />
+
     </LinearLayout>
 </layout>

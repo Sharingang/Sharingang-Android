@@ -12,6 +12,10 @@ class ItemsViewModel : ViewModel() {
     private val itemsList = ArrayList<Item>()
     private val _items = MutableLiveData<List<Item>>()
 
+    private val _navigateToEditItem = MutableLiveData<Item?>()
+    val navigateToEditItem: LiveData<Item?>
+        get() = _navigateToEditItem
+
     init {
         _items.value = itemsList
     }
@@ -48,5 +52,13 @@ class ItemsViewModel : ViewModel() {
         } else {
             addItem(newItem)
         }
+    }
+
+    fun onEditItemClicked(item: Item) {
+        _navigateToEditItem.value = item
+    }
+
+    fun onEditItemNavigated() {
+        _navigateToEditItem.value = null
     }
 }
