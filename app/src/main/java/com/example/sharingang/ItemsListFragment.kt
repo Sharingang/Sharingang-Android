@@ -27,28 +27,19 @@ class ItemsListFragment : Fragment() {
     ): View? {
         val binding: FragmentItemsListBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_items_list, container, false)
-
         binding.viewModel = viewModel
-
         binding.newItemButton.setOnClickListener { view: View ->
             view.findNavController().navigate(R.id.action_itemsListFragment_to_newItemFragment)
         }
 
-        val adapter = ItemsAdapter(ItemListener { item ->
-            viewModel.onEditItemClicked(item)
-        })
+        val adapter = ItemsAdapter(ItemListener { item -> viewModel.onEditItemClicked(item) })
         binding.itemList.adapter = adapter
         viewModel.items.observe(viewLifecycleOwner, {
-            it?.let {
-                adapter.submitList(it)
-            }
+            it?.let { adapter.submitList(it) }
         })
-
         viewModel.navigateToEditItem.observe(viewLifecycleOwner, Observer { item ->
             item?.let {
-                this.findNavController().navigate(
-                    ItemsListFragmentDirections.actionItemsListFragmentToEditItemFragment(item)
-                )
+                this.findNavController().navigate(ItemsListFragmentDirections.actionItemsListFragmentToEditItemFragment(item))
                 viewModel.onEditItemNavigated()
             }
         })
