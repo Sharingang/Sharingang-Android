@@ -37,6 +37,9 @@ class MainActivity : AppCompatActivity() {
                 adapter.data = it
             }
         })
+        binding.mapButton.setOnClickListener{
+            startActivity(Intent(this, MapActivity::class.java))
+        }
     }
 
     fun createNewItem(view: View) {

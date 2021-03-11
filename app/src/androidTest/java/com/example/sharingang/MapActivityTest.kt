@@ -21,10 +21,9 @@ import org.junit.runner.RunWith
 class MapActivityTest {
     @get:Rule
     val activityRule = ActivityScenarioRule(MapActivity::class.java)
-    //@get:Rule 
-    //var permissionRule: GrantPermissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION)
-    // code taken from https://alexzh.com/ui-testing-of-android-runtime-permissions/
-    fun grantPermission() {
+
+    // code for grandPermission and denyPermission taken from https://alexzh.com/ui-testing-of-android-runtime-permissions/
+    private fun grantPermission() {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
         if (Build.VERSION.SDK_INT >= 23) {
             val allowPermission = UiDevice.getInstance(instrumentation).findObject(UiSelector().text(
@@ -40,7 +39,8 @@ class MapActivityTest {
             }
         }
     }
-    fun denyPermission() {
+
+    private fun denyPermission() {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
         if (Build.VERSION.SDK_INT >= 23) {
             val denyPermission = UiDevice.getInstance(instrumentation).findObject(UiSelector().text(
@@ -54,11 +54,12 @@ class MapActivityTest {
             }
         }
     }
+
     @Test
-    fun clickingOnButtonDisplayLocation(){
-        val button = onView(withId(R.id.button_get_localisation))
+    fun clickingOnButtonDisplaysLocation() {
+        val button = onView(withId(R.id.button_get_location))
         button.check(matches(withText("Get localisation")))
-        val text = onView(withId(R.id.localisation_display))
+        val text = onView(withId(R.id.location_display))
         text.check(matches(withText("")))
 
         button.perform(click())

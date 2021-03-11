@@ -9,23 +9,23 @@
         tools:context=".MapActivity">
 
         <Button
-            android:id="@+id/button_get_localisation"
+            android:id="@+id/button_get_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/get_localisation"
+            android:text="@string/get_location"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/localisation_display"
+            android:id="@+id/location_display"
             android:layout_width="183dp"
             android:layout_height="158dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_get_localisation"
+            app:layout_constraintTop_toBottomOf="@+id/button_get_location"
             app:layout_constraintVertical_bias="0.215" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,5 +3,6 @@
     <string name="new_item">New Item</string>
     <string name="description">Description</string>
     <string name="create_item">Create Item</string>
-    <string name="get_localisation">Get localisation</string>
+    <string name="get_location">Get Location</string>
+    <string name="go_to_map">Go to Map</string>
 </resources>
