@@ -11,7 +11,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class NewItemActivityTest {
+class NewItemFragmentTest {
     // We start with the main activity, and then navigate where we want
     @get:Rule
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
