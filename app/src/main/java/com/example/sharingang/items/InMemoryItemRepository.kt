@@ -33,10 +33,23 @@ class InMemoryItemRepository @Inject constructor() : ItemRepository {
 
     override suspend fun addItem(item: Item): String {
         require(item.id == null)
+
         val id = UUID.randomUUID().toString()
         item.id = id
         itemsMap[id] = item
         itemsLiveData.postValue(itemsMap.values.toList())
         return id
+    }
+
+    override suspend fun updateItem(item: Item): Boolean {
+        requireNotNull(item.id)
+
+        itemsMap[item.id!!] = item
+        return true
+    }
+
+    override suspend fun deleteItem(id: String): Boolean {
+        itemsMap.remove(id)
+        return true
     }
 }

@@ -28,4 +28,20 @@ interface ItemRepository {
      * When the database is modified, the new data is provided to the LiveData instance.
      */
     fun getAllItemsLiveData(): LiveData<List<Item>>
+
+    /**
+     * Update existing item
+     *
+     * The item's id cannot be null.
+     *
+     * @return whether the update succeeded
+     */
+    suspend fun updateItem(item: Item): Boolean
+
+    /**
+     * Delete existing item
+     *
+     * @return true if the deletion succeeded or there is no item with such id
+     */
+    suspend fun deleteItem(id: String): Boolean
 }

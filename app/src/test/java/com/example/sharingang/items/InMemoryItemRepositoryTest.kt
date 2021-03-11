@@ -29,6 +29,16 @@ class InMemoryItemRepositoryTest {
         }
     }
 
+    @Test(expected = IllegalArgumentException::class)
+    fun canAddItemThrowsWhenIdNonNull() {
+        val repo: ItemRepository = InMemoryItemRepository()
+        runBlocking {
+            val item = generateSampleItem()
+            item.id = "some-id"
+            repo.addItem(item)
+        }
+    }
+
     @Test
     fun canGetAddedItem() {
         val repo: ItemRepository = InMemoryItemRepository()
@@ -70,6 +80,44 @@ class InMemoryItemRepositoryTest {
             }
 
             assert(itemsLiveData.getOrAwaitValue().containsAll(items))
+        }
+    }
+
+    @Test
+    fun canUpdateItem() {
+        val repo: ItemRepository = InMemoryItemRepository()
+        runBlocking {
+            val item = generateSampleItem()
+
+            item.id = repo.addItem(item)
+
+            val updatedItem = item.copy(description = "updated description")
+            repo.updateItem(updatedItem)
+
+            assert(repo.getItem(updatedItem.id!!) == updatedItem)
+        }
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun updateItemThrowsExceptionWhenIdNull() {
+        val repo: ItemRepository = InMemoryItemRepository()
+        runBlocking {
+            // New Item with no id
+            val item = generateSampleItem()
+            repo.updateItem(item)
+        }
+    }
+
+    @Test
+    fun deleteItemActuallyDeletesTheItem() {
+        val repo: ItemRepository = InMemoryItemRepository()
+        runBlocking {
+            val item = generateSampleItem()
+            val id = repo.addItem(item)
+
+            assert(repo.deleteItem(id!!))
+
+            assert(repo.getItem(id) == null)
         }
     }
 

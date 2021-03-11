@@ -96,4 +96,32 @@ class FirestoreItemRepository @Inject constructor() :
             null
         }
     }
+
+    override suspend fun updateItem(item: Item): Boolean {
+        requireNotNull(item.id)
+
+        return try {
+            firestore.collection(collectionName).document(item.id!!)
+                .set(item)
+                .await()
+            Log.d(TAG, "Updated item with ID: ${item.id}")
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "Error updating item with ID: ${item.id}", e)
+            false
+        }
+    }
+
+    override suspend fun deleteItem(id: String): Boolean {
+        return try {
+            firestore.collection(collectionName).document(id)
+                .delete()
+                .await()
+            Log.d(TAG, "Deleted item with ID: $id")
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "Error deleting item with ID: $id", e)
+            false
+        }
+    }
 }
