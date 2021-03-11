@@ -32,16 +32,9 @@ class EditItemFragment : Fragment() {
         binding.editItemDescription.setText(item.description)
 
         binding.editItemButton.setOnClickListener { view: View ->
-            onEditItemClick(
-                view,
-                binding.editItemDescription.text.toString()
-            )
+            viewModel.updateItem(item, Item(binding.editItemDescription.text.toString()))
+            view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)
         }
         return binding.root
-    }
-
-    private fun onEditItemClick(view: View, description: String) {
-        viewModel.updateItem(item, Item(description))
-        view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)
     }
 }

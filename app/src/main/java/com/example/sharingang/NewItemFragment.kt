@@ -26,17 +26,9 @@ class NewItemFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_new_item, container, false)
 
         binding.createItemButton.setOnClickListener { view: View ->
-            onCreateItemClick(
-                view,
-                binding.editItemDescription.text.toString()
-            )
+            viewModel.addItem(Item(binding.editItemDescription.text.toString()))
+            view.findNavController().navigate(R.id.action_newItemFragment_to_itemsListFragment)
         }
         return binding.root
     }
-
-    private fun onCreateItemClick(view: View, description: String) {
-        viewModel.addItem(Item(description))
-        view.findNavController().navigate(R.id.action_newItemFragment_to_itemsListFragment)
-    }
-
 }
