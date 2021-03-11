@@ -31,4 +31,22 @@ class ItemsViewModel : ViewModel() {
         itemsList.add(item)
         _items.value = itemsList
     }
+
+    /**
+     * Replace the old item in the list by a new one. If it
+     * doesn't exist, just add the new item.
+     *
+     * @param oldItem the item to be replaced
+     * @param newItem the new item that should replace the other one
+     */
+    fun updateItem(oldItem: Item, newItem: Item) {
+        if (itemsList.contains(oldItem)) {
+            val index = itemsList.indexOf(oldItem)
+            itemsList.remove(oldItem)
+            itemsList.add(index, newItem)
+            _items.value = itemsList
+        } else {
+            addItem(newItem)
+        }
+    }
 }
