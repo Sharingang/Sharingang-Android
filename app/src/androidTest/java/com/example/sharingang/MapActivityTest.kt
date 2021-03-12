@@ -9,6 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiSelector
 import org.junit.Rule
@@ -35,6 +36,21 @@ class MapActivityTest {
             ))
             if (allowPermission.exists()) {
                 allowPermission.click()
+            }
+        }
+    }
+
+    private fun denyPermission() {
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        if (Build.VERSION.SDK_INT >= 23) {
+            val denyPermission = UiDevice.getInstance(instrumentation).findObject(UiSelector().text(
+                    when (Build.VERSION.SDK_INT) {
+                        in 24..28 -> "DENY"
+                        else -> "Deny"
+                    }
+            ))
+            if (denyPermission.exists()) {
+                denyPermission.click()
             }
         }
     }
