@@ -22,6 +22,16 @@ My time estimate was accurate for the research but for the implementation it too
 
 For this first sprint, we were a bit late to merge all the changes. I had to wait for other tasks before merging but luckily the architecture we had was good and I didn't have to change a lot of code to merge.
 
+# Zach
+
+I have read and done the vast majority of the Android Kotlin course provided by Goole. I have also read the report about firebase made by Samuel.
+
+I started making a view for the search page of the application however I have to turn it into a fragment for which I need to finish the Kotlin course.
+
+My time estimation and management was very much wrong and it is taking longer than expected.
+
+Next time, I'd like to finish the view for the search page as well as it's actual functionality.
+
 # Scrum Master (Lúcás)
 
 One issue at the start of the week was that too little work was assigned. Thankfully
