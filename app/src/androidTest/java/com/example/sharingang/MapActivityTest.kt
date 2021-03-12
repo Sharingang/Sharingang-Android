@@ -12,6 +12,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiSelector
+import org.hamcrest.core.StringContains.containsString
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -49,5 +50,6 @@ class MapActivityTest {
 
         button.perform(click())
         grantPermission()
+        button.perform(click())
     }
 }
