@@ -14,7 +14,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
-class NewItemActivityTest {
+class NewItemFragmentTest {
     @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
 
