@@ -1,5 +1,6 @@
 package com.example.sharingang
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,11 +20,11 @@ class ItemsListFragment : Fragment() {
     private val viewModel: ItemsViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         val binding: FragmentItemsListBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_items_list, container, false)
+                DataBindingUtil.inflate(inflater, R.layout.fragment_items_list, container, false)
         binding.viewModel = viewModel
         binding.newItemButton.setOnClickListener { view: View ->
             view.findNavController().navigate(R.id.action_itemsListFragment_to_newItemFragment)
@@ -40,7 +41,9 @@ class ItemsListFragment : Fragment() {
                 viewModel.onEditItemNavigated()
             }
         })
-
+        binding.goToMap.setOnClickListener {
+            startActivity(Intent(this.activity, MapActivity::class.java))
+        }
         return binding.root
     }
 

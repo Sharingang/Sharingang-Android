@@ -23,6 +23,11 @@ class MainActivityTest {
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
+    fun clickingOnButtonStartsMapActivity(){
+        onView(withId(R.id.go_to_map)).perform(click())
+        onView(withId(R.id.location_display)).check(matches(withText("")))
+    }
+    @Test
     fun clickingOnButtonStartsNewItemFragment() {
         onView(withId(R.id.newItemButton)).perform(click())
         onView(withId(R.id.newItemPrompt))
