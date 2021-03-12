@@ -13,6 +13,15 @@ than I anticpated.
 I had started working on adding persistence, and basically finished, but then Samuel's
 work on Firebase basically upended my work, at least for now.
 
+# Samuel
+
+I did some research about Firebase, and documented my findings.
+Then I implemented a repository to store and retrieve items using Firestore.
+
+My time estimate was accurate for the research but for the implementation it took more time.
+
+For this first sprint, we were a bit late to merge all the changes. I had to wait for other tasks before merging but luckily the architecture we had was good and I didn't have to change a lot of code to merge.
+
 # Scrum Master (Lúcás)
 
 One issue at the start of the week was that too little work was assigned. Thankfully
