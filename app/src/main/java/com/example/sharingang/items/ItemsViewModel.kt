@@ -48,7 +48,7 @@ class ItemsViewModel @Inject constructor(
     fun updateItem(oldItem: Item, newItem: Item) {
         newItem.id = oldItem.id
         viewModelScope.launch(Dispatchers.IO) {
-            itemRepository.updateItem(item)
+            itemRepository.updateItem(newItem)
         }
     }
 

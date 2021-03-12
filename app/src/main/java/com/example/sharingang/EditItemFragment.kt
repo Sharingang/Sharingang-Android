@@ -12,7 +12,6 @@ import com.example.sharingang.databinding.FragmentEditItemBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsViewModel
 
-
 class EditItemFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
@@ -32,7 +31,10 @@ class EditItemFragment : Fragment() {
         binding.editItemDescription.setText(item.description)
 
         binding.editItemButton.setOnClickListener { view: View ->
-            viewModel.updateItem(item, Item(binding.editItemDescription.text.toString()))
+            viewModel.updateItem(
+                item,
+                Item(description = binding.editItemDescription.text.toString())
+            )
             view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)
         }
         return binding.root

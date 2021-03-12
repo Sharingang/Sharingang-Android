@@ -12,7 +12,6 @@ import com.example.sharingang.databinding.FragmentNewItemBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsViewModel
 
-
 class NewItemFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
@@ -26,7 +25,7 @@ class NewItemFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_new_item, container, false)
 
         binding.createItemButton.setOnClickListener { view: View ->
-            viewModel.addItem(Item(binding.editItemDescription.text.toString()))
+            viewModel.addItem(Item(description = binding.editItemDescription.text.toString()))
             view.findNavController().navigate(R.id.action_newItemFragment_to_itemsListFragment)
         }
         return binding.root

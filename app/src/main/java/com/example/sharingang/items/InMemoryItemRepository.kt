@@ -45,11 +45,13 @@ class InMemoryItemRepository @Inject constructor() : ItemRepository {
         requireNotNull(item.id)
 
         itemsMap[item.id!!] = item
+        itemsLiveData.postValue(itemsMap.values.toList())
         return true
     }
 
     override suspend fun deleteItem(id: String): Boolean {
         itemsMap.remove(id)
+        itemsLiveData.postValue(itemsMap.values.toList())
         return true
     }
 }
