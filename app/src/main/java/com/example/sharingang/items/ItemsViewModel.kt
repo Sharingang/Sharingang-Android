@@ -3,28 +3,29 @@ package com.example.sharingang.items
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * ItemsViewModel models the state of the fragment for viewing items
  */
-class ItemsViewModel : ViewModel() {
-
-    private val itemsList = ArrayList<Item>()
-    private val _items = MutableLiveData<List<Item>>()
+@HiltViewModel
+class ItemsViewModel @Inject constructor(
+    private val itemRepository: ItemRepository
+) : ViewModel() {
 
     private val _navigateToEditItem = MutableLiveData<Item?>()
     val navigateToEditItem: LiveData<Item?>
         get() = _navigateToEditItem
 
-    init {
-        _items.value = itemsList
-    }
-
     /**
      * The last item created
      */
     val items: LiveData<List<Item>>
-        get() = _items
+        get() = itemRepository.getAllItemsLiveData()
 
     /**
      * Add a new item.
@@ -32,8 +33,9 @@ class ItemsViewModel : ViewModel() {
      * @param item the item to be added
      */
     fun addItem(item: Item) {
-        itemsList.add(item)
-        _items.value = itemsList
+        viewModelScope.launch(Dispatchers.IO) {
+            itemRepository.addItem(item)
+        }
     }
 
     /**
@@ -44,13 +46,9 @@ class ItemsViewModel : ViewModel() {
      * @param newItem the new item that should replace the other one
      */
     fun updateItem(oldItem: Item, newItem: Item) {
-        if (itemsList.contains(oldItem)) {
-            val index = itemsList.indexOf(oldItem)
-            itemsList.remove(oldItem)
-            itemsList.add(index, newItem)
-            _items.value = itemsList
-        } else {
-            addItem(newItem)
+        newItem.id = oldItem.id
+        viewModelScope.launch(Dispatchers.IO) {
+            itemRepository.updateItem(newItem)
         }
     }
 

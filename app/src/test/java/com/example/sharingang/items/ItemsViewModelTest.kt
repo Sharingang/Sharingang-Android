@@ -10,18 +10,9 @@ class ItemsViewModelTest {
     val rule = InstantTaskExecutorRule()
 
     @Test
-    fun itemsViewModelStartsEmpty() {
-        val model = ItemsViewModel()
+    fun startsEmpty() {
+        val model = ItemsViewModel(InMemoryItemRepository())
         val value = model.items.getOrAwaitValue()
         assert(value.isEmpty())
-    }
-
-    @Test
-    fun weCanAddAndRetrieveItems() {
-        val model = ItemsViewModel()
-        val items = listOf(Item("A"), Item("B"))
-        model.addItem(items[0])
-        model.addItem(items[1])
-        assert(model.items.getOrAwaitValue() == items)
     }
 }
