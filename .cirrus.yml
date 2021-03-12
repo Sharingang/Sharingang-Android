@@ -5,11 +5,19 @@ check_android_task:
     TARGET: google_apis
     ARCH: x86
     CC_TEST_REPORTER_ID: ENCRYPTED[f6faceadd916d06a8ede5053d30c9138c5ff641bea71c905f1a019311381f1db69ef3d03c57e8fa6e7c14bcd4ba372e3]
+    GOOGLE_SERVICES_JSON: ENCRYPTED[2fd7a675f46e34afeba381eba65e870450d43ecc225ead42c274dcd16eac3602f01e6b418e2c39350606508e88e3d2bd]
   container:
     image: reactivecircus/android-emulator-$API_LEVEL:latest
     kvm: true
     cpu: 8
     memory: 10G
+  google_services_json_file:
+    path: app/google-services.json
+    variable_name: GOOGLE_SERVICES_JSON
+  firebase_emulator_background_script: |
+    curl -Lo ./firebase https://firebase.tools/bin/linux/latest
+    chmod +x firebase
+    ./firebase emulators:start
   create_device_script:
     echo no | avdmanager create avd --force --name test --abi "$TARGET/$ARCH" --package "system-images;android-$API_LEVEL;$TARGET;$ARCH"
   start_emulator_background_script:
@@ -17,6 +25,8 @@ check_android_task:
   build_script: |
     chmod +x gradlew
     ./gradlew assembleDebugAndroidTest
+  wait_for_firebase_script:
+    while [[ "$(curl -s localhost:4400/emulators)" != *"firestore"* ]]; do sleep 1; done
   wait_for_emulator_script: |
     adb wait-for-device
     adb shell input keyevent 82
