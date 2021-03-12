@@ -13,7 +13,6 @@
         android:theme="@style/Theme.Sharingang">
         <activity android:name=".MapActivity"
             android:parentActivityName=".MainActivity"/>
-        <activity android:name=".NewItemActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
