@@ -13,6 +13,17 @@ than I anticpated.
 I had started working on adding persistence, and basically finished, but then Samuel's
 work on Firebase basically upended my work, at least for now.
 
+# Sebastian
+
+I first needed a refresh on android and Kotlin, so I read a basics course.
+This took me 5 hours, which is what I estimated.
+
+Then I implemented a way to fetch the location of the device, which required a way to ask for permissions.
+I miscalculated the time it took me to implement this feature.
+Instead of 3 hours, it took my around 8 hours, because a lot of documentation was either deprecated or not complete.
+
+Then I had some troubles with the pull requests and merging, as I had never done that before.
+
 # Samuel
 
 I did some research about Firebase, and documented my findings.
