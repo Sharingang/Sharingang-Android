@@ -40,21 +40,6 @@ class MapActivityTest {
         }
     }
 
-    private fun denyPermission() {
-        val instrumentation = InstrumentationRegistry.getInstrumentation()
-        if (Build.VERSION.SDK_INT >= 23) {
-            val denyPermission = UiDevice.getInstance(instrumentation).findObject(UiSelector().text(
-                    when (Build.VERSION.SDK_INT) {
-                        in 24..28 -> "DENY"
-                        else -> "Deny"
-                    }
-            ))
-            if (denyPermission.exists()) {
-                denyPermission.click()
-            }
-        }
-    }
-
     @Test
     fun clickingOnButtonDisplaysLocation() {
         val button = onView(withId(R.id.button_get_location))
