@@ -7,7 +7,6 @@ plugins {
     id 'kotlin-parcelize'
     id 'com.google.gms.google-services'
     id 'dagger.hilt.android.plugin'
-    id 'com.google.secrets_gradle_plugin' version '0.5'
 }
 
 android {
