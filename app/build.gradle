@@ -7,6 +7,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'com.google.gms.google-services'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.secrets_gradle_plugin' version '0.5'
 }
 
 android {
@@ -57,6 +58,7 @@ dependencies {
     
     // Location
     implementation 'com.google.android.gms:play-services-location:18.0.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
     // Navigation Component
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"

@@ -42,14 +42,11 @@ class MapActivityTest {
     }
 
     @Test
-    fun clickingOnButtonDisplaysLocation() {
-        val button = onView(withId(R.id.button_get_location))
-        button.check(matches(withText("Get Location")))
+    fun grantingPermissionDisplaysLocation() {
+        grantPermission()
         val text = onView(withId(R.id.location_display))
         text.check(matches(withText("")))
-
-        button.perform(click())
-        grantPermission()
-        button.perform(click())
+        Thread.sleep(10000)
+        text.check(matches(withText(containsString("Your location"))))
     }
 }
