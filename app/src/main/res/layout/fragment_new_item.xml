@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="title"
+            type="String" />
 
         <variable
             name="description"
@@ -23,13 +26,24 @@
             android:textStyle="bold" />
 
         <EditText
+            android:id="@+id/editItemTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/title"
+            android:importantForAutofill="no"
+            android:inputType="textPersonName"
+            android:text="@={title}" />
+
+        <EditText
             android:id="@+id/editItemDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/description"
             android:importantForAutofill="no"
-            android:inputType="textMultiLine|textPersonName"
+            android:inputType="textMultiLine"
+            android:minLines="4"
             android:singleLine="false"
             android:text="@={description}"
             tools:ignore="LabelFor" />

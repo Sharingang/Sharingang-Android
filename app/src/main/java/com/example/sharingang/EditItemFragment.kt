@@ -1,11 +1,11 @@
 package com.example.sharingang
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.example.sharingang.databinding.FragmentEditItemBinding
@@ -28,12 +28,13 @@ class EditItemFragment : Fragment() {
 
         item = args.item
 
-        binding.editItemDescription.setText(item.description)
+        binding.title = item.title
+        binding.description = item.description
 
         binding.editItemButton.setOnClickListener { view: View ->
             viewModel.updateItem(
                 item,
-                Item(description = binding.editItemDescription.text.toString())
+                Item(title = binding.title ?: "", description = binding.description ?: "")
             )
             view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)
         }
