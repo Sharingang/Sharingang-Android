@@ -14,10 +14,6 @@ check_android_task:
   google_services_json_file:
     path: app/google-services.json
     variable_name: GOOGLE_SERVICES_JSON
-  firebase_emulator_background_script: |
-    curl -Lo ./firebase https://firebase.tools/bin/linux/latest
-    chmod +x firebase
-    ./firebase emulators:start
   create_device_script:
     echo no | avdmanager create avd --force --name test --abi "$TARGET/$ARCH" --package "system-images;android-$API_LEVEL;$TARGET;$ARCH"
   start_emulator_background_script:
@@ -25,8 +21,6 @@ check_android_task:
   build_script: |
     chmod +x gradlew
     ./gradlew assembleDebugAndroidTest
-  wait_for_firebase_script:
-    while [[ "$(curl -s localhost:4400/emulators)" != *"firestore"* ]]; do sleep 1; done
   wait_for_emulator_script: |
     adb wait-for-device
     adb shell input keyevent 82

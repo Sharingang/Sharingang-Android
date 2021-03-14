@@ -29,7 +29,7 @@ class NewItemFragmentTest {
     fun aDescriptionCanBeEnteredAndSeenOnMainActivity() {
         onView(withId(R.id.newItemButton)).perform(click())
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
-        onView(withId(R.id.editItemDescription)).perform(
+        onView(withId(R.id.editItemTitle)).perform(
             typeText(firstItem),
             closeSoftKeyboard()
         )
@@ -40,7 +40,7 @@ class NewItemFragmentTest {
         onView(withText(firstItem)).check(matches(isDisplayed()))
 
         onView(withId(R.id.newItemButton)).perform(click())
-        onView(withId(R.id.editItemDescription)).perform(
+        onView(withId(R.id.editItemTitle)).perform(
             typeText(secondItem),
             closeSoftKeyboard()
         )

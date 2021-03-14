@@ -22,7 +22,7 @@ class ItemsAdapter(private val clickListener: ItemListener) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Item, clickListener: ItemListener) {
-            binding.itemListViewTitle.text = item.description
+            binding.itemListViewTitle.text = item.title
             binding.item = item
             binding.clickListener = clickListener
         }

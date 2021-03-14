@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="description"
+            type="String" />
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,14 +26,26 @@
             android:textStyle="bold" />
 
         <EditText
+            android:id="@+id/editItemTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/title"
+            android:importantForAutofill="no"
+            android:inputType="textPersonName"
+            android:text="@={title}" />
+
+        <EditText
             android:id="@+id/editItemDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/description"
             android:importantForAutofill="no"
-            android:inputType="textMultiLine|textPersonName"
-            android:singleLine="false" />
+            android:inputType="textMultiLine"
+            android:minLines="4"
+            android:singleLine="false"
+            android:text="@={description}" />
 
         <Button
             android:id="@+id/editItemButton"

@@ -30,7 +30,7 @@ class EditItemFragmentTest {
         onView(withId(R.id.newItemButton)).perform(click())
         onView(withId(R.id.newItemPrompt))
             .check(matches(withText("New Item")))
-        onView(withId(R.id.editItemDescription)).perform(
+        onView(withId(R.id.editItemTitle)).perform(
             typeText(item),
             closeSoftKeyboard()
         )
@@ -48,7 +48,7 @@ class EditItemFragmentTest {
         onView(withId(R.id.editItemPrompt))
             .check(matches(withText("Edit Item")))
 
-        onView(withId(R.id.editItemDescription)).perform(
+        onView(withId(R.id.editItemTitle)).perform(
             typeText(editedItem),
             closeSoftKeyboard()
         )
