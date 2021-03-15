@@ -56,7 +56,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             override fun onLocationResult(locationResult: LocationResult) {
                 lastLocation = locationResult.lastLocation
                 updateLocationText()
-                //moveCameraToLastLocation()
+                moveCameraToLastLocation()
                 moveLastLocationMarker()
             }
         }
