@@ -49,9 +49,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private var lastLocationMarker: Marker? = null
     private var map: GoogleMap? = null
 
-    // Allows the cancellation of a location request if, for example, the user exists the activity
-    private var cancellationTokenSource = CancellationTokenSource()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_map)
