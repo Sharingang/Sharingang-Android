@@ -35,7 +35,11 @@ class EditItemFragment : Fragment() {
         binding.editItemButton.setOnClickListener { view: View ->
             viewModel.updateItem(
                 item,
-                Item(title = binding.title ?: "", description = binding.description ?: "", price = binding.price?.toDoubleOrNull() ?: 0.0)
+                Item(
+                    title = binding.title ?: "",
+                    description = binding.description ?: "",
+                    price = binding.price?.toDoubleOrNull() ?: 0.0
+                )
 
             )
             view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)
