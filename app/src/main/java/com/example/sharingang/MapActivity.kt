@@ -27,8 +27,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var permissionGranted: Boolean = false
 
-    // TODO remove when the fix is released
-    @SuppressLint("InvalidFragmentVersionForActivityResult")
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             if (isGranted) {
@@ -58,7 +56,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             override fun onLocationResult(locationResult: LocationResult) {
                 lastLocation = locationResult.lastLocation
                 updateLocationText()
-                moveCameraToLastLocation()
+                //moveCameraToLastLocation()
                 moveLastLocationMarker()
             }
         }
