@@ -1,13 +1,10 @@
 package com.example.sharingang
 
-import android.content.pm.PackageManager
 import android.Manifest
 import android.annotation.SuppressLint
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
-import android.util.Log
-import android.view.View.INVISIBLE
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -21,9 +18,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.CancellationTokenSource
-import com.google.android.gms.tasks.Task
 
-const val REQUEST_LOCATION: Int = 0
 const val DEFAULT_ZOOM = 15.0
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -31,6 +26,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var permissionGranted: Boolean = false
+
+    // TODO remove when the fix is released
+    @SuppressLint("InvalidFragmentVersionForActivityResult")
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             if (isGranted) {
