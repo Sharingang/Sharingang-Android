@@ -30,11 +30,12 @@ class EditItemFragment : Fragment() {
 
         binding.title = item.title
         binding.description = item.description
+        binding.categorySpinner.setSelection(item.category)
 
         binding.editItemButton.setOnClickListener { view: View ->
             viewModel.updateItem(
                 item,
-                Item(title = binding.title ?: "", description = binding.description ?: "")
+                Item(title = binding.title ?: "", description = binding.description ?: "", category = binding.categorySpinner.selectedItemPosition ?: 0)
             )
             view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)
         }

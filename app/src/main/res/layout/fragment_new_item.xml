@@ -48,6 +48,11 @@
             android:text="@={description}"
             tools:ignore="LabelFor" />
 
+        <Spinner
+            android:id="@+id/category_spinner"
+            android:entries="@array/categories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
         <Button
             android:id="@+id/createItemButton"
             android:layout_width="wrap_content"

@@ -44,6 +44,9 @@ class ItemsListFragment : Fragment() {
         binding.goToMap.setOnClickListener {
             startActivity(Intent(this.activity, MapActivity::class.java))
         }
+        binding.gotoSearchButton.setOnClickListener{
+            view -> view.findNavController().navigate(R.id.action_itemsListFragment_to_searchFragment);
+        }
         return binding.root
     }
 

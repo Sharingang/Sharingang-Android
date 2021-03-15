@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -23,12 +24,27 @@ class NewItemFragment : Fragment() {
 
         val binding: FragmentNewItemBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_new_item, container, false)
+        var category : Int = 0
+        binding.categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                adapterView: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if(adapterView != null){category = position}
+            }
 
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+        }
         binding.createItemButton.setOnClickListener { view: View ->
             viewModel.addItem(
                 Item(
                     description = binding.description ?: "",
-                    title = binding.title ?: ""
+                    title = binding.title ?: "",
+                    category = category ?: 0
                 )
             )
             view.findNavController().navigate(R.id.action_newItemFragment_to_itemsListFragment)
