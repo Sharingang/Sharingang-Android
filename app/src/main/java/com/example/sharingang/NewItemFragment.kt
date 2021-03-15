@@ -29,7 +29,7 @@ class NewItemFragment : Fragment() {
                 Item(
                     description = binding.description ?: "",
                     title = binding.title ?: "",
-                    price = binding.price
+                    price = binding.price?.toDoubleOrNull() ?: 0.0
 
                 )
             )

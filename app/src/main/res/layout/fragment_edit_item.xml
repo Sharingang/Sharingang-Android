@@ -12,7 +12,7 @@
             type="String" />
         <variable
             name="price"
-            type="double" />
+            type="String" />
     </data>
 
     <LinearLayout

@@ -30,12 +30,13 @@ class EditItemFragment : Fragment() {
 
         binding.title = item.title
         binding.description = item.description
-        binding.price = item.price
+        binding.price = item.price.toString().format("%.2f")
 
         binding.editItemButton.setOnClickListener { view: View ->
             viewModel.updateItem(
                 item,
-                Item(title = binding.title ?: "", description = binding.description ?: "", price = binding.price)
+                Item(title = binding.title ?: "", description = binding.description ?: "", price = binding.price?.toDoubleOrNull() ?: 0.0)
+
             )
             view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)
         }

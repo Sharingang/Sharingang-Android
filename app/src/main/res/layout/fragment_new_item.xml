@@ -12,7 +12,7 @@
             type="String" />
         <variable
             name="price"
-            type="double" />
+            type="String" />
     </data>
 
     <LinearLayout
@@ -53,13 +53,14 @@
 
         <EditText
             android:id="@+id/editItemPrice"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:autofillHints="yes"
             android:ems="10"
             android:hint="@string/default_price"
             android:importantForAutofill="yes"
-            android:autofillHints="yes"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:text="@={price}" />
 
         <Button
             android:id="@+id/createItemButton"
