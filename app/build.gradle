@@ -44,6 +44,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    // TODO remove when the fix is released
+    lintOptions {
+        disable 'InvalidFragmentVersionForActivityResult'
+    }
 }
 
 dependencies {
