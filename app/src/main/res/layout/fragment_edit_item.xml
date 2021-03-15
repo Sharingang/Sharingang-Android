@@ -10,6 +10,9 @@
         <variable
             name="description"
             type="String" />
+        <variable
+            name="price"
+            type="double" />
     </data>
 
     <LinearLayout
@@ -44,8 +47,18 @@
             android:importantForAutofill="no"
             android:inputType="textMultiLine"
             android:minLines="4"
-            android:singleLine="false"
-            android:text="@={description}" />
+            android:text="@={description}"
+            android:singleLine="false" />
+
+        <EditText
+            android:id="@+id/editItemPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/price"
+            android:inputType="numberDecimal"
+            android:importantForAutofill="no"
+            android:text="@={price}"/>
 
         <Button
             android:id="@+id/editItemButton"

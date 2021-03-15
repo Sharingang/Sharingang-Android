@@ -28,7 +28,9 @@ class NewItemFragment : Fragment() {
             viewModel.addItem(
                 Item(
                     description = binding.description ?: "",
-                    title = binding.title ?: ""
+                    title = binding.title ?: "",
+                    price = binding.price
+
                 )
             )
             view.findNavController().navigate(R.id.action_newItemFragment_to_itemsListFragment)
