@@ -47,6 +47,11 @@ class ItemsDiffCallback : DiffUtil.ItemCallback<Item>() {
     }
 }
 
-class ItemListener(val clickListener: (item: Item) -> Unit) {
-    fun onClick(item: Item) = clickListener(item)
+// Replace the description with its ID once the database is set
+class ItemListener(
+    val onEditListener: (item: Item) -> Unit,
+    val onViewListener: (item: Item) -> Unit
+) {
+    fun onEdit(item: Item) = onEditListener(item)
+    fun onView(item: Item) = onViewListener(item)
 }
