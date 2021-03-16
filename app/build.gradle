@@ -44,6 +44,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    // TODO remove when the fix is released
+    lintOptions {
+        disable 'InvalidFragmentVersionForActivityResult'
+    }
 }
 
 dependencies {
@@ -57,6 +61,7 @@ dependencies {
     
     // Location
     implementation 'com.google.android.gms:play-services-location:18.0.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
     // Navigation Component
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
