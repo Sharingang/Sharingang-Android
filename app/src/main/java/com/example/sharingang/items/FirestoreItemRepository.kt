@@ -101,7 +101,7 @@ class FirestoreItemRepository @Inject constructor() :
         requireNotNull(item.id)
 
         return try {
-            firestore.collection(collectionName).document(item.id!!)
+            firestore.collection(collectionName).document(item.id)
                 .set(item)
                 .await()
             Log.d(TAG, "Updated item with ID: ${item.id}")

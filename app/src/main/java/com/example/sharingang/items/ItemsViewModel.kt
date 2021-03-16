@@ -39,16 +39,13 @@ class ItemsViewModel @Inject constructor(
     }
 
     /**
-     * Replace the old item in the list by a new one. If it
-     * doesn't exist, just add the new item.
+     * Replace the old item by a new one.
      *
-     * @param oldItem the item to be replaced
-     * @param newItem the new item that should replace the other one
+     * @param updatedItem the updated item containing the ID of the existing one
      */
-    fun updateItem(oldItem: Item, newItem: Item) {
-        newItem.id = oldItem.id
+    fun updateItem(updatedItem: Item) {
         viewModelScope.launch(Dispatchers.IO) {
-            itemRepository.updateItem(newItem)
+            itemRepository.updateItem(updatedItem)
         }
     }
 

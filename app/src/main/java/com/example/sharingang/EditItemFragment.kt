@@ -15,7 +15,7 @@ import com.example.sharingang.items.ItemsViewModel
 class EditItemFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
-    private lateinit var item: Item
+    private lateinit var existingItem: Item
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,21 +26,19 @@ class EditItemFragment : Fragment() {
 
         val args = EditItemFragmentArgs.fromBundle(requireArguments())
 
-        item = args.item
+        existingItem = args.item
 
-        binding.title = item.title
-        binding.description = item.description
-        binding.price = item.price.toString().format("%.2f")
+        binding.title = existingItem.title
+        binding.description = existingItem.description
+        binding.price = existingItem.price.toString().format("%.2f")
 
         binding.editItemButton.setOnClickListener { view: View ->
             viewModel.updateItem(
-                item,
-                Item(
+                existingItem.copy(
                     title = binding.title ?: "",
                     description = binding.description ?: "",
                     price = binding.price?.toDoubleOrNull() ?: 0.0
                 )
-
             )
             view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)
         }
