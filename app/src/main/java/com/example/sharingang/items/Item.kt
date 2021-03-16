@@ -18,8 +18,7 @@ data class Item(
     /** URLs of the images */
     val images: List<String> = listOf(),
 
-    /** Price in cents */
-    val price: Int = 0,
+    val price: Double = 0.0,
 
     val createdAt: Date = Date(),
 

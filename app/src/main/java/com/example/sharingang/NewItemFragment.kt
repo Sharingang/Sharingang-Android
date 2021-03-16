@@ -27,6 +27,7 @@ class NewItemFragment : Fragment() {
         binding.createItemButton.setOnClickListener { view: View ->
             viewModel.addItem(
                 Item(
+                    price = binding.price?.toDoubleOrNull() ?: 0.0,
                     description = binding.description ?: "",
                     title = binding.title ?: ""
                 )
