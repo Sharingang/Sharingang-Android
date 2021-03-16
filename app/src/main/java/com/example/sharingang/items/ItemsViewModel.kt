@@ -21,6 +21,14 @@ class ItemsViewModel @Inject constructor(
     val navigateToEditItem: LiveData<Item?>
         get() = _navigateToEditItem
 
+    private val _focusedItem = MutableLiveData<Item?>()
+    val focusedItem: LiveData<Item?>
+        get() = _focusedItem
+
+    private val _viewingItem = MutableLiveData<Boolean>(false)
+    val viewingItem: LiveData<Boolean>
+        get() = _viewingItem
+
     /**
      * The last item created
      */
@@ -55,5 +63,14 @@ class ItemsViewModel @Inject constructor(
 
     fun onEditItemNavigated() {
         _navigateToEditItem.value = null
+    }
+
+    fun onViewItem(item: Item) {
+        _focusedItem.value = item
+        _viewingItem.value = true
+    }
+
+    fun onViewItemNavigated() {
+        _viewingItem.value = false
     }
 }

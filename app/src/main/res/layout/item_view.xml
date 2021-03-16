@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="@{() -> clickListener.onClick(item)}"
+            android:onClick="@{() -> clickListener.onView(item)}"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:textSize="24sp"
@@ -34,7 +34,7 @@
             android:id="@+id/item_list_view_edit_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> clickListener.onClick(item)}"
+            android:onClick="@{() -> clickListener.onEdit(item)}"
             android:text="@string/edit"
             android:textSize="20sp" />
 

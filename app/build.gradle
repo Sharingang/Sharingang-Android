@@ -75,6 +75,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore-ktx'
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
     
     testImplementation 'junit:junit:4.13.2'
