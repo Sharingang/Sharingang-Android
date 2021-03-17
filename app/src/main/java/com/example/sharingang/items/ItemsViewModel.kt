@@ -25,7 +25,7 @@ class ItemsViewModel @Inject constructor(
     val focusedItem: LiveData<Item?>
         get() = _focusedItem
 
-    private val _viewingItem = MutableLiveData<Boolean>(false)
+    private val _viewingItem = MutableLiveData(false)
     val viewingItem: LiveData<Boolean>
         get() = _viewingItem
 

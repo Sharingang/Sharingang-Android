@@ -10,6 +10,7 @@
         <variable
             name="description"
             type="String" />
+
         <variable
             name="price"
             type="String" />
@@ -27,6 +28,13 @@
             android:text="@string/edit_item"
             android:textSize="30sp"
             android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/edit_item_image"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:contentDescription="@string/item_image_description"
+            android:src="@drawable/ic_baseline_image_24" />
 
         <EditText
             android:id="@+id/editItemTitle"
@@ -47,8 +55,8 @@
             android:importantForAutofill="no"
             android:inputType="textMultiLine"
             android:minLines="4"
-            android:text="@={description}"
-            android:singleLine="false" />
+            android:singleLine="false"
+            android:text="@={description}" />
 
         <EditText
             android:id="@+id/editItemPrice"
@@ -56,9 +64,9 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/price"
-            android:inputType="numberDecimal"
             android:importantForAutofill="no"
-            android:text="@={price}"/>
+            android:inputType="numberDecimal"
+            android:text="@={price}" />
 
         <Button
             android:id="@+id/editItemButton"
