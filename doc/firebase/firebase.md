@@ -34,7 +34,7 @@ All queries can either
 - be "observed" and get notified in real time when a document matching the query changes (will be useful for the chat feature)
 
 ## Data model
-We will have an `items` collection containing item documents with the attributs defined below.
+We will have an `items` collection containing item documents with the attributes defined below.
 
 ![diagram](img/model.png)
 

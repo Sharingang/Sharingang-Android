@@ -35,8 +35,7 @@ class InMemoryItemRepository @Inject constructor() : ItemRepository {
         require(item.id == null)
 
         val id = UUID.randomUUID().toString()
-        item.id = id
-        itemsMap[id] = item
+        itemsMap[id] = item.copy(id = id)
         itemsLiveData.postValue(itemsMap.values.toList())
         return id
     }
@@ -44,7 +43,7 @@ class InMemoryItemRepository @Inject constructor() : ItemRepository {
     override suspend fun updateItem(item: Item): Boolean {
         requireNotNull(item.id)
 
-        itemsMap[item.id!!] = item
+        itemsMap[item.id] = item
         itemsLiveData.postValue(itemsMap.values.toList())
         return true
     }

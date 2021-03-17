@@ -46,6 +46,4 @@ class ItemsListFragment : Fragment() {
         }
         return binding.root
     }
-
-
 }

@@ -33,8 +33,7 @@ class InMemoryItemRepositoryTest {
     fun canAddItemThrowsWhenIdNonNull() {
         val repo: ItemRepository = InMemoryItemRepository()
         runBlocking {
-            val item = generateSampleItem()
-            item.id = "some-id"
+            val item = generateSampleItem().copy(id = "some-id")
             repo.addItem(item)
         }
     }
@@ -45,10 +44,9 @@ class InMemoryItemRepositoryTest {
         runBlocking {
             val item = generateSampleItem()
 
-            // To be able to compare the items, we have to save the generated id
-            item.id = repo.addItem(item)
+            val id = repo.addItem(item)!!
 
-            assert(repo.getItem(item.id!!) == item)
+            assert(repo.getItem(id) == item.copy(id = id))
         }
     }
 
@@ -58,11 +56,9 @@ class InMemoryItemRepositoryTest {
         runBlocking {
             val items = List(5) { generateSampleItem(it) }
 
-            for (item in items) {
-                item.id = repo.addItem(item)
-            }
+            val addedItems = items.map { it.copy(id = repo.addItem(it)) }
 
-            assert(repo.getAllItems().containsAll(items))
+            assert(repo.getAllItems().containsAll(addedItems))
         }
     }
 
@@ -75,11 +71,9 @@ class InMemoryItemRepositoryTest {
 
             val items = List(5) { generateSampleItem(it) }
 
-            for (item in items) {
-                item.id = repo.addItem(item)
-            }
+            val addedItems = items.map { it.copy(id = repo.addItem(it)) }
 
-            assert(itemsLiveData.getOrAwaitValue().containsAll(items))
+            assert(itemsLiveData.getOrAwaitValue().containsAll(addedItems))
         }
     }
 
@@ -89,9 +83,9 @@ class InMemoryItemRepositoryTest {
         runBlocking {
             val item = generateSampleItem()
 
-            item.id = repo.addItem(item)
+            val addedItem = item.copy(id = repo.addItem(item))
 
-            val updatedItem = item.copy(description = "updated description")
+            val updatedItem = addedItem.copy(description = "updated description")
             repo.updateItem(updatedItem)
 
             assert(repo.getItem(updatedItem.id!!) == updatedItem)
