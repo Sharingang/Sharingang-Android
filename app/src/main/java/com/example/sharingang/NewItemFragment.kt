@@ -16,7 +16,7 @@ import com.example.sharingang.items.ItemsViewModel
 class NewItemFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
-
+    var category : Int = 0;
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -24,20 +24,12 @@ class NewItemFragment : Fragment() {
 
         val binding: FragmentNewItemBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_new_item, container, false)
-        var category : Int = 0
         binding.categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(
-                adapterView: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
+            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
-                if(adapterView != null){category = position}
+                category = if(adapterView != null) position else 0;
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
         binding.createItemButton.setOnClickListener { view: View ->
             viewModel.addItem(

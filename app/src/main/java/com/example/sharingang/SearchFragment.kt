@@ -48,7 +48,7 @@ class SearchFragment : Fragment() {
         if(search_name == null){Log.d("info", "String search was null");}else{
             Log.d("info", search_name);
         }
-//        val listItems = repo.getAllItemsLiveData()
+//        val listItems = async{repo.getAllItemsLiveData()}
 
 
 //        adapter.submitList(searchResults);

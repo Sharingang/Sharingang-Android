@@ -18,6 +18,7 @@ import com.example.sharingang.items.ItemsViewModel
 class ItemsListFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
+    val adapter = ItemsAdapter(ItemListener { item -> viewModel.onEditItemClicked(item) })
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -29,8 +30,6 @@ class ItemsListFragment : Fragment() {
         binding.newItemButton.setOnClickListener { view: View ->
             view.findNavController().navigate(R.id.action_itemsListFragment_to_newItemFragment)
         }
-
-        val adapter = ItemsAdapter(ItemListener { item -> viewModel.onEditItemClicked(item) })
         binding.itemList.adapter = adapter
         viewModel.items.observe(viewLifecycleOwner, {
             it?.let { adapter.submitList(it) }
