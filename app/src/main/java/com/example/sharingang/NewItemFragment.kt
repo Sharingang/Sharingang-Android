@@ -27,20 +27,14 @@ class NewItemFragment : Fragment() {
         val binding: FragmentNewItemBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_new_item, container, false)
 
-        binding.categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long
-            ) {
-                category = if(adapterView != null) position else 0
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
         binding.createItemButton.setOnClickListener { view: View ->
             viewModel.addItem(
                 Item(
-                    price = binding.price?.toDoubleOrNull() ?: 0.0,
-                    description = binding.description ?: "",
-                    title = binding.title ?: "",
-                    category = category
+                        price = binding.price?.toDoubleOrNull() ?: 0.0,
+                        description = binding.description ?: "",
+                        title = binding.title ?: "",
+                        category = binding.categorySpinner.selectedItemPosition,
+                        categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition]
                 )
             )
             view.findNavController().navigate(R.id.action_newItemFragment_to_itemsListFragment)
