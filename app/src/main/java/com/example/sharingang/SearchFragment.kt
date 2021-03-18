@@ -26,8 +26,14 @@ private const val ARG_PARAM2 = "param2"
 class SearchFragment : Fragment() {
 
     private val viewModel : ItemsViewModel by activityViewModels();
-    private val adapter = ItemsAdapter(ItemListener {  });
-//    private val repo = FirestoreItemRepository()
+    private val adapter = setupItemAdapter();
+
+
+    private fun setupItemAdapter(): ItemsAdapter {
+        val onEdit = { item: Item -> viewModel.onEditItemClicked(item) }
+        val onView = { item: Item -> viewModel.onViewItem(item) }
+        return ItemsAdapter(ItemListener(onEdit, onView))
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -48,10 +54,5 @@ class SearchFragment : Fragment() {
         if(search_name == null){Log.d("info", "String search was null");}else{
             Log.d("info", search_name);
         }
-//        val listItems = async{repo.getAllItemsLiveData()}
-
-
-//        adapter.submitList(searchResults);
     }
-
 }

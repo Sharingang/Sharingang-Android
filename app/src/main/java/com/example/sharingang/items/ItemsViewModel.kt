@@ -21,6 +21,14 @@ class ItemsViewModel @Inject constructor(
     val navigateToEditItem: LiveData<Item?>
         get() = _navigateToEditItem
 
+    private val _focusedItem = MutableLiveData<Item?>()
+    val focusedItem: LiveData<Item?>
+        get() = _focusedItem
+
+    private val _viewingItem = MutableLiveData<Boolean>(false)
+    val viewingItem: LiveData<Boolean>
+        get() = _viewingItem
+
     /**
      * The last item created
      */
@@ -39,16 +47,13 @@ class ItemsViewModel @Inject constructor(
     }
 
     /**
-     * Replace the old item in the list by a new one. If it
-     * doesn't exist, just add the new item.
+     * Replace the old item by a new one.
      *
-     * @param oldItem the item to be replaced
-     * @param newItem the new item that should replace the other one
+     * @param updatedItem the updated item containing the ID of the existing one
      */
-    fun updateItem(oldItem: Item, newItem: Item) {
-        newItem.id = oldItem.id
+    fun updateItem(updatedItem: Item) {
         viewModelScope.launch(Dispatchers.IO) {
-            itemRepository.updateItem(newItem)
+            itemRepository.updateItem(updatedItem)
         }
     }
 
@@ -58,5 +63,14 @@ class ItemsViewModel @Inject constructor(
 
     fun onEditItemNavigated() {
         _navigateToEditItem.value = null
+    }
+
+    fun onViewItem(item: Item) {
+        _focusedItem.value = item
+        _viewingItem.value = true
+    }
+
+    fun onViewItemNavigated() {
+        _viewingItem.value = false
     }
 }

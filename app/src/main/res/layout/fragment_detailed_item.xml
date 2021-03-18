@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.sharingang.items.ItemsViewModel" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/itemTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.focusedItem.title}"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/itemCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{@string/categories(viewModel.focusedItem.category)}"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/itemPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{@string/display_price(viewModel.focusedItem.price)}"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/itemDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.focusedItem.description}"
+            android:textSize="18sp" />
+    </LinearLayout>
+</layout>

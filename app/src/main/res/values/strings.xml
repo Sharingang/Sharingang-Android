@@ -3,9 +3,20 @@
     <string name="new_item">New Item</string>
     <string name="description">Description</string>
     <string name="create_item">Create Item</string>
-    <string name="get_location">Get Location</string>
     <string name="go_to_map">Go to Map</string>
     <string name="edit">Edit</string>
     <string name="edit_item">Edit Item</string>
     <string name="title">Title</string>
+    <string name="default_price">Price (default: 0.0)</string>
+    <string name="price">Price</string>
+    <string name="display_price">$ %.2f</string>
+
+    <string-array name="categories">
+        <item>None</item>
+        <item>Book</item>
+        <item>Electronics</item>
+        <item>Games</item>
+        <item>Clothes</item>
+        <item>Miscellaneous</item>
+    </string-array>
 </resources>

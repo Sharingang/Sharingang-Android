@@ -17,8 +17,8 @@
             android:id="@+id/action_itemsListFragment_to_editItemFragment"
             app:destination="@id/editItemFragment" />
         <action
-            android:id="@+id/action_itemsListFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
+            android:id="@+id/action_itemsListFragment_to_detailedItemFragment"
+            app:destination="@id/detailedItemFragment" />
     </fragment>
     <fragment
         android:id="@+id/newItemFragment"
@@ -42,11 +42,7 @@
             app:argType="com.example.sharingang.items.Item" />
     </fragment>
     <fragment
-        android:id="@+id/searchFragment"
-        android:name="com.example.sharingang.SearchFragment"
-        android:label="SearchFragment" >
-        <action
-            android:id="@+id/action_searchFragment_to_itemsListFragment"
-            app:destination="@id/itemsListFragment" />
-    </fragment>
+        android:id="@+id/detailedItemFragment"
+        android:name="com.example.sharingang.DetailedItemFragment"
+        android:label="DetailedItemFragment" />
 </navigation>

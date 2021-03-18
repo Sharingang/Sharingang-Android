@@ -10,6 +10,9 @@
         <variable
             name="description"
             type="String" />
+        <variable
+            name="price"
+            type="String" />
     </data>
 
     <LinearLayout
@@ -48,11 +51,24 @@
             android:text="@={description}"
             tools:ignore="LabelFor" />
 
+
         <Spinner
             android:id="@+id/category_spinner"
-            android:entries="@array/categories"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:entries="@array/categories" />
+
+        <EditText
+            android:id="@+id/editItemPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autofillHints="yes"
+            android:ems="10"
+            android:hint="@string/default_price"
+            android:importantForAutofill="yes"
+            android:inputType="numberDecimal"
+            android:text="@={price}" />
+
         <Button
             android:id="@+id/createItemButton"
             android:layout_width="wrap_content"

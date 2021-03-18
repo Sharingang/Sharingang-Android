@@ -39,10 +39,7 @@ class ItemsAdapter(private val clickListener: ItemListener) :
 
 class ItemsDiffCallback : DiffUtil.ItemCallback<Item>() {
     override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
-        // Since it's a data class, the == checks if all the fields are equal
-        // now there is only a description so it might work weirdly with same description items,
-        // but later we'll check if their IDs are equal or not
-        return oldItem == newItem
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
@@ -51,6 +48,10 @@ class ItemsDiffCallback : DiffUtil.ItemCallback<Item>() {
 }
 
 // Replace the description with its ID once the database is set
-class ItemListener(val clickListener: (item: Item) -> Unit) {
-    fun onClick(item: Item) = clickListener(item)
+class ItemListener(
+    val onEditListener: (item: Item) -> Unit,
+    val onViewListener: (item: Item) -> Unit
+) {
+    fun onEdit(item: Item) = onEditListener(item)
+    fun onView(item: Item) = onViewListener(item)
 }
