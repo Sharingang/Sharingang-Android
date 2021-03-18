@@ -17,7 +17,6 @@ import com.example.sharingang.items.ItemsViewModel
 class NewItemFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
-    var category : Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
