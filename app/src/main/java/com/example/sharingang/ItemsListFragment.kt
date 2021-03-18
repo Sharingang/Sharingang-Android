@@ -20,12 +20,6 @@ class ItemsListFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
 
-    private fun setupItemAdapter(): ItemsAdapter {
-        val onEdit = { item: Item -> viewModel.onEditItemClicked(item) }
-        val onView = { item: Item -> viewModel.onViewItem(item) }
-        return ItemsAdapter(ItemListener(onEdit, onView))
-    }
-
     private fun setupNavigation() {
         viewModel.navigateToEditItem.observe(viewLifecycleOwner, { item ->
             item?.let {
@@ -56,11 +50,10 @@ class ItemsListFragment : Fragment() {
             view.findNavController().navigate(R.id.action_itemsListFragment_to_newItemFragment)
         }
 
-        val adapter = setupItemAdapter()
+        val adapter = viewModel.setupItemAdapter()
         binding.itemList.adapter = adapter
-        viewModel.items.observe(viewLifecycleOwner, {
-            it?.let { adapter.submitList(it) }
-        })
+        viewModel.addObserver(viewLifecycleOwner, adapter)
+        
         setupNavigation()
         binding.goToMap.setOnClickListener {
             startActivity(Intent(this.activity, MapActivity::class.java))

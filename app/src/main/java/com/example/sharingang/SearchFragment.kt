@@ -18,22 +18,14 @@ import com.example.sharingang.items.ItemsViewModel
 class SearchFragment : Fragment() {
 
     private val viewModel : ItemsViewModel by activityViewModels()
-    private val adapter = setupItemAdapter()
-
-
-    private fun setupItemAdapter(): ItemsAdapter {
-        val onEdit = { item: Item -> viewModel.onEditItemClicked(item) }
-        val onView = { item: Item -> viewModel.onViewItem(item) }
-        return ItemsAdapter(ItemListener(onEdit, onView))
-    }
+    private val adapter = viewModel.setupItemAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val binding : FragmentSearchBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
         binding.itemList.adapter = adapter
-        viewModel.items.observe(viewLifecycleOwner, {
-            it?.let { adapter.submitList(it) }
-        })
+
+        viewModel.addObserver(viewLifecycleOwner, adapter)
         binding.sflSearchButton.setOnClickListener{
             searchList(binding.sflSearchText.text.toString())
         }
