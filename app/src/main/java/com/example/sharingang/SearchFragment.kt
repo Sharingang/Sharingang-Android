@@ -18,11 +18,11 @@ import com.example.sharingang.items.ItemsViewModel
 class SearchFragment : Fragment() {
 
     private val viewModel : ItemsViewModel by activityViewModels()
-    private val adapter = viewModel.setupItemAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val binding : FragmentSearchBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
+        val adapter = viewModel.setupItemAdapter()
         binding.itemList.adapter = adapter
 
         viewModel.addObserver(viewLifecycleOwner, adapter)
