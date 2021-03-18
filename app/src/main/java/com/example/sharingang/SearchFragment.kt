@@ -10,8 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.sharingang.databinding.FragmentSearchBinding
 import com.example.sharingang.items.Item
-import com.example.sharingang.items.ItemListener
-import com.example.sharingang.items.ItemsAdapter
 import com.example.sharingang.items.ItemsViewModel
 
 
@@ -27,16 +25,22 @@ class SearchFragment : Fragment() {
 
         viewModel.addObserver(viewLifecycleOwner, adapter)
         binding.sflSearchButton.setOnClickListener{
-            searchList(binding.sflSearchText.text.toString())
+
         }
         return binding.root
     }
 
 
-    private fun searchList(search_name : String?){
-        Log.d("info","Seach function called")
-        if(search_name == null){Log.d("info", "String search was null");}else{
-            Log.d("info", search_name)
+    private fun searchList(search_name : String?) : ArrayList<Item>? {
+        if (search_name == null || viewModel.items.value == null) {
+            return null
         }
+        var searchResults : ArrayList<Item> = ArrayList();
+        for (i in viewModel.items.value!!) {
+            if(i.title.contains(search_name) || i.description.contains(search_name)){
+                searchResults.add(i);
+            }
+        }
+        return searchResults
     }
 }
