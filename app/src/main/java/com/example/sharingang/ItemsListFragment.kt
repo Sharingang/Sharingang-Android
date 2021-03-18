@@ -49,9 +49,7 @@ class ItemsListFragment : Fragment() {
         binding.newItemButton.setOnClickListener { view: View ->
             view.findNavController().navigate(R.id.action_itemsListFragment_to_newItemFragment)
         }
-        binding.gotoSearchButton.setOnClickListener { view: View ->
-            view.findNavController().navigate(R.id.action_itemsListFragment_to_searchFragment5)
-        }
+        binding.gotoSearchButton.setOnClickListener { view: View -> gotoSearchPage(view) }
 
         val adapter = viewModel.setupItemAdapter()
         binding.itemList.adapter = adapter
@@ -63,6 +61,10 @@ class ItemsListFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    fun gotoSearchPage(view : View){
+        view.findNavController().navigate(R.id.action_itemsListFragment_to_searchFragment5)
     }
 }
 
