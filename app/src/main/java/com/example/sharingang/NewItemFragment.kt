@@ -1,9 +1,11 @@
+
 package com.example.sharingang
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -27,9 +29,11 @@ class NewItemFragment : Fragment() {
         binding.createItemButton.setOnClickListener { view: View ->
             viewModel.addItem(
                 Item(
-                    price = binding.price?.toDoubleOrNull() ?: 0.0,
-                    description = binding.description ?: "",
-                    title = binding.title ?: ""
+                        price = binding.price?.toDoubleOrNull() ?: 0.0,
+                        description = binding.description ?: "",
+                        title = binding.title ?: "",
+                        category = binding.categorySpinner.selectedItemPosition,
+                        categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition]
                 )
             )
             view.findNavController().navigate(R.id.action_newItemFragment_to_itemsListFragment)

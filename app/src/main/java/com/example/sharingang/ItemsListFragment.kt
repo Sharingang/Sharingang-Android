@@ -20,17 +20,11 @@ class ItemsListFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
 
-    private fun setupItemAdapter(): ItemsAdapter {
-        val onEdit = { item: Item -> viewModel.onEditItemClicked(item) }
-        val onView = { item: Item -> viewModel.onViewItem(item) }
-        return ItemsAdapter(ItemListener(onEdit, onView))
-    }
-
     private fun setupNavigation() {
         viewModel.navigateToEditItem.observe(viewLifecycleOwner, { item ->
             item?.let {
                 this.findNavController().navigate(
-                    ItemsListFragmentDirections.actionItemsListFragmentToEditItemFragment(item)
+                        ItemsListFragmentDirections.actionItemsListFragmentToEditItemFragment(item)
                 )
                 viewModel.onEditItemNavigated()
             }
@@ -38,7 +32,7 @@ class ItemsListFragment : Fragment() {
         viewModel.viewingItem.observe(viewLifecycleOwner, {
             if (it) {
                 this.findNavController().navigate(
-                    ItemsListFragmentDirections.actionItemsListFragmentToDetailedItemFragment()
+                        ItemsListFragmentDirections.actionItemsListFragmentToDetailedItemFragment()
                 )
                 viewModel.onViewItemNavigated()
             }
@@ -46,25 +40,31 @@ class ItemsListFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         val binding: FragmentItemsListBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_items_list, container, false)
+                DataBindingUtil.inflate(inflater, R.layout.fragment_items_list, container, false)
         binding.viewModel = viewModel
         binding.newItemButton.setOnClickListener { view: View ->
             view.findNavController().navigate(R.id.action_itemsListFragment_to_newItemFragment)
         }
+        binding.gotoSearchButton.setOnClickListener { view: View -> gotoSearchPage(view) }
 
-        val adapter = setupItemAdapter()
+        val adapter = viewModel.setupItemAdapter()
         binding.itemList.adapter = adapter
-        viewModel.items.observe(viewLifecycleOwner, {
-            it?.let { adapter.submitList(it) }
-        })
+        viewModel.addObserver(viewLifecycleOwner, adapter)
+        
         setupNavigation()
         binding.goToMap.setOnClickListener {
             startActivity(Intent(this.activity, MapActivity::class.java))
         }
+
         return binding.root
     }
+
+    fun gotoSearchPage(view : View){
+        view.findNavController().navigate(R.id.action_itemsListFragment_to_searchFragment5)
+    }
 }
+

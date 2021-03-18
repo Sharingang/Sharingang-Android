@@ -10,4 +10,15 @@
     <string name="default_price">Price (default: 0.0)</string>
     <string name="price">Price</string>
     <string name="display_price">$ %.2f</string>
+    <string name="search_hint">Search...</string>
+    <string name="search_go_button">Go</string>
+
+    <string-array name="categories">
+        <item>None</item>
+        <item>Book</item>
+        <item>Electronics</item>
+        <item>Games</item>
+        <item>Clothes</item>
+        <item>Miscellaneous</item>
+    </string-array>
 </resources>

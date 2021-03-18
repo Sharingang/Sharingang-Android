@@ -1,9 +1,10 @@
 package com.example.sharingang
 
 import androidx.test.espresso.Espresso
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -27,27 +28,45 @@ class DetailedItemFragmentTest {
 
     @Test
     fun anItemCanBeEditedAndSeenOnItemsListFragment() {
-        Espresso.onView(ViewMatchers.withId(R.id.newItemButton)).perform(ViewActions.click())
-        Espresso.onView(ViewMatchers.withId(R.id.newItemPrompt))
-            .check(ViewAssertions.matches(ViewMatchers.withText("New Item")))
-        Espresso.onView(ViewMatchers.withId(R.id.editItemTitle)).perform(
-            ViewActions.typeText(itemTitle),
-            ViewActions.closeSoftKeyboard()
+        onView(withId(R.id.newItemButton)).perform(click())
+        onView(withId(R.id.newItemPrompt))
+            .check(matches(withText("New Item")))
+        onView(withId(R.id.editItemTitle)).perform(
+            typeText(itemTitle),
+            closeSoftKeyboard()
         )
-        Espresso.onView(ViewMatchers.withId(R.id.editItemDescription)).perform(
-            ViewActions.typeText(itemDescription),
-            ViewActions.closeSoftKeyboard()
+        onView(withId(R.id.editItemDescription)).perform(
+            typeText(itemDescription),
+            closeSoftKeyboard()
         )
-        val buttonCreate = Espresso.onView(ViewMatchers.withId(R.id.createItemButton))
-        buttonCreate.check(ViewAssertions.matches(ViewMatchers.withText("Create Item")))
-        buttonCreate.perform(ViewActions.click())
+        val buttonCreate = onView(withId(R.id.createItemButton))
+        buttonCreate.check(matches(withText("Create Item")))
+        buttonCreate.perform(click())
 
-        Espresso.onView(ViewMatchers.withText(itemTitle)).perform(ViewActions.click())
+        onView(withText(itemTitle)).perform(click())
 
-        Espresso.onView(ViewMatchers.withId(R.id.itemTitle))
-            .check(ViewAssertions.matches(ViewMatchers.withText(itemTitle)))
+        onView(withId(R.id.itemTitle))
+            .check(matches(withText(itemTitle)))
 
-        Espresso.onView(ViewMatchers.withId(R.id.itemDescription))
-            .check(ViewAssertions.matches(ViewMatchers.withText(itemDescription)))
+        onView(withId(R.id.itemDescription))
+            .check(matches(withText(itemDescription)))
+    }
+
+    @Test
+    fun canSeeCategoryInDetailedItemFragment(){
+        val testTitle : String = "Book Item"
+        val testCategory : String = "Book"
+        onView(withId(R.id.newItemButton)).perform(click())
+        onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
+        onView(withId(R.id.editItemTitle)).perform(
+                typeText(testTitle),
+                closeSoftKeyboard()
+        )
+        onView(withId(R.id.category_spinner)).perform(click())
+        onView(withText(testCategory)).perform(click())
+        onView(withId(R.id.createItemButton)).perform(click())
+
+        onView(withText(testTitle)).perform(click())
+        onView(withId(R.id.itemCategory)).check(matches(withText(testCategory)))
     }
 }

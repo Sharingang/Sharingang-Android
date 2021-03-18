@@ -12,6 +12,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
 class EditItemFragmentTest {
@@ -26,13 +27,41 @@ class EditItemFragmentTest {
     private val editedItem = "Edited"
 
     @Test
+    fun canEditCategoryOfItem(){
+        onView(withId(R.id.newItemButton)).perform(click())
+        onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
+        onView(withId(R.id.editItemTitle)).perform(
+                typeText("Book_item"),
+                closeSoftKeyboard()
+        )
+
+        onView(withId(R.id.category_spinner)).perform(click())
+        onView(withText("Book")).perform(click())
+
+        onView(withId(R.id.createItemButton)).perform(click())
+
+        onView(withText("Book_item")).check(matches(isDisplayed()))
+        onView(withId(R.id.item_list_view_edit_btn)).check(matches(withText("Edit"))).perform(click())
+
+        onView(withId(R.id.editItemPrompt)).check(matches(withText("Edit Item")))
+        onView(withId(R.id.category_spinner)).check(matches(withSpinnerText("Book")))
+        onView(withId(R.id.category_spinner)).perform(click())
+        onView(withText("Games")).perform(click())
+
+        onView(withId(R.id.editItemButton)).perform(click())
+        onView(withId(R.id.item_list_view_edit_btn)).check(matches(withText("Edit"))).perform(click())
+        onView(withId(R.id.category_spinner)).check(matches(withSpinnerText("Games")))
+    }
+
+
+    @Test
     fun anItemCanBeEditedAndSeenOnItemsListFragment() {
         onView(withId(R.id.newItemButton)).perform(click())
         onView(withId(R.id.newItemPrompt))
             .check(matches(withText("New Item")))
         onView(withId(R.id.editItemTitle)).perform(
-            typeText(item),
-            closeSoftKeyboard()
+                typeText(item),
+                closeSoftKeyboard()
         )
         val buttonCreate = onView(withId(R.id.createItemButton))
         buttonCreate.check(matches(withText("Create Item")))
@@ -49,8 +78,8 @@ class EditItemFragmentTest {
             .check(matches(withText("Edit Item")))
 
         onView(withId(R.id.editItemTitle)).perform(
-            typeText(editedItem),
-            closeSoftKeyboard()
+                typeText(editedItem),
+                closeSoftKeyboard()
         )
 
         onView(withId(R.id.editItemButton)).perform(click())

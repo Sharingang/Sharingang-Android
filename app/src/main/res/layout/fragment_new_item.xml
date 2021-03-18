@@ -51,6 +51,13 @@
             android:text="@={description}"
             tools:ignore="LabelFor" />
 
+
+        <Spinner
+            android:id="@+id/category_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/categories" />
+
         <EditText
             android:id="@+id/editItemPrice"
             android:layout_width="wrap_content"
