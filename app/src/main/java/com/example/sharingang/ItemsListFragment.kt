@@ -50,6 +50,10 @@ class ItemsListFragment : Fragment() {
             view.findNavController().navigate(R.id.action_itemsListFragment_to_newItemFragment)
         }
 
+        binding.gotoSearchButton.setOnClickListener { view : View ->
+            view.findNavController().navigate(R.id.action_itemsListFragment_to_searchFragment4)
+        }
+
         val adapter = viewModel.setupItemAdapter()
         binding.itemList.adapter = adapter
         viewModel.addObserver(viewLifecycleOwner, adapter)
