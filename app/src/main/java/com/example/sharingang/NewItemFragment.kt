@@ -17,7 +17,7 @@ import com.example.sharingang.items.ItemsViewModel
 class NewItemFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
-    var category : Int = 0;
+    var category : Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +30,7 @@ class NewItemFragment : Fragment() {
         binding.categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
-                category = if(adapterView != null) position else 0;
+                category = if(adapterView != null) position else 0
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }

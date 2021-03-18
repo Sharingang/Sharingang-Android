@@ -39,7 +39,7 @@ class EditItemFragment : Fragment() {
                             title = binding.title ?: "",
                             description = binding.description ?: "",
                             price = binding.price?.toDoubleOrNull() ?: 0.0,
-                            category = binding.categorySpinner.selectedItemPosition ?: 0
+                            category = binding.categorySpinner.selectedItemPosition
                     )
             )
             view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)
