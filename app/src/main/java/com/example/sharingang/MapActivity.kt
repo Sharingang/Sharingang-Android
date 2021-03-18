@@ -2,12 +2,14 @@ package com.example.sharingang
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.example.sharingang.databinding.ActivityMapBinding
 import com.google.android.gms.location.*
@@ -18,18 +20,17 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 
+
 const val DEFAULT_ZOOM = 15.0
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMapBinding
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private var permissionGranted: Boolean = false
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             if (isGranted) {
-                permissionGranted = true
                 startLocationUpdates()
             } else {
                 Toast.makeText(
@@ -37,7 +38,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                     "Location permission successfully denied. Feature is disabled.",
                     Toast.LENGTH_LONG
                 ).show()
-                permissionGranted = false
             }
         }
 
@@ -64,9 +64,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
-    @SuppressLint("MissingPermission")
     private fun startLocationUpdates() {
-        if (!permissionGranted) {
+        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED)) {
             requestLocationPermission()
         } else {
             fusedLocationClient.requestLocationUpdates(
