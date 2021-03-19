@@ -6,10 +6,20 @@ A feature that has been added this week is putting the price into the New and Ed
 Overall this task was not too difficult and did not take a huge amount of time, however, issues have occurred with Cirrus which did not help us merge the pull request as fast as planned.
 
 ## Lúcás
+First I implemented extra forms for adding both a title and a description when creating and editing items.
+This took the 2 hours I expected, given that I had familiarize myself with the fragments the others had made.
 
+Then, I added an extra view for seeing all of the components of an item. This took about as long as I expected,
+since I needed to figure out how to implement click interactions for list items, and also modify
+the navigation graph.
+
+I started looking into implementing caching, but researching how room works, and different caching
+strategies took longer than expected.
 
 ## Sebastian
+I implemented the display of the map, with the current location of the user being refreshed every 2.5-5 seconds, automatically. This took me 7 hours, which is slightly lower than the 8 hours I estimated for it. 
 
+Overall, I am feeling much more confident using git, with merges and pull requests. I am also getting more familiar with Kotlin, and I struggle less than before with Android Studio.
 
 ## Samuel
 Last week we didn't have time to perfect the integration of the database and the other features (add and edit items, navigation).
@@ -23,10 +33,19 @@ I also continued a bit with the Android Kotlin codelabs and helps my teammates w
 My time estimate was more accurate this time.
 
 ## Zach
+This week I finished the kotlin course from the previous sprint, I also implemented a category attribute for items and modified the existing code to work with it.
 
+I had estimated only an hour for this task but in the end it took over 6h to complete. Merging with the main branch also proved quite difficult as my branch was many commits behind.
+
+I was unable to finish the implementation of the search functionality due to time constraints so I intend to finish it during the next sprint.
 
 ## Bastien
+I checked with Samuel the integration concerning the database and the other features.
+Then I started researching how to add images from the gallery in the app and started implementing it.
 
+The feature is not finished because I needed to refactor the code, but I can't find a way to make it work while being separated despite receiving help from Lucas.
+
+My time estimate was again far from reality.
 
 ## Overall team
 We only had one stand-up meeting at the beginning of the week but we stayed in contact on the WhatsApp group.
