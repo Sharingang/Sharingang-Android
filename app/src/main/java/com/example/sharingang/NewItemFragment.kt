@@ -63,6 +63,11 @@ class NewItemFragment : Fragment() {
             view.findNavController().navigate(R.id.action_newItemFragment_to_itemsListFragment)
         }
 
+        setupLocation()
+        return binding.root
+    }
+
+    private fun setupLocation(){
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         binding.newItemGetLocation.setOnClickListener {
             doOrGetPermission(
@@ -73,9 +78,7 @@ class NewItemFragment : Fragment() {
                 requestPermissionLauncher
             )
         }
-        return binding.root
     }
-
     @SuppressLint("MissingPermission")
     private fun updateLocation() {
         val getLocationTask = fusedLocationClient.getCurrentLocation(
