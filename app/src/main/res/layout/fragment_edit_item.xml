@@ -71,7 +71,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/write_latitude"
+                android:id="@+id/edit_latitude"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -82,7 +82,7 @@
                 android:text="@={latitude}"/>
 
             <EditText
-                android:id="@+id/write_longitude"
+                android:id="@+id/edit_longitude"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

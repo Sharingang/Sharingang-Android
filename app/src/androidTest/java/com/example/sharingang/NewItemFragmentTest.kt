@@ -67,4 +67,18 @@ class NewItemFragmentTest {
         onView(withId(R.id.write_latitude)).check(matches(not(withText(""))))
         onView(withId(R.id.write_longitude)).check(matches(not(withText(""))))
     }
+    @Test
+    fun aLocationCanBeWritten(){
+        onView(withId(R.id.newItemButton)).perform(click())
+        onView(withId(R.id.write_latitude)).perform(
+            typeText("45.01"),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.write_longitude)).perform(
+            typeText("5.014"),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.createItemButton)).perform(click())
+        onView(withId(R.id.item_list_view_edit_btn)).perform(click())
+    }
 }
