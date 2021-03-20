@@ -32,6 +32,8 @@ class EditItemFragment : Fragment() {
         binding.description = existingItem.description
         binding.price = existingItem.price.toString().format("%.2f")
         binding.categorySpinner.setSelection(existingItem.category)
+        binding.latitude = existingItem.latitude.toString()
+        binding.longitude = existingItem.longitude.toString()
 
         binding.editItemButton.setOnClickListener { view: View ->
             viewModel.updateItem(
@@ -40,7 +42,9 @@ class EditItemFragment : Fragment() {
                             description = binding.description ?: "",
                             price = binding.price?.toDoubleOrNull() ?: 0.0,
                             category = binding.categorySpinner.selectedItemPosition,
-                            categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition]
+                            categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
+                            latitude = binding.latitude?.toDoubleOrNull()?:0.0,
+                            longitude = binding.longitude?.toDoubleOrNull()?:0.0
                     )
             )
             view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)

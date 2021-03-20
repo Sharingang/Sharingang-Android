@@ -8,6 +8,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -48,5 +49,16 @@ class NewItemFragmentTest {
 
         onView(withText(firstItem)).check(matches(isDisplayed()))
         onView(withText(secondItem)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun clickingOnGetLocationDisplaysLocation(){
+        onView(withId(R.id.newItemButton)).perform(click())
+        val button = onView(withId(R.id.new_item_get_location))
+        button.check(matches(withText("Get Location")))
+        button.perform(click())
+        Thread.sleep(5000)
+        onView(withId(R.id.write_latitude)).check(matches(not(withText(""))))
+        onView(withId(R.id.write_longitude)).check(matches(not(withText(""))))
     }
 }
