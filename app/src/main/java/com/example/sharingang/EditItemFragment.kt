@@ -18,11 +18,11 @@ class EditItemFragment : Fragment() {
     private lateinit var existingItem: Item
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         val binding: FragmentEditItemBinding =
-                DataBindingUtil.inflate(inflater, R.layout.fragment_edit_item, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_edit_item, container, false)
 
         val args = EditItemFragmentArgs.fromBundle(requireArguments())
 
@@ -37,15 +37,15 @@ class EditItemFragment : Fragment() {
 
         binding.editItemButton.setOnClickListener { view: View ->
             viewModel.updateItem(
-                    existingItem.copy(
-                            title = binding.title ?: "",
-                            description = binding.description ?: "",
-                            price = binding.price?.toDoubleOrNull() ?: 0.0,
-                            category = binding.categorySpinner.selectedItemPosition,
-                            categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
-                            latitude = binding.latitude?.toDoubleOrNull()?:0.0,
-                            longitude = binding.longitude?.toDoubleOrNull()?:0.0
-                    )
+                existingItem.copy(
+                    title = binding.title ?: "",
+                    description = binding.description ?: "",
+                    price = binding.price?.toDoubleOrNull() ?: 0.0,
+                    category = binding.categorySpinner.selectedItemPosition,
+                    categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
+                    latitude = binding.latitude?.toDoubleOrNull() ?: 0.0,
+                    longitude = binding.longitude?.toDoubleOrNull() ?: 0.0
+                )
             )
             view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)
         }

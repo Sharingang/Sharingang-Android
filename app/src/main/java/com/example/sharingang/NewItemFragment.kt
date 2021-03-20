@@ -1,15 +1,11 @@
 package com.example.sharingang
 
 import android.Manifest
-import android.content.pm.PackageManager
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -17,6 +13,8 @@ import androidx.navigation.findNavController
 import com.example.sharingang.databinding.FragmentNewItemBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsViewModel
+import com.example.sharingang.utils.doOrGetPermission
+import com.example.sharingang.utils.requestPermissionLauncher
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -28,21 +26,20 @@ class NewItemFragment : Fragment() {
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var binding: FragmentNewItemBinding
-    private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-            if (isGranted) {
-                getLocation()
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Location permission successfully denied. Feature is disabled.",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        }
 
     // Allows the cancellation of a location request if, for example, the user exists the activity
     private var cancellationTokenSource = CancellationTokenSource()
+    private val requestPermissionLauncher = requestPermissionLauncher(
+        this
+    ) {
+        doOrGetPermission(
+            this.context,
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            { updateLocation() }, null
+        )
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,41 +65,28 @@ class NewItemFragment : Fragment() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         binding.newItemGetLocation.setOnClickListener {
-            getLocation()
+            doOrGetPermission(
+                this.context,
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                { updateLocation() },
+                requestPermissionLauncher
+            )
         }
         return binding.root
     }
 
-    private fun getLocation() {
-        if (ContextCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            val getLocationTask = fusedLocationClient.getCurrentLocation(
-                LocationRequest.PRIORITY_HIGH_ACCURACY,
-                cancellationTokenSource.token
-            )
-            getLocationTask.addOnCompleteListener {
-                if (it.isSuccessful && it.result != null) {
-                    binding.latitude = it.result.latitude.toString()
-                    binding.longitude = it.result.longitude.toString()
-                }
+    @SuppressLint("MissingPermission")
+    private fun updateLocation() {
+        val getLocationTask = fusedLocationClient.getCurrentLocation(
+            LocationRequest.PRIORITY_HIGH_ACCURACY,
+            cancellationTokenSource.token
+        )
+        getLocationTask.addOnCompleteListener {
+            if (it.isSuccessful && it.result != null) {
+                binding.latitude = it.result.latitude.toString()
+                binding.longitude = it.result.longitude.toString()
             }
-        } else {
-            requestLocationPermission()
         }
-    }
-
-    private fun requestLocationPermission() {
-        // shouldShowRequestPermissionRationale returns false if the user has chosen "not ask again" or if the permission is disabled
-        if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
-            Toast.makeText(
-                requireContext(),
-                "Location permission is required to display your location on the map.",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-        requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 }
