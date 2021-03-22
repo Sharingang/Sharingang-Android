@@ -30,6 +30,15 @@ class EditItemFragment : Fragment() {
 
     lateinit var binding: FragmentEditItemBinding
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        observer = ImageAccess(requireActivity()) { uri: Uri? ->
+            binding.editItemImage.setImageURI(uri)
+            imageUri = uri
+        }
+        lifecycle.addObserver(observer)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,28 +47,11 @@ class EditItemFragment : Fragment() {
 
         val args = EditItemFragmentArgs.fromBundle(requireArguments())
 
-        observer = ImageAccess(requireActivity().activityResultRegistry) { uri: Uri? ->
-            binding.editItemImage.setImageURI(uri)
-            imageUri = uri
-        }
-        lifecycle.addObserver(observer)
-
         existingItem = args.item
 
         bind(binding, existingItem)
 
         return binding.root
-    }
-
-    private fun openGallery() {
-        observer.checkAndRequestPermission(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            "Storage permission is required to add an image from your phone.",
-            requireActivity()
-        )
-        if (observer.storagePermissionGranted) {
-            observer.openGallery()
-        }
     }
 
     private fun bind(binding: FragmentEditItemBinding, item: Item) {
@@ -70,7 +62,7 @@ class EditItemFragment : Fragment() {
             binding.editItemImage.setImageURI(Uri.parse(it))
         }
         binding.editItemImage.setOnClickListener {
-            openGallery()
+            observer.openGallery(requireActivity())
         }
         binding.editItemButton.setOnClickListener { view: View ->
             viewModel.updateItem(
@@ -81,6 +73,7 @@ class EditItemFragment : Fragment() {
                     imageUri = imageUri?.toString()
                 )
             )
+            observer.unregister()
             view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)
         }
     }

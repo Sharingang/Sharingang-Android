@@ -26,6 +26,16 @@ class NewItemFragment : Fragment() {
 
     lateinit var binding: FragmentNewItemBinding
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        observer = ImageAccess(requireActivity()) { uri: Uri? ->
+            Log.i("ImageAccess", observer.test.toString())
+            binding.newItemImage.setImageURI(uri)
+            imageUri = uri
+        }
+        lifecycle.addObserver(observer)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,29 +51,13 @@ class NewItemFragment : Fragment() {
                     imageUri = imageUri?.toString()
                 )
             )
+            observer.unregister()
             view.findNavController().navigate(R.id.action_newItemFragment_to_itemsListFragment)
         }
 
-        observer = ImageAccess(requireActivity().activityResultRegistry) { uri: Uri? ->
-            binding.newItemImage.setImageURI(uri)
-            imageUri = uri
-        }
-        lifecycle.addObserver(observer)
-
         binding.newItemImage.setOnClickListener {
-            openGallery()
+            observer.openGallery(requireActivity())
         }
         return binding.root
-    }
-
-    private fun openGallery() {
-        observer.checkAndRequestPermission(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            "Storage permission is required to add an image from your phone.",
-            requireActivity()
-        )
-        if (observer.storagePermissionGranted) {
-            observer.openGallery()
-        }
     }
 }

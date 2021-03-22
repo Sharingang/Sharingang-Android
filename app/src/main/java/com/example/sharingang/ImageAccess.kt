@@ -4,45 +4,55 @@ import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 
 
-class ImageAccess(private val registry: ActivityResultRegistry, private val callback: (Uri?) -> Unit) : DefaultLifecycleObserver {
+class ImageAccess(private val registry: FragmentActivity, private val callback: (Uri?) -> Unit) : DefaultLifecycleObserver {
 
     var storagePermissionGranted: Boolean = false
     private lateinit var requestStoragePermissionLauncher: ActivityResultLauncher<String>
 
-    lateinit var pickImage : ActivityResultLauncher<String>
+    private lateinit var pickImage : ActivityResultLauncher<String>
+
+    var test = 0
 
     override fun onCreate(owner: LifecycleOwner) {
+        Log.d("ImageAccess", test.toString())
         requestStoragePermissionLauncher =
-            registry.register(
+            registry.activityResultRegistry.register(
                 "storagePermission",
                 owner,
                 ActivityResultContracts.RequestPermission()
             ) { isGranted: Boolean ->
                 if (!isGranted) {
-                    /*Toast.makeText(
-                        owner,
+                    Toast.makeText(
+                        registry,
                         "Storage permission successfully denied. Feature is disabled.",
                         Toast.LENGTH_LONG
-                    ).show()*/
+                    ).show()
                 }
                 storagePermissionGranted = isGranted
 
             }
         pickImage =
-            registry.register("openGallery", owner, ActivityResultContracts.GetContent(), callback)
+            registry.activityResultRegistry.register("openGallery", owner, ActivityResultContracts.GetContent(), callback)
     }
 
-    fun checkAndRequestPermission(permission: String, rationale: String, context: Activity) {
+    fun unregister() {
+        pickImage.unregister()
+        requestStoragePermissionLauncher.unregister()
+    }
+
+    private fun checkAndRequestPermission(permission: String, rationale: String, context: Activity) {
         when {
             ContextCompat.checkSelfPermission(
                 context,
@@ -69,7 +79,14 @@ class ImageAccess(private val registry: ActivityResultRegistry, private val call
         }
     }
 
-    fun openGallery() {
-        pickImage.launch("image/*")
+    fun openGallery(activity: Activity) {
+        checkAndRequestPermission(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            "Storage permission is required to add an image from your phone.",
+            activity
+        )
+        if (storagePermissionGranted) {
+            pickImage.launch("image/*")
+        }
     }
 }
