@@ -1,5 +1,6 @@
 package com.example.sharingang
 
+import android.Manifest
 import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,7 +14,7 @@ import com.example.sharingang.databinding.FragmentEditItemBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsViewModel
 import com.example.sharingang.utils.consumeLocation
-import com.example.sharingang.utils.doOrGetLocationPermission
+import com.example.sharingang.utils.doOrGetPermission
 import com.example.sharingang.utils.requestPermissionLauncher
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -24,15 +25,15 @@ class EditItemFragment : Fragment() {
     private val viewModel: ItemsViewModel by activityViewModels()
     private lateinit var existingItem: Item
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var fusedLocationEdit: FusedLocationProviderClient
     private lateinit var binding: FragmentEditItemBinding
     private var cancellationTokenSource = CancellationTokenSource()
     private val requestPermissionLauncher = requestPermissionLauncher(this) {
-        doOrGetLocationPermission(
-            requireContext(),
+        doOrGetPermission(
             this,
+            Manifest.permission.ACCESS_FINE_LOCATION,
             {
-                consumeLocation(fusedLocationClient, cancellationTokenSource.token) {
+                consumeLocation(fusedLocationEdit, cancellationTokenSource) {
                     updateLocation(it)
                 }
             },
@@ -67,21 +68,20 @@ class EditItemFragment : Fragment() {
             )
             view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)
         }
-        setupLocation()
+        setupLocationEdit()
         return binding.root
     }
 
-    private fun setupLocation() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+    private fun setupLocationEdit() {
+        fusedLocationEdit = LocationServices.getFusedLocationProviderClient(requireContext())
         binding.editItemGetLocation.setOnClickListener {
-            doOrGetLocationPermission(
-                requireContext(),
+            doOrGetPermission(
                 this,
+                Manifest.permission.ACCESS_FINE_LOCATION,
                 {
-                    consumeLocation(
-                        fusedLocationClient,
-                        cancellationTokenSource.token
-                    ) { updateLocation(it) }
+                    consumeLocation(fusedLocationEdit, cancellationTokenSource) {
+                        updateLocation(it)
+                    }
                 },
                 requestPermissionLauncher
             )
@@ -89,8 +89,8 @@ class EditItemFragment : Fragment() {
     }
 
     private fun updateLocation(location: Location) {
-        binding.latitude = location.latitude.toString()
         binding.longitude = location.longitude.toString()
+        binding.latitude = location.latitude.toString()
     }
 
     private fun setupBinding() {

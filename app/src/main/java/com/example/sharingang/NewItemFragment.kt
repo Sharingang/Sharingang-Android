@@ -1,5 +1,6 @@
 package com.example.sharingang
 
+import android.Manifest
 import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,7 +14,7 @@ import com.example.sharingang.databinding.FragmentNewItemBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsViewModel
 import com.example.sharingang.utils.consumeLocation
-import com.example.sharingang.utils.doOrGetLocationPermission
+import com.example.sharingang.utils.doOrGetPermission
 import com.example.sharingang.utils.requestPermissionLauncher
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -23,7 +24,7 @@ class NewItemFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var fusedLocationCreate: FusedLocationProviderClient
     private lateinit var binding: FragmentNewItemBinding
 
     // Allows the cancellation of a location request if, for example, the user exists the activity
@@ -31,11 +32,11 @@ class NewItemFragment : Fragment() {
     private val requestPermissionLauncher = requestPermissionLauncher(
         this
     ) {
-        doOrGetLocationPermission(
-            requireContext(),
+        doOrGetPermission(
             this,
+            Manifest.permission.ACCESS_FINE_LOCATION,
             {
-                consumeLocation(fusedLocationClient, cancellationTokenSource.token) {
+                consumeLocation(fusedLocationCreate, cancellationTokenSource) {
                     updateLocation(
                         it
                     )
@@ -67,21 +68,22 @@ class NewItemFragment : Fragment() {
             view.findNavController().navigate(R.id.action_newItemFragment_to_itemsListFragment)
         }
 
-        setupLocation()
+        setupLocationCreate()
         return binding.root
     }
 
-    private fun setupLocation() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+    private fun setupLocationCreate() {
+        fusedLocationCreate = LocationServices.getFusedLocationProviderClient(requireContext())
         binding.newItemGetLocation.setOnClickListener {
-            doOrGetLocationPermission(
-                requireContext(),
+            doOrGetPermission(
                 this,
+                Manifest.permission.ACCESS_FINE_LOCATION,
                 {
-                    consumeLocation(
-                        fusedLocationClient,
-                        cancellationTokenSource.token
-                    ) { updateLocation(it) }
+                    consumeLocation(fusedLocationCreate, cancellationTokenSource) {
+                        updateLocation(
+                            it
+                        )
+                    }
                 }, requestPermissionLauncher
             )
         }

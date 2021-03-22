@@ -31,7 +31,7 @@ class MapFragmentTest {
         GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION)
 
     @Test
-    fun grantingPermissionDisplaysLocation() {
+    fun openingFragmentDisplaysLocation() {
         onView(withId(R.id.go_to_map)).perform(click())
         val text = onView(withId(R.id.location_display))
         text.check(matches(withText("")))
