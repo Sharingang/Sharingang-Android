@@ -58,7 +58,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    
+
     // Location
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
@@ -78,8 +78,10 @@ dependencies {
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "androidx.room:room-runtime:2.3.0-beta03"
+    kapt "androidx.room:room-compiler:2.3.0-beta03"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
-    
+
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'android.arch.core:core-testing:1.1.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
