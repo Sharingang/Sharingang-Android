@@ -1,15 +1,10 @@
 package com.example.sharingang
 
-import android.Manifest
-import android.app.Activity
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -24,7 +19,7 @@ class EditItemFragment : Fragment() {
 
     private lateinit var existingItem: Item
 
-    private lateinit var observer : ImageAccess
+    private lateinit var observer: ImageAccess
 
     private var imageUri: Uri? = null
 
@@ -33,8 +28,10 @@ class EditItemFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         observer = ImageAccess(requireActivity()) { uri: Uri? ->
-            binding.editItemImage.setImageURI(uri)
-            imageUri = uri
+            uri?.let {
+                binding.editItemImage.setImageURI(uri)
+                imageUri = uri
+            }
         }
         lifecycle.addObserver(observer)
     }

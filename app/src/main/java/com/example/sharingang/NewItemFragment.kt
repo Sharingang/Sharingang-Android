@@ -1,10 +1,7 @@
 package com.example.sharingang
 
-import android.Manifest
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,9 +26,10 @@ class NewItemFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         observer = ImageAccess(requireActivity()) { uri: Uri? ->
-            Log.i("ImageAccess", observer.test.toString())
-            binding.newItemImage.setImageURI(uri)
-            imageUri = uri
+            uri?.let {
+                binding.newItemImage.setImageURI(uri)
+                imageUri = uri
+            }
         }
         lifecycle.addObserver(observer)
     }

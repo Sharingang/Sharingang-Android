@@ -4,10 +4,8 @@ import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
@@ -16,17 +14,15 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 
 
-class ImageAccess(private val registry: FragmentActivity, private val callback: (Uri?) -> Unit) : DefaultLifecycleObserver {
+class ImageAccess(private val registry: FragmentActivity, private val callback: (Uri?) -> Unit) :
+    DefaultLifecycleObserver {
 
-    var storagePermissionGranted: Boolean = false
+    private var storagePermissionGranted: Boolean = false
     private lateinit var requestStoragePermissionLauncher: ActivityResultLauncher<String>
 
-    private lateinit var pickImage : ActivityResultLauncher<String>
-
-    var test = 0
+    private lateinit var pickImage: ActivityResultLauncher<String>
 
     override fun onCreate(owner: LifecycleOwner) {
-        Log.d("ImageAccess", test.toString())
         requestStoragePermissionLauncher =
             registry.activityResultRegistry.register(
                 "storagePermission",
@@ -44,7 +40,12 @@ class ImageAccess(private val registry: FragmentActivity, private val callback: 
 
             }
         pickImage =
-            registry.activityResultRegistry.register("openGallery", owner, ActivityResultContracts.GetContent(), callback)
+            registry.activityResultRegistry.register(
+                "openGallery",
+                owner,
+                ActivityResultContracts.GetContent(),
+                callback
+            )
     }
 
     fun unregister() {
@@ -52,7 +53,11 @@ class ImageAccess(private val registry: FragmentActivity, private val callback: 
         requestStoragePermissionLauncher.unregister()
     }
 
-    private fun checkAndRequestPermission(permission: String, rationale: String, context: Activity) {
+    private fun checkAndRequestPermission(
+        permission: String,
+        rationale: String,
+        context: Activity
+    ) {
         when {
             ContextCompat.checkSelfPermission(
                 context,
@@ -63,11 +68,7 @@ class ImageAccess(private val registry: FragmentActivity, private val callback: 
                 }
             }
             shouldShowRequestPermissionRationale(context, permission) -> {
-                Toast.makeText(
-                    context,
-                    rationale,
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast.makeText(context, rationale, Toast.LENGTH_LONG).show()
             }
             else -> {
                 when (permission) {
