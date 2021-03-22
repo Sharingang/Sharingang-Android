@@ -27,8 +27,11 @@ class InMemoryItemRepository @Inject constructor() : ItemRepository {
         return itemsMap.values.toList()
     }
 
-    override fun getAllItemsLiveData(): LiveData<List<Item>> {
+    override fun items(): LiveData<List<Item>> {
         return itemsLiveData
+    }
+
+    override suspend fun refreshItems() {
     }
 
     override suspend fun addItem(item: Item): String {

@@ -1,19 +1,20 @@
 package com.example.sharingang.items
 
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import javax.inject.Singleton
 
 /**
- * Tells Hilt to use an instance of FirestoreItemRepository when we require an ItemRepository
+ * Tells Hilt to use an instance of FirestoreItemStore when we require an ItemStore
  */
 @Module
 @InstallIn(ViewModelComponent::class)
-abstract class ItemRepositoryModule {
+object ItemRepositoryModule {
 
-    @Binds
-    abstract fun bindItemRepository(
-        firestoreItemRepository: FirestoreItemRepository
-    ): ItemRepository
+    @Provides
+    fun provideItemRepository(): ItemRepository {
+        return CachedItemRepository(FirestoreItemStore())
+    }
 }
