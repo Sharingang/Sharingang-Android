@@ -30,7 +30,7 @@ class EditItemFragment : Fragment() {
     private var cancellationTokenSource = CancellationTokenSource()
     private val requestPermissionLauncher = requestPermissionLauncher(this) {
         doOrGetPermission(
-            this.context, this, Manifest.permission.ACCESS_FINE_LOCATION, { updateLocation() }, null
+            requireContext(), this, Manifest.permission.ACCESS_FINE_LOCATION, { updateLocation() }, null
         )
     }
 
@@ -69,7 +69,7 @@ class EditItemFragment : Fragment() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         binding.editItemGetLocation.setOnClickListener {
             doOrGetPermission(
-                this.context,
+                requireContext(),
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 { updateLocation() },

@@ -28,7 +28,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val requestPermissionLauncher = requestPermissionLauncher(this) {
         doOrGetPermission(
-            this.context,
+            requireContext(),
             this,
             Manifest.permission.ACCESS_FINE_LOCATION,
             { startLocationUpdates() },
@@ -111,7 +111,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onResume() {
         binding.mapView.onResume()
         doOrGetPermission(
-            this.context, this, android.Manifest.permission.ACCESS_FINE_LOCATION,
+            requireContext(), this, android.Manifest.permission.ACCESS_FINE_LOCATION,
             { startLocationUpdates() }, requestPermissionLauncher
         )
         super.onResume()

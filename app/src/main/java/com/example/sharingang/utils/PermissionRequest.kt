@@ -20,14 +20,14 @@ fun requestPermissionLauncher(
 }
 
 fun doOrGetPermission(
-    context: Context?,
+    context: Context,
     fragment: Fragment,
     permission: String,
     callback: () -> Unit,
     resultLauncher: ActivityResultLauncher<String>?
 ) {
     if (ContextCompat.checkSelfPermission(
-            context!!,
+            context,
             permission
         ) == PackageManager.PERMISSION_GRANTED
     ) {
@@ -38,7 +38,7 @@ fun doOrGetPermission(
 }
 
 fun requestPermission(
-    context: Context?,
+    context: Context,
     fragment: Fragment,
     permission: String,
     resultLauncher: ActivityResultLauncher<String>

@@ -33,7 +33,7 @@ class NewItemFragment : Fragment() {
         this
     ) {
         doOrGetPermission(
-            this.context,
+            requireContext(),
             this,
             Manifest.permission.ACCESS_FINE_LOCATION,
             { updateLocation() }, null
@@ -71,7 +71,7 @@ class NewItemFragment : Fragment() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         binding.newItemGetLocation.setOnClickListener {
             doOrGetPermission(
-                this.context,
+                requireContext(),
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 { updateLocation() },
