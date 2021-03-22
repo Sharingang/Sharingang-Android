@@ -56,6 +56,12 @@
             android:text="@={description}"
             android:singleLine="false" />
 
+        <Spinner
+            android:id="@+id/category_spinner"
+            android:entries="@array/categories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
         <EditText
             android:id="@+id/editItemPrice"
             android:layout_width="match_parent"
@@ -92,11 +98,12 @@
                 android:inputType="numberDecimal"
                 android:text="@={longitude}"/>
         </LinearLayout>
-        <Spinner
-            android:id="@+id/category_spinner"
-            android:entries="@array/categories"
+
+        <Button
+            android:id="@+id/edit_item_get_location"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="@string/get_location" />
         <Button
             android:id="@+id/editItemButton"
             android:layout_width="wrap_content"
