@@ -27,8 +27,8 @@ class NewItemFragment : Fragment() {
         super.onCreate(savedInstanceState)
         observer = ImageAccess(requireActivity()) { uri: Uri? ->
             uri?.let {
-                binding.newItemImage.setImageURI(uri)
                 imageUri = uri
+                binding.newItemImage.setImageURI(uri)
             }
         }
         lifecycle.addObserver(observer)
