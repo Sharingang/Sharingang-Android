@@ -1,18 +1,21 @@
 package com.example.sharingang.items
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import javax.inject.Inject
 
 
-class CachedItemRepository constructor(private val store: ItemStore) : ItemRepository {
-    private val _items: MutableLiveData<List<Item>> = MutableLiveData(listOf())
+class CachedItemRepository @Inject constructor(
+    private val itemDao: ItemDao,
+    private val store: ItemStore
+) : ItemRepository {
 
     override fun items(): LiveData<List<Item>> {
-        return _items
+        return itemDao.getAllItems()
     }
 
     override suspend fun refreshItems() {
-        _items.postValue(store.getAllItems())
+        val newItems = store.getAllItems()
+        itemDao.insert(newItems)
     }
 
     override suspend fun addItem(item: Item): String? {
