@@ -46,7 +46,7 @@ class ItemsListFragment : Fragment() {
             view.findNavController().navigate(R.id.action_itemsListFragment_to_newItemFragment)
         }
         binding.goToMap.setOnClickListener { view: View ->
-            view.findNavController().navigate(R.id.action_itemsListFragment_to_mapFragment)
+            goToMap(view)
         }
         binding.gotoSearchButton.setOnClickListener { view: View -> goToSearchPage(view) }
 
@@ -57,6 +57,10 @@ class ItemsListFragment : Fragment() {
         setupNavigation()
 
         return binding.root
+    }
+
+    private fun goToMap(view: View) {
+        view.findNavController().navigate(R.id.action_itemsListFragment_to_mapFragment)
     }
 
     fun goToSearchPage(view: View) {
