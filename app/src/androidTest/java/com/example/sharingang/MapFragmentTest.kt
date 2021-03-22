@@ -35,7 +35,7 @@ class MapFragmentTest {
         onView(withId(R.id.go_to_map)).perform(click())
         val text = onView(withId(R.id.location_display))
         text.check(matches(withText("")))
-        Thread.sleep(10000)
+        Thread.sleep(6000)
         text.check(matches(withText(containsString("Your location"))))
     }
 }

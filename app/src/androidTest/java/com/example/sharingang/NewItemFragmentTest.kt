@@ -69,7 +69,7 @@ class NewItemFragmentTest {
     }
 
     @Test
-    fun aLocationCanBeWritten() {
+    fun aLocationCanBeWrittenInNewItemFragment() {
         onView(withId(R.id.newItemButton)).perform(click())
         onView(withId(R.id.write_latitude)).perform(
             typeText("45.01"),

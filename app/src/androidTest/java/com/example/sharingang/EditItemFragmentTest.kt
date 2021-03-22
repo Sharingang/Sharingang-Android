@@ -27,7 +27,7 @@ class EditItemFragmentTest {
     private val editedItem = "Edited"
 
     @Test
-    fun canEditCategoryOfItem() {
+    fun canEditItemCategory() {
         onView(withId(R.id.newItemButton)).perform(click())
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
         onView(withId(R.id.editItemTitle)).perform(
@@ -91,7 +91,7 @@ class EditItemFragmentTest {
     }
 
     @Test
-    fun aLocationCanBeWritten() {
+    fun aLocationCanBeWrittenInEditFragment() {
         onView(withId(R.id.newItemButton)).perform(click())
         onView(withId(R.id.createItemButton)).perform(click())
         onView(withId(R.id.item_list_view_edit_btn)).perform(click())

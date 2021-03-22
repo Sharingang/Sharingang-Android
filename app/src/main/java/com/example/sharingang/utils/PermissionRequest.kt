@@ -49,8 +49,7 @@ fun requestPermission(
 ) {
     if (fragment.shouldShowRequestPermissionRationale(permission)) {
         Toast.makeText(
-            context,
-            String.format("%s permission is required", permission),
+            context, "$permission is required",
             Toast.LENGTH_LONG
         ).show()
     }
