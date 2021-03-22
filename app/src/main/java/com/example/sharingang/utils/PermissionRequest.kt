@@ -19,24 +19,6 @@ fun requestPermissionLauncher(
     }
 }
 
-fun doOrGetPermission(
-    context: Context,
-    fragment: Fragment,
-    permission: String,
-    callback: () -> Unit,
-    resultLauncher: ActivityResultLauncher<String>?
-) {
-    if (ContextCompat.checkSelfPermission(
-            context,
-            permission
-        ) == PackageManager.PERMISSION_GRANTED
-    ) {
-        callback()
-    } else {
-        requestPermission(context, fragment, permission, resultLauncher!!)
-    }
-}
-
 fun requestPermission(
     context: Context,
     fragment: Fragment,

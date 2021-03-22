@@ -1,7 +1,6 @@
 package com.example.sharingang
 
-import android.Manifest
-import android.annotation.SuppressLint
+import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +12,10 @@ import androidx.navigation.findNavController
 import com.example.sharingang.databinding.FragmentEditItemBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsViewModel
-import com.example.sharingang.utils.doOrGetPermission
+import com.example.sharingang.utils.consumeLocation
+import com.example.sharingang.utils.doOrGetLocationPermission
 import com.example.sharingang.utils.requestPermissionLauncher
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.CancellationTokenSource
 
@@ -29,8 +28,15 @@ class EditItemFragment : Fragment() {
     private lateinit var binding: FragmentEditItemBinding
     private var cancellationTokenSource = CancellationTokenSource()
     private val requestPermissionLauncher = requestPermissionLauncher(this) {
-        doOrGetPermission(
-            requireContext(), this, Manifest.permission.ACCESS_FINE_LOCATION, { updateLocation() }, null
+        doOrGetLocationPermission(
+            requireContext(),
+            this,
+            {
+                consumeLocation(fusedLocationClient, cancellationTokenSource.token) {
+                    updateLocation(it)
+                }
+            },
+            null
         )
     }
 
@@ -68,28 +74,23 @@ class EditItemFragment : Fragment() {
     private fun setupLocation() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         binding.editItemGetLocation.setOnClickListener {
-            doOrGetPermission(
+            doOrGetLocationPermission(
                 requireContext(),
                 this,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                { updateLocation() },
+                {
+                    consumeLocation(
+                        fusedLocationClient,
+                        cancellationTokenSource.token
+                    ) { updateLocation(it) }
+                },
                 requestPermissionLauncher
             )
         }
     }
 
-    @SuppressLint("MissingPermission")
-    private fun updateLocation() {
-        val getLocationTask = fusedLocationClient.getCurrentLocation(
-            LocationRequest.PRIORITY_HIGH_ACCURACY,
-            cancellationTokenSource.token
-        )
-        getLocationTask.addOnCompleteListener {
-            if (it.isSuccessful && it.result != null) {
-                binding.latitude = it.result.latitude.toString()
-                binding.longitude = it.result.longitude.toString()
-            }
-        }
+    private fun updateLocation(location: Location) {
+        binding.latitude = location.latitude.toString()
+        binding.longitude = location.longitude.toString()
     }
 
     private fun setupBinding() {

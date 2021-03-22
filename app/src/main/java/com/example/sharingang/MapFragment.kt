@@ -1,6 +1,5 @@
 package com.example.sharingang
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.location.Location
 import android.os.Bundle
@@ -11,7 +10,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.sharingang.databinding.FragmentMapBinding
-import com.example.sharingang.utils.doOrGetPermission
+import com.example.sharingang.utils.doOrGetLocationPermission
 import com.example.sharingang.utils.requestPermissionLauncher
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -27,10 +26,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentMapBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val requestPermissionLauncher = requestPermissionLauncher(this) {
-        doOrGetPermission(
+        doOrGetLocationPermission(
             requireContext(),
             this,
-            Manifest.permission.ACCESS_FINE_LOCATION,
             { startLocationUpdates() },
             null
         )
@@ -110,8 +108,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onResume() {
         binding.mapView.onResume()
-        doOrGetPermission(
-            requireContext(), this, android.Manifest.permission.ACCESS_FINE_LOCATION,
+        doOrGetLocationPermission(
+            requireContext(), this,
             { startLocationUpdates() }, requestPermissionLauncher
         )
         super.onResume()
