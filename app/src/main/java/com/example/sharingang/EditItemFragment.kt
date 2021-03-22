@@ -1,7 +1,5 @@
 package com.example.sharingang
 
-import android.Manifest
-import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,33 +11,13 @@ import androidx.navigation.findNavController
 import com.example.sharingang.databinding.FragmentEditItemBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsViewModel
-import com.example.sharingang.utils.consumeLocation
-import com.example.sharingang.utils.doOrGetPermission
-import com.example.sharingang.utils.requestPermissionLauncher
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.tasks.CancellationTokenSource
 
 class EditItemFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
     private lateinit var existingItem: Item
 
-    private lateinit var fusedLocationEdit: FusedLocationProviderClient
     private lateinit var binding: FragmentEditItemBinding
-    private var cancellationTokenSource = CancellationTokenSource()
-    private val requestPermissionLauncher = requestPermissionLauncher(this) {
-        doOrGetPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            {
-                consumeLocation(fusedLocationEdit, cancellationTokenSource) {
-                    updateLocation(it)
-                }
-            },
-            null
-        )
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,29 +46,7 @@ class EditItemFragment : Fragment() {
             )
             view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)
         }
-        setupLocationEdit()
         return binding.root
-    }
-
-    private fun setupLocationEdit() {
-        fusedLocationEdit = LocationServices.getFusedLocationProviderClient(requireContext())
-        binding.editItemGetLocation.setOnClickListener {
-            doOrGetPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                {
-                    consumeLocation(fusedLocationEdit, cancellationTokenSource) {
-                        updateLocation(it)
-                    }
-                },
-                requestPermissionLauncher
-            )
-        }
-    }
-
-    private fun updateLocation(location: Location) {
-        binding.longitude = location.longitude.toString()
-        binding.latitude = location.latitude.toString()
     }
 
     private fun setupBinding() {

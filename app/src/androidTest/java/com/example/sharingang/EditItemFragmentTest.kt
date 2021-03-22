@@ -8,7 +8,6 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import org.hamcrest.Matchers
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -89,19 +88,6 @@ class EditItemFragmentTest {
 
         onView(withText(item + editedItem))
             .check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun clickingOnGetLocationDisplaysLocation() {
-        onView(withId(R.id.newItemButton)).perform(click())
-        onView(withId(R.id.createItemButton)).perform(click())
-        onView(withId(R.id.item_list_view_edit_btn)).perform(click())
-        val button = onView(withId(R.id.edit_item_get_location))
-        button.check(matches(withText("Get Location")))
-        button.perform(click())
-        Thread.sleep(5000)
-        onView(withId(R.id.edit_longitude)).check(matches(Matchers.not(withText(""))))
-        onView(withId(R.id.edit_latitude)).check(matches(Matchers.not(withText(""))))
     }
 
     @Test
