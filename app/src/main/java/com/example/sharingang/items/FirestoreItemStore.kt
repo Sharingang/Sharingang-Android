@@ -1,17 +1,12 @@
 package com.example.sharingang.items
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.sharingang.BuildConfig
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
-import java.lang.Exception
-import javax.inject.Inject
-import javax.inject.Singleton
 
 private const val TAG = "FirestoreItemRepository"
 
@@ -20,9 +15,7 @@ private const val TAG = "FirestoreItemRepository"
  *
  * During development it requires running the Firebase emulator (see README.md)
  */
-@Singleton
-class FirestoreItemRepository @Inject constructor() :
-    ItemRepository {
+class FirestoreItemStore : ItemStore {
     private val firestore = Firebase.firestore
     private val collectionName = "items"
 
@@ -64,27 +57,9 @@ class FirestoreItemRepository @Inject constructor() :
         return result.map { it.toObject(Item::class.java) }
     }
 
-    override fun getAllItemsLiveData(): LiveData<List<Item>> {
-        val query = firestore.collection(collectionName)
-            .orderBy("createdAt", Query.Direction.DESCENDING)
-
-        val itemsLiveData = MutableLiveData<List<Item>>()
-
-        query.addSnapshotListener { value, error ->
-            if (error != null) {
-                Log.e(TAG, "Failed to get all items from Firebase.", error)
-                return@addSnapshotListener
-            }
-
-            itemsLiveData.value = value!!.map { it.toObject(Item::class.java) }
-        }
-
-        return itemsLiveData
-    }
-
     override suspend fun addItem(item: Item): String? {
         require(item.id == null)
-        
+
         return try {
             val document = firestore.collection(collectionName)
                 .add(item)
