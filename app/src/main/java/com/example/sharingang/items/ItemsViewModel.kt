@@ -35,6 +35,10 @@ class ItemsViewModel @Inject constructor(
     val viewingItem: LiveData<Boolean>
         get() = _viewingItem
 
+    private val _refreshing = MutableLiveData(false)
+    val refreshing: LiveData<Boolean>
+        get() = _refreshing
+
     /**
      * The last item created
      */
@@ -90,5 +94,14 @@ class ItemsViewModel @Inject constructor(
         items.observe(LifeCycleOwner, {
             it?.let { adapter.submitList(it) }
         })
+    }
+
+    fun refresh() {
+        _refreshing.value = true
+        viewModelScope.launch {
+            itemRepository.refreshItems()
+            // Since we're in a coroutine, need to use post instead
+            _refreshing.postValue(false)
+        }
     }
 }

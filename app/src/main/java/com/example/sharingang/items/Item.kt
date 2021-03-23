@@ -14,7 +14,7 @@ import java.util.*
  * Item represents an item available for sharing, or for sale.
  */
 @Parcelize
-@Entity(indices = [Index(value = ["id"])])
+@Entity(indices = [Index(value = ["id"], unique = true)])
 data class Item(
     val title: String = "",
 
