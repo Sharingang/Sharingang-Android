@@ -15,7 +15,7 @@ class InMemoryItemRepositoryTest {
         val repo: ItemRepository = InMemoryItemRepository()
         runBlocking {
             assert(repo.getAllItems().isEmpty())
-            assert(repo.getAllItemsLiveData().getOrAwaitValue().isEmpty())
+            assert(repo.items().getOrAwaitValue().isEmpty())
         }
     }
 
@@ -66,7 +66,7 @@ class InMemoryItemRepositoryTest {
     fun canGetAllAddedItemsWithLiveData() {
         val repo: ItemRepository = InMemoryItemRepository()
         runBlocking {
-            val itemsLiveData = repo.getAllItemsLiveData()
+            val itemsLiveData = repo.items()
             assert(itemsLiveData.getOrAwaitValue().isEmpty())
 
             val items = List(5) { generateSampleItem(it) }
