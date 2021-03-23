@@ -32,10 +32,10 @@ class ItemsListFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
     lateinit var mGoogleSignInClient: GoogleSignInClient
-    lateinit var loginStatus: TextView
-    lateinit var loginButton: Button
-    lateinit var logoutButton: Button
-    private val RC_SIGN_IN = 9001
+    lateinit var loginStatus: TextView // text is changing
+    lateinit var loginButton: Button // visibility toggle
+    lateinit var logoutButton: Button //visibility toggle
+    private val RC_SIGN_IN = 1337
 
     private fun setupNavigation() {
         viewModel.navigateToEditItem.observe(viewLifecycleOwner, { item ->
@@ -80,6 +80,7 @@ class ItemsListFragment : Fragment() {
             startActivity(Intent(this.activity, MapActivity::class.java))
         }
 
+        /* Signing In */
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("771023799063-kmve17s9cfu6ckd3kijcv8vdvvdqb58s.apps.googleusercontent.com")
             .requestServerAuthCode("771023799063-kmve17s9cfu6ckd3kijcv8vdvvdqb58s.apps.googleusercontent.com")
@@ -108,6 +109,8 @@ class ItemsListFragment : Fragment() {
     fun gotoSearchPage(view : View){
         view.findNavController().navigate(R.id.action_itemsListFragment_to_searchFragment5)
     }
+
+    /* Below: Sign In/Out Implementation*/
 
     private fun signIn() {
         val signInIntent = mGoogleSignInClient.signInIntent
