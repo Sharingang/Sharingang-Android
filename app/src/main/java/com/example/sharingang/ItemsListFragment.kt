@@ -55,9 +55,7 @@ class ItemsListFragment : Fragment() {
         val binding: FragmentItemsListBinding =
                 DataBindingUtil.inflate(inflater, R.layout.fragment_items_list, container, false)
         binding.viewModel = viewModel
-        loginStatus = binding.loginStatus
-        loginButton = binding.loginButton
-        logoutButton = binding.logoutButton
+
         binding.newItemButton.setOnClickListener { view: View ->
             view.findNavController().navigate(R.id.action_itemsListFragment_to_newItemFragment)
         }
@@ -71,8 +69,19 @@ class ItemsListFragment : Fragment() {
         binding.goToMap.setOnClickListener {
             startActivity(Intent(this.activity, MapActivity::class.java))
         }
+        sign_in_init(binding)
+        return binding.root
+    }
 
-        /* Signing In  Below */
+    fun gotoSearchPage(view: View) {
+        view.findNavController().navigate(R.id.action_itemsListFragment_to_searchFragment5)
+    }
+
+    /* Below: Sign In/Out Implementation*/
+    fun sign_in_init(binding: FragmentItemsListBinding) {
+        loginStatus = binding.loginStatus
+        loginButton = binding.loginButton
+        logoutButton = binding.logoutButton
         logoutButton.visibility = View.GONE
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(CLIENT_AUTH_KEY)
@@ -93,15 +102,7 @@ class ItemsListFragment : Fragment() {
             logoutButton.visibility = View.GONE
             loginButton.visibility = View.VISIBLE
         }
-
-        return binding.root
     }
-
-    fun gotoSearchPage(view: View) {
-        view.findNavController().navigate(R.id.action_itemsListFragment_to_searchFragment5)
-    }
-
-    /* Below: Sign In/Out Implementation*/
 
     fun sign_in() {
         val signInIntent = mGoogleSignInClient.signInIntent
