@@ -3,18 +3,20 @@ package com.example.sharingang
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import com.example.sharingang.databinding.FragmentAccountBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.OnCompleteListener
+
 
 class AccountFragment : Fragment() {
 
@@ -25,37 +27,51 @@ class AccountFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: FragmentAccountBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_account, container, false)
+        val binding: FragmentAccountBinding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_account,
+            container,
+            false
+        )
         // Inflate the layout for this fragment
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                // There are no request codes
                 val data: Intent? = result.data
                 val task = GoogleSignIn.getSignedInAccountFromIntent(data)
                 try {
                     val account = task.getResult(
                         ApiException::class.java
                     )
-                    binding.accountStatus.text = "Logged in as ${account.displayName}\n(${account.email})"
+                    "Status: Logged in as \n${account.displayName}\n(${account.email})".also { binding.accountStatus.text = it }
                 } catch (e: ApiException) {
-                    binding.accountStatus.text = "F"
+                    binding.accountStatus.text = getString(R.string.failed_login_message)
                 }
             }
         }
-        binding.loginButton.setOnClickListener {
-            Log.d("info","Seach function called")
-            sign_in()
-        }
-        return binding.root
-    }
-
-    private fun sign_in() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(CLIENT_AUTH_KEY)
             .requestServerAuthCode(CLIENT_AUTH_KEY)
             .requestEmail()
             .build()
-        val mGoogleSignInClient = activity?.let { GoogleSignIn.getClient(it, gso) }!!
-        resultLauncher.launch(mGoogleSignInClient.signInIntent)
+        val googleSignInClient = activity?.let { GoogleSignIn.getClient(it, gso) }!!
+        binding.loginButton.setOnClickListener {
+            sign_in(googleSignInClient)
+        }
+        binding.logoutButton.setOnClickListener() {
+            sign_out(signInClient = googleSignInClient, binding)
+        }
+        return binding.root
+    }
+
+    private fun sign_in(signInClient: GoogleSignInClient) {
+
+        resultLauncher.launch(signInClient.signInIntent)
+    }
+
+    private fun sign_out(signInClient: GoogleSignInClient, binding: FragmentAccountBinding) {
+        signInClient.signOut()
+            .addOnCompleteListener(requireActivity(), OnCompleteListener<Void?> {
+                binding.accountStatus.text = "Logged Out"
+            })
     }
 }
