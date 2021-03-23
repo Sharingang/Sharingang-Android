@@ -28,4 +28,6 @@
     <string name="googleLoginButton">Log In With Google</string>
     <string name="account">Account</string>
     <string name="search">Search</string>
+    <string name="logged_out">Logged Out</string>
+    <string name="log_out">Log Out</string>
 </resources>
