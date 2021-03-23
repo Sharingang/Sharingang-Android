@@ -35,7 +35,8 @@ class ItemsListFragment : Fragment() {
     lateinit var loginStatus: TextView // text is changing
     lateinit var loginButton: Button // visibility toggle
     lateinit var logoutButton: Button //visibility toggle
-    private val RC_SIGN_IN = 1337
+    private val SIGN_IN_CODE: Int = 1337
+    private val CLIENT_AUTH_KEY: String = "771023799063-kmve17s9cfu6ckd3kijcv8vdvvdqb58s.apps.googleusercontent.com"
 
     private fun setupNavigation() {
         viewModel.navigateToEditItem.observe(viewLifecycleOwner, { item ->
@@ -74,31 +75,35 @@ class ItemsListFragment : Fragment() {
         val adapter = viewModel.setupItemAdapter()
         binding.itemList.adapter = adapter
         viewModel.addObserver(viewLifecycleOwner, adapter)
-        
+
         setupNavigation()
         binding.goToMap.setOnClickListener {
             startActivity(Intent(this.activity, MapActivity::class.java))
         }
 
-        /* Signing In */
+        /* Signing In  Below */
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("771023799063-kmve17s9cfu6ckd3kijcv8vdvvdqb58s.apps.googleusercontent.com")
-            .requestServerAuthCode("771023799063-kmve17s9cfu6ckd3kijcv8vdvvdqb58s.apps.googleusercontent.com")
-            .requestEmail()
-            .build()
+                .requestIdToken(CLIENT_AUTH_KEY)
+                .requestServerAuthCode(CLIENT_AUTH_KEY)
+                .requestEmail()
+                .build()
 
 
         mGoogleSignInClient = activity?.let { GoogleSignIn.getClient(it, gso) }!!
 
         loginButton.setOnClickListener {
-            signIn()
+            // Sign in
+            val signInIntent = mGoogleSignInClient.signInIntent
+            startActivityForResult(
+                    signInIntent, SIGN_IN_CODE
+            )
             loginButton.visibility = View.GONE
             logoutButton.visibility = View.VISIBLE
         }
         logoutButton.setOnClickListener {
             mGoogleSignInClient.signOut()
             mGoogleSignInClient.revokeAccess()
-            loginStatus.text = "Logged Out"
+            loginStatus.text = getString(R.string.text_loggedOut)
             logoutButton.visibility = View.GONE
             loginButton.visibility = View.VISIBLE
         }
@@ -106,63 +111,29 @@ class ItemsListFragment : Fragment() {
         return binding.root
     }
 
-    fun gotoSearchPage(view : View){
+    fun gotoSearchPage(view: View) {
         view.findNavController().navigate(R.id.action_itemsListFragment_to_searchFragment5)
     }
 
     /* Below: Sign In/Out Implementation*/
 
-    private fun signIn() {
-        val signInIntent = mGoogleSignInClient.signInIntent
-        startActivityForResult(
-            signInIntent, RC_SIGN_IN
-        )
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_SIGN_IN) {
-            val task =
-                GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleSignInResult(task)
+        if (requestCode == SIGN_IN_CODE) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+
+            try {
+                val account = task.getResult(
+                        ApiException::class.java
+                )
+                "Logged in as ${account.displayName}\n(${account.email})".also { loginStatus.text = it }
+            } catch (e: ApiException) {
+                // Sign in was unsuccessful
+                logoutButton.visibility = View.GONE
+                loginButton.visibility = View.VISIBLE
+            }
         }
     }
-
-    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
-        try {
-            val account = completedTask.getResult(
-                ApiException::class.java
-            )
-            loginStatus.text = "Logged in as ${account.displayName}" + "\n (${account.email})"
-            // Signed in successfully
-            val googleId = account?.id ?: ""
-            Log.i("Google ID",googleId)
-
-            val googleFirstName = account?.givenName ?: ""
-            Log.i("Google First Name", googleFirstName)
-
-            val googleLastName = account?.familyName ?: ""
-            Log.i("Google Last Name", googleLastName)
-
-            val googleEmail = account?.email ?: ""
-            Log.i("Google Email", googleEmail)
-
-            val googleProfilePicURL = account?.photoUrl.toString()
-            Log.i("Google Profile Pic URL", googleProfilePicURL)
-
-            val googleIdToken = account?.idToken ?: ""
-            Log.i("Google ID Token", googleIdToken)
-
-        } catch (e: ApiException) {
-            // Sign in was unsuccessful
-            Log.e(
-                "failed code=", e.statusCode.toString()
-            )
-            logoutButton.visibility = View.GONE
-            loginButton.visibility = View.VISIBLE
-        }
-    }
-
 }
 
 

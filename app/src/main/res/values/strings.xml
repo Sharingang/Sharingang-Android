@@ -16,6 +16,7 @@
     <string name="google_login_button_name">Log In With Google</string>
     <string name="text_logged_out">Logged Out</string>
     <string name="text_log_out">Log Out</string>
+    <string name="text_loggedOut">Logged Out</string>
 
     <string-array name="categories">
         <item>None</item>
