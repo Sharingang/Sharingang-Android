@@ -1,6 +1,8 @@
 package com.example.sharingang.items
 
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -14,8 +16,11 @@ class CachedItemRepository @Inject constructor(
     }
 
     override suspend fun refreshItems() {
-        val newItems = store.getAllItems()
-        itemDao.insert(newItems)
+        // This is necessary, since you want to avoid doing this work on the main thread
+        withContext(Dispatchers.IO) {
+            val newItems = store.getAllItems()
+            itemDao.insert(newItems)
+        }
     }
 
     override suspend fun addItem(item: Item): String? {

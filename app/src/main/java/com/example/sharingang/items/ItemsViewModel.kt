@@ -17,6 +17,12 @@ class ItemsViewModel @Inject constructor(
     private val itemRepository: ItemRepository
 ) : ViewModel() {
 
+    init {
+        viewModelScope.launch {
+            itemRepository.refreshItems()
+        }
+    }
+
     private val _navigateToEditItem = MutableLiveData<Item?>()
     val navigateToEditItem: LiveData<Item?>
         get() = _navigateToEditItem
