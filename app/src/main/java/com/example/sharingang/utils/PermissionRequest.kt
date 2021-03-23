@@ -48,10 +48,7 @@ fun requestPermission(
     resultLauncher: ActivityResultLauncher<String>
 ) {
     if (fragment.shouldShowRequestPermissionRationale(permission)) {
-        Toast.makeText(
-            context, "$permission is required",
-            Toast.LENGTH_LONG
-        ).show()
+        Toast.makeText(context, "$permission is required", Toast.LENGTH_LONG).show()
     }
     resultLauncher.launch(permission)
 }
