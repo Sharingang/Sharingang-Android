@@ -26,7 +26,7 @@ class AccountFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding: FragmentAccountBinding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_account,
@@ -43,9 +43,16 @@ class AccountFragment : Fragment() {
                         ApiException::class.java
                     )
                     "Status: Logged in as \n${account.displayName}\n(${account.email})".also { binding.accountStatus.text = it }
+                    binding.loginButton.visibility = View.GONE
                 } catch (e: ApiException) {
                     binding.accountStatus.text = getString(R.string.failed_login_message)
+                    binding.loginButton.visibility = View.VISIBLE
+                    binding.logoutButton.visibility = View.GONE
                 }
+            }
+            else {
+                binding.loginButton.visibility = View.VISIBLE
+                binding.logoutButton.visibility = View.GONE
             }
         }
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -55,7 +62,7 @@ class AccountFragment : Fragment() {
             .build()
         val googleSignInClient = activity?.let { GoogleSignIn.getClient(it, gso) }!!
         binding.loginButton.setOnClickListener {
-            sign_in(googleSignInClient)
+            sign_in(googleSignInClient, binding)
         }
         binding.logoutButton.setOnClickListener() {
             sign_out(signInClient = googleSignInClient, binding)
@@ -63,15 +70,18 @@ class AccountFragment : Fragment() {
         return binding.root
     }
 
-    private fun sign_in(signInClient: GoogleSignInClient) {
-
+    private fun sign_in(signInClient: GoogleSignInClient, binding: FragmentAccountBinding) {
         resultLauncher.launch(signInClient.signInIntent)
+        binding.loginButton.visibility = View.GONE
+        binding.logoutButton.visibility = View.VISIBLE
     }
 
     private fun sign_out(signInClient: GoogleSignInClient, binding: FragmentAccountBinding) {
         signInClient.signOut()
             .addOnCompleteListener(requireActivity(), OnCompleteListener<Void?> {
-                binding.accountStatus.text = "Logged Out"
+                binding.accountStatus.text = getString(R.string.text_logged_out)
+                binding.logoutButton.visibility = View.GONE
+                binding.loginButton.visibility = View.VISIBLE
             })
     }
 }
