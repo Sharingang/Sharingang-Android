@@ -30,9 +30,7 @@ class CachedItemRepository @Inject constructor(
     }
 
     override suspend fun getItem(id: String): Item? {
-        val ret = store.getItem(id)
-        refreshItems()
-        return ret
+        return itemDao.getItem(id)
     }
 
     override suspend fun getAllItems(): List<Item> {
