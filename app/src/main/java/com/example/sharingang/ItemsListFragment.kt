@@ -34,6 +34,7 @@ class ItemsListFragment : Fragment() {
     lateinit var mGoogleSignInClient: GoogleSignInClient
     lateinit var loginStatus: TextView
     lateinit var loginButton: Button
+    lateinit var logoutButton: Button
     private val RC_SIGN_IN = 9001
 
     private fun setupNavigation() {
@@ -64,6 +65,7 @@ class ItemsListFragment : Fragment() {
         binding.viewModel = viewModel
         loginStatus = binding.loginStatus
         loginButton = binding.loginButton
+        logoutButton = binding.logoutButton
         binding.newItemButton.setOnClickListener { view: View ->
             view.findNavController().navigate(R.id.action_itemsListFragment_to_newItemFragment)
         }
@@ -89,11 +91,15 @@ class ItemsListFragment : Fragment() {
 
         loginButton.setOnClickListener {
             signIn()
+            loginButton.visibility = View.GONE
+            logoutButton.visibility = View.VISIBLE
         }
-        binding.logoutButton.setOnClickListener {
+        logoutButton.setOnClickListener {
             mGoogleSignInClient.signOut()
             mGoogleSignInClient.revokeAccess()
             loginStatus.text = "Logged Out"
+            logoutButton.visibility = View.GONE
+            loginButton.visibility = View.VISIBLE
         }
 
         return binding.root
@@ -149,6 +155,8 @@ class ItemsListFragment : Fragment() {
             Log.e(
                 "failed code=", e.statusCode.toString()
             )
+            logoutButton.visibility = View.GONE
+            loginButton.visibility = View.VISIBLE
         }
     }
 
