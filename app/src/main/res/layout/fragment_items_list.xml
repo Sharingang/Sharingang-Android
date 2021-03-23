@@ -27,13 +27,39 @@
             android:id="@+id/gotoSearchButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Search" />
+            android:text="@string/text_search" />
 
         <Button
             android:id="@+id/newItemButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/new_item" />
+
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/google_login_button_name" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/login_status"
+                android:layout_width="299dp"
+                android:layout_height="wrap_content"
+                android:text="@string/text_logged_out"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/logout_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/text_log_out" />
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/itemList"
