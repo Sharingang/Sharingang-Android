@@ -2,31 +2,22 @@ package com.example.sharingang
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.sharingang.databinding.FragmentItemsListBinding
-import com.example.sharingang.items.Item
-import com.example.sharingang.items.ItemListener
-import com.example.sharingang.items.ItemsAdapter
 import com.example.sharingang.items.ItemsViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import kotlin.math.log
 
 class ItemsListFragment : Fragment() {
 
@@ -82,6 +73,7 @@ class ItemsListFragment : Fragment() {
         }
 
         /* Signing In  Below */
+        logoutButton.visibility = View.GONE
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(CLIENT_AUTH_KEY)
                 .requestServerAuthCode(CLIENT_AUTH_KEY)
@@ -92,13 +84,7 @@ class ItemsListFragment : Fragment() {
         mGoogleSignInClient = activity?.let { GoogleSignIn.getClient(it, gso) }!!
 
         loginButton.setOnClickListener {
-            // Sign in
-            val signInIntent = mGoogleSignInClient.signInIntent
-            startActivityForResult(
-                    signInIntent, SIGN_IN_CODE
-            )
-            loginButton.visibility = View.GONE
-            logoutButton.visibility = View.VISIBLE
+            sign_in()
         }
         logoutButton.setOnClickListener {
             mGoogleSignInClient.signOut()
@@ -116,6 +102,15 @@ class ItemsListFragment : Fragment() {
     }
 
     /* Below: Sign In/Out Implementation*/
+
+    fun sign_in() {
+        val signInIntent = mGoogleSignInClient.signInIntent
+        startActivityForResult(
+                signInIntent, SIGN_IN_CODE
+        )
+        loginButton.visibility = View.GONE
+        logoutButton.visibility = View.VISIBLE
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

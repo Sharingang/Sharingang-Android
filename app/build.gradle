@@ -23,6 +23,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
         testInstrumentationRunner "com.example.sharingang.CustomTestRunner"
+
     }
 
     buildFeatures {
