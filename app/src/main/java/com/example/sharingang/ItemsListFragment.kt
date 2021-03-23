@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -23,12 +24,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import kotlin.math.log
 
 class ItemsListFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
     lateinit var mGoogleSignInClient: GoogleSignInClient
     lateinit var loginStatus: TextView
+    lateinit var loginButton: Button
     private val RC_SIGN_IN = 9001
 
     private fun setupNavigation() {
@@ -58,6 +61,7 @@ class ItemsListFragment : Fragment() {
                 DataBindingUtil.inflate(inflater, R.layout.fragment_items_list, container, false)
         binding.viewModel = viewModel
         loginStatus = binding.loginStatus
+        loginButton = binding.loginButton
         binding.newItemButton.setOnClickListener { view: View ->
             view.findNavController().navigate(R.id.action_itemsListFragment_to_newItemFragment)
         }
@@ -79,8 +83,7 @@ class ItemsListFragment : Fragment() {
             .build()
 
         mGoogleSignInClient = activity?.let { GoogleSignIn.getClient(it, gso) }!!
-
-        binding.loginButton.setOnClickListener {
+        loginButton.setOnClickListener {
             signIn()
         }
 
@@ -112,7 +115,7 @@ class ItemsListFragment : Fragment() {
             val account = completedTask.getResult(
                 ApiException::class.java
             )
-            loginStatus.text = "Logged in as ${account.displayName}"
+            loginStatus.text = "Logged in as ${account.displayName}" + "\n (${account.email})"
             // Signed in successfully
             val googleId = account?.id ?: ""
             Log.i("Google ID",googleId)
