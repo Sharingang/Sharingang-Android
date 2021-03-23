@@ -29,20 +29,9 @@ class NewItemFragment : Fragment() {
 
     // Allows the cancellation of a location request if, for example, the user exists the activity
     private var cancellationTokenSource = CancellationTokenSource()
-    private val requestPermissionLauncher = requestPermissionLauncher(
-        this
-    ) {
-        doOrGetPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            {
-                consumeLocation(fusedLocationCreate, cancellationTokenSource) {
-                    updateLocation(
-                        it
-                    )
-                }
-            }, null
-        )
+    private val requestPermissionLauncher = requestPermissionLauncher(this) {
+        doOrGetPermission(this, Manifest.permission.ACCESS_FINE_LOCATION,
+            { consumeLocation(fusedLocationCreate, cancellationTokenSource) { updateLocation(it) } }, null)
     }
 
 

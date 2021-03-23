@@ -28,10 +28,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val requestPermissionLauncher = requestPermissionLauncher(this) {
         doOrGetPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            { startLocationUpdates() },
-            null
+            this, Manifest.permission.ACCESS_FINE_LOCATION, { startLocationUpdates() }, null
         )
     }
     private var lastLocation: Location? = null
