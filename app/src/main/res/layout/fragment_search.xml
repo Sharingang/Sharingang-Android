@@ -13,7 +13,10 @@
             android:layout_width="231dp"
             android:layout_height="50dp"
             android:ems="10"
-            android:hint="@string/search_hint" />
+            android:hint="@string/search_hint"
+            android:inputType="text"
+            android:autofillHints="true"
+            />
 
         <Button
             android:id="@+id/sflSearchButton"
