@@ -23,10 +23,14 @@ class CachedItemRepository @Inject constructor(
         }
     }
 
-    override suspend fun addItem(item: Item): String? {
-        val ret = store.addItem(item)
+    private suspend fun <T> thenRefresh(fn: suspend () -> T): T {
+        val ret = fn()
         refreshItems()
         return ret
+    }
+
+    override suspend fun addItem(item: Item): String? {
+        return thenRefresh { store.addItem(item) }
     }
 
     override suspend fun getItem(id: String): Item? {
@@ -34,20 +38,14 @@ class CachedItemRepository @Inject constructor(
     }
 
     override suspend fun getAllItems(): List<Item> {
-        val ret = store.getAllItems()
-        refreshItems()
-        return ret
+        return thenRefresh { store.getAllItems() }
     }
 
     override suspend fun updateItem(item: Item): Boolean {
-        val ret = store.updateItem(item)
-        refreshItems()
-        return ret
+        return thenRefresh { store.updateItem(item) }
     }
 
     override suspend fun deleteItem(id: String): Boolean {
-        val ret = store.deleteItem(id)
-        refreshItems()
-        return ret
+        return thenRefresh { store.deleteItem(id) }
     }
 }
