@@ -17,34 +17,45 @@ class EditItemFragment : Fragment() {
     private val viewModel: ItemsViewModel by activityViewModels()
     private lateinit var existingItem: Item
 
+    private lateinit var binding: FragmentEditItemBinding
+
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
-        val binding: FragmentEditItemBinding =
-                DataBindingUtil.inflate(inflater, R.layout.fragment_edit_item, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_edit_item, container, false)
 
         val args = EditItemFragmentArgs.fromBundle(requireArguments())
 
         existingItem = args.item
 
-        binding.title = existingItem.title
-        binding.description = existingItem.description
-        binding.price = existingItem.price.toString().format("%.2f")
-        binding.categorySpinner.setSelection(existingItem.category)
+        setupBinding()
 
         binding.editItemButton.setOnClickListener { view: View ->
             viewModel.updateItem(
-                    existingItem.copy(
-                            title = binding.title ?: "",
-                            description = binding.description ?: "",
-                            price = binding.price?.toDoubleOrNull() ?: 0.0,
-                            category = binding.categorySpinner.selectedItemPosition,
-                            categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition]
-                    )
+                existingItem.copy(
+                    title = binding.title ?: "",
+                    description = binding.description ?: "",
+                    price = binding.price?.toDoubleOrNull() ?: 0.0,
+                    category = binding.categorySpinner.selectedItemPosition,
+                    categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
+                    latitude = binding.latitude?.toDoubleOrNull() ?: 0.0,
+                    longitude = binding.longitude?.toDoubleOrNull() ?: 0.0
+                )
             )
             view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)
         }
         return binding.root
+    }
+
+    private fun setupBinding() {
+        binding.title = existingItem.title
+        binding.description = existingItem.description
+        binding.price = existingItem.price.toString().format("%.2f")
+        binding.categorySpinner.setSelection(existingItem.category)
+        binding.latitude = existingItem.latitude.toString()
+        binding.longitude = existingItem.longitude.toString()
+
     }
 }

@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_itemsListFragment_to_searchFragment5"
             app:destination="@id/searchFragment5" />
+        <action
+            android:id="@+id/action_itemsListFragment_to_mapFragment"
+            app:destination="@+id/mapFragment" />
     </fragment>
     <fragment
         android:id="@+id/newItemFragment"
@@ -52,4 +55,8 @@
         android:id="@+id/searchFragment5"
         android:name="com.example.sharingang.SearchFragment"
         android:label="SearchFragment" />
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.example.sharingang.MapFragment"
+        android:label="MapFragment" />
 </navigation>

@@ -13,6 +13,12 @@
         <variable
             name="price"
             type="String" />
+        <variable
+            name="latitude"
+            type="String" />
+        <variable
+            name="longitude"
+            type="String" />
     </data>
 
     <LinearLayout
@@ -68,6 +74,40 @@
             android:importantForAutofill="yes"
             android:inputType="numberDecimal"
             android:text="@={price}" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/write_latitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:autofillHints="no"
+                android:ems="10"
+                android:hint="@string/latitude"
+                android:inputType="numberDecimal"
+                android:text="@={latitude}"/>
+
+            <EditText
+                android:id="@+id/write_longitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:autofillHints="no"
+                android:ems="10"
+                android:hint="@string/longitude"
+                android:inputType="numberDecimal"
+                android:text="@={longitude}"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/new_item_get_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/get_location" />
 
         <Button
             android:id="@+id/createItemButton"

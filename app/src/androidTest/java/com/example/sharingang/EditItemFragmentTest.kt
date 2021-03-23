@@ -27,12 +27,12 @@ class EditItemFragmentTest {
     private val editedItem = "Edited"
 
     @Test
-    fun canEditCategoryOfItem(){
+    fun canEditItemCategory() {
         onView(withId(R.id.newItemButton)).perform(click())
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
         onView(withId(R.id.editItemTitle)).perform(
-                typeText("Book_item"),
-                closeSoftKeyboard()
+            typeText("Book_item"),
+            closeSoftKeyboard()
         )
 
         onView(withId(R.id.category_spinner)).perform(click())
@@ -41,7 +41,8 @@ class EditItemFragmentTest {
         onView(withId(R.id.createItemButton)).perform(click())
 
         onView(withText("Book_item")).check(matches(isDisplayed()))
-        onView(withId(R.id.item_list_view_edit_btn)).check(matches(withText("Edit"))).perform(click())
+        onView(withId(R.id.item_list_view_edit_btn)).check(matches(withText("Edit")))
+            .perform(click())
 
         onView(withId(R.id.editItemPrompt)).check(matches(withText("Edit Item")))
         onView(withId(R.id.category_spinner)).check(matches(withSpinnerText("Book")))
@@ -49,7 +50,8 @@ class EditItemFragmentTest {
         onView(withText("Games")).perform(click())
 
         onView(withId(R.id.editItemButton)).perform(click())
-        onView(withId(R.id.item_list_view_edit_btn)).check(matches(withText("Edit"))).perform(click())
+        onView(withId(R.id.item_list_view_edit_btn)).check(matches(withText("Edit")))
+            .perform(click())
         onView(withId(R.id.category_spinner)).check(matches(withSpinnerText("Games")))
     }
 
@@ -60,8 +62,8 @@ class EditItemFragmentTest {
         onView(withId(R.id.newItemPrompt))
             .check(matches(withText("New Item")))
         onView(withId(R.id.editItemTitle)).perform(
-                typeText(item),
-                closeSoftKeyboard()
+            typeText(item),
+            closeSoftKeyboard()
         )
         val buttonCreate = onView(withId(R.id.createItemButton))
         buttonCreate.check(matches(withText("Create Item")))
@@ -78,13 +80,29 @@ class EditItemFragmentTest {
             .check(matches(withText("Edit Item")))
 
         onView(withId(R.id.editItemTitle)).perform(
-                typeText(editedItem),
-                closeSoftKeyboard()
+            typeText(editedItem),
+            closeSoftKeyboard()
         )
 
         onView(withId(R.id.editItemButton)).perform(click())
 
         onView(withText(item + editedItem))
             .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun aLocationCanBeWrittenInEditFragment() {
+        onView(withId(R.id.newItemButton)).perform(click())
+        onView(withId(R.id.createItemButton)).perform(click())
+        onView(withId(R.id.item_list_view_edit_btn)).perform(click())
+        onView(withId(R.id.edit_latitude)).perform(
+            typeText("45.01"),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.edit_longitude)).perform(
+            typeText("5.014"),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.editItemButton)).perform(click())
     }
 }

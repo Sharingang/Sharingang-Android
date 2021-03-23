@@ -10,8 +10,17 @@
         <variable
             name="description"
             type="String" />
+
         <variable
             name="price"
+            type="String" />
+
+        <variable
+            name="latitude"
+            type="String" />
+
+        <variable
+            name="longitude"
             type="String" />
     </data>
 
@@ -47,8 +56,14 @@
             android:importantForAutofill="no"
             android:inputType="textMultiLine"
             android:minLines="4"
-            android:text="@={description}"
-            android:singleLine="false" />
+            android:singleLine="false"
+            android:text="@={description}" />
+
+        <Spinner
+            android:id="@+id/category_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/categories" />
 
         <EditText
             android:id="@+id/editItemPrice"
@@ -56,15 +71,38 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/price"
-            android:inputType="numberDecimal"
             android:importantForAutofill="no"
-            android:text="@={price}"/>
+            android:inputType="numberDecimal"
+            android:text="@={price}" />
 
-        <Spinner
-            android:id="@+id/category_spinner"
-            android:entries="@array/categories"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/edit_latitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:autofillHints="no"
+                android:ems="10"
+                android:hint="@string/latitude"
+                android:inputType="numberDecimal"
+                android:text="@={latitude}" />
+
+            <EditText
+                android:id="@+id/edit_longitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:autofillHints="no"
+                android:ems="10"
+                android:hint="@string/longitude"
+                android:inputType="numberDecimal"
+                android:text="@={longitude}" />
+        </LinearLayout>
+
         <Button
             android:id="@+id/editItemButton"
             android:layout_width="wrap_content"
