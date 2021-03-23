@@ -29,15 +29,9 @@ class ImageAccess(private val registry: FragmentActivity, private val callback: 
                 owner,
                 ActivityResultContracts.RequestPermission()
             ) { isGranted: Boolean ->
-                if (!isGranted) {
-                    Toast.makeText(
-                        registry,
-                        "Storage permission successfully denied. Feature is disabled.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+                if (!isGranted)
+                    Toast.makeText(registry, "Storage permission successfully denied. Feature is disabled.", Toast.LENGTH_LONG).show()
                 storagePermissionGranted = isGranted
-
             }
         pickImage =
             registry.activityResultRegistry.register(
@@ -72,9 +66,7 @@ class ImageAccess(private val registry: FragmentActivity, private val callback: 
             }
             else -> {
                 when (permission) {
-                    Manifest.permission.READ_EXTERNAL_STORAGE -> requestStoragePermissionLauncher.launch(
-                        permission
-                    )
+                    Manifest.permission.READ_EXTERNAL_STORAGE -> requestStoragePermissionLauncher.launch(permission)
                 }
             }
         }

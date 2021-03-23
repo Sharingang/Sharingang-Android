@@ -28,10 +28,8 @@ class EditItemFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         observer = ImageAccess(requireActivity()) { uri: Uri? ->
-            uri?.let {
-                binding.editItemImage.setImageURI(uri)
-                imageUri = uri
-            }
+            uri?.let { binding.editItemImage.setImageURI(uri)
+                imageUri = uri }
         }
         lifecycle.addObserver(observer)
     }
@@ -55,9 +53,7 @@ class EditItemFragment : Fragment() {
         binding.title = existingItem.title
         binding.description = existingItem.description
         binding.price = existingItem.price.toString().format("%.2f")
-        existingItem.imageUri?.let {
-            binding.editItemImage.setImageURI(Uri.parse(it))
-        }
+        existingItem.imageUri?.let { binding.editItemImage.setImageURI(Uri.parse(it)) }
         binding.editItemImage.setOnClickListener {
             observer.openGallery(requireActivity())
         }

@@ -26,10 +26,8 @@ class NewItemFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         observer = ImageAccess(requireActivity()) { uri: Uri? ->
-            uri?.let {
-                imageUri = uri
-                binding.newItemImage.setImageURI(uri)
-            }
+            uri?.let { imageUri = uri
+                binding.newItemImage.setImageURI(uri) }
         }
         lifecycle.addObserver(observer)
     }
