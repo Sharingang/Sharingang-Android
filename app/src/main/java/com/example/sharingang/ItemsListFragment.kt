@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -23,6 +24,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import kotlin.math.log
 
@@ -82,9 +84,16 @@ class ItemsListFragment : Fragment() {
             .requestEmail()
             .build()
 
+
         mGoogleSignInClient = activity?.let { GoogleSignIn.getClient(it, gso) }!!
+
         loginButton.setOnClickListener {
             signIn()
+        }
+        binding.logoutButton.setOnClickListener {
+            mGoogleSignInClient.signOut()
+            mGoogleSignInClient.revokeAccess()
+            loginStatus.text = "Logged Out"
         }
 
         return binding.root
