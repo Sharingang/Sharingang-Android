@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Sharingang</string>
     <string name="new_item">New Item</string>
     <string name="description">Description</string>
@@ -10,7 +10,7 @@
     <string name="default_price">Price (default: 0.0)</string>
     <string name="price">Price</string>
     <string name="display_price">$ %.2f</string>
-    <string name="search_hint">Search...</string>
+    <string name="search_hint" tools:ignore="TypographyEllipsis">Search...</string>
     <string name="search_go_button">Go</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
@@ -23,4 +23,9 @@
         <item>Clothes</item>
         <item>Miscellaneous</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="googleLoginButton">Log In With Google</string>
+    <string name="account">Account</string>
+    <string name="search">Search</string>
 </resources>

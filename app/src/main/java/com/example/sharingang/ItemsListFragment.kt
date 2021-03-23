@@ -49,7 +49,9 @@ class ItemsListFragment : Fragment() {
             goToMap(view)
         }
         binding.gotoSearchButton.setOnClickListener { view: View -> goToSearchPage(view) }
-
+        binding.gotoAccount.setOnClickListener {
+            view: View -> view.findNavController().navigate(R.id.action_itemsListFragment_to_accountFragment)
+        }
         val adapter = viewModel.setupItemAdapter()
         binding.itemList.adapter = adapter
         viewModel.addObserver(viewLifecycleOwner, adapter)
