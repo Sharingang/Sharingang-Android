@@ -45,28 +45,21 @@ class ItemsListFragment : Fragment() {
         binding.newItemButton.setOnClickListener { view: View ->
             view.findNavController().navigate(R.id.action_itemsListFragment_to_newItemFragment)
         }
-        binding.goToMap.setOnClickListener { view: View ->
-            goToMap(view)
-        }
+        binding.goToMap.setOnClickListener { view: View -> goToMap(view) }
         binding.gotoSearchButton.setOnClickListener { view: View -> goToSearchPage(view) }
-        binding.gotoAccount.setOnClickListener {
-            view: View -> view.findNavController().navigate(R.id.action_itemsListFragment_to_accountFragment)
-        }
+        binding.gotoAccount.setOnClickListener { view: View -> gotoAccount(view) }
         val adapter = viewModel.setupItemAdapter()
         binding.itemList.adapter = adapter
         viewModel.addObserver(viewLifecycleOwner, adapter)
 
         setupNavigation()
 
-        binding.swiperefresh.setOnRefreshListener {
-            viewModel.refresh()
-        }
+        binding.swiperefresh.setOnRefreshListener { viewModel.refresh() }
         viewModel.refreshing.observe(viewLifecycleOwner, {
             if (!it) {
                 binding.swiperefresh.isRefreshing = false
             }
         })
-
         return binding.root
     }
 
@@ -76,6 +69,10 @@ class ItemsListFragment : Fragment() {
 
     fun goToSearchPage(view: View) {
         view.findNavController().navigate(R.id.action_itemsListFragment_to_searchFragment5)
+    }
+
+    fun gotoAccount(view: View) {
+        view.findNavController().navigate(R.id.action_itemsListFragment_to_accountFragment)
     }
 }
 
