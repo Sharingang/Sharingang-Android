@@ -16,14 +16,13 @@ import com.example.sharingang.items.ItemsViewModel
 class EditItemFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
-
     private lateinit var existingItem: Item
 
     private lateinit var observer: ImageAccess
 
     private var imageUri: Uri? = null
 
-    lateinit var binding: FragmentEditItemBinding
+    private lateinit var binding: FragmentEditItemBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,25 +43,36 @@ class EditItemFragment : Fragment() {
 
         existingItem = args.item
 
-        bind(binding, existingItem)
+        setupBinding()
 
         return binding.root
     }
 
-    private fun bind(binding: FragmentEditItemBinding, item: Item) {
+    private fun setupBinding() {
         binding.title = existingItem.title
         binding.description = existingItem.description
         binding.price = existingItem.price.toString().format("%.2f")
+        binding.categorySpinner.setSelection(existingItem.category)
+        binding.latitude = existingItem.latitude.toString()
+        binding.longitude = existingItem.longitude.toString()
         existingItem.imageUri?.let { binding.editItemImage.setImageURI(Uri.parse(it)) }
         binding.editItemImage.setOnClickListener {
             observer.openGallery(requireActivity())
         }
+        editItemClickListener()
+    }
+
+    private fun editItemClickListener() {
         binding.editItemButton.setOnClickListener { view: View ->
             viewModel.updateItem(
                 existingItem.copy(
                     title = binding.title ?: "",
                     description = binding.description ?: "",
                     price = binding.price?.toDoubleOrNull() ?: 0.0,
+                    category = binding.categorySpinner.selectedItemPosition,
+                    categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
+                    latitude = binding.latitude?.toDoubleOrNull() ?: 0.0,
+                    longitude = binding.longitude?.toDoubleOrNull() ?: 0.0,
                     imageUri = imageUri?.toString()
                 )
             )

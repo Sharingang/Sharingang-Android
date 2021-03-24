@@ -1,5 +1,6 @@
 package com.example.sharingang.items
 
+import android.widget.Adapter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -72,5 +73,17 @@ class ItemsViewModel @Inject constructor(
 
     fun onViewItemNavigated() {
         _viewingItem.value = false
+    }
+
+    fun setupItemAdapter(): ItemsAdapter{
+        val onEdit = { item: Item -> onEditItemClicked(item) }
+        val onView = { item: Item -> onViewItem(item) }
+        return ItemsAdapter(ItemListener(onEdit, onView))
+    }
+
+    fun addObserver(LifeCycleOwner : androidx.lifecycle.LifecycleOwner, adapter : ItemsAdapter){
+        items.observe(LifeCycleOwner, {
+            it?.let { adapter.submitList(it) }
+        })
     }
 }

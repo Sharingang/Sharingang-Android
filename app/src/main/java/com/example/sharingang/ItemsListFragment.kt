@@ -1,6 +1,5 @@
 package com.example.sharingang
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,20 +10,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.sharingang.databinding.FragmentItemsListBinding
-import com.example.sharingang.items.Item
-import com.example.sharingang.items.ItemListener
-import com.example.sharingang.items.ItemsAdapter
 import com.example.sharingang.items.ItemsViewModel
 
 class ItemsListFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
-
-    private fun setupItemAdapter(): ItemsAdapter {
-        val onEdit = { item: Item -> viewModel.onEditItemClicked(item) }
-        val onView = { item: Item -> viewModel.onViewItem(item) }
-        return ItemsAdapter(ItemListener(onEdit, onView))
-    }
 
     private fun setupNavigation() {
         viewModel.navigateToEditItem.observe(viewLifecycleOwner, { item ->
@@ -55,16 +45,26 @@ class ItemsListFragment : Fragment() {
         binding.newItemButton.setOnClickListener { view: View ->
             view.findNavController().navigate(R.id.action_itemsListFragment_to_newItemFragment)
         }
-
-        val adapter = setupItemAdapter()
-        binding.itemList.adapter = adapter
-        viewModel.items.observe(viewLifecycleOwner, {
-            it?.let { adapter.submitList(it) }
-        })
-        setupNavigation()
-        binding.goToMap.setOnClickListener {
-            startActivity(Intent(this.activity, MapActivity::class.java))
+        binding.goToMap.setOnClickListener { view: View ->
+            goToMap(view)
         }
+        binding.gotoSearchButton.setOnClickListener { view: View -> goToSearchPage(view) }
+
+        val adapter = viewModel.setupItemAdapter()
+        binding.itemList.adapter = adapter
+        viewModel.addObserver(viewLifecycleOwner, adapter)
+
+        setupNavigation()
+
         return binding.root
     }
+
+    private fun goToMap(view: View) {
+        view.findNavController().navigate(R.id.action_itemsListFragment_to_mapFragment)
+    }
+
+    fun goToSearchPage(view: View) {
+        view.findNavController().navigate(R.id.action_itemsListFragment_to_searchFragment5)
+    }
 }
+
