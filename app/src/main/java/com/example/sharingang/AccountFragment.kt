@@ -38,6 +38,7 @@ class AccountFragment : Fragment() {
             container,
             false
         )
+        binding.logoutButton.visibility = View.GONE
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
@@ -79,9 +80,9 @@ class AccountFragment : Fragment() {
 
     private fun sign_out(signInClient: GoogleSignInClient, binding: FragmentAccountBinding) {
         signInClient.signOut()
-            .addOnCompleteListener(requireActivity(), OnCompleteListener<Void?> {
+            .addOnCompleteListener(requireActivity()) {
                 updateUI(accountStatus = AccountStatus.LOGGED_OUT, binding)
-            })
+            }
     }
 
     private fun updateUI(accountStatus: AccountStatus, binding: FragmentAccountBinding) {

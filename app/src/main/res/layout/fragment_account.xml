@@ -12,7 +12,7 @@
             android:id="@+id/loginButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Log In"
+            android:text="@string/log_in"
             app:icon="@drawable/common_google_signin_btn_icon_light"
             app:iconGravity="start"
             app:iconSize="3dp" />
@@ -26,7 +26,7 @@
 
             <TextView
                 android:id="@+id/account_status"
-                android:layout_width="311dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
@@ -35,7 +35,7 @@
             <Button
                 android:id="@+id/logoutButton"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/log_out" />
         </LinearLayout>
