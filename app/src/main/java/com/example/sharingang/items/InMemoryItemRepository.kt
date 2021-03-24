@@ -10,7 +10,7 @@ import kotlin.collections.HashMap
  * In-memory implementation of the ItemRepository
  * The data is not persisted.
  */
-class InMemoryItemRepository @Inject constructor() : ItemRepository {
+class InMemoryItemRepository : ItemRepository {
 
     private val itemsMap = HashMap<String, Item>()
     private val itemsLiveData = MutableLiveData<List<Item>>()
