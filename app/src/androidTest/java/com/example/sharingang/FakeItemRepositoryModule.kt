@@ -1,22 +1,42 @@
 package com.example.sharingang
 
-import com.example.sharingang.items.InMemoryItemRepository
-import com.example.sharingang.items.ItemRepository
-import com.example.sharingang.items.ItemRepositoryModule
-import dagger.Binds
+import android.content.Context
+import androidx.room.Room
+import com.example.sharingang.items.*
 import dagger.Module
-import dagger.hilt.android.components.ViewModelComponent
+import dagger.Provides
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
+import javax.inject.Singleton
 
 @Module
 @TestInstallIn(
-    components = [ViewModelComponent::class],
+    components = [SingletonComponent::class],
     replaces = [ItemRepositoryModule::class]
 )
-abstract class FakeItemRepositoryModule {
+object FakeItemRepositoryModule {
+    @Singleton
+    @Provides
+    fun provideItemStore(): ItemStore {
+        return InMemoryItemRepository()
+    }
 
-    @Binds
-    abstract fun bindItemRepository(
-        firestoreItemRepository: InMemoryItemRepository
-    ): ItemRepository
+    @Singleton
+    @Provides
+    fun provideItemRepository(repo: CachedItemRepository): ItemRepository {
+        return repo
+    }
+
+    @Singleton
+    @Provides
+    fun provideDatabase(@ApplicationContext app: Context): ItemDatabase {
+        return Room.inMemoryDatabaseBuilder(app, ItemDatabase::class.java).build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideItemDao(db: ItemDatabase): ItemDao {
+        return db.itemDao
+    }
 }
