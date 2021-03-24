@@ -1,9 +1,13 @@
 package com.example.sharingang
 
+import android.content.Intent
 import android.Manifest
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.matcher.IntentMatchers
+import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -25,17 +29,29 @@ class NewItemFragmentTest {
     @get:Rule(order = 1)
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
-    @get:Rule
-    val grantPermissionRule: GrantPermissionRule =
-        GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION)
+    @get:Rule(order = 2)
+    val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    )
+
+    @get:Rule(order = 3)
+    var mActivityTestRule = IntentsTestRule(MainActivity::class.java)
 
     private val firstItem = "First Item"
     private val secondItem = "Second Item"
 
     @Test
     fun aDescriptionCanBeEnteredAndSeenOnMainActivity() {
+        savePickedImage(mActivityTestRule.activity)
+        val imgGalleryResult = createImageGallerySetResultStub(mActivityTestRule.activity)
+        Intents.intending(IntentMatchers.hasAction(Intent.ACTION_GET_CONTENT)).respondWith(imgGalleryResult)
+
         onView(withId(R.id.newItemButton)).perform(click())
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
+
+        onView(withId(R.id.new_item_image)).perform(click())
+        onView(withId(R.id.new_item_image)).check(matches(hasContentDescription()))
         onView(withId(R.id.editItemTitle)).perform(
             typeText(firstItem),
             closeSoftKeyboard()

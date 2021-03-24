@@ -1,5 +1,6 @@
 package com.example.sharingang
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,14 +18,26 @@ class EditItemFragment : Fragment() {
     private val viewModel: ItemsViewModel by activityViewModels()
     private lateinit var existingItem: Item
 
+    private lateinit var observer: ImageAccess
+
+    private var imageUri: Uri? = null
+
     private lateinit var binding: FragmentEditItemBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        observer = ImageAccess(requireActivity()) { uri: Uri? ->
+            uri?.let { binding.editItemImage.setImageURI(uri)
+                imageUri = uri }
+        }
+        lifecycle.addObserver(observer)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_edit_item, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_item, container, false)
 
         val args = EditItemFragmentArgs.fromBundle(requireArguments())
 
@@ -32,20 +45,6 @@ class EditItemFragment : Fragment() {
 
         setupBinding()
 
-        binding.editItemButton.setOnClickListener { view: View ->
-            viewModel.updateItem(
-                existingItem.copy(
-                    title = binding.title ?: "",
-                    description = binding.description ?: "",
-                    price = binding.price?.toDoubleOrNull() ?: 0.0,
-                    category = binding.categorySpinner.selectedItemPosition,
-                    categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
-                    latitude = binding.latitude?.toDoubleOrNull() ?: 0.0,
-                    longitude = binding.longitude?.toDoubleOrNull() ?: 0.0
-                )
-            )
-            view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)
-        }
         return binding.root
     }
 
@@ -56,6 +55,29 @@ class EditItemFragment : Fragment() {
         binding.categorySpinner.setSelection(existingItem.category)
         binding.latitude = existingItem.latitude.toString()
         binding.longitude = existingItem.longitude.toString()
+        existingItem.imageUri?.let { binding.editItemImage.setImageURI(Uri.parse(it)) }
+        binding.editItemImage.setOnClickListener {
+            observer.openGallery(requireActivity())
+        }
+        editItemClickListener()
+    }
 
+    private fun editItemClickListener() {
+        binding.editItemButton.setOnClickListener { view: View ->
+            viewModel.updateItem(
+                existingItem.copy(
+                    title = binding.title ?: "",
+                    description = binding.description ?: "",
+                    price = binding.price?.toDoubleOrNull() ?: 0.0,
+                    category = binding.categorySpinner.selectedItemPosition,
+                    categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
+                    latitude = binding.latitude?.toDoubleOrNull() ?: 0.0,
+                    longitude = binding.longitude?.toDoubleOrNull() ?: 0.0,
+                    imageUri = imageUri?.toString()
+                )
+            )
+            observer.unregister()
+            view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)
+        }
     }
 }

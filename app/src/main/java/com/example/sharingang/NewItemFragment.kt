@@ -1,5 +1,6 @@
 package com.example.sharingang
 
+import android.net.Uri
 import android.Manifest
 import android.location.Location
 import android.os.Bundle
@@ -24,8 +25,22 @@ class NewItemFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
 
+    private lateinit var observer: ImageAccess
+
+    private var imageUri: Uri? = null
+
+    lateinit var binding: FragmentNewItemBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        observer = ImageAccess(requireActivity()) { uri: Uri? ->
+            uri?.let { imageUri = uri
+                binding.newItemImage.setImageURI(uri) }
+        }
+        lifecycle.addObserver(observer)
+    }
+
     private lateinit var fusedLocationCreate: FusedLocationProviderClient
-    private lateinit var binding: FragmentNewItemBinding
 
     // Allows the cancellation of a location request if, for example, the user exists the activity
     private var cancellationTokenSource = CancellationTokenSource()
@@ -39,26 +54,32 @@ class NewItemFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_item, container, false)
 
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_new_item, container, false)
+        bind()
+        setupLocationCreate()
+
+        return binding.root
+    }
+
+    private fun bind() {
         binding.createItemButton.setOnClickListener { view: View ->
-            viewModel.addItem(
-                Item(
-                    price = binding.price?.toDoubleOrNull() ?: 0.0,
-                    description = binding.description ?: "",
-                    title = binding.title ?: "",
-                    category = binding.categorySpinner.selectedItemPosition,
-                    categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
-                    latitude = binding.latitude?.toDoubleOrNull() ?: 0.0,
-                    longitude = binding.longitude?.toDoubleOrNull() ?: 0.0
-                )
-            )
+            viewModel.addItem(Item(
+                price = binding.price?.toDoubleOrNull() ?: 0.0,
+                description = binding.description ?: "",
+                title = binding.title ?: "",
+                category = binding.categorySpinner.selectedItemPosition,
+                categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
+                latitude = binding.latitude?.toDoubleOrNull() ?: 0.0,
+                longitude = binding.longitude?.toDoubleOrNull() ?: 0.0,
+                imageUri = imageUri?.toString()
+            ))
+            observer.unregister()
             view.findNavController().navigate(R.id.action_newItemFragment_to_itemsListFragment)
         }
-
-        setupLocationCreate()
-        return binding.root
+        binding.newItemImage.setOnClickListener {
+            observer.openGallery(requireActivity())
+        }
     }
 
     private fun setupLocationCreate() {

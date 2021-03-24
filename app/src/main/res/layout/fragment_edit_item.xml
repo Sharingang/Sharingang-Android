@@ -37,6 +37,13 @@
             android:textSize="30sp"
             android:textStyle="bold" />
 
+        <ImageView
+            android:id="@+id/edit_item_image"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:contentDescription="@string/item_image_description"
+            android:src="@drawable/ic_baseline_image_24" />
+
         <EditText
             android:id="@+id/editItemTitle"
             android:layout_width="match_parent"

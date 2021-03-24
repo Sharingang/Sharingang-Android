@@ -1,11 +1,10 @@
 package com.example.sharingang.items
 
-import java.util.Date
-
 import android.os.Parcelable
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.ServerTimestamp
 import kotlinx.parcelize.Parcelize
+import java.util.*
 
 /**
  * Item represents an item available for sharing, or for sale.
@@ -18,6 +17,10 @@ data class Item(
 
     /** URLs of the images */
     val images: List<String> = listOf(),
+
+    /** Provisory, will be changed later when we actually
+        upload image to the server and cache it locally */
+    var imageUri: String? = null,
 
     val price: Double = 0.0,
 
