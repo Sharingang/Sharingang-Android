@@ -39,6 +39,12 @@ class AccountFragment : Fragment() {
             false
         )
         binding.logoutButton.visibility = View.GONE
+        createLauncher(binding)
+        signInSetup(binding)
+        return binding.root
+    }
+
+    private fun createLauncher(binding: FragmentAccountBinding) {
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
@@ -58,6 +64,9 @@ class AccountFragment : Fragment() {
                 updateUI(accountStatus = AccountStatus.LOGGED_OUT, binding)
             }
         }
+    }
+
+    private fun signInSetup(binding: FragmentAccountBinding) {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(CLIENT_AUTH_KEY)
             .requestServerAuthCode(CLIENT_AUTH_KEY)
@@ -70,7 +79,6 @@ class AccountFragment : Fragment() {
         binding.logoutButton.setOnClickListener() {
             sign_out(signInClient = googleSignInClient, binding)
         }
-        return binding.root
     }
 
     private fun sign_in(signInClient: GoogleSignInClient, binding: FragmentAccountBinding) {
