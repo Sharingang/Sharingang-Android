@@ -55,25 +55,31 @@ class NewItemFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_item, container, false)
+
+        bind()
+        setupLocationCreate()
+
+        return binding.root
+    }
+
+    private fun bind() {
         binding.createItemButton.setOnClickListener { view: View ->
             viewModel.addItem(Item(
-                    price = binding.price?.toDoubleOrNull() ?: 0.0,
-                    description = binding.description ?: "",
-                    title = binding.title ?: "",
-                    category = binding.categorySpinner.selectedItemPosition,
-                    categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
-                    latitude = binding.latitude?.toDoubleOrNull() ?: 0.0,
-                    longitude = binding.longitude?.toDoubleOrNull() ?: 0.0,
-                    imageUri = imageUri?.toString()
-                ))
+                price = binding.price?.toDoubleOrNull() ?: 0.0,
+                description = binding.description ?: "",
+                title = binding.title ?: "",
+                category = binding.categorySpinner.selectedItemPosition,
+                categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
+                latitude = binding.latitude?.toDoubleOrNull() ?: 0.0,
+                longitude = binding.longitude?.toDoubleOrNull() ?: 0.0,
+                imageUri = imageUri?.toString()
+            ))
             observer.unregister()
             view.findNavController().navigate(R.id.action_newItemFragment_to_itemsListFragment)
         }
-        setupLocationCreate()
         binding.newItemImage.setOnClickListener {
             observer.openGallery(requireActivity())
         }
-        return binding.root
     }
 
     private fun setupLocationCreate() {

@@ -29,13 +29,13 @@ class NewItemFragmentTest {
     @get:Rule(order = 1)
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
-    @get:Rule
+    @get:Rule(order = 2)
     val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(
         Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.ACCESS_FINE_LOCATION)
+        Manifest.permission.ACCESS_FINE_LOCATION
     )
 
-    @get:Rule
+    @get:Rule(order = 3)
     var mActivityTestRule = IntentsTestRule(MainActivity::class.java)
 
     private val firstItem = "First Item"
