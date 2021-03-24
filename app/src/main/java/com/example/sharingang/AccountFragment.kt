@@ -23,6 +23,11 @@ class AccountFragment : Fragment() {
     private val CLIENT_AUTH_KEY: String = "771023799063-kmve17s9cfu6ckd3kijcv8vdvvdqb58s.apps.googleusercontent.com"
     lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
+    private enum class AccountStatus{
+        LOGGED_IN,
+        LOGGED_OUT
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,7 +38,6 @@ class AccountFragment : Fragment() {
             container,
             false
         )
-        // Inflate the layout for this fragment
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
@@ -43,16 +47,14 @@ class AccountFragment : Fragment() {
                         ApiException::class.java
                     )
                     "Status: Logged in as \n${account.displayName}\n(${account.email})".also { binding.accountStatus.text = it }
-                    binding.loginButton.visibility = View.GONE
+                    updateUI(accountStatus = AccountStatus.LOGGED_IN, binding)
                 } catch (e: ApiException) {
+                    updateUI(accountStatus = AccountStatus.LOGGED_OUT, binding)
                     binding.accountStatus.text = getString(R.string.failed_login_message)
-                    binding.loginButton.visibility = View.VISIBLE
-                    binding.logoutButton.visibility = View.GONE
                 }
             }
             else {
-                binding.loginButton.visibility = View.VISIBLE
-                binding.logoutButton.visibility = View.GONE
+                updateUI(accountStatus = AccountStatus.LOGGED_OUT, binding)
             }
         }
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -72,16 +74,25 @@ class AccountFragment : Fragment() {
 
     private fun sign_in(signInClient: GoogleSignInClient, binding: FragmentAccountBinding) {
         resultLauncher.launch(signInClient.signInIntent)
-        binding.loginButton.visibility = View.GONE
-        binding.logoutButton.visibility = View.VISIBLE
+        updateUI(accountStatus = AccountStatus.LOGGED_IN, binding)
     }
 
     private fun sign_out(signInClient: GoogleSignInClient, binding: FragmentAccountBinding) {
         signInClient.signOut()
             .addOnCompleteListener(requireActivity(), OnCompleteListener<Void?> {
-                binding.accountStatus.text = getString(R.string.text_logged_out)
-                binding.logoutButton.visibility = View.GONE
-                binding.loginButton.visibility = View.VISIBLE
+                updateUI(accountStatus = AccountStatus.LOGGED_OUT, binding)
             })
+    }
+
+    private fun updateUI(accountStatus: AccountStatus, binding: FragmentAccountBinding) {
+        if(accountStatus == AccountStatus.LOGGED_IN) {
+            binding.loginButton.visibility = View.GONE
+            binding.logoutButton.visibility = View.VISIBLE
+        }
+        else {
+            binding.loginButton.visibility = View.VISIBLE
+            binding.logoutButton.visibility = View.GONE
+            binding.accountStatus.text = getString(R.string.text_logged_out)
+        }
     }
 }
