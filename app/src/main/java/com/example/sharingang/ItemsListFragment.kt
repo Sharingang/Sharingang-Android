@@ -58,6 +58,15 @@ class ItemsListFragment : Fragment() {
 
         setupNavigation()
 
+        binding.swiperefresh.setOnRefreshListener {
+            viewModel.refresh()
+        }
+        viewModel.refreshing.observe(viewLifecycleOwner, {
+            if (!it) {
+                binding.swiperefresh.isRefreshing = false
+            }
+        })
+
         return binding.root
     }
 
