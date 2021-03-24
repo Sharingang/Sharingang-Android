@@ -50,9 +50,7 @@ class AccountFragment : Fragment() {
                 val data: Intent? = result.data
                 val task = GoogleSignIn.getSignedInAccountFromIntent(data)
                 try {
-                    val account = task.getResult(
-                        ApiException::class.java
-                    )
+                    val account = task.getResult(ApiException::class.java)
                     "Status: Logged in as \n${account.displayName}\n(${account.email})".also { binding.accountStatus.text = it }
                     updateUI(accountStatus = AccountStatus.LOGGED_IN, binding)
                 } catch (e: ApiException) {
@@ -60,18 +58,14 @@ class AccountFragment : Fragment() {
                     binding.accountStatus.text = getString(R.string.failed_login_message)
                 }
             }
-            else {
-                updateUI(accountStatus = AccountStatus.LOGGED_OUT, binding)
-            }
+            else { updateUI(accountStatus = AccountStatus.LOGGED_OUT, binding) }
         }
     }
 
     private fun signInSetup(binding: FragmentAccountBinding) {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(CLIENT_AUTH_KEY)
-            .requestServerAuthCode(CLIENT_AUTH_KEY)
-            .requestEmail()
-            .build()
+            .requestIdToken(CLIENT_AUTH_KEY).requestServerAuthCode(CLIENT_AUTH_KEY)
+            .requestEmail().build()
         val googleSignInClient = activity?.let { GoogleSignIn.getClient(it, gso) }!!
         binding.loginButton.setOnClickListener {
             sign_in(googleSignInClient, binding)
@@ -87,8 +81,7 @@ class AccountFragment : Fragment() {
     }
 
     private fun sign_out(signInClient: GoogleSignInClient, binding: FragmentAccountBinding) {
-        signInClient.signOut()
-            .addOnCompleteListener(requireActivity()) {
+        signInClient.signOut().addOnCompleteListener(requireActivity()) {
                 updateUI(accountStatus = AccountStatus.LOGGED_OUT, binding)
             }
     }
