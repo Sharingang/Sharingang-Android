@@ -32,4 +32,5 @@
     <string name="log_out">Log Out</string>
     <string name="failed_login_message">Status: Login Failed. Please Retry.</string>
     <string name="text_logged_out">Status: Logged Out</string>
+    <string name="log_in">Log In</string>
 </resources>
