@@ -9,25 +9,43 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/sflSearchText"
-            android:layout_width="231dp"
-            android:layout_height="50dp"
+            android:id="@+id/searchText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/search_hint" />
 
-        <Button
-            android:id="@+id/sflSearchButton"
-            android:text="@string/search_go_button"
+        <Spinner
+            android:id="@+id/searchCategorySpinner"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:entries="@array/categories"/>
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/sflSearchButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_go_button" />
+
+            <Button
+                android:id="@+id/clearSearchButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/clear_search_button" />
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/itemSearchList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     </LinearLayout>
 </layout>

@@ -59,20 +59,44 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
-    fun searchItems(searchName: String?){
-        val listSearchResults = ArrayList<Item>()
-        if(searchName == null || searchName.isEmpty()){
-            _searchResults.postValue(listSearchResults)
-            return
-        }
+
+    fun clearSearchResults(){
+        _searchResults.value = listOf<Item>()
+    }
+
+    /**
+     * Searches through the list to find items, if the name is left empty or null
+     * it will ignore the name search. The same goes for the category.
+     *
+     * @param searchName string searched for
+     * @param categoryID category searched for
+     */
+    fun searchItems(searchName: String?, categoryID : Int){
+        val categoryResults = HashSet<Item>()
+        val nameResults = HashSet<Item>()
 
         viewModelScope.launch(Dispatchers.IO){
-            for(item in itemRepository.getAllItems()){
-                if(item.title.toLowerCase().contains(searchName!!.toLowerCase())){
-                    listSearchResults.add(item)
+            if(categoryID == 0){
+                categoryResults.addAll(itemRepository.getAllItems())
+            }else{
+                for(item in itemRepository.getAllItems()){
+                    if(item.category == categoryID){
+                        categoryResults.add(item)
+                    }
                 }
             }
-            _searchResults.postValue(listSearchResults)
+
+            if(searchName == null || searchName.isEmpty()){
+                nameResults.addAll(itemRepository.getAllItems())
+            }else{
+                for(item in itemRepository.getAllItems()){
+                    if(item.title.toLowerCase().contains(searchName!!.toLowerCase())){
+                        nameResults.add(item)
+                    }
+                }
+            }
+
+            _searchResults.postValue(categoryResults.intersect(nameResults).toList())
         }
     }
     /**

@@ -16,6 +16,7 @@
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="get_location">Get Location</string>
+    <string name="clear_search_button">Clear search</string>
     <string-array name="categories">
         <item>None</item>
         <item>Book</item>
