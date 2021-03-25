@@ -1,8 +1,6 @@
 package com.example.sharingang.users
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.room.Room
-import com.example.sharingang.CacheDatabase
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
@@ -17,7 +15,7 @@ class InMemoryUserRepositoryTest {
         val repo: UserRepository = InMemoryUserRepository()
         runBlocking {
             val user = generateSampleUser()
-            assert(repo.addUser(user))
+            assert(repo.add(user) != null)
         }
     }
 
@@ -26,7 +24,7 @@ class InMemoryUserRepositoryTest {
         val repo: UserRepository = InMemoryUserRepository()
         runBlocking {
             val user = generateSampleUser().copy(id = null)
-            repo.addUser(user)
+            repo.add(user)
         }
     }
 
@@ -36,9 +34,9 @@ class InMemoryUserRepositoryTest {
         runBlocking {
             val user = generateSampleUser()
 
-            repo.addUser(user)
+            repo.add(user)
 
-            val retrievedUser = repo.getUser(user.id!!)
+            val retrievedUser = repo.get(user.id!!)
 
             assert(retrievedUser == user)
         }
@@ -49,12 +47,12 @@ class InMemoryUserRepositoryTest {
         val repo: UserRepository = InMemoryUserRepository()
         runBlocking {
             val user = generateSampleUser()
-            repo.addUser(user)
+            repo.add(user)
 
             val updatedUser = user.copy(name = "updated name")
-            assert(repo.updateUser(updatedUser))
+            assert(repo.update(updatedUser))
 
-            assert(repo.getUser(updatedUser.id!!) == updatedUser)
+            assert(repo.get(updatedUser.id!!) == updatedUser)
         }
     }
 
@@ -64,7 +62,7 @@ class InMemoryUserRepositoryTest {
         runBlocking {
             // New User with no id
             val user = generateSampleUser().copy(id = null)
-            repo.updateUser(user)
+            repo.update(user)
         }
     }
 

@@ -18,11 +18,11 @@ class InMemoryItemRepository : ItemRepository {
         itemsLiveData.value = itemsMap.values.toList()
     }
 
-    override suspend fun getItem(id: String): Item? {
+    override suspend fun get(id: String): Item? {
         return itemsMap[id]
     }
 
-    override suspend fun getAllItems(): List<Item> {
+    override suspend fun getAll(): List<Item> {
         return itemsMap.values.toList()
     }
 
@@ -33,7 +33,7 @@ class InMemoryItemRepository : ItemRepository {
     override suspend fun refreshItems() {
     }
 
-    override suspend fun addItem(item: Item): String {
+    override suspend fun add(item: Item): String {
         require(item.id == null)
 
         val id = UUID.randomUUID().toString()
@@ -42,7 +42,7 @@ class InMemoryItemRepository : ItemRepository {
         return id
     }
 
-    override suspend fun updateItem(item: Item): Boolean {
+    override suspend fun update(item: Item): Boolean {
         requireNotNull(item.id)
 
         itemsMap[item.id] = item
@@ -50,7 +50,7 @@ class InMemoryItemRepository : ItemRepository {
         return true
     }
 
-    override suspend fun deleteItem(id: String): Boolean {
+    override suspend fun delete(id: String): Boolean {
         itemsMap.remove(id)
         itemsLiveData.postValue(itemsMap.values.toList())
         return true

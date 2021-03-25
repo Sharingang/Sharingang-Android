@@ -11,11 +11,11 @@ class InMemoryUserRepository : UserRepository {
 
     private val usersMap = HashMap<String, User>()
 
-    override suspend fun getUser(id: String): User? {
+    override suspend fun get(id: String): User? {
         return usersMap[id]
     }
 
-    override suspend fun getAllUsers(): List<User> {
+    override suspend fun getAll(): List<User> {
         return usersMap.values.toList()
     }
 
@@ -26,17 +26,17 @@ class InMemoryUserRepository : UserRepository {
     override suspend fun refreshUsers() {
     }
 
-    override suspend fun addUser(user: User): Boolean {
+    override suspend fun add(user: User): String? {
         requireNotNull(user.id)
         if (usersMap.containsKey(user.id)) {
-            return false
+            return null
         }
 
         usersMap[user.id] = user
-        return true
+        return user.id
     }
 
-    override suspend fun updateUser(user: User): Boolean {
+    override suspend fun update(user: User): Boolean {
         requireNotNull(user.id)
 
         usersMap[user.id] = user

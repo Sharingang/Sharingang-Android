@@ -12,19 +12,19 @@ interface UserStore {
      *
      * The user id must be the one returned by the authentication provider.
      *
-     * @return whether the operation succeeded
+     * @return id of the user if successfully added otherwise null
      */
-    suspend fun addUser(user: User): Boolean
+    suspend fun add(user: User): String?
 
     /**
      * Returns the user with corresponding id or null if it doesn't exist
      */
-    suspend fun getUser(id: String): User?
+    suspend fun get(id: String): User?
 
     /**
      * Returns all of the users that exist
      */
-    suspend fun getAllUsers(): List<User>
+    suspend fun getAll(): List<User>
 
     /**
      * Update existing user
@@ -33,5 +33,5 @@ interface UserStore {
      *
      * @return whether the update succeeded
      */
-    suspend fun updateUser(user: User): Boolean
+    suspend fun update(user: User): Boolean
 }

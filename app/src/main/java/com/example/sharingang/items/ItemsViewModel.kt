@@ -52,7 +52,7 @@ class ItemsViewModel @Inject constructor(
      */
     fun addItem(item: Item) {
         viewModelScope.launch(Dispatchers.IO) {
-            itemRepository.addItem(item)
+            itemRepository.add(item)
         }
     }
 
@@ -63,7 +63,7 @@ class ItemsViewModel @Inject constructor(
      */
     fun updateItem(updatedItem: Item) {
         viewModelScope.launch(Dispatchers.IO) {
-            itemRepository.updateItem(updatedItem)
+            itemRepository.update(updatedItem)
         }
     }
 

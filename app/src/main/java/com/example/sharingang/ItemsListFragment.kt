@@ -43,7 +43,9 @@ class ItemsListFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_items_list, container, false)
         binding.viewModel = viewModel
         binding.newItemButton.setOnClickListener { view: View ->
-            view.findNavController().navigate(R.id.action_itemsListFragment_to_newItemFragment)
+            view.findNavController().navigate(
+                ItemsListFragmentDirections.actionItemsListFragmentToNewItemFragment()
+            )
         }
         binding.goToMap.setOnClickListener { view: View ->
             goToMap(view)
@@ -69,11 +71,15 @@ class ItemsListFragment : Fragment() {
     }
 
     private fun goToMap(view: View) {
-        view.findNavController().navigate(R.id.action_itemsListFragment_to_mapFragment)
+        view.findNavController().navigate(
+            ItemsListFragmentDirections.actionItemsListFragmentToMapFragment()
+        )
     }
 
     fun goToSearchPage(view: View) {
-        view.findNavController().navigate(R.id.action_itemsListFragment_to_searchFragment5)
+        view.findNavController().navigate(
+            ItemsListFragmentDirections.actionItemsListFragmentToSearchFragment5()
+        )
     }
 }
 

@@ -5,7 +5,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-
 class CachedUserRepository @Inject constructor(
     private val userDao: UserDao,
     private val store: UserStore
@@ -18,7 +17,7 @@ class CachedUserRepository @Inject constructor(
     private suspend fun doRefreshUsers(): List<User> =
         // This is necessary, since you want to avoid doing this work on the main thread
         withContext(Dispatchers.IO) {
-            val newUsers = store.getAllUsers()
+            val newUsers = store.getAll()
             userDao.insert(newUsers)
             newUsers
         }
@@ -34,19 +33,19 @@ class CachedUserRepository @Inject constructor(
         return ret
     }
 
-    override suspend fun addUser(user: User): Boolean {
-        return thenRefresh { store.addUser(user) }
+    override suspend fun add(user: User): String? {
+        return thenRefresh { store.add(user) }
     }
 
-    override suspend fun getUser(id: String): User? {
+    override suspend fun get(id: String): User? {
         return userDao.getUser(id)
     }
 
-    override suspend fun getAllUsers(): List<User> {
+    override suspend fun getAll(): List<User> {
         return doRefreshUsers()
     }
 
-    override suspend fun updateUser(user: User): Boolean {
-        return thenRefresh { store.updateUser(user) }
+    override suspend fun update(user: User): Boolean {
+        return thenRefresh { store.update(user) }
     }
 }
