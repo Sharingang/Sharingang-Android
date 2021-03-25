@@ -91,7 +91,7 @@ class AccountFragment : Fragment() {
 
     private fun updateUI(accountStatus: AccountStatus, binding: FragmentAccountBinding) {
         if(accountStatus == AccountStatus.LOGGED_IN) {
-            (binding.loginButton.visibility) = View.GONE
+            binding.loginButton.visibility = View.GONE
             binding.logoutButton.visibility = View.VISIBLE
         } else { binding.loginButton.visibility = View.VISIBLE
             binding.logoutButton.visibility = View.GONE
