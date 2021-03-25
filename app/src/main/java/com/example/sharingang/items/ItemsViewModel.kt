@@ -84,10 +84,17 @@ class ItemsViewModel @Inject constructor(
         _viewingItem.value = false
     }
 
+    fun onSellItem(item: Item) {
+        viewModelScope.launch {
+            itemRepository.updateItem(item.copy(sold = !item.sold))
+        }
+    }
+
     fun setupItemAdapter(): ItemsAdapter {
         val onEdit = { item: Item -> onEditItemClicked(item) }
         val onView = { item: Item -> onViewItem(item) }
-        return ItemsAdapter(ItemListener(onEdit, onView))
+        val onSell = { item: Item -> onSellItem(item) }
+        return ItemsAdapter(ItemListener(onEdit, onView, onSell))
     }
 
     fun addObserver(LifeCycleOwner: androidx.lifecycle.LifecycleOwner, adapter: ItemsAdapter) {
