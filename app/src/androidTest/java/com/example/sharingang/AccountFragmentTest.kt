@@ -42,7 +42,7 @@ class AccountFragmentTest {
         onView(withId(R.id.account_status)).check(matches(withText("Status: Logged Out")))
     }
 
-    /*
+
     @Test
     fun loginClick() {
         val device: UiDevice = UiDevice.getInstance(getInstrumentation())
@@ -51,7 +51,7 @@ class AccountFragmentTest {
         device.pressBack()
         onView(withId(R.id.loginButton)).check(matches(withText("Log In")))
     }
-    */
+
 
 
 }
