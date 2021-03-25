@@ -76,7 +76,7 @@ class ItemsViewModel @Inject constructor(
      * @param searchName string searched for
      * @param categoryID category searched for
      */
-    fun searchItems(searchName: String?, categoryID : Int){
+    fun searchItems(searchName: String, categoryID : Int){
         viewModelScope.launch(Dispatchers.IO){
             val allItemsSet = HashSet<Item>(itemRepository.getAllItems())
             val categoryResults = HashSet<Item>(allItemsSet)
@@ -90,7 +90,7 @@ class ItemsViewModel @Inject constructor(
                 }
             }
 
-            if(searchName != null && searchName.isNotEmpty()){
+            if(searchName.isNotEmpty()){
                 for(item in allItemsSet){
                     if(!item.title.toLowerCase().contains(searchName!!.toLowerCase())){
                         nameResults.remove(item)

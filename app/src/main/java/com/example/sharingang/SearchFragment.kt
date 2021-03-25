@@ -22,7 +22,8 @@ class SearchFragment : Fragment() {
         viewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.SEARCH_RESULTS)
 
         binding.sflSearchButton.setOnClickListener{
-            viewModel.searchItems(binding.searchText.text.toString(), binding.searchCategorySpinner.selectedItemPosition)
+
+            viewModel.searchItems(binding.searchText.text.toString() , binding.searchCategorySpinner.selectedItemPosition)
         }
 
         binding.clearSearchButton.setOnClickListener { view -> clearSearch(view) }
