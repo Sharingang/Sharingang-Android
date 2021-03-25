@@ -63,8 +63,7 @@ class AccountFragment : Fragment() {
     }
 
     private fun signInSetup(binding: FragmentAccountBinding) {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(CLIENT_AUTH_KEY).requestServerAuthCode(CLIENT_AUTH_KEY).requestEmail().build()
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(CLIENT_AUTH_KEY).requestServerAuthCode(CLIENT_AUTH_KEY).requestEmail().build()
         val googleSignInClient = activity?.let { GoogleSignIn.getClient(it, gso) }!!
         binding.loginButton.setOnClickListener { sign_in(googleSignInClient, binding) }
         binding.logoutButton.setOnClickListener() { sign_out(signInClient = googleSignInClient, binding) }
@@ -80,8 +79,12 @@ class AccountFragment : Fragment() {
     }
 
     private fun updateUI(accountStatus: AccountStatus, binding: FragmentAccountBinding) {
-        binding.loginButton.visibility = if (accountStatus == AccountStatus.LOGGED_IN) View.GONE else View.VISIBLE
-        binding.logoutButton.visibility = if (accountStatus == AccountStatus.LOGGED_OUT) View.GONE else View.VISIBLE
-        if (accountStatus == AccountStatus.LOGGED_OUT) { binding.accountStatus.text = getString(R.string.text_logged_out) }
+        if(accountStatus == AccountStatus.LOGGED_IN) {
+            (binding.loginButton.visibility) = View.GONE
+            binding.logoutButton.visibility = View.VISIBLE
+        } else { binding.loginButton.visibility = View.VISIBLE
+            binding.logoutButton.visibility = View.GONE
+            binding.accountStatus.text = getString(R.string.text_logged_out)
+        }
     }
 }
