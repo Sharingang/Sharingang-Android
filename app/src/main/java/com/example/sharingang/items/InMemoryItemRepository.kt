@@ -3,7 +3,6 @@ package com.example.sharingang.items
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import java.util.*
-import javax.inject.Inject
 import kotlin.collections.HashMap
 
 /**

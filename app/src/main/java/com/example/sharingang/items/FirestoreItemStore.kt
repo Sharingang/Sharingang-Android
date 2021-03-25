@@ -1,40 +1,22 @@
 package com.example.sharingang.items
 
 import android.util.Log
-import com.example.sharingang.BuildConfig
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.firestoreSettings
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
+import javax.inject.Singleton
 
-private const val TAG = "FirestoreItemRepository"
+private const val TAG = "FirestoreItemStore"
 
 /**
  * Implementation of ItemRepository using the Firestore database
  *
  * During development it requires running the Firebase emulator (see README.md)
  */
-class FirestoreItemStore : ItemStore {
-    private val firestore = Firebase.firestore
+@Singleton
+class FirestoreItemStore @Inject constructor(private val firestore: FirebaseFirestore) : ItemStore {
     private val collectionName = "items"
-
-    init {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "Using Firebase emulator.")
-            // 10.0.2.2 is the special IP address to connect to the 'localhost' of
-            // the host computer from an Android emulator.
-            firestore.useEmulator("10.0.2.2", 8080)
-
-            // Because the Firebase emulator doesn't persist data, we disable the local persistence
-            // to avoid conflicting data.
-            firestore.firestoreSettings = firestoreSettings {
-                isPersistenceEnabled = false
-            }
-        } else {
-            Log.d(TAG, "Using production Firebase.")
-        }
-    }
 
     override suspend fun getItem(id: String): Item? {
         val document = firestore.collection(collectionName)
