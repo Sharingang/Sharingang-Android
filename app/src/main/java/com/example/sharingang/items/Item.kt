@@ -29,6 +29,8 @@ data class Item(
 
     val price: Double = 0.0,
 
+    val sold: Boolean = false,
+
     @ServerTimestamp
     val createdAt: Date? = null,
 
