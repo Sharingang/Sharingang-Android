@@ -70,8 +70,8 @@ class ItemsViewModel @Inject constructor(
     }
 
     /**
-     * Searches through the list to find items, ignores searchName or
-     * categoryID if null or empty.
+     * Searches through database, ignores searchName/
+     * categoryID if null/empty.
      *
      * @param searchName string searched for
      * @param categoryID category searched for
