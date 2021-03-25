@@ -79,28 +79,21 @@ class ItemsViewModel @Inject constructor(
     fun searchItems(searchName: String?, categoryID : Int){
         val categoryResults = HashSet<Item>()
         val nameResults = HashSet<Item>()
-
         viewModelScope.launch(Dispatchers.IO){
-            if(categoryID == 0){
-                categoryResults.addAll(itemRepository.getAllItems())
-            }else{
+            if (categoryID == 0) categoryResults.addAll(itemRepository.getAllItems()) else{
                 for(item in itemRepository.getAllItems()){
                     if(item.category == categoryID){
                         categoryResults.add(item)
                     }
                 }
             }
-
-            if(searchName == null || searchName.isEmpty()){
-                nameResults.addAll(itemRepository.getAllItems())
-            }else{
+            if(searchName == null || searchName.isEmpty()) nameResults.addAll(itemRepository.getAllItems()) else{
                 for(item in itemRepository.getAllItems()){
                     if(item.title.toLowerCase().contains(searchName!!.toLowerCase())){
                         nameResults.add(item)
                     }
                 }
             }
-
             _searchResults.postValue(categoryResults.intersect(nameResults).toList())
         }
     }
