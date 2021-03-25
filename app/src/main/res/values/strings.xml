@@ -11,7 +11,7 @@
     <string name="price">Price</string>
     <string name="display_price">$ %.2f</string>
     <string name="item_image_description">Item Image</string>
-    <string name="search_hint" tools:ignore="TypographyEllipsis">Search...</string>
+    <string name="search_hint">Search…</string>
 
     <string name="search_go_button">Go</string>
     <string name="latitude">Latitude</string>
