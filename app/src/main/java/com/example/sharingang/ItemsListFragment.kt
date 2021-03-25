@@ -14,6 +14,7 @@ import com.example.sharingang.items.ItemsViewModel
 
 class ItemsListFragment : Fragment() {
 
+    private lateinit var binding: FragmentItemsListBinding
     private val viewModel: ItemsViewModel by activityViewModels()
 
     private fun setupNavigation() {
@@ -35,13 +36,7 @@ class ItemsListFragment : Fragment() {
         })
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val binding: FragmentItemsListBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_items_list, container, false)
-        binding.viewModel = viewModel
+    fun setupButtons() {
         binding.newItemButton.setOnClickListener { view: View ->
             view.findNavController().navigate(
                 ItemsListFragmentDirections.actionItemsListFragmentToNewItemFragment()
@@ -56,6 +51,16 @@ class ItemsListFragment : Fragment() {
             it.findNavController().navigate(action)
         }
         binding.gotoSearchButton.setOnClickListener { view: View -> goToSearchPage(view) }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_items_list, container, false)
+        binding.viewModel = viewModel
+
+        setupButtons()
 
         val adapter = viewModel.setupItemAdapter()
         binding.itemList.adapter = adapter
