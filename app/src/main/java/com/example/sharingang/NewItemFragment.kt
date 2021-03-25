@@ -79,6 +79,7 @@ class NewItemFragment : Fragment() {
                 categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
                 latitude = binding.latitude?.toDoubleOrNull() ?: 0.0,
                 longitude = binding.longitude?.toDoubleOrNull() ?: 0.0,
+                sold = false,
                 imageUri = imageUri?.toString()
             ))
             observer.unregister()
