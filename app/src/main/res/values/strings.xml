@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">Sharingang</string>
     <string name="new_item">New Item</string>
     <string name="description">Description</string>
