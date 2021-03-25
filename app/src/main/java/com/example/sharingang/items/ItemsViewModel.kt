@@ -90,7 +90,7 @@ class ItemsViewModel @Inject constructor(
                 }
             }
 
-            if(!(searchName == null || searchName.isEmpty())){
+            if(searchName != null && searchName.isNotEmpty()){
                 for(item in allItemsSet){
                     if(!item.title.toLowerCase().contains(searchName!!.toLowerCase())){
                         nameResults.remove(item)
