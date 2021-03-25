@@ -42,21 +42,13 @@ class ItemsListFragment : Fragment() {
         val binding: FragmentItemsListBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_items_list, container, false)
         binding.viewModel = viewModel
-        binding.newItemButton.setOnClickListener { view: View ->
-            view.findNavController().navigate(R.id.action_itemsListFragment_to_newItemFragment)
-        }
-        binding.goToMap.setOnClickListener { view: View ->
-            goToMap(view)
-        }
+        binding.newItemButton.setOnClickListener { view: View -> gotoNewItem(view) }
+        binding.goToMap.setOnClickListener { view: View -> goToMap(view) }
         binding.gotoSearchButton.setOnClickListener { view: View -> goToSearchPage(view) }
-
-        binding.gotoSearchButton.setOnClickListener { view : View ->
-            view.findNavController().navigate(R.id.action_itemsListFragment_to_searchFragment5)
-        }
 
         val adapter = viewModel.setupItemAdapter()
         binding.itemList.adapter = adapter
-        viewModel.addObserver(viewLifecycleOwner, adapter)
+        viewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.ALL_ITEMS)
 
         setupNavigation()
 
@@ -70,6 +62,10 @@ class ItemsListFragment : Fragment() {
         })
 
         return binding.root
+    }
+
+    private fun gotoNewItem(view: View){
+        view.findNavController().navigate(R.id.action_itemsListFragment_to_newItemFragment)
     }
 
     private fun goToMap(view: View) {

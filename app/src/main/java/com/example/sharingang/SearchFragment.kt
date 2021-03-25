@@ -19,21 +19,19 @@ class SearchFragment : Fragment() {
         val binding : FragmentSearchBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
         val adapter = viewModel.setupItemAdapter()
         binding.itemSearchList.adapter = adapter;
-        viewModel.addSearchObserver(viewLifecycleOwner, adapter)
+        viewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.SEARCH_RESULTS)
 
         binding.sflSearchButton.setOnClickListener{
             viewModel.searchItems(binding.searchText.text.toString(), binding.searchCategorySpinner.selectedItemPosition)
         }
 
-        binding.sflSearchButton.setOnClickListener{
-            viewModel.searchItems(binding.searchText.text.toString(), binding.searchCategorySpinner.selectedItemPosition)
-        }
-
-        binding.clearSearchButton.setOnClickListener {
-            viewModel.clearSearchResults()
-        }
+        binding.clearSearchButton.setOnClickListener { view -> clearSearch(view) }
 
         return binding.root
+    }
+
+    private fun clearSearch(view: View){
+        viewModel.clearSearchResults()
     }
 
 }

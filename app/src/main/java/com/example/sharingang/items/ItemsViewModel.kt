@@ -21,6 +21,11 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
+    enum class OBSERVABLES{
+        ALL_ITEMS, SEARCH_RESULTS
+    }
+
+
     private val _navigateToEditItem = MutableLiveData<Item?>()
     val navigateToEditItem: LiveData<Item?>
         get() = _navigateToEditItem
@@ -65,8 +70,8 @@ class ItemsViewModel @Inject constructor(
     }
 
     /**
-     * Searches through the list to find items, if the name is left empty or null
-     * it will ignore the name search. The same goes for the category.
+     * Searches through the list to find items, ignores searchName or
+     * categoryID if null or empty.
      *
      * @param searchName string searched for
      * @param categoryID category searched for
@@ -140,14 +145,12 @@ class ItemsViewModel @Inject constructor(
         return ItemsAdapter(ItemListener(onEdit, onView, onSell))
     }
 
-    fun addObserver(LifeCycleOwner: LifecycleOwner, adapter: ItemsAdapter) {
-        items.observe(LifeCycleOwner, {
-            it?.let { adapter.submitList(it) }
-        })
-    }
-
-    fun addSearchObserver(LifeCycleOwner: LifecycleOwner, adapter: ItemsAdapter){
-        searchResults.observe(LifeCycleOwner, {
+    fun addObserver(LifeCycleOwner: LifecycleOwner, adapter: ItemsAdapter, type : OBSERVABLES) {
+        val observable : LiveData<List<Item>> = when(type){
+            OBSERVABLES.ALL_ITEMS -> items
+            OBSERVABLES.SEARCH_RESULTS -> searchResults
+        }
+        observable.observe(LifeCycleOwner, {
             it?.let { adapter.submitList(it) }
         })
     }
