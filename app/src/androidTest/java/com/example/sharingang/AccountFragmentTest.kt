@@ -45,6 +45,7 @@ class AccountFragmentTest {
 
     @Test
     fun loginClick() {
+        Thread.sleep(5000)
         val device: UiDevice = UiDevice.getInstance(getInstrumentation())
         onView(withId(R.id.gotoAccount)).perform(click())
         onView(withId(R.id.loginButton)).perform(click())
