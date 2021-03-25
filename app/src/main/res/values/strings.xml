@@ -10,7 +10,12 @@
     <string name="default_price">Price (default: 0.0)</string>
     <string name="price">Price</string>
     <string name="display_price">$ %.2f</string>
-
+    <string name="item_image_description">Item Image</string>
+    <string name="search_hint">Search...</string>
+    <string name="search_go_button">Go</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="get_location">Get Location</string>
     <string-array name="categories">
         <item>None</item>
         <item>Book</item>

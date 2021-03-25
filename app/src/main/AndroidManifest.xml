@@ -3,6 +3,8 @@
     package="com.example.sharingang">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name=".SharingangApplication"
         android:allowBackup="false"
@@ -16,9 +18,8 @@
             android:value="@string/google_api_key" />
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
-        <activity android:name=".MapActivity"
-            android:parentActivityName=".MainActivity"/>
+            android:value="@integer/google_play_services_version" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
