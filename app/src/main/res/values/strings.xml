@@ -15,7 +15,7 @@
     <string name="search_go_button">Go</string>
     <string name="latitude">Latitude</string>
     <string name="sell">Sell</string>
-    <string name="unsell">Unsell</string>
+    <string name="unsell">Resell</string>
     <string name="longitude">Longitude</string>
     <string name="get_location">Get Location</string>
     <string-array name="categories">
