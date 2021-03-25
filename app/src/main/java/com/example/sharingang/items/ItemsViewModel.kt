@@ -1,9 +1,7 @@
 package com.example.sharingang.items
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.util.Log
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,6 +37,11 @@ class ItemsViewModel @Inject constructor(
     val refreshing: LiveData<Boolean>
         get() = _refreshing
 
+
+    private val _searchResults = MutableLiveData<List<Item>>(listOf())
+    val searchResults: LiveData<List<Item>>
+        get() = _searchResults
+
     /**
      * The last item created
      */
@@ -56,6 +59,22 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
+    fun searchItems(searchName: String?){
+        val listSearchResults = ArrayList<Item>()
+        if(searchName == null || searchName.isEmpty()){
+            _searchResults.postValue(listSearchResults)
+            return
+        }
+
+        viewModelScope.launch(Dispatchers.IO){
+            for(item in itemRepository.getAllItems()){
+                if(item.title.toLowerCase().contains(searchName!!.toLowerCase())){
+                    listSearchResults.add(item)
+                }
+            }
+            _searchResults.postValue(listSearchResults)
+        }
+    }
     /**
      * Replace the old item by a new one.
      *
@@ -90,8 +109,14 @@ class ItemsViewModel @Inject constructor(
         return ItemsAdapter(ItemListener(onEdit, onView))
     }
 
-    fun addObserver(LifeCycleOwner: androidx.lifecycle.LifecycleOwner, adapter: ItemsAdapter) {
+    fun addObserver(LifeCycleOwner: LifecycleOwner, adapter: ItemsAdapter) {
         items.observe(LifeCycleOwner, {
+            it?.let { adapter.submitList(it) }
+        })
+    }
+
+    fun addSearchObserver(LifeCycleOwner: LifecycleOwner, adapter: ItemsAdapter){
+        searchResults.observe(LifeCycleOwner, {
             it?.let { adapter.submitList(it) }
         })
     }

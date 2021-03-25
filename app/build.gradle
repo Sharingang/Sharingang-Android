@@ -59,6 +59,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
+
     // Location
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
@@ -80,6 +81,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "androidx.room:room-runtime:2.3.0-beta03"
     implementation "androidx.room:room-ktx:2.3.0-beta03"
+    implementation 'com.google.firebase:firebase-firestore:21.4.0'
     kapt "androidx.room:room-compiler:2.3.0-beta03"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
