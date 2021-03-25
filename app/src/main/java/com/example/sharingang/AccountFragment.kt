@@ -47,7 +47,9 @@ class AccountFragment : Fragment() {
 
     private fun createLauncher(binding: FragmentAccountBinding) {
         resultLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            registerForActivityResult(
+                ActivityResultContracts.
+                StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
                     val data: Intent? = result.data
                     val task = GoogleSignIn.getSignedInAccountFromIntent(data)
@@ -66,18 +68,27 @@ class AccountFragment : Fragment() {
     }
 
     private fun signInSetup(binding: FragmentAccountBinding) {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        val gso =
+            GoogleSignInOptions
+            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(CLIENT_AUTH_KEY)
             .requestServerAuthCode(CLIENT_AUTH_KEY)
             .requestEmail()
             .build()
-        val googleSignInClient = activity?.let { GoogleSignIn.getClient(it, gso) }!!
-        binding.loginButton.setOnClickListener { sign_in(googleSignInClient, binding) }
-        binding.logoutButton.setOnClickListener() { sign_out(signInClient = googleSignInClient, binding) }
+        val googleSignInClient = activity?.let {
+            GoogleSignIn.getClient(it, gso)
+        }!!
+        binding.loginButton.setOnClickListener {
+            sign_in(googleSignInClient, binding)
+        }
+        binding.logoutButton.setOnClickListener() {
+            sign_out(signInClient = googleSignInClient, binding)
+        }
     }
 
     private fun sign_in(signInClient: GoogleSignInClient, binding: FragmentAccountBinding) {
-        resultLauncher.launch(signInClient.signInIntent)
+        val toLaunch: Intent = signInClient.signInIntent
+        resultLauncher.launch(toLaunch)
         updateUI(accountStatus = AccountStatus.LOGGED_IN, binding)
     }
 
