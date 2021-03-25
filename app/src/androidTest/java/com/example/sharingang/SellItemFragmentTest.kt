@@ -40,6 +40,6 @@ class SellItemFragmentTest {
 
         Espresso.onView(ViewMatchers.withText("Sell")).perform(ViewActions.click())
         Espresso.onView(ViewMatchers.withId(R.id.item_list_view_sell_button))
-            .check(ViewAssertions.matches(ViewMatchers.withText("Unsell")))
+            .check(ViewAssertions.matches(ViewMatchers.withText("Resell")))
     }
 }
