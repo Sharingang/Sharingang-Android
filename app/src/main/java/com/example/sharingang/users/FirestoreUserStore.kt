@@ -18,7 +18,11 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
 
     override suspend fun add(user: User): String? {
         requireNotNull(user.id)
-        return super.add(user)
+        return if (super.update(user, user.id)) {
+            user.id
+        } else {
+            null
+        }
     }
 
     override suspend fun update(user: User): Boolean {

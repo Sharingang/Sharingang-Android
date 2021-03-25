@@ -65,6 +65,7 @@ object RepositoryModule {
         return db.userDao
     }
 
+    @Singleton
     @Provides
     fun provideFirebaseFirestore(): FirebaseFirestore {
         val firestore = Firebase.firestore

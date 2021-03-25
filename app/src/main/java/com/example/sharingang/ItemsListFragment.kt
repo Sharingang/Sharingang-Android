@@ -50,6 +50,11 @@ class ItemsListFragment : Fragment() {
         binding.goToMap.setOnClickListener { view: View ->
             goToMap(view)
         }
+        binding.userProfileButton.setOnClickListener {
+            val action =
+                ItemsListFragmentDirections.actionItemsListFragmentToUserProfileFragment("test")
+            it.findNavController().navigate(action)
+        }
         binding.gotoSearchButton.setOnClickListener { view: View -> goToSearchPage(view) }
 
         val adapter = viewModel.setupItemAdapter()
