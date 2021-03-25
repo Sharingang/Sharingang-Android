@@ -51,19 +51,26 @@ class AccountFragment : Fragment() {
                 if (result.resultCode == Activity.RESULT_OK) {
                     val data: Intent? = result.data
                     val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-                    try { val account = task.getResult(ApiException::class.java)
+                    try {
+                        val account = task.getResult(ApiException::class.java)
                         "Status: Logged in as \n${account.displayName}\n(${account.email})".also { binding.accountStatus.text = it }
                         updateUI(accountStatus = AccountStatus.LOGGED_IN, binding)
                     } catch (e: ApiException) {
                         updateUI(accountStatus = AccountStatus.LOGGED_OUT, binding)
                         binding.accountStatus.text = getString(R.string.failed_login_message)
                     }
-                } else { updateUI(accountStatus = AccountStatus.LOGGED_OUT, binding) }
+                } else {
+                    updateUI(accountStatus = AccountStatus.LOGGED_OUT, binding)
+                }
             }
     }
 
     private fun signInSetup(binding: FragmentAccountBinding) {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(CLIENT_AUTH_KEY).requestServerAuthCode(CLIENT_AUTH_KEY).requestEmail().build()
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(CLIENT_AUTH_KEY)
+            .requestServerAuthCode(CLIENT_AUTH_KEY)
+            .requestEmail()
+            .build()
         val googleSignInClient = activity?.let { GoogleSignIn.getClient(it, gso) }!!
         binding.loginButton.setOnClickListener { sign_in(googleSignInClient, binding) }
         binding.logoutButton.setOnClickListener() { sign_out(signInClient = googleSignInClient, binding) }
