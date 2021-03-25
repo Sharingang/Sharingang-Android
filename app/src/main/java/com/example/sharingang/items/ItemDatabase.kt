@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.sharingang.DateConverter
 
-@Database(entities = [Item::class], version = 1)
+@Database(entities = [Item::class], version = 2)
 @TypeConverters(DateConverter::class)
 abstract class ItemDatabase : RoomDatabase() {
     abstract val itemDao: ItemDao
