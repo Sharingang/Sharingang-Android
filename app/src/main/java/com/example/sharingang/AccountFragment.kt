@@ -19,9 +19,6 @@ import com.google.android.gms.tasks.OnCompleteListener
 
 
 class AccountFragment : Fragment() {
-
-    private val CLIENT_AUTH_KEY: String =
-        "771023799063-kmve17s9cfu6ckd3kijcv8vdvvdqb58s.apps.googleusercontent.com"
     var resultLauncher: ActivityResultLauncher<Intent>? = null
 
     private enum class AccountStatus {
@@ -65,11 +62,13 @@ class AccountFragment : Fragment() {
     }
 
     private fun signInSetup(binding: FragmentAccountBinding) {
+        val clientId=
+            activity?.resources?.getString(R.string.default_web_client_id);
         val gso =
             GoogleSignInOptions
             .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(CLIENT_AUTH_KEY)
-            .requestServerAuthCode(CLIENT_AUTH_KEY)
+            .requestIdToken(clientId)
+            .requestServerAuthCode(clientId)
             .requestEmail()
             .build()
         val googleSignInClient = activity?.let {
