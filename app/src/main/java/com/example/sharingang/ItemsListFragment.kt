@@ -37,11 +37,7 @@ class ItemsListFragment : Fragment() {
     }
 
     fun setupButtons() {
-        binding.newItemButton.setOnClickListener { view: View ->
-            view.findNavController().navigate(
-                    ItemsListFragmentDirections.actionItemsListFragmentToNewItemFragment()
-            )
-        }
+        binding.newItemButton.setOnClickListener { view: View -> goToNewItem(view) }
         binding.goToMap.setOnClickListener { view: View ->
             goToMap(view)
         }
@@ -51,7 +47,7 @@ class ItemsListFragment : Fragment() {
             it.findNavController().navigate(action)
         }
         binding.gotoSearchButton.setOnClickListener { view: View -> goToSearchPage(view) }
-        binding.gotoAccount.setOnClickListener { view: View -> gotoAccount(view) }
+        binding.gotoAccount.setOnClickListener { view: View -> goToAccount(view) }
     }
 
     override fun onCreateView(
@@ -65,7 +61,7 @@ class ItemsListFragment : Fragment() {
 
         val adapter = viewModel.setupItemAdapter()
         binding.itemList.adapter = adapter
-        viewModel.addObserver(viewLifecycleOwner, adapter)
+        viewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.ALL_ITEMS)
 
         setupNavigation()
 
@@ -79,6 +75,12 @@ class ItemsListFragment : Fragment() {
         return binding.root
     }
 
+    private fun goToNewItem(view: View){
+        view.findNavController().navigate(
+                ItemsListFragmentDirections.actionItemsListFragmentToNewItemFragment()
+        )
+    }
+
     private fun goToMap(view: View) {
         view.findNavController().navigate(
                 ItemsListFragmentDirections.actionItemsListFragmentToMapFragment()
@@ -87,11 +89,11 @@ class ItemsListFragment : Fragment() {
 
     fun goToSearchPage(view: View) {
         view.findNavController().navigate(
-                ItemsListFragmentDirections.actionItemsListFragmentToSearchFragment5()
+                ItemsListFragmentDirections.actionItemsListFragmentToSearchFragment()
         )
     }
 
-    fun gotoAccount(view: View) {
+    fun goToAccount(view: View) {
         view.findNavController().navigate(
                 ItemsListFragmentDirections.actionItemsListFragmentToAccountFragment()
         )

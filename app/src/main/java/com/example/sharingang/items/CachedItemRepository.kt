@@ -54,3 +54,4 @@ class CachedItemRepository @Inject constructor(
         return thenRefresh { store.delete(id) }
     }
 }
+

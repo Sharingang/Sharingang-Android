@@ -20,8 +20,8 @@
             android:id="@+id/action_itemsListFragment_to_detailedItemFragment"
             app:destination="@id/detailedItemFragment" />
         <action
-            android:id="@+id/action_itemsListFragment_to_searchFragment5"
-            app:destination="@id/searchFragment5" />
+            android:id="@+id/action_itemsListFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
         <action
             android:id="@+id/action_itemsListFragment_to_mapFragment"
             app:destination="@+id/mapFragment" />
@@ -58,7 +58,7 @@
         android:name="com.example.sharingang.DetailedItemFragment"
         android:label="DetailedItemFragment" />
     <fragment
-        android:id="@+id/searchFragment5"
+        android:id="@+id/searchFragment"
         android:name="com.example.sharingang.SearchFragment"
         android:label="SearchFragment" />
     <fragment
