@@ -27,13 +27,20 @@
             android:id="@+id/gotoSearchButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Search" />
+            android:text="@string/search" />
 
         <Button
             android:id="@+id/newItemButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/new_item" />
+
+
+        <Button
+            android:id="@+id/gotoAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/account" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swiperefresh"
