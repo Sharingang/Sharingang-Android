@@ -11,11 +11,21 @@
     <string name="price">Price</string>
     <string name="display_price">$ %.2f</string>
     <string name="item_image_description">Item Image</string>
-    <string name="search_hint">Search...</string>
+    <string name="search_hint">Search…</string>
     <string name="search_go_button">Go</string>
     <string name="latitude">Latitude</string>
+    <string name="sell">Sell</string>
+    <string name="unsell">Resell</string>
     <string name="longitude">Longitude</string>
     <string name="get_location">Get Location</string>
+    <string name="user_profile">User profile</string>
+    <string name="account">Account</string>
+    <string name="search">Search</string>
+    <string name="logged_out">Status: Logged Out</string>
+    <string name="log_out">Log Out</string>
+    <string name="failed_login_message">Status: Login Failed. Please Retry.</string>
+    <string name="text_logged_out">Status: Logged Out</string>
+    <string name="log_in">Log In</string>
     <string-array name="categories">
         <item>None</item>
         <item>Book</item>

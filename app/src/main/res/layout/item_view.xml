@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
+            android:textColor="@{item.sold ? @android:color/holo_red_dark : @color/black}"
             android:onClick="@{() -> clickListener.onView(item)}"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
@@ -36,6 +37,15 @@
             android:layout_height="wrap_content"
             android:onClick="@{() -> clickListener.onEdit(item)}"
             android:text="@string/edit"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/item_list_view_sell_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:onClick="@{() -> clickListener.onSell(item)}"
+            android:text="@{item.sold ? @string/unsell : @string/sell}"
             android:textSize="20sp" />
 
     </LinearLayout>
