@@ -30,13 +30,18 @@ or things will take.
 ## Sebastian
 I added a location to items, with the possibility to fetch the current location of the device through a button. 
 
-With the research and trials-failures, this feature took me around 4 hours. However, I had to spent at least three hours refactoring the code as some new parts were very similar with what already was implemented for the map feature. 
+With the research and trials-failures, this feature took me around 4 hours. However, I had to spent at least fours hours refactoring the code (and make codeclimate/Cirrus acceots the changes) as some new parts were very similar with what already was implemented for the map feature. 
 
 I started the feature where the items are displayed on the map.
 
 Overall, my time estimates were not accurate.
 
 ## Zach
+This week I implemented the basic search algorithm, both for text and for categories. Went through a few different algorithms and still needs improvement but for now it works. This work took be about 9 hours altogether.
+
+Next week I want to improve the implementation and try to implement a chat system.
+
+My time estimations are getting better but I would like to implement tasks that require a bit more learning and research.
 
 ## Overall team
 We did two stand-up meetings this week: on Monday and Thursday. 
