@@ -4,7 +4,9 @@ import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.HashSet
 
 /**
  * ItemsViewModel models the state of the fragment for viewing items
@@ -63,7 +65,7 @@ class ItemsViewModel @Inject constructor(
     }
 
 
-    fun clearSearchResults(){
+    fun clearSearchResults() {
         _searchResults.value = listOf<Item>()
     }
 
@@ -74,23 +76,25 @@ class ItemsViewModel @Inject constructor(
      * @param searchName string searched for
      * @param categoryID category searched for
      */
-    fun searchItems(searchName: String, categoryID : Int){
-        viewModelScope.launch(Dispatchers.IO){
+    fun searchItems(searchName: String, categoryID: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
             val allItemsSet = HashSet<Item>(itemRepository.getAll())
             val categoryResults = HashSet<Item>(allItemsSet)
             val nameResults = HashSet<Item>(allItemsSet)
 
-            if(categoryID != 0){
-                for(item in allItemsSet){
-                    if(item.category != categoryID){
+            if (categoryID != 0) {
+                for (item in allItemsSet) {
+                    if (item.category != categoryID) {
                         categoryResults.remove(item)
                     }
                 }
             }
 
-            if(searchName.isNotEmpty()){
-                for(item in allItemsSet){
-                    if(!item.title.toLowerCase().contains(searchName.toLowerCase())){
+            if (searchName.isNotEmpty()) {
+                for (item in allItemsSet) {
+                    if (!item.title.toLowerCase(Locale.getDefault())
+                            .contains(searchName.toLowerCase(Locale.getDefault()))
+                    ) {
                         nameResults.remove(item)
                     }
                 }
@@ -98,6 +102,7 @@ class ItemsViewModel @Inject constructor(
             _searchResults.postValue(categoryResults.intersect(nameResults).toList())
         }
     }
+
     /**
      * Replace the old item by a new one.
      *
@@ -139,8 +144,8 @@ class ItemsViewModel @Inject constructor(
         return ItemsAdapter(ItemListener(onEdit, onView, onSell))
     }
 
-    fun addObserver(LifeCycleOwner: LifecycleOwner, adapter: ItemsAdapter, type : OBSERVABLES) {
-        val observable : LiveData<List<Item>> = when(type){
+    fun addObserver(LifeCycleOwner: LifecycleOwner, adapter: ItemsAdapter, type: OBSERVABLES) {
+        val observable: LiveData<List<Item>> = when (type) {
             OBSERVABLES.ALL_ITEMS -> items
             OBSERVABLES.SEARCH_RESULTS -> searchResults
         }
