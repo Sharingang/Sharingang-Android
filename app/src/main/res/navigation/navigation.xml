@@ -26,6 +26,9 @@
             android:id="@+id/action_itemsListFragment_to_mapFragment"
             app:destination="@+id/mapFragment" />
         <action
+            android:id="@+id/action_itemsListFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+        <action
             android:id="@+id/action_itemsListFragment_to_accountFragment"
             app:destination="@id/accountFragment" />
     </fragment>
@@ -62,6 +65,15 @@
         android:id="@+id/mapFragment"
         android:name="com.example.sharingang.MapFragment"
         android:label="MapFragment" />
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.example.sharingang.UserProfileFragment"
+        android:label="user_profile_fragment"
+        tools:layout="@layout/user_profile_fragment" >
+        <argument
+            android:name="userId"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/accountFragment"
         android:name="com.example.sharingang.AccountFragment"

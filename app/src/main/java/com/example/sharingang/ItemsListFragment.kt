@@ -14,13 +14,14 @@ import com.example.sharingang.items.ItemsViewModel
 
 class ItemsListFragment : Fragment() {
 
+    private lateinit var binding: FragmentItemsListBinding
     private val viewModel: ItemsViewModel by activityViewModels()
 
     private fun setupNavigation() {
         viewModel.navigateToEditItem.observe(viewLifecycleOwner, { item ->
             item?.let {
                 this.findNavController().navigate(
-                    ItemsListFragmentDirections.actionItemsListFragmentToEditItemFragment(item)
+                        ItemsListFragmentDirections.actionItemsListFragmentToEditItemFragment(item)
                 )
                 viewModel.onEditItemNavigated()
             }
@@ -28,26 +29,40 @@ class ItemsListFragment : Fragment() {
         viewModel.viewingItem.observe(viewLifecycleOwner, {
             if (it) {
                 this.findNavController().navigate(
-                    ItemsListFragmentDirections.actionItemsListFragmentToDetailedItemFragment()
+                        ItemsListFragmentDirections.actionItemsListFragmentToDetailedItemFragment()
                 )
                 viewModel.onViewItemNavigated()
             }
         })
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val binding: FragmentItemsListBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_items_list, container, false)
-        binding.viewModel = viewModel
+    fun setupButtons() {
         binding.newItemButton.setOnClickListener { view: View ->
-            view.findNavController().navigate(R.id.action_itemsListFragment_to_newItemFragment)
+            view.findNavController().navigate(
+                    ItemsListFragmentDirections.actionItemsListFragmentToNewItemFragment()
+            )
         }
-        binding.goToMap.setOnClickListener { view: View -> goToMap(view) }
+        binding.goToMap.setOnClickListener { view: View ->
+            goToMap(view)
+        }
+        binding.userProfileButton.setOnClickListener {
+            val action =
+                    ItemsListFragmentDirections.actionItemsListFragmentToUserProfileFragment("test")
+            it.findNavController().navigate(action)
+        }
         binding.gotoSearchButton.setOnClickListener { view: View -> goToSearchPage(view) }
         binding.gotoAccount.setOnClickListener { view: View -> gotoAccount(view) }
+    }
+
+    override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_items_list, container, false)
+        binding.viewModel = viewModel
+
+        setupButtons()
+
         val adapter = viewModel.setupItemAdapter()
         binding.itemList.adapter = adapter
         viewModel.addObserver(viewLifecycleOwner, adapter)
@@ -60,19 +75,26 @@ class ItemsListFragment : Fragment() {
                 binding.swiperefresh.isRefreshing = false
             }
         })
+
         return binding.root
     }
 
     private fun goToMap(view: View) {
-        view.findNavController().navigate(R.id.action_itemsListFragment_to_mapFragment)
+        view.findNavController().navigate(
+                ItemsListFragmentDirections.actionItemsListFragmentToMapFragment()
+        )
     }
 
     fun goToSearchPage(view: View) {
-        view.findNavController().navigate(R.id.action_itemsListFragment_to_searchFragment5)
+        view.findNavController().navigate(
+                ItemsListFragmentDirections.actionItemsListFragmentToSearchFragment5()
+        )
     }
 
     fun gotoAccount(view: View) {
-        view.findNavController().navigate(R.id.action_itemsListFragment_to_accountFragment)
+        view.findNavController().navigate(
+                ItemsListFragmentDirections.actionItemsListFragmentToAccountFragment()
+        )
     }
 }
 
