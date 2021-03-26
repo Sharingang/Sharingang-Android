@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_itemsListFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />
+        <action
+            android:id="@+id/action_itemsListFragment_to_accountFragment"
+            app:destination="@id/accountFragment" />
     </fragment>
     <fragment
         android:id="@+id/newItemFragment"
@@ -71,4 +74,8 @@
             android:name="userId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.example.sharingang.AccountFragment"
+        android:label="AccountFragment" />
 </navigation>

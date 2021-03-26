@@ -5,7 +5,7 @@ check_android_task:
     TARGET: google_apis
     ARCH: x86
     CC_TEST_REPORTER_ID: ENCRYPTED[f6faceadd916d06a8ede5053d30c9138c5ff641bea71c905f1a019311381f1db69ef3d03c57e8fa6e7c14bcd4ba372e3]
-    GOOGLE_SERVICES_JSON: ENCRYPTED[2fd7a675f46e34afeba381eba65e870450d43ecc225ead42c274dcd16eac3602f01e6b418e2c39350606508e88e3d2bd]
+    GOOGLE_SERVICES_JSON: ENCRYPTED[3173be22faa87fe43cc6aafa54fba1e3ef866bba20537023b4d951c737767a7328cb6637f05c9e3b7c66ff35f0f9cca4]
   container:
     image: reactivecircus/android-emulator-$API_LEVEL:latest
     kvm: true
