@@ -21,15 +21,13 @@ class EditItemFragment : Fragment() {
     private lateinit var observer: ImageAccess
 
     private var imageUri: Uri? = null
+    private var cameraUri: Uri? = null
 
     private lateinit var binding: FragmentEditItemBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        observer = ImageAccess(requireActivity()) { uri: Uri? ->
-            uri?.let { binding.editItemImage.setImageURI(uri)
-                imageUri = uri }
-        }
+        observer = ImageAccess(requireActivity(), ::galleryCallback, ::cameraCallback)
         lifecycle.addObserver(observer)
     }
 
@@ -59,6 +57,9 @@ class EditItemFragment : Fragment() {
         binding.editItemImage.setOnClickListener {
             observer.openGallery(requireActivity())
         }
+        binding.editItemTakePicture.setOnClickListener {
+            cameraUri = observer.openCamera(requireActivity())
+        }
         editItemClickListener()
     }
 
@@ -78,6 +79,22 @@ class EditItemFragment : Fragment() {
             )
             observer.unregister()
             view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)
+        }
+    }
+
+    private fun galleryCallback(uri: Uri?) {
+        uri?.let { imageUri = uri
+            binding.editItemImage.setImageURI(uri)
+        }
+    }
+
+    private fun cameraCallback(res: Boolean?) {
+        res?.let {
+            if (it) {
+                cameraUri?.let { imageUri = cameraUri
+                    binding.editItemImage.setImageURI(cameraUri)
+                }
+            }
         }
     }
 }

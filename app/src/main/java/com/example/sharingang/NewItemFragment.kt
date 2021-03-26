@@ -28,15 +28,13 @@ class NewItemFragment : Fragment() {
     private lateinit var observer: ImageAccess
 
     private var imageUri: Uri? = null
+    private var cameraUri: Uri? = null
 
     lateinit var binding: FragmentNewItemBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        observer = ImageAccess(requireActivity()) { uri: Uri? ->
-            uri?.let { imageUri = uri
-                binding.newItemImage.setImageURI(uri) }
-        }
+        observer = ImageAccess(requireActivity(), ::galleryCallback, ::cameraCallback)
         lifecycle.addObserver(observer)
     }
 
@@ -88,6 +86,9 @@ class NewItemFragment : Fragment() {
         binding.newItemImage.setOnClickListener {
             observer.openGallery(requireActivity())
         }
+        binding.newItemTakePicture.setOnClickListener {
+            cameraUri = observer.openCamera(requireActivity())
+        }
     }
 
     private fun setupLocationCreate() {
@@ -110,5 +111,21 @@ class NewItemFragment : Fragment() {
     private fun updateLocation(location: Location) {
         binding.latitude = location.latitude.toString()
         binding.longitude = location.longitude.toString()
+    }
+
+    private fun galleryCallback(uri: Uri?) {
+        uri?.let { imageUri = uri
+            binding.newItemImage.setImageURI(uri)
+        }
+    }
+
+    private fun cameraCallback(res: Boolean?) {
+        res?.let {
+            if (it) {
+                cameraUri?.let { imageUri = cameraUri
+                    binding.newItemImage.setImageURI(cameraUri)
+                }
+            }
+        }
     }
 }

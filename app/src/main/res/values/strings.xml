@@ -18,6 +18,7 @@
     <string name="unsell">Resell</string>
     <string name="longitude">Longitude</string>
     <string name="get_location">Get Location</string>
+    <string name="take_picture">Take Picture</string>
     <string-array name="categories">
         <item>None</item>
         <item>Book</item>
