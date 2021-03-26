@@ -26,6 +26,8 @@ but it's still hard to figure out how long tasks requiring learning new systems
 or things will take.
 
 ## Samuel
+I had a draft pull request left from last week to add classes to load and store users with the database, so I finished it. In the meantime, Lúcás added caching for the items so I did the same for the users too and took the opportunity to do some refactoring because we now have similar classes for loading/storing items and users. So, it took a bit longer than expected.
+Then I created a new page that retrieves and displays a user (name and profile picture) for which the estimation was correct.
 
 ## Sebastian
 I added a location to items, with the possibility to fetch the current location of the device through a button. 
