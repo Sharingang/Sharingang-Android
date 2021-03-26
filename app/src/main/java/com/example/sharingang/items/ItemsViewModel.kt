@@ -78,28 +78,17 @@ class ItemsViewModel @Inject constructor(
      */
     fun searchItems(searchName: String, categoryID: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val allItemsSet = HashSet<Item>(itemRepository.getAll())
-            val categoryResults = HashSet<Item>(allItemsSet)
-            val nameResults = HashSet<Item>(allItemsSet)
+            val results = itemRepository.getAll().filter { item ->
+                // If we have a category, it should match
+                val matchCategory = categoryID == 0 || item.category == categoryID
 
-            if (categoryID != 0) {
-                for (item in allItemsSet) {
-                    if (item.category != categoryID) {
-                        categoryResults.remove(item)
-                    }
-                }
-            }
+                // If we have a search term, it should match
+                val matchName = searchName.isEmpty() || item.title.toLowerCase(Locale.getDefault())
+                    .contains(searchName.toLowerCase(Locale.getDefault()))
 
-            if (searchName.isNotEmpty()) {
-                for (item in allItemsSet) {
-                    if (!item.title.toLowerCase(Locale.getDefault())
-                            .contains(searchName.toLowerCase(Locale.getDefault()))
-                    ) {
-                        nameResults.remove(item)
-                    }
-                }
+                matchCategory && matchName
             }
-            _searchResults.postValue(categoryResults.intersect(nameResults).toList())
+            _searchResults.postValue(results)
         }
     }
 
