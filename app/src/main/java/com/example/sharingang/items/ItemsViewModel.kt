@@ -1,6 +1,5 @@
 package com.example.sharingang.items
 
-import android.util.Log
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -21,10 +20,9 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
-    enum class OBSERVABLES{
+    enum class OBSERVABLES {
         ALL_ITEMS, SEARCH_RESULTS
     }
-
 
     private val _navigateToEditItem = MutableLiveData<Item?>()
     val navigateToEditItem: LiveData<Item?>
@@ -60,7 +58,7 @@ class ItemsViewModel @Inject constructor(
      */
     fun addItem(item: Item) {
         viewModelScope.launch(Dispatchers.IO) {
-            itemRepository.addItem(item)
+            itemRepository.add(item)
         }
     }
 
@@ -78,7 +76,7 @@ class ItemsViewModel @Inject constructor(
      */
     fun searchItems(searchName: String, categoryID : Int){
         viewModelScope.launch(Dispatchers.IO){
-            val allItemsSet = HashSet<Item>(itemRepository.getAllItems())
+            val allItemsSet = HashSet<Item>(itemRepository.getAll())
             val categoryResults = HashSet<Item>(allItemsSet)
             val nameResults = HashSet<Item>(allItemsSet)
 
@@ -92,7 +90,7 @@ class ItemsViewModel @Inject constructor(
 
             if(searchName.isNotEmpty()){
                 for(item in allItemsSet){
-                    if(!item.title.toLowerCase().contains(searchName!!.toLowerCase())){
+                    if(!item.title.toLowerCase().contains(searchName.toLowerCase())){
                         nameResults.remove(item)
                     }
                 }
@@ -107,7 +105,7 @@ class ItemsViewModel @Inject constructor(
      */
     fun updateItem(updatedItem: Item) {
         viewModelScope.launch(Dispatchers.IO) {
-            itemRepository.updateItem(updatedItem)
+            itemRepository.update(updatedItem)
         }
     }
 
@@ -130,7 +128,7 @@ class ItemsViewModel @Inject constructor(
 
     fun onSellItem(item: Item) {
         viewModelScope.launch {
-            itemRepository.updateItem(item.copy(sold = !item.sold))
+            itemRepository.update(item.copy(sold = !item.sold))
         }
     }
 

@@ -18,7 +18,7 @@ class CachedItemRepository @Inject constructor(
     private suspend fun doRefreshItems(): List<Item> =
         // This is necessary, since you want to avoid doing this work on the main thread
         withContext(Dispatchers.IO) {
-            val newItems = store.getAllItems()
+            val newItems = store.getAll()
             itemDao.insert(newItems)
             newItems
         }
@@ -34,23 +34,24 @@ class CachedItemRepository @Inject constructor(
         return ret
     }
 
-    override suspend fun addItem(item: Item): String? {
-        return thenRefresh { store.addItem(item) }
+    override suspend fun add(item: Item): String? {
+        return thenRefresh { store.add(item) }
     }
 
-    override suspend fun getItem(id: String): Item? {
+    override suspend fun get(id: String): Item? {
         return itemDao.getItem(id)
     }
 
-    override suspend fun getAllItems(): List<Item> {
+    override suspend fun getAll(): List<Item> {
         return doRefreshItems()
     }
 
-    override suspend fun updateItem(item: Item): Boolean {
-        return thenRefresh { store.updateItem(item) }
+    override suspend fun update(item: Item): Boolean {
+        return thenRefresh { store.update(item) }
     }
 
-    override suspend fun deleteItem(id: String): Boolean {
-        return thenRefresh { store.deleteItem(id) }
+    override suspend fun delete(id: String): Boolean {
+        return thenRefresh { store.delete(id) }
     }
 }
+

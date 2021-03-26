@@ -14,7 +14,7 @@ class InMemoryItemRepositoryTest {
     fun startsEmpty() {
         val repo: ItemRepository = InMemoryItemRepository()
         runBlocking {
-            assert(repo.getAllItems().isEmpty())
+            assert(repo.getAll().isEmpty())
             assert(repo.items().getOrAwaitValue().isEmpty())
         }
     }
@@ -24,7 +24,7 @@ class InMemoryItemRepositoryTest {
         val repo: ItemRepository = InMemoryItemRepository()
         runBlocking {
             val item = generateSampleItem()
-            val id = repo.addItem(item)
+            val id = repo.add(item)
             assert(id != null)
         }
     }
@@ -34,7 +34,7 @@ class InMemoryItemRepositoryTest {
         val repo: ItemRepository = InMemoryItemRepository()
         runBlocking {
             val item = generateSampleItem().copy(id = "some-id")
-            repo.addItem(item)
+            repo.add(item)
         }
     }
 
@@ -44,9 +44,9 @@ class InMemoryItemRepositoryTest {
         runBlocking {
             val item = generateSampleItem()
 
-            val id = repo.addItem(item)!!
+            val id = repo.add(item)!!
 
-            assert(repo.getItem(id) == item.copy(id = id))
+            assert(repo.get(id) == item.copy(id = id))
         }
     }
 
@@ -56,9 +56,9 @@ class InMemoryItemRepositoryTest {
         runBlocking {
             val items = List(5) { generateSampleItem(it) }
 
-            val addedItems = items.map { it.copy(id = repo.addItem(it)) }
+            val addedItems = items.map { it.copy(id = repo.add(it)) }
 
-            assert(repo.getAllItems().containsAll(addedItems))
+            assert(repo.getAll().containsAll(addedItems))
         }
     }
 
@@ -71,7 +71,7 @@ class InMemoryItemRepositoryTest {
 
             val items = List(5) { generateSampleItem(it) }
 
-            val addedItems = items.map { it.copy(id = repo.addItem(it)) }
+            val addedItems = items.map { it.copy(id = repo.add(it)) }
 
             assert(itemsLiveData.getOrAwaitValue().containsAll(addedItems))
         }
@@ -83,12 +83,12 @@ class InMemoryItemRepositoryTest {
         runBlocking {
             val item = generateSampleItem()
 
-            val addedItem = item.copy(id = repo.addItem(item))
+            val addedItem = item.copy(id = repo.add(item))
 
             val updatedItem = addedItem.copy(description = "updated description")
-            repo.updateItem(updatedItem)
+            repo.update(updatedItem)
 
-            assert(repo.getItem(updatedItem.id!!) == updatedItem)
+            assert(repo.get(updatedItem.id!!) == updatedItem)
         }
     }
 
@@ -98,7 +98,7 @@ class InMemoryItemRepositoryTest {
         runBlocking {
             // New Item with no id
             val item = generateSampleItem()
-            repo.updateItem(item)
+            repo.update(item)
         }
     }
 
@@ -107,11 +107,11 @@ class InMemoryItemRepositoryTest {
         val repo: ItemRepository = InMemoryItemRepository()
         runBlocking {
             val item = generateSampleItem()
-            val id = repo.addItem(item)
+            val id = repo.add(item)
 
-            assert(repo.deleteItem(id!!))
+            assert(repo.delete(id!!))
 
-            assert(repo.getItem(id) == null)
+            assert(repo.get(id) == null)
         }
     }
 
@@ -119,3 +119,4 @@ class InMemoryItemRepositoryTest {
         return Item(title = "My title $index", description = "My description $index")
     }
 }
+
