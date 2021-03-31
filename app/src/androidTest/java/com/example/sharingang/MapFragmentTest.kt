@@ -9,7 +9,10 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
+import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiSelector
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.core.StringContains.containsString
@@ -34,19 +37,16 @@ class MapFragmentTest {
     @Test
     fun itemsAddedAreDisplayedOnTheMap() {
         onView(withId(R.id.newItemButton)).perform(click())
-        onView(withId(R.id.write_latitude)).perform(
-            ViewActions.typeText("37.4"),
-            ViewActions.closeSoftKeyboard()
-        )
-        onView(withId(R.id.write_longitude)).perform(
-            ViewActions.typeText("4.143"),
-            ViewActions.closeSoftKeyboard()
-        )
+        onView(withId(R.id.new_item_get_location)).perform(click())
+        Thread.sleep(3000)
         onView(withId(R.id.createItemButton)).perform(click())
         onView(withId(R.id.go_to_map)).perform(click())
         val text = onView(withId(R.id.location_display))
         //text.check(matches(withText("")))
         Thread.sleep(6000)
         text.check(matches(withText(containsString("Your location"))))
+        val device = UiDevice.getInstance(getInstrumentation())
+        val marker = device.findObject(UiSelector().descriptionContains(""))
+        marker.click()
     }
 }
