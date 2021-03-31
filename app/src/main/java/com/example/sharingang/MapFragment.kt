@@ -67,7 +67,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         return binding.root
     }
 
-    private fun setupItemsMarkers(){
+    private fun setupItemsMarkers() {
         viewModel.items.observe(viewLifecycleOwner, {
             for (item: Item in it) {
                 val addedMarker = map?.addMarker(
