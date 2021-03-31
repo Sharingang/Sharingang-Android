@@ -61,6 +61,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 moveLastLocationMarker()
             }
         }
+        setupItemsMarkers()
+        binding.mapView.onCreate(savedInstanceState)
+        binding.mapView.getMapAsync(this)
+        return binding.root
+    }
+
+    private fun setupItemsMarkers(){
         viewModel.items.observe(viewLifecycleOwner, {
             for (item: Item in it) {
                 val addedMarker = map?.addMarker(
@@ -70,9 +77,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 addedMarker?.tag = item
             }
         })
-        binding.mapView.onCreate(savedInstanceState)
-        binding.mapView.getMapAsync(this)
-        return binding.root
     }
 
     @SuppressLint("MissingPermission")
