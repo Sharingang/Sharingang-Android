@@ -125,7 +125,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         map?.setOnMarkerClickListener { marker: Marker ->
             if (marker != lastLocationMarker) {
                 val temp: Item = marker.tag as Item
-                Toast.makeText(context, "$temp is required", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "$temp", Toast.LENGTH_SHORT).show()
             }
             map?.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
             true
