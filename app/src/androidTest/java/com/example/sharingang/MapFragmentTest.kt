@@ -2,6 +2,7 @@ package com.example.sharingang
 
 import android.Manifest
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -31,10 +32,20 @@ class MapFragmentTest {
         GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION)
 
     @Test
-    fun openingFragmentDisplaysLocation() {
+    fun itemsAddedAreDisplayedOnTheMap() {
+        onView(withId(R.id.newItemButton)).perform(click())
+        onView(withId(R.id.write_latitude)).perform(
+            ViewActions.typeText("37.4"),
+            ViewActions.closeSoftKeyboard()
+        )
+        onView(withId(R.id.write_longitude)).perform(
+            ViewActions.typeText("4.143"),
+            ViewActions.closeSoftKeyboard()
+        )
+        onView(withId(R.id.createItemButton)).perform(click())
         onView(withId(R.id.go_to_map)).perform(click())
         val text = onView(withId(R.id.location_display))
-        text.check(matches(withText("")))
+        //text.check(matches(withText("")))
         Thread.sleep(6000)
         text.check(matches(withText(containsString("Your location"))))
     }

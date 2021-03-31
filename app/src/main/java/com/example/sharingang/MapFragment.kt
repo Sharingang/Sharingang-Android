@@ -69,6 +69,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun setupItemsMarkers() {
         viewModel.items.observe(viewLifecycleOwner, {
+            map?.clear() // need to remove all markers, otherwise they will be added once more on the map, stacking them up
+            if (lastLocation != null) {
+                addLastLocationMarker()
+            }
             for (item: Item in it) {
                 val addedMarker = map?.addMarker(
                     MarkerOptions().position(LatLng(item.latitude, item.longitude))
@@ -95,8 +99,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private fun updateLocationText() {
         binding.locationDisplay.text = String.format(
             "Your location is: %s %s",
-            lastLocation!!.longitude,
-            lastLocation!!.latitude
+            lastLocation!!.latitude,
+            lastLocation!!.longitude
         )
     }
 
@@ -114,6 +118,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun moveLastLocationMarker() {
         lastLocationMarker?.remove()
+        addLastLocationMarker()
+    }
+
+    private fun addLastLocationMarker() {
         lastLocationMarker = map?.addMarker(
             MarkerOptions().position(
                 LatLng(
