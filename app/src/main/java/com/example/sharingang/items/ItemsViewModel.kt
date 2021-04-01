@@ -151,4 +151,13 @@ class ItemsViewModel @Inject constructor(
             _refreshing.postValue(false)
         }
     }
+
+    fun goToItemDetail(id: String) {
+        viewModelScope.launch {
+            val item = itemRepository.get(id)
+            if (item != null) {
+                onViewItem(item)
+            }
+        }
+    }
 }

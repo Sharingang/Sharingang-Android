@@ -11,6 +11,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.sharingang.databinding.FragmentItemsListBinding
 import com.example.sharingang.items.ItemsViewModel
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.ktx.Firebase
 
 class ItemsListFragment : Fragment() {
 
@@ -72,6 +74,8 @@ class ItemsListFragment : Fragment() {
             }
         })
 
+        handleDeepLink()
+
         return binding.root
     }
 
@@ -87,16 +91,33 @@ class ItemsListFragment : Fragment() {
         )
     }
 
-    fun goToSearchPage(view: View) {
+    private fun goToSearchPage(view: View) {
         view.findNavController().navigate(
                 ItemsListFragmentDirections.actionItemsListFragmentToSearchFragment()
         )
     }
 
-    fun goToAccount(view: View) {
+    private fun goToAccount(view: View) {
         view.findNavController().navigate(
                 ItemsListFragmentDirections.actionItemsListFragmentToAccountFragment()
         )
+    }
+
+    private fun handleDeepLink() {
+        val activity = this.activity ?: return
+
+        Firebase.dynamicLinks
+            .getDynamicLink(activity.intent)
+            .addOnSuccessListener(requireActivity()) { pendingDynamicLinkData ->
+                val deepLink = pendingDynamicLinkData?.link
+                when (deepLink?.path) {
+                    "/item" -> {
+                        deepLink.getQueryParameter("id")?.let {
+                            viewModel.goToItemDetail(it)
+                        }
+                    }
+                }
+            }
     }
 }
 
