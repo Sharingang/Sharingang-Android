@@ -14,6 +14,7 @@ import androidx.navigation.findNavController
 import com.example.sharingang.databinding.FragmentNewItemBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsViewModel
+import com.example.sharingang.utils.ImageAccess
 import com.example.sharingang.utils.consumeLocation
 import com.example.sharingang.utils.doOrGetPermission
 import com.example.sharingang.utils.requestPermissionLauncher
@@ -28,13 +29,12 @@ class NewItemFragment : Fragment() {
     private lateinit var observer: ImageAccess
 
     private var imageUri: Uri? = null
-    private var cameraUri: Uri? = null
 
     lateinit var binding: FragmentNewItemBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        observer = ImageAccess(requireActivity(), ::galleryCallback, ::cameraCallback)
+        observer = ImageAccess(requireActivity())
         lifecycle.addObserver(observer)
     }
 
@@ -61,6 +61,8 @@ class NewItemFragment : Fragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_item, container, false)
 
+        observer.setupImageView(binding.newItemImage)
+
         bind()
         setupLocationCreate()
 
@@ -69,6 +71,7 @@ class NewItemFragment : Fragment() {
 
     private fun bind() {
         binding.createItemButton.setOnClickListener { view: View ->
+            imageUri = observer.getImageUri()
             viewModel.addItem(Item(
                 price = binding.price?.toDoubleOrNull() ?: 0.0,
                 description = binding.description ?: "",
@@ -87,7 +90,7 @@ class NewItemFragment : Fragment() {
             observer.openGallery(requireActivity())
         }
         binding.newItemTakePicture.setOnClickListener {
-            cameraUri = observer.openCamera(requireActivity())
+            observer.openCamera(requireActivity())
         }
     }
 
@@ -111,21 +114,5 @@ class NewItemFragment : Fragment() {
     private fun updateLocation(location: Location) {
         binding.latitude = location.latitude.toString()
         binding.longitude = location.longitude.toString()
-    }
-
-    private fun galleryCallback(uri: Uri?) {
-        uri?.let { imageUri = uri
-            binding.newItemImage.setImageURI(uri)
-        }
-    }
-
-    private fun cameraCallback(res: Boolean?) {
-        res?.let {
-            if (it) {
-                cameraUri?.let { imageUri = cameraUri
-                    binding.newItemImage.setImageURI(cameraUri)
-                }
-            }
-        }
     }
 }

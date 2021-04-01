@@ -12,6 +12,7 @@ import androidx.navigation.findNavController
 import com.example.sharingang.databinding.FragmentEditItemBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsViewModel
+import com.example.sharingang.utils.ImageAccess
 
 class EditItemFragment : Fragment() {
 
@@ -21,13 +22,12 @@ class EditItemFragment : Fragment() {
     private lateinit var observer: ImageAccess
 
     private var imageUri: Uri? = null
-    private var cameraUri: Uri? = null
 
     private lateinit var binding: FragmentEditItemBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        observer = ImageAccess(requireActivity(), ::galleryCallback, ::cameraCallback)
+        observer = ImageAccess(requireActivity())
         lifecycle.addObserver(observer)
     }
 
@@ -38,6 +38,8 @@ class EditItemFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_item, container, false)
 
         val args = EditItemFragmentArgs.fromBundle(requireArguments())
+
+        observer.setupImageView(binding.editItemImage)
 
         existingItem = args.item
 
@@ -58,13 +60,14 @@ class EditItemFragment : Fragment() {
             observer.openGallery(requireActivity())
         }
         binding.editItemTakePicture.setOnClickListener {
-            cameraUri = observer.openCamera(requireActivity())
+            observer.openCamera(requireActivity())
         }
         editItemClickListener()
     }
 
     private fun editItemClickListener() {
         binding.editItemButton.setOnClickListener { view: View ->
+            imageUri = observer.getImageUri()
             viewModel.updateItem(
                 existingItem.copy(
                     title = binding.title ?: "",
@@ -79,22 +82,6 @@ class EditItemFragment : Fragment() {
             )
             observer.unregister()
             view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)
-        }
-    }
-
-    private fun galleryCallback(uri: Uri?) {
-        uri?.let { imageUri = uri
-            binding.editItemImage.setImageURI(uri)
-        }
-    }
-
-    private fun cameraCallback(res: Boolean?) {
-        res?.let {
-            if (it) {
-                cameraUri?.let { imageUri = cameraUri
-                    binding.editItemImage.setImageURI(cameraUri)
-                }
-            }
         }
     }
 }
