@@ -17,37 +17,6 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
-        <Button
-            android:id="@+id/go_to_map"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/go_to_map" />
-
-        <Button
-            android:id="@+id/userProfileButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/user_profile" />
-
-        <Button
-            android:id="@+id/gotoSearchButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/search" />
-
-        <Button
-            android:id="@+id/newItemButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/new_item" />
-
-
-        <Button
-            android:id="@+id/gotoAccount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/account" />
-
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swiperefresh"
             android:layout_width="match_parent"
