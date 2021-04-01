@@ -1,10 +1,10 @@
 package com.example.sharingang
 
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -28,7 +28,7 @@ class DetailedItemFragmentTest {
 
     @Test
     fun anItemCanBeEditedAndSeenOnItemsListFragment() {
-        onView(withId(R.id.newItemButton)).perform(click())
+        navigate_to(R.id.newItemFragment)
         onView(withId(R.id.newItemPrompt))
             .check(matches(withText("New Item")))
         onView(withId(R.id.editItemTitle)).perform(
@@ -53,14 +53,14 @@ class DetailedItemFragmentTest {
     }
 
     @Test
-    fun canSeeCategoryInDetailedItemFragment(){
-        val testTitle : String = "Book Item"
-        val testCategory : String = "Book"
-        onView(withId(R.id.newItemButton)).perform(click())
+    fun canSeeCategoryInDetailedItemFragment() {
+        val testTitle: String = "Book Item"
+        val testCategory: String = "Book"
+        navigate_to(R.id.newItemFragment)
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
         onView(withId(R.id.editItemTitle)).perform(
-                typeText(testTitle),
-                closeSoftKeyboard()
+            typeText(testTitle),
+            closeSoftKeyboard()
         )
         onView(withId(R.id.category_spinner)).perform(click())
         onView(withText(testCategory)).perform(click())

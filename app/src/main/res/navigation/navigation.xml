@@ -69,9 +69,10 @@
         android:id="@+id/userProfileFragment"
         android:name="com.example.sharingang.UserProfileFragment"
         android:label="User Profile"
-        tools:layout="@layout/user_profile_fragment" >
+        tools:layout="@layout/user_profile_fragment">
         <argument
             android:name="userId"
+            android:defaultValue="test"
             app:argType="string" />
     </fragment>
     <fragment

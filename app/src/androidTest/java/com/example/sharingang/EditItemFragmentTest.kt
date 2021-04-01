@@ -41,7 +41,7 @@ class EditItemFragmentTest {
 
     @Test
     fun canEditItemCategory() {
-        onView(withId(R.id.newItemButton)).perform(click())
+        navigate_to(R.id.newItemFragment)
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
         onView(withId(R.id.editItemTitle)).perform(
             typeText("Book_item"),
@@ -75,7 +75,7 @@ class EditItemFragmentTest {
         val imgGalleryResult = createImageGallerySetResultStub(mActivityTestRule.activity)
         intending(hasAction(Intent.ACTION_GET_CONTENT)).respondWith(imgGalleryResult)
 
-        onView(withId(R.id.newItemButton)).perform(click())
+        navigate_to(R.id.newItemFragment)
         onView(withId(R.id.newItemPrompt))
             .check(matches(withText("New Item")))
         onView(withId(R.id.editItemTitle)).perform(
@@ -112,7 +112,7 @@ class EditItemFragmentTest {
 
     @Test
     fun aLocationCanBeWrittenInEditFragment() {
-        onView(withId(R.id.newItemButton)).perform(click())
+        navigate_to(R.id.newItemFragment)
         onView(withId(R.id.createItemButton)).perform(click())
         onView(withId(R.id.item_list_view_edit_btn)).perform(click())
         onView(withId(R.id.edit_latitude)).perform(

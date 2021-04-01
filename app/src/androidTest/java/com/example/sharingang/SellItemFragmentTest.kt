@@ -1,6 +1,6 @@
 package com.example.sharingang
 
-import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
@@ -27,21 +27,21 @@ class SellItemFragmentTest {
 
     @Test
     fun anItemCanBeEditedAndSeenOnItemsListFragment() {
-        Espresso.onView(ViewMatchers.withId(R.id.newItemButton)).perform(ViewActions.click())
-        Espresso.onView(ViewMatchers.withId(R.id.newItemPrompt))
+        navigate_to(R.id.newItemFragment)
+        onView(ViewMatchers.withId(R.id.newItemPrompt))
             .check(ViewAssertions.matches(ViewMatchers.withText("New Item")))
-        Espresso.onView(ViewMatchers.withId(R.id.editItemTitle)).perform(
+        onView(ViewMatchers.withId(R.id.editItemTitle)).perform(
             ViewActions.typeText(itemTitle),
             ViewActions.closeSoftKeyboard()
         )
-        val buttonCreate = Espresso.onView(ViewMatchers.withId(R.id.createItemButton))
+        val buttonCreate = onView(ViewMatchers.withId(R.id.createItemButton))
         buttonCreate.check(ViewAssertions.matches(ViewMatchers.withText("Create Item")))
         buttonCreate.perform(ViewActions.click())
 
-        Espresso.onView(ViewMatchers.withText("Sell")).perform(ViewActions.click())
+        onView(ViewMatchers.withText("Sell")).perform(ViewActions.click())
         // Wait for RecyclerView to remove old button
         Thread.sleep(1000)
-        Espresso.onView(ViewMatchers.withId(R.id.item_list_view_sell_button))
+        onView(ViewMatchers.withId(R.id.item_list_view_sell_button))
             .check(ViewAssertions.matches(ViewMatchers.withText("Resell")))
     }
 }
