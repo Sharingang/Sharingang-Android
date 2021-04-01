@@ -41,8 +41,18 @@ class ImageAccess(
 
     override fun onCreate(owner: LifecycleOwner) {
         setupPermissionLaunchers(owner)
-        pickImage = registry.activityResultRegistry.register("openGallery", owner, ActivityResultContracts.GetContent(), ::galleryCallback)
-        takePicture = registry.activityResultRegistry.register("takePicture", owner, ActivityResultContracts.TakePicture(), ::cameraCallback)
+        pickImage = registry.activityResultRegistry.register(
+            "openGallery",
+            owner,
+            ActivityResultContracts.GetContent(),
+            ::galleryCallback
+        )
+        takePicture = registry.activityResultRegistry.register(
+            "takePicture",
+            owner,
+            ActivityResultContracts.TakePicture(),
+            ::cameraCallback
+        )
     }
 
     fun unregister() {
