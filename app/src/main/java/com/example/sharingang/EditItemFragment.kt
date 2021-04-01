@@ -21,7 +21,6 @@ class EditItemFragment : Fragment() {
     private lateinit var observer: ImageAccess
 
     private var imageUri: Uri? = null
-    private var cameraUri: Uri? = null
 
     private lateinit var binding: FragmentEditItemBinding
 

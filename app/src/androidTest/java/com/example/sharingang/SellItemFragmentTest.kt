@@ -39,6 +39,8 @@ class SellItemFragmentTest {
         buttonCreate.perform(ViewActions.click())
 
         Espresso.onView(ViewMatchers.withText("Sell")).perform(ViewActions.click())
+        // Wait for RecyclerView to remove old button
+        Thread.sleep(1000)
         Espresso.onView(ViewMatchers.withId(R.id.item_list_view_sell_button))
             .check(ViewAssertions.matches(ViewMatchers.withText("Resell")))
     }

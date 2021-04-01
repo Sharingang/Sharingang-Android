@@ -44,10 +44,6 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    // TODO remove when the fix is released
-    lintOptions {
-        disable 'InvalidFragmentVersionForActivityResult'
-    }
 }
 
 dependencies {
@@ -76,12 +72,19 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.6.0')
     implementation 'com.google.firebase:firebase-firestore-ktx'
 
+    // authentication
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
+
     implementation "com.google.dagger:hilt-android:$hilt_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "androidx.room:room-runtime:2.3.0-rc01"
     implementation "androidx.room:room-ktx:2.3.0-rc01"
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
     kapt "androidx.room:room-compiler:2.3.0-rc01"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
+
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'android.arch.core:core-testing:1.1.1'
@@ -110,6 +113,8 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
     }
 
     def fileFilter = [
+            // Generated files
+            '**/*FragmentArgs*',
             '**/R.class',
             '**/R$*.class',
             '**/BuildConfig.*',
@@ -121,8 +126,9 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
             'hilt_aggregated_deps/**',
             '**/*_Factory.class',
             '**/*_MembersInjector.class',
+            '**/*Module.class',
             // Cannot test Firebase
-            '**/Firestore*.class'
+            '**/*Firestore*.class'
     ]
     def debugTree = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)
     def mainSrc = "$project.projectDir/src/main/java"

@@ -101,7 +101,7 @@
                 android:autofillHints="no"
                 android:ems="10"
                 android:hint="@string/latitude"
-                android:inputType="numberDecimal"
+                android:inputType="numberDecimal|numberSigned"
                 android:text="@={latitude}" />
 
             <EditText
@@ -112,7 +112,7 @@
                 android:autofillHints="no"
                 android:ems="10"
                 android:hint="@string/longitude"
-                android:inputType="numberDecimal"
+                android:inputType="numberDecimal|numberSigned"
                 android:text="@={longitude}" />
         </LinearLayout>
 
