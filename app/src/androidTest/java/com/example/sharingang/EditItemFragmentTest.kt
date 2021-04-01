@@ -1,10 +1,13 @@
 package com.example.sharingang
 
 import android.content.Intent
+import android.provider.MediaStore
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intending
+import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -13,6 +16,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.hamcrest.Matchers
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -74,6 +78,7 @@ class EditItemFragmentTest {
         savePickedImage(mActivityTestRule.activity)
         val imgGalleryResult = createImageGallerySetResultStub(mActivityTestRule.activity)
         intending(hasAction(Intent.ACTION_GET_CONTENT)).respondWith(imgGalleryResult)
+        intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgGalleryResult)
 
         onView(withId(R.id.newItemButton)).perform(click())
         onView(withId(R.id.newItemPrompt))
@@ -97,6 +102,9 @@ class EditItemFragmentTest {
             .check(matches(withText("Edit Item")))
 
         onView(withId(R.id.edit_item_image)).perform(click())
+        onView(withId(R.id.edit_item_image)).check(matches(hasContentDescription()))
+
+        onView(withId(R.id.edit_item_take_picture)).perform(click())
         onView(withId(R.id.edit_item_image)).check(matches(hasContentDescription()))
 
         onView(withId(R.id.editItemTitle)).perform(
@@ -124,5 +132,29 @@ class EditItemFragmentTest {
             closeSoftKeyboard()
         )
         onView(withId(R.id.editItemButton)).perform(click())
+    }
+
+    @Test
+    fun aPictureCanBeTakenAndDisplayed() {
+        savePickedImage(mActivityTestRule.activity)
+        val imgGalleryResult = createImageGallerySetResultStub(mActivityTestRule.activity)
+        Intents.intending(IntentMatchers.hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgGalleryResult)
+
+        onView(withId(R.id.newItemButton)).perform(click())
+        onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
+
+        onView(withId(R.id.new_item_take_picture)).perform(click())
+        onView(withId(R.id.new_item_image)).check(matches(hasContentDescription()))
+    }
+
+    @Test
+    fun clickingOnGetLocationDisplaysLocation() {
+        onView(withId(R.id.newItemButton)).perform(click())
+        val button = onView(withId(R.id.new_item_get_location))
+        button.check(matches(withText("Get Location")))
+        button.perform(click())
+        Thread.sleep(5000)
+        onView(withId(R.id.write_latitude)).check(matches(Matchers.not(withText(""))))
+        onView(withId(R.id.write_longitude)).check(matches(Matchers.not(withText(""))))
     }
 }
