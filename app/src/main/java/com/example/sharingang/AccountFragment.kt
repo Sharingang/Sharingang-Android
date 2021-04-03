@@ -13,19 +13,26 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.sharingang.databinding.FragmentAccountBinding
+import com.example.sharingang.users.User
+import com.example.sharingang.users.UserRepository
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 class AccountFragment : Fragment() {
     var resultLauncher: ActivityResultLauncher<Intent>? = null
     lateinit var sharedPreferences: SharedPreferences
     lateinit var editor: SharedPreferences.Editor
+    @Inject
+    lateinit var userRepository: UserRepository
 
 
     private enum class AccountStatus {
@@ -74,8 +81,18 @@ class AccountFragment : Fragment() {
                     try {
                         val account = GoogleSignIn.getSignedInAccountFromIntent(result.data)
                             .getResult(ApiException::class.java)
+
                         "Status: Logged in as \n${account.displayName}\n".also { binding.accountStatus.text = it }
                         updateAccountPreferences(editor, LoginErrorCode.SUCCESS, account)
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            userRepository.add(
+                                User(
+                                    id = "",
+                                    name = "",
+                                    profilePicture = ""
+                                )
+                            )
+                        }
                         updateUI(accountStatus = AccountStatus.LOGGED_IN, binding)
                     } catch (e: ApiException) {
                         updateUI(accountStatus = AccountStatus.LOGGED_OUT, binding)
