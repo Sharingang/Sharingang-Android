@@ -19,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
 
 
 class AccountFragment : Fragment() {
@@ -165,6 +166,7 @@ class AccountFragment : Fragment() {
             editor.putString(getString(R.string.key_account_name), "")
             editor.putString(getString(R.string.key_account_picture), "")
             editor.putString(getString(R.string.key_account_email), "")
+            editor.putString(getString(R.string.key_account_token), "")
         }
         else {
             editor.putString(getString(R.string.key_account_uid), account?.id)
@@ -173,9 +175,8 @@ class AccountFragment : Fragment() {
                 getString(R.string.key_account_picture),
                 account?.photoUrl!!.toString()
             )
-            editor.putString(getString(R.string.key_account_email),
-                account.email!!.toString()
-            )
+            editor.putString(getString(R.string.key_account_email), account.email!!.toString())
+            editor.putString(getString(R.string.key_account_token), account?.idToken)
         }
         editor.apply()
     }
