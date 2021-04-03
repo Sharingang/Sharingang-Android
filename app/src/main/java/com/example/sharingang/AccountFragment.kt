@@ -22,14 +22,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class AccountFragment : Fragment() {
     var resultLauncher: ActivityResultLauncher<Intent>? = null
     lateinit var sharedPreferences: SharedPreferences
+    lateinit var auth: FirebaseAuth
     lateinit var editor: SharedPreferences.Editor
     @Inject
     lateinit var userRepository: UserRepository
@@ -64,7 +70,7 @@ class AccountFragment : Fragment() {
         )!!
         editor = sharedPreferences.edit()
         editor.apply()
-
+        auth = FirebaseAuth.getInstance()
         restorePreferences(binding)
         createLauncher(binding)
         signInSetup(binding)
@@ -84,12 +90,13 @@ class AccountFragment : Fragment() {
 
                         "Status: Logged in as \n${account.displayName}\n".also { binding.accountStatus.text = it }
                         updateAccountPreferences(editor, LoginErrorCode.SUCCESS, account)
+                        firebaseAuthWithGoogle(account.idToken!!, binding)
                         lifecycleScope.launch(Dispatchers.IO) {
                             userRepository.add(
                                 User(
-                                    id = "",
-                                    name = "",
-                                    profilePicture = ""
+                                    id = "Test account",
+                                    name = "benhauer",
+                                    profilePicture = "empty"
                                 )
                             )
                         }
@@ -193,8 +200,23 @@ class AccountFragment : Fragment() {
                 account?.photoUrl!!.toString()
             )
             editor.putString(getString(R.string.key_account_email), account.email!!.toString())
-            editor.putString(getString(R.string.key_account_token), account?.idToken)
+            editor.putString(getString(R.string.key_account_token), account.idToken)
         }
         editor.apply()
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String, binding: FragmentAccountBinding) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    val user = auth.currentUser
+                    updateUI(AccountStatus.LOGGED_IN, binding)
+                } else {
+                    // If sign in fails, display a message to the user.
+                    updateUI(AccountStatus.LOGGED_OUT, binding)
+                }
+            }
     }
 }
