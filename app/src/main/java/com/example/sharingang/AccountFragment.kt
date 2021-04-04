@@ -100,8 +100,7 @@ class AccountFragment : Fragment() {
                         updateAccountPreferences(editor, LoginErrorCode.FAILURE, null)
                     }
                 } else {
-                    updateUI(accountStatus = AccountStatus.LOGGED_OUT, binding)
-                    updateAccountPreferences(editor, LoginErrorCode.FAILURE, null)
+                    handle_no_signin(AccountStatus.LOGGED_OUT, binding, LoginErrorCode.FAILURE)
                 }
             }
         editor.apply()
@@ -137,9 +136,8 @@ class AccountFragment : Fragment() {
     }
 
     private fun sign_out(signInClient: GoogleSignInClient, binding: FragmentAccountBinding) {
-        signInClient.signOut().addOnCompleteListener(requireActivity()) { updateUI(
-            accountStatus = AccountStatus.LOGGED_OUT, binding)
-            updateAccountPreferences(editor, LoginErrorCode.SIGNOUT, null)
+        signInClient.signOut().addOnCompleteListener(requireActivity()) {
+            handle_no_signin(AccountStatus.LOGGED_OUT, binding, LoginErrorCode.SIGNOUT)
         }
     }
 
@@ -219,5 +217,10 @@ class AccountFragment : Fragment() {
                     updateUI(AccountStatus.LOGGED_IN, binding)
                 }
             }
+    }
+
+    private fun handle_no_signin(status: AccountStatus, binding: FragmentAccountBinding, loginErrorCode: LoginErrorCode) {
+        updateUI(status, binding)
+        updateAccountPreferences(editor, loginErrorCode, null)
     }
 }
