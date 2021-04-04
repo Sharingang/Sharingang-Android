@@ -46,13 +46,17 @@ class ItemsListFragment : Fragment() {
             val sharedPreferences = activity?.getSharedPreferences(
                 getString(R.string.preference_user_info),
                 Context.MODE_PRIVATE
-            )!!
+            )
             val action =
+                if (sharedPreferences == null) {
+                    ItemsListFragmentDirections.actionItemsListFragmentToUserProfileFragment("test")
+                } else {
                     ItemsListFragmentDirections.actionItemsListFragmentToUserProfileFragment(
                         sharedPreferences.getString(
                             getString(R.string.account_firebase_uid), "test"
                         )!!
                     )
+                }
             it.findNavController().navigate(action)
         }
         binding.gotoSearchButton.setOnClickListener { view: View -> goToSearchPage(view) }

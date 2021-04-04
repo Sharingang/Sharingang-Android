@@ -177,6 +177,7 @@ class AccountFragment : Fragment() {
         account: GoogleSignInAccount?
     ) {
         if(code == LoginErrorCode.FAILURE || code == LoginErrorCode.SIGNOUT) {
+            editor.putString(getString(R.string.key_login_status), "logged out")
             editor.putString(getString(R.string.key_account_uid), "")
             editor.putString(getString(R.string.key_account_name), "")
             editor.putString(getString(R.string.key_account_picture), "")
@@ -185,6 +186,7 @@ class AccountFragment : Fragment() {
             editor.putString(getString(R.string.account_firebase_uid), "")
         }
         else {
+            editor.putString(getString(R.string.key_login_status), "logged in")
             editor.putString(getString(R.string.key_account_uid), account?.id)
             editor.putString(getString(R.string.key_account_name), account?.displayName)
             editor.putString(
