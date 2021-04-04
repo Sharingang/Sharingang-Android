@@ -1,5 +1,6 @@
 package com.example.sharingang
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -42,8 +43,16 @@ class ItemsListFragment : Fragment() {
             goToMap(view)
         }
         binding.userProfileButton.setOnClickListener {
+            val sharedPreferences = activity?.getSharedPreferences(
+                getString(R.string.preference_user_info),
+                Context.MODE_PRIVATE
+            )!!
             val action =
-                    ItemsListFragmentDirections.actionItemsListFragmentToUserProfileFragment("test")
+                    ItemsListFragmentDirections.actionItemsListFragmentToUserProfileFragment(
+                        sharedPreferences.getString(
+                            getString(R.string.account_firebase_uid), "test"
+                        )!!
+                    )
             it.findNavController().navigate(action)
         }
         binding.gotoSearchButton.setOnClickListener { view: View -> goToSearchPage(view) }

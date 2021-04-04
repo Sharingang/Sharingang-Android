@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -183,6 +184,7 @@ class AccountFragment : Fragment() {
             editor.putString(getString(R.string.key_account_picture), "")
             editor.putString(getString(R.string.key_account_email), "")
             editor.putString(getString(R.string.key_account_token), "")
+            editor.putString(getString(R.string.account_firebase_uid), "")
         }
         else {
             editor.putString(getString(R.string.key_account_uid), account?.id)
@@ -212,6 +214,8 @@ class AccountFragment : Fragment() {
                             )
                         )
                     }
+                    editor.putString(getString(R.string.account_firebase_uid), user?.uid)
+                    editor.apply()
                     updateUI(AccountStatus.LOGGED_IN, binding)
                 }
             }

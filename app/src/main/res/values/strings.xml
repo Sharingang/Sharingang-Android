@@ -33,6 +33,7 @@
     <string name="key_account_picture">key_account_picture</string>
     <string name="key_account_email">key_account_email</string>
     <string name="key_account_token">key_account_token</string>
+    <string name="account_firebase_uid">account_firebase_uid</string>
     <string-array name="categories">
         <item>None</item>
         <item>Book</item>
