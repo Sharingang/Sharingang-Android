@@ -91,15 +91,7 @@ class AccountFragment : Fragment() {
                         "Status: Logged in as \n${account.displayName}\n".also { binding.accountStatus.text = it }
                         updateAccountPreferences(editor, LoginErrorCode.SUCCESS, account)
                         firebaseAuthWithGoogle(account.idToken!!, binding)
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            userRepository.add(
-                                User(
-                                    id = "Test account",
-                                    name = "benhauer",
-                                    profilePicture = "empty"
-                                )
-                            )
-                        }
+
                         updateUI(accountStatus = AccountStatus.LOGGED_IN, binding)
                     } catch (e: ApiException) {
                         updateUI(accountStatus = AccountStatus.LOGGED_OUT, binding)
@@ -210,12 +202,17 @@ class AccountFragment : Fragment() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
                     val user = auth.currentUser
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        userRepository.add(
+                            User(
+                                id = user?.uid,
+                                name = user?.displayName!!,
+                                profilePicture = user.photoUrl!!.toString()
+                            )
+                        )
+                    }
                     updateUI(AccountStatus.LOGGED_IN, binding)
-                } else {
-                    // If sign in fails, display a message to the user.
-                    updateUI(AccountStatus.LOGGED_OUT, binding)
                 }
             }
     }
