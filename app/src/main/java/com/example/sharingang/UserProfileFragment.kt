@@ -33,10 +33,11 @@ class UserProfileFragment : Fragment() {
         viewModel.setUser(args.userId)
         binding.viewModel = viewModel
 
+        /*
         lifecycleScope.launch(Dispatchers.IO) {
             viewModel.createTestUser(args.userId)
         }
-
+        */
         viewModel.user.observe(viewLifecycleOwner, { user ->
             if (user != null) {
                 binding.nameText.text = user.name

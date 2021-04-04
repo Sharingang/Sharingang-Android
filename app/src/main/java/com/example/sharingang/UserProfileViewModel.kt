@@ -27,7 +27,7 @@ class UserProfileViewModel @Inject constructor(
     fun setUser(userId: String) {
         _userId.postValue(userId)
     }
-
+    /*
     // Only for testing
     suspend fun createTestUser(userId: String) {
         if (userRepository.get(userId) == null) {
@@ -40,4 +40,6 @@ class UserProfileViewModel @Inject constructor(
             )
         }
     }
+    */
+
 }
