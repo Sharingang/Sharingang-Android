@@ -47,7 +47,7 @@ class AccountFragment : Fragment() {
         LOGGED_OUT
     }
 
-    private enum class LoginErrorCode {
+    enum class LoginErrorCode {
         SUCCESS,
         FAILURE,
         SIGNOUT
@@ -79,7 +79,6 @@ class AccountFragment : Fragment() {
     }
 
     private fun createLauncher(binding: FragmentAccountBinding) {
-
         resultLauncher =
             registerForActivityResult(
                 ActivityResultContracts.StartActivityForResult()
@@ -88,16 +87,19 @@ class AccountFragment : Fragment() {
                     try {
                         val account = GoogleSignIn.getSignedInAccountFromIntent(result.data)
                             .getResult(ApiException::class.java)
-
                         "Status: Logged in as \n${account.displayName}\n".also { binding.accountStatus.text = it }
-                        updateAccountPreferences(editor, LoginErrorCode.SUCCESS, account)
+                        Companion.updateAccountPreferences(
+                            this,
+                            editor, LoginErrorCode.SUCCESS, account)
                         firebaseAuthWithGoogle(account.idToken!!, binding)
 
                         updateUI(accountStatus = AccountStatus.LOGGED_IN, binding)
                     } catch (e: ApiException) {
                         updateUI(accountStatus = AccountStatus.LOGGED_OUT, binding)
                         binding.accountStatus.text = getString(R.string.failed_login_message)
-                        updateAccountPreferences(editor, LoginErrorCode.FAILURE, null)
+                        Companion.updateAccountPreferences(
+                            this,
+                            editor, LoginErrorCode.FAILURE, null)
                     }
                 } else {
                     handle_no_signin(AccountStatus.LOGGED_OUT, binding, LoginErrorCode.FAILURE)
@@ -172,33 +174,6 @@ class AccountFragment : Fragment() {
         }
     }
 
-    private fun updateAccountPreferences(
-        editor: SharedPreferences.Editor, code: LoginErrorCode,
-        account: GoogleSignInAccount?
-    ) {
-        if(code == LoginErrorCode.FAILURE || code == LoginErrorCode.SIGNOUT) {
-            editor.putString(getString(R.string.key_login_status), "logged out")
-            editor.putString(getString(R.string.key_account_uid), "")
-            editor.putString(getString(R.string.key_account_name), "")
-            editor.putString(getString(R.string.key_account_picture), "")
-            editor.putString(getString(R.string.key_account_email), "")
-            editor.putString(getString(R.string.key_account_token), "")
-            editor.putString(getString(R.string.account_firebase_uid), "")
-        }
-        else {
-            editor.putString(getString(R.string.key_login_status), "logged in")
-            editor.putString(getString(R.string.key_account_uid), account?.id)
-            editor.putString(getString(R.string.key_account_name), account?.displayName)
-            editor.putString(
-                getString(R.string.key_account_picture),
-                account?.photoUrl!!.toString()
-            )
-            editor.putString(getString(R.string.key_account_email), account.email!!.toString())
-            editor.putString(getString(R.string.key_account_token), account.idToken)
-        }
-        editor.apply()
-    }
-
     private fun firebaseAuthWithGoogle(idToken: String, binding: FragmentAccountBinding) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
@@ -223,6 +198,36 @@ class AccountFragment : Fragment() {
 
     private fun handle_no_signin(status: AccountStatus, binding: FragmentAccountBinding, loginErrorCode: LoginErrorCode) {
         updateUI(status, binding)
-        updateAccountPreferences(editor, loginErrorCode, null)
+        Companion.updateAccountPreferences(this, editor, loginErrorCode, null)
+    }
+
+    companion object {
+         fun updateAccountPreferences(
+            accountFragment: AccountFragment,
+            editor: SharedPreferences.Editor, code: LoginErrorCode,
+            account: GoogleSignInAccount?
+        ) {
+            if(code == LoginErrorCode.FAILURE || code == LoginErrorCode.SIGNOUT) {
+                editor.putString(accountFragment.getString(R.string.key_login_status), "logged out")
+                editor.putString(accountFragment.getString(R.string.key_account_uid), "")
+                editor.putString(accountFragment.getString(R.string.key_account_name), "")
+                editor.putString(accountFragment.getString(R.string.key_account_picture), "")
+                editor.putString(accountFragment.getString(R.string.key_account_email), "")
+                editor.putString(accountFragment.getString(R.string.key_account_token), "")
+                editor.putString(accountFragment.getString(R.string.account_firebase_uid), "")
+            }
+            else {
+                editor.putString(accountFragment.getString(R.string.key_login_status), "logged in")
+                editor.putString(accountFragment.getString(R.string.key_account_uid), account?.id)
+                editor.putString(accountFragment.getString(R.string.key_account_name), account?.displayName)
+                editor.putString(
+                    accountFragment.getString(R.string.key_account_picture),
+                    account?.photoUrl!!.toString()
+                )
+                editor.putString(accountFragment.getString(R.string.key_account_email), account.email!!.toString())
+                editor.putString(accountFragment.getString(R.string.key_account_token), account.idToken)
+            }
+            editor.apply()
+        }
     }
 }
