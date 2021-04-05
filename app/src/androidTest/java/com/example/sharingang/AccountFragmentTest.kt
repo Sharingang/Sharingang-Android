@@ -38,13 +38,13 @@ class AccountFragmentTest {
         val createAct = device.findObject(UiSelector().className("android.widget.EditText"))
         createAct.click()
         createAct.text = "sharingang.test"
-        device.findObject(UiSelector().textContains("ext")).clickAndWaitForNewWindow(1000)
-        Thread.sleep(15000)
+        device.findObject(UiSelector().textContains("ext")).click()
+        Thread.sleep(2000)
         val secondfield = device.findObject(UiSelector().className("android.widget.EditText"))
         secondfield.text = "sharingangtest2021"
         device.findObject(UiSelector().textContains("ext")).click()
-        Thread.sleep(4000)
-        device.findObject(UiSelector()).swipeUp(1000)
+        Thread.sleep(2000)
+        device.findObject(UiSelector()).swipeUp(500)
         device.findObject(UiSelector().className("android.widget.Button").instance(3)).clickAndWaitForNewWindow(20000)
         try {
             val scrollable = UiScrollable(UiSelector().scrollable(true))
@@ -55,8 +55,10 @@ class AccountFragmentTest {
 
         Thread.sleep(1000)
         device.findObject(UiSelector().className("android.widget.Button").instance(0)).click()
-        Thread.sleep(5000)
-        //device.findObject(UiSelector().className("android.widget.Button").instance(0)).click()
+        Thread.sleep(2000)
+        device.pressBack()
+        onView(withId(R.id.userProfileButton)).perform(click())
+        onView(withId(R.id.nameText)).check(matches(withText("Sharingang Test")))
     }
 
     @Test
