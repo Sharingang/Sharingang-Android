@@ -80,24 +80,19 @@ class AccountFragment : Fragment() {
 
     private fun createLauncher(binding: FragmentAccountBinding) {
         resultLauncher =
-            registerForActivityResult(
-                ActivityResultContracts.StartActivityForResult()
-            ) { result ->
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
                     try {
                         val account = GoogleSignIn.getSignedInAccountFromIntent(result.data)
                             .getResult(ApiException::class.java)
                         "Status: Logged in as \n${account.displayName}\n".also { binding.accountStatus.text = it }
-                        Companion.updateAccountPreferences(
-                            this,
-                            editor, LoginErrorCode.SUCCESS, account)
+                        updateAccountPreferences(this, editor, LoginErrorCode.SUCCESS, account)
                         firebaseAuthWithGoogle(account.idToken!!, binding)
-
                         updateUI(accountStatus = AccountStatus.LOGGED_IN, binding)
                     } catch (e: ApiException) {
                         updateUI(accountStatus = AccountStatus.LOGGED_OUT, binding)
                         binding.accountStatus.text = getString(R.string.failed_login_message)
-                        Companion.updateAccountPreferences(
+                        updateAccountPreferences(
                             this,
                             editor, LoginErrorCode.FAILURE, null)
                     }
@@ -198,7 +193,7 @@ class AccountFragment : Fragment() {
 
     private fun handle_no_signin(status: AccountStatus, binding: FragmentAccountBinding, loginErrorCode: LoginErrorCode) {
         updateUI(status, binding)
-        Companion.updateAccountPreferences(this, editor, loginErrorCode, null)
+        updateAccountPreferences(this, editor, loginErrorCode, null)
     }
 
     companion object {
