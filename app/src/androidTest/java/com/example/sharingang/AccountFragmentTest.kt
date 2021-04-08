@@ -1,5 +1,6 @@
 package com.example.sharingang
 
+import android.Manifest
 import android.content.SharedPreferences
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
@@ -8,6 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
+import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.*
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -28,6 +30,10 @@ class AccountFragmentTest {
     @get:Rule(order = 1)
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
+    @get:Rule
+    val grantPermissionRule: GrantPermissionRule =
+        GrantPermissionRule.grant(Manifest.permission.INTERNET)
+
     @Test
     fun loginButtonMatchesText() {
         onView(withId(R.id.gotoAccount)).check(matches(withText("Account")))
@@ -43,7 +49,7 @@ class AccountFragmentTest {
     fun loginClick() {
         onView(withId(R.id.gotoAccount)).perform(click())
         onView(withId(R.id.loginButton)).perform(click())
-        Thread.sleep(2000)
+        Thread.sleep(10000)
         val device: UiDevice = UiDevice.getInstance(getInstrumentation())
         //device.pressBack()
         //onView(withId(R.id.loginButton)).check(matches(withText("Log In")))
@@ -51,11 +57,11 @@ class AccountFragmentTest {
         createAct.click()
         createAct.text = "sharingang.test"
         device.findObject(UiSelector().textContains("ext")).click()
-        Thread.sleep(2000)
+        Thread.sleep(10000)
         val secondfield = device.findObject(UiSelector().className("android.widget.EditText"))
         secondfield.text = "sharingangtest2021"
         device.findObject(UiSelector().textContains("ext")).click()
-        Thread.sleep(2000)
+        Thread.sleep(6000)
         device.findObject(UiSelector()).swipeUp(500)
         device.findObject(UiSelector().className("android.widget.Button").instance(3)).clickAndWaitForNewWindow(20000)
         try {
