@@ -44,7 +44,7 @@ class AccountFragmentTest {
     }
 
 
-
+    /*
     @Test
     fun loginClick() {
         onView(withId(R.id.gotoAccount)).perform(click())
@@ -95,5 +95,5 @@ class AccountFragmentTest {
         onView(withId(R.id.userProfileButton)).perform(click())
         onView(withId(R.id.nameText)).check(matches(withText("")))
     }
-
+    */
 }
