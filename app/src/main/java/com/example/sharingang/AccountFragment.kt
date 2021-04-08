@@ -97,7 +97,7 @@ class AccountFragment : Fragment() {
                             editor, LoginErrorCode.FAILURE, null)
                     }
                 } else {
-                    handle_no_signin(AccountStatus.LOGGED_OUT, binding, LoginErrorCode.FAILURE)
+                    handleUnlink(AccountStatus.LOGGED_OUT, binding, LoginErrorCode.FAILURE)
                 }
             }
         editor.apply()
@@ -134,7 +134,7 @@ class AccountFragment : Fragment() {
 
     private fun sign_out(signInClient: GoogleSignInClient, binding: FragmentAccountBinding) {
         signInClient.signOut().addOnCompleteListener(requireActivity()) {
-            handle_no_signin(AccountStatus.LOGGED_OUT, binding, LoginErrorCode.SIGNOUT)
+            handleUnlink(AccountStatus.LOGGED_OUT, binding, LoginErrorCode.SIGNOUT)
         }
     }
 
@@ -191,38 +191,37 @@ class AccountFragment : Fragment() {
             }
     }
 
-    private fun handle_no_signin(status: AccountStatus, binding: FragmentAccountBinding, loginErrorCode: LoginErrorCode) {
+    private fun handleUnlink(status: AccountStatus, binding: FragmentAccountBinding, loginErrorCode: LoginErrorCode) {
         updateUI(status, binding)
         updateAccountPreferences(this, editor, loginErrorCode, null)
     }
 
-    companion object {
-         fun updateAccountPreferences(
-            accountFragment: AccountFragment,
-            editor: SharedPreferences.Editor, code: LoginErrorCode,
-            account: GoogleSignInAccount?
-        ) {
-            if(code == LoginErrorCode.FAILURE || code == LoginErrorCode.SIGNOUT) {
-                editor.putString(accountFragment.getString(R.string.key_login_status), "logged out")
-                editor.putString(accountFragment.getString(R.string.key_account_uid), "")
-                editor.putString(accountFragment.getString(R.string.key_account_name), "")
-                editor.putString(accountFragment.getString(R.string.key_account_picture), "")
-                editor.putString(accountFragment.getString(R.string.key_account_email), "")
-                editor.putString(accountFragment.getString(R.string.key_account_token), "")
-                editor.putString(accountFragment.getString(R.string.account_firebase_uid), "")
-            }
-            else {
-                editor.putString(accountFragment.getString(R.string.key_login_status), "logged in")
-                editor.putString(accountFragment.getString(R.string.key_account_uid), account?.id)
-                editor.putString(accountFragment.getString(R.string.key_account_name), account?.displayName)
-                editor.putString(
-                    accountFragment.getString(R.string.key_account_picture),
-                    account?.photoUrl!!.toString()
-                )
-                editor.putString(accountFragment.getString(R.string.key_account_email), account.email!!.toString())
-                editor.putString(accountFragment.getString(R.string.key_account_token), account.idToken)
-            }
-            editor.apply()
+
+    private fun updateAccountPreferences(
+    accountFragment: AccountFragment,
+    editor: SharedPreferences.Editor, code: LoginErrorCode,
+    account: GoogleSignInAccount?
+    ) {
+        if(code == LoginErrorCode.FAILURE || code == LoginErrorCode.SIGNOUT) {
+            editor.putString(accountFragment.getString(R.string.key_login_status), "logged out")
+            editor.putString(accountFragment.getString(R.string.key_account_uid), "")
+            editor.putString(accountFragment.getString(R.string.key_account_name), "")
+            editor.putString(accountFragment.getString(R.string.key_account_picture), "")
+            editor.putString(accountFragment.getString(R.string.key_account_email), "")
+            editor.putString(accountFragment.getString(R.string.key_account_token), "")
+            editor.putString(accountFragment.getString(R.string.account_firebase_uid), "")
         }
+        else {
+            editor.putString(accountFragment.getString(R.string.key_login_status), "logged in")
+            editor.putString(accountFragment.getString(R.string.key_account_uid), account?.id)
+            editor.putString(accountFragment.getString(R.string.key_account_name), account?.displayName)
+            editor.putString(
+                accountFragment.getString(R.string.key_account_picture),
+                account?.photoUrl!!.toString()
+            )
+            editor.putString(accountFragment.getString(R.string.key_account_email), account.email!!.toString())
+            editor.putString(accountFragment.getString(R.string.key_account_token), account.idToken)
+        }
+        editor.apply()
     }
 }
