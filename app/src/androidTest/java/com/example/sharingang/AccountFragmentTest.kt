@@ -12,14 +12,15 @@ import androidx.test.uiautomator.*
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers.not
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
+import org.junit.runner.manipulation.Alphanumeric
+import org.junit.runners.MethodSorters
 
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class AccountFragmentTest {
     @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
@@ -37,7 +38,7 @@ class AccountFragmentTest {
     }
 
 
-    /*
+
     @Test
     fun loginClick() {
         onView(withId(R.id.gotoAccount)).perform(click())
@@ -73,7 +74,7 @@ class AccountFragmentTest {
     }
 
     @Test
-    fun loggedInScreenWhenLoggedIn() {
+    fun loginScreenMatchesWhenLoggedIn() {
         onView(withId(R.id.gotoAccount)).perform(click())
         onView(withId(R.id.account_status)).check(matches(withText("Status: Logged in as \nSharingang Test")))
         onView(withId(R.id.loginButton)).check(matches(not(isDisplayed())))
@@ -82,6 +83,11 @@ class AccountFragmentTest {
         onView(withId(R.id.loginButton)).check(matches(isDisplayed()))
         onView(withId(R.id.logoutButton)).check(matches(not(isDisplayed())))
     }
-    */
+
+    @Test
+    fun logoutUpdatesUserProfile() {
+        onView(withId(R.id.userProfileButton)).perform(click())
+        onView(withId(R.id.nameText)).check(matches(withText("")))
+    }
 
 }
