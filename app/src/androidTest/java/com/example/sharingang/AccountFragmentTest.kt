@@ -61,8 +61,8 @@ class AccountFragmentTest {
         val secondfield = device.findObject(UiSelector().className("android.widget.EditText"))
         secondfield.text = "sharingangtest2021"
         device.findObject(UiSelector().textContains("ext")).click()
-        Thread.sleep(6000)
-        device.findObject(UiSelector()).swipeUp(500)
+        Thread.sleep(10000)
+        device.findObject(UiSelector()).swipeUp(1000)
         device.findObject(UiSelector().className("android.widget.Button").instance(3)).clickAndWaitForNewWindow(20000)
         try {
             val scrollable = UiScrollable(UiSelector().scrollable(true))
