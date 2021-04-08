@@ -86,15 +86,13 @@ class AccountFragment : Fragment() {
                         val account = GoogleSignIn.getSignedInAccountFromIntent(result.data)
                             .getResult(ApiException::class.java)
                         "Status: Logged in as \n${account.displayName}\n".also { binding.accountStatus.text = it }
-                        updateAccountPreferences(this, editor, LoginErrorCode.SUCCESS, account)
+                        updateAccountPreferences(editor, LoginErrorCode.SUCCESS, account)
                         firebaseAuthWithGoogle(account.idToken!!, binding)
                         updateUI(accountStatus = AccountStatus.LOGGED_IN, binding)
                     } catch (e: ApiException) {
                         updateUI(accountStatus = AccountStatus.LOGGED_OUT, binding)
                         binding.accountStatus.text = getString(R.string.failed_login_message)
-                        updateAccountPreferences(
-                            this,
-                            editor, LoginErrorCode.FAILURE, null)
+                        updateAccountPreferences(editor, LoginErrorCode.FAILURE, null)
                     }
                 } else {
                     handleUnlink(AccountStatus.LOGGED_OUT, binding, LoginErrorCode.FAILURE)
@@ -193,32 +191,31 @@ class AccountFragment : Fragment() {
 
     private fun handleUnlink(status: AccountStatus, binding: FragmentAccountBinding, loginErrorCode: LoginErrorCode) {
         updateUI(status, binding)
-        updateAccountPreferences(this, editor, loginErrorCode, null)
+        updateAccountPreferences(editor, loginErrorCode, null)
     }
 
 
     private fun updateAccountPreferences(
-    accountFragment: AccountFragment,
     editor: SharedPreferences.Editor, code: LoginErrorCode,
     account: GoogleSignInAccount?
     ) {
         if(code == LoginErrorCode.FAILURE || code == LoginErrorCode.SIGNOUT) {
-            editor.putString(accountFragment.getString(R.string.key_account_uid), "")
-            editor.putString(accountFragment.getString(R.string.key_account_name), "")
-            editor.putString(accountFragment.getString(R.string.key_account_picture), "")
-            editor.putString(accountFragment.getString(R.string.key_account_email), "")
-            editor.putString(accountFragment.getString(R.string.key_account_token), "")
-            editor.putString(accountFragment.getString(R.string.account_firebase_uid), "")
+            editor.putString(getString(R.string.key_account_uid), "")
+            editor.putString(getString(R.string.key_account_name), "")
+            editor.putString(getString(R.string.key_account_picture), "")
+            editor.putString(getString(R.string.key_account_email), "")
+            editor.putString(getString(R.string.key_account_token), "")
+            editor.putString(getString(R.string.account_firebase_uid), "")
         }
         else {
-            editor.putString(accountFragment.getString(R.string.key_account_uid), account?.id)
-            editor.putString(accountFragment.getString(R.string.key_account_name), account?.displayName)
+            editor.putString(getString(R.string.key_account_uid), account?.id)
+            editor.putString(getString(R.string.key_account_name), account?.displayName)
             editor.putString(
-                accountFragment.getString(R.string.key_account_picture),
+                getString(R.string.key_account_picture),
                 account?.photoUrl!!.toString()
             )
-            editor.putString(accountFragment.getString(R.string.key_account_email), account.email!!.toString())
-            editor.putString(accountFragment.getString(R.string.key_account_token), account.idToken)
+            editor.putString(getString(R.string.key_account_email), account.email!!.toString())
+            editor.putString(getString(R.string.key_account_token), account.idToken)
         }
         editor.apply()
     }
