@@ -171,18 +171,18 @@ class AccountFragment : Fragment() {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) {
-                    val user = auth.currentUser
+                if (task.isSuccessful && auth.currentUser != null) {
+                    val user = auth.currentUser!!
                     lifecycleScope.launch(Dispatchers.IO) {
                         userRepository.add(
                             User(
-                                id = user?.uid,
-                                name = user?.displayName!!,
-                                profilePicture = user.photoUrl!!.toString()
+                                id = user.uid,
+                                name = user.displayName!!,
+                                profilePicture = user.photoUrl?.toString()
                             )
                         )
                     }
-                    editor.putString(getString(R.string.account_firebase_uid), user?.uid)
+                    editor.putString(getString(R.string.account_firebase_uid), user.uid)
                     editor.apply()
                     updateUI(AccountStatus.LOGGED_IN, binding)
                 }
@@ -212,9 +212,9 @@ class AccountFragment : Fragment() {
             editor.putString(getString(R.string.key_account_name), account?.displayName)
             editor.putString(
                 getString(R.string.key_account_picture),
-                account?.photoUrl!!.toString()
+                if(account?.photoUrl != null) account.photoUrl!!.toString() else ""
             )
-            editor.putString(getString(R.string.key_account_email), account.email!!.toString())
+            editor.putString(getString(R.string.key_account_email), account?.email!!.toString())
             editor.putString(getString(R.string.key_account_token), account.idToken)
         }
         editor.apply()
