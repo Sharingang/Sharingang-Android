@@ -21,13 +21,21 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         return navHostFragment.navController
     }
 
-    private fun setupNavigation(navController: NavController) {
+    private fun setupToolbar(navController: NavController) {
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
         val appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
         findViewById<Toolbar>(R.id.toolbar)
             .setupWithNavController(navController, appBarConfiguration)
+    }
+
+    private fun setupNavView(navController: NavController) {
         findViewById<NavigationView>(R.id.nav_view)
             .setupWithNavController(navController)
+    }
+
+    private fun setupNavigation(navController: NavController) {
+        setupToolbar(navController)
+        setupNavView(navController)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,9 +45,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.myNavHostFragment) as NavHostFragment
-        val navController = navHostFragment.navController
+        val navController = getNavController()
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
 }
