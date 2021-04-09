@@ -1,8 +1,6 @@
 package com.example.sharingang
 
 
-import android.content.Context
-import android.content.SharedPreferences
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -29,6 +27,6 @@ class UserProfileFragmentTest {
         onView(withId(R.id.userProfileButton)).perform(click())
 
         val textView = onView(withId(R.id.nameText))
-        textView.check(matches(withText("")))
+        textView.check(matches(withText(FakeCurrentUserProvider.fakeUser.name)))
     }
 }

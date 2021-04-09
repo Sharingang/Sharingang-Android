@@ -49,7 +49,8 @@ class ItemsListFragment : Fragment() {
             )
             val action =
                 if (sharedPreferences == null) {
-                    ItemsListFragmentDirections.actionItemsListFragmentToUserProfileFragment("test")
+                    // userId = null => current user
+                    ItemsListFragmentDirections.actionItemsListFragmentToUserProfileFragment(null)
                 } else {
                     ItemsListFragmentDirections.actionItemsListFragmentToUserProfileFragment(
                         sharedPreferences.getString(
