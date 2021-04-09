@@ -36,6 +36,7 @@ import javax.inject.Inject
 class AccountFragment : Fragment() {
     var resultLauncher: ActivityResultLauncher<Intent>? = null
     lateinit var sharedPreferences: SharedPreferences
+    @Inject
     lateinit var auth: FirebaseAuth
     lateinit var editor: SharedPreferences.Editor
     @Inject
@@ -71,7 +72,6 @@ class AccountFragment : Fragment() {
         )!!
         editor = sharedPreferences.edit()
         editor.apply()
-        auth = FirebaseAuth.getInstance()
         restorePreferences(binding)
         createLauncher(binding)
         signInSetup(binding)
