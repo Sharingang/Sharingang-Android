@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.sharingang.databinding.FragmentMapBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsViewModel
@@ -137,7 +138,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         map?.setOnMarkerClickListener { marker: Marker ->
             if (marker != lastLocationMarker) {
                 val temp: Item = marker.tag as Item
-                Toast.makeText(context, "$temp", Toast.LENGTH_SHORT).show()
+                viewModel.onViewItem(temp)
+                this.findNavController().navigate(
+                    MapFragmentDirections.actionMapFragmentToDetailedItemFragment()
+                )
+                //Toast.makeText(context, "$temp", Toast.LENGTH_SHORT).show()
             }
             map?.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
             true
