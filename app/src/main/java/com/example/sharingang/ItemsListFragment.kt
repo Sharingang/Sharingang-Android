@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.sharingang.databinding.FragmentItemsListBinding
 import com.example.sharingang.items.ItemsViewModel
@@ -23,7 +22,7 @@ class ItemsListFragment : Fragment() {
         viewModel.navigateToEditItem.observe(viewLifecycleOwner, { item ->
             item?.let {
                 this.findNavController().navigate(
-                        ItemsListFragmentDirections.actionItemsListFragmentToEditItemFragment(item)
+                    ItemsListFragmentDirections.actionItemsListFragmentToEditItemFragment(item)
                 )
                 viewModel.onEditItemNavigated()
             }
@@ -31,35 +30,19 @@ class ItemsListFragment : Fragment() {
         viewModel.viewingItem.observe(viewLifecycleOwner, {
             if (it) {
                 this.findNavController().navigate(
-                        ItemsListFragmentDirections.actionItemsListFragmentToDetailedItemFragment()
+                    ItemsListFragmentDirections.actionItemsListFragmentToDetailedItemFragment()
                 )
                 viewModel.onViewItemNavigated()
             }
         })
     }
 
-    fun setupButtons() {
-        binding.newItemButton.setOnClickListener { view: View -> goToNewItem(view) }
-        binding.goToMap.setOnClickListener { view: View ->
-            goToMap(view)
-        }
-        binding.userProfileButton.setOnClickListener {
-            val action =
-                    ItemsListFragmentDirections.actionItemsListFragmentToUserProfileFragment("test")
-            it.findNavController().navigate(action)
-        }
-        binding.gotoSearchButton.setOnClickListener { view: View -> goToSearchPage(view) }
-        binding.gotoAccount.setOnClickListener { view: View -> goToAccount(view) }
-    }
-
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_items_list, container, false)
         binding.viewModel = viewModel
-
-        setupButtons()
 
         val adapter = viewModel.setupItemAdapter()
         binding.itemList.adapter = adapter
@@ -77,30 +60,6 @@ class ItemsListFragment : Fragment() {
         handleDeepLink()
 
         return binding.root
-    }
-
-    private fun goToNewItem(view: View){
-        view.findNavController().navigate(
-                ItemsListFragmentDirections.actionItemsListFragmentToNewItemFragment()
-        )
-    }
-
-    private fun goToMap(view: View) {
-        view.findNavController().navigate(
-                ItemsListFragmentDirections.actionItemsListFragmentToMapFragment()
-        )
-    }
-
-    private fun goToSearchPage(view: View) {
-        view.findNavController().navigate(
-                ItemsListFragmentDirections.actionItemsListFragmentToSearchFragment()
-        )
-    }
-
-    private fun goToAccount(view: View) {
-        view.findNavController().navigate(
-                ItemsListFragmentDirections.actionItemsListFragmentToAccountFragment()
-        )
     }
 
     private fun handleDeepLink() {

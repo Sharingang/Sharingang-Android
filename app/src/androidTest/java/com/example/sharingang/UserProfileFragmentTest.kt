@@ -2,7 +2,6 @@ package com.example.sharingang
 
 
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -24,7 +23,7 @@ class UserProfileFragmentTest {
 
     @Test
     fun canOpenSearchFragment() {
-        onView(withId(R.id.userProfileButton)).perform(click())
+        navigate_to(R.id.userProfileFragment)
 
         val textView = onView(withId(R.id.nameText))
         textView.check(matches(withText("Test user")))
