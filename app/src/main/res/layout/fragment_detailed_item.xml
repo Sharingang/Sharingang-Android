@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="com.example.sharingang.items.ItemsViewModel" />
+            name="item"
+            type="com.example.sharingang.items.Item" />
     </data>
 
     <LinearLayout
@@ -20,7 +20,7 @@
             android:id="@+id/itemTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.focusedItem.title}"
+            android:text="@{item.title}"
             android:textSize="30sp"
             tools:text="Title" />
 
@@ -28,7 +28,7 @@
             android:id="@+id/itemCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.focusedItem.categoryString}"
+            android:text="@{item.categoryString}"
             android:textSize="25sp"
             tools:text="Category" />
 
@@ -36,7 +36,7 @@
             android:id="@+id/itemPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{@string/display_price(viewModel.focusedItem.price)}"
+            android:text="@{@string/display_price(item.price)}"
             android:textSize="18sp"
             tools:text="10.00" />
 
@@ -44,7 +44,7 @@
             android:id="@+id/itemDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.focusedItem.description}"
+            android:text="@{item.description}"
             android:textSize="18sp"
             tools:text="Here goes the description of the item." />
 

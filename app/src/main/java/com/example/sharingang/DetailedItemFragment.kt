@@ -8,17 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.navArgs
 import com.example.sharingang.databinding.FragmentDetailedItemBinding
 import com.example.sharingang.items.Item
-import com.example.sharingang.items.ItemsViewModel
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 
 class DetailedItemFragment : Fragment() {
-    private val viewModel: ItemsViewModel by activityViewModels()
+    private val args: DetailedItemFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,7 +26,7 @@ class DetailedItemFragment : Fragment() {
         val binding: FragmentDetailedItemBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_detailed_item, container, false)
 
-        binding.viewModel = viewModel
+        binding.item = args.item
 
         binding.shareButton.setOnClickListener { shareItem() }
 
@@ -35,17 +34,15 @@ class DetailedItemFragment : Fragment() {
     }
 
     private fun shareItem() {
-        val item = viewModel.focusedItem.value
-        if (item != null) {
-            val link = generateLink(item)
-            val shareIntent = Intent.createChooser(Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, link.toString())
-                putExtra(Intent.EXTRA_TITLE, item.title + " - " + getString(R.string.app_name))
-                type = "text/plain"
-            }, null)
-            startActivity(shareIntent)
-        }
+        val item = args.item
+        val link = generateLink(item)
+        val shareIntent = Intent.createChooser(Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, link.toString())
+            putExtra(Intent.EXTRA_TITLE, item.title + " - " + getString(R.string.app_name))
+            type = "text/plain"
+        }, null)
+        startActivity(shareIntent)
     }
 
     private fun generateLink(item: Item): Uri {
