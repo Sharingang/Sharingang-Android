@@ -44,7 +44,7 @@ class MapFragmentTest {
             ViewActions.closeSoftKeyboard()
         )
         onView(withId(R.id.new_item_get_location)).perform(click())
-        Thread.sleep(5000)
+        Thread.sleep(6000)
         onView(withId(R.id.createItemButton)).perform(click())
         navigate_to(R.id.mapFragment)
         Thread.sleep(6000)
