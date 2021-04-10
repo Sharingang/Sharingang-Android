@@ -18,7 +18,7 @@
     <string name="unsell">Resell</string>
     <string name="longitude">Longitude</string>
     <string name="get_location">Get Location</string>
-    <string name="user_profile">User profile</string>
+    <string name="user_profile">User Profile</string>
     <string name="account">Account</string>
     <string name="search">Search</string>
     <string name="logged_out">Status: Logged Out</string>
@@ -27,6 +27,13 @@
     <string name="text_logged_out">Status: Logged Out</string>
     <string name="log_in">Log In</string>
     <string name="clear_search_button">Clear search</string>
+    <string name="preference_user_info">user_state_preferences</string>
+    <string name="key_account_uid">key_account_uid</string>
+    <string name="key_account_name">key_account_name</string>
+    <string name="key_account_picture">key_account_picture</string>
+    <string name="key_account_email">key_account_email</string>
+    <string name="key_account_token">key_account_token</string>
+    <string name="account_firebase_uid">account_firebase_uid</string>
     <string-array name="categories">
         <item>None</item>
         <item>Book</item>

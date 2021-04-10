@@ -2,7 +2,6 @@ package com.example.sharingang
 
 import android.Manifest
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -36,11 +35,11 @@ class MapFragmentTest {
 
     @Test
     fun itemsAddedAreDisplayedOnTheMap() {
-        onView(withId(R.id.newItemButton)).perform(click())
+        navigate_to(R.id.newItemFragment)
         onView(withId(R.id.new_item_get_location)).perform(click())
         Thread.sleep(3000)
         onView(withId(R.id.createItemButton)).perform(click())
-        onView(withId(R.id.go_to_map)).perform(click())
+        navigate_to(R.id.mapFragment)
         val text = onView(withId(R.id.location_display))
         //text.check(matches(withText("")))
         Thread.sleep(6000)

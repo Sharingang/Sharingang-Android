@@ -136,15 +136,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         this.map = googleMap
         map?.setOnMarkerClickListener { marker: Marker ->
+            map?.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
             if (marker != lastLocationMarker) {
                 val temp: Item = marker.tag as Item
                 viewModel.onViewItem(temp)
                 this.findNavController().navigate(
                     MapFragmentDirections.actionMapFragmentToDetailedItemFragment()
                 )
+                viewModel.onViewItemNavigated()
                 //Toast.makeText(context, "$temp", Toast.LENGTH_SHORT).show()
             }
-            map?.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
             true
         }
     }
