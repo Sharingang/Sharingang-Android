@@ -26,6 +26,6 @@ class UserProfileFragmentTest {
         navigate_to(R.id.userProfileFragment)
 
         val textView = onView(withId(R.id.nameText))
-        textView.check(matches(withText("Test user")))
+        textView.check(matches(withText(FakeCurrentUserProvider.fakeUser.name)))
     }
 }
