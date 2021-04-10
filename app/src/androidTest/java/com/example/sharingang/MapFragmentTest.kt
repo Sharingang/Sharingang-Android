@@ -1,6 +1,7 @@
 package com.example.sharingang
 
 import android.Manifest
+import android.util.Log
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
@@ -43,14 +44,14 @@ class MapFragmentTest {
             ViewActions.closeSoftKeyboard()
         )
         onView(withId(R.id.new_item_get_location)).perform(click())
-        Thread.sleep(4000)
+        Thread.sleep(5000)
         onView(withId(R.id.createItemButton)).perform(click())
         navigate_to(R.id.mapFragment)
         Thread.sleep(6000)
         val device = UiDevice.getInstance(getInstrumentation())
-        val marker = device.findObject(UiSelector().descriptionContains(""))
-        marker.click()
-        onView(withText(itemTitle)).check(matches(isDisplayed()));
+        device.click(device.displayWidth/2,device.displayHeight/2+device.displayHeight/8)
+        Thread.sleep(1000)
+        onView(withId(R.id.itemTitle)).check(matches(withText(itemTitle)));
     }
 
     @Test
