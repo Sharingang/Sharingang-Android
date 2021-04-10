@@ -2,10 +2,10 @@ package com.example.sharingang
 
 import android.Manifest
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
@@ -14,7 +14,6 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiSelector
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import org.hamcrest.core.StringContains.containsString
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -33,19 +32,31 @@ class MapFragmentTest {
     val grantPermissionRule: GrantPermissionRule =
         GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION)
 
+
+    private val itemTitle = "T"
+
     @Test
     fun itemsAddedAreDisplayedOnTheMap() {
         navigate_to(R.id.newItemFragment)
+        onView(withId(R.id.editItemTitle)).perform(
+            ViewActions.typeText(itemTitle),
+            ViewActions.closeSoftKeyboard()
+        )
         onView(withId(R.id.new_item_get_location)).perform(click())
-        Thread.sleep(3000)
+        Thread.sleep(4000)
         onView(withId(R.id.createItemButton)).perform(click())
         navigate_to(R.id.mapFragment)
-        val text = onView(withId(R.id.location_display))
-        //text.check(matches(withText("")))
         Thread.sleep(6000)
-        text.check(matches(withText(containsString("Your location"))))
         val device = UiDevice.getInstance(getInstrumentation())
         val marker = device.findObject(UiSelector().descriptionContains(""))
         marker.click()
+        onView(withText(itemTitle)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    fun clickingOnButtonResetsCamera() {
+        navigate_to(R.id.mapFragment)
+        Thread.sleep(6000)
+        onView(withId(R.id.map_get_my_location)).perform(click())
     }
 }

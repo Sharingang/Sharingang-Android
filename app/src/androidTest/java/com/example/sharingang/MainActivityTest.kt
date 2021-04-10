@@ -28,12 +28,6 @@ class MainActivityTest {
         GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION)
 
     @Test
-    fun clickingOnButtonOpensMap() {
-        navigate_to(R.id.mapFragment)
-        onView(withId(R.id.location_display)).check(matches(withText("")))
-    }
-
-    @Test
     fun clickingOnButtonStartsNewItemFragment() {
         navigate_to(R.id.newItemFragment)
         onView(withId(R.id.newItemPrompt))
