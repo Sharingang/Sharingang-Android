@@ -23,10 +23,6 @@ class UserProfileFragment : Fragment() {
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
 
-    companion object {
-        fun newInstance() = UserProfileFragment()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,7 +33,6 @@ class UserProfileFragment : Fragment() {
         val userId = when(args.userId) {
                 null, "" -> currentUserProvider.getCurrentUserId()
                 else -> args.userId
-
         }
 
         viewModel.setUser(userId)
