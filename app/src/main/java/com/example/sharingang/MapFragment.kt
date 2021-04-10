@@ -143,7 +143,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     MapFragmentDirections.actionMapFragmentToDetailedItemFragment()
                 )
                 viewModel.onViewItemNavigated()
-                //Toast.makeText(context, "$temp", Toast.LENGTH_SHORT).show()
             }
             true
         }

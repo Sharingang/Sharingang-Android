@@ -6,7 +6,8 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
@@ -47,7 +48,6 @@ class MapFragmentTest {
         onView(withId(R.id.createItemButton)).perform(click())
         navigate_to(R.id.mapFragment)
         Thread.sleep(6000)
-        val device = UiDevice.getInstance(getInstrumentation())
         var activity: Activity? = null
         activityRule.scenario.onActivity {
             activity = it
@@ -58,6 +58,7 @@ class MapFragmentTest {
         if (resourceId > 0) {
             result = activity!!.resources.getDimensionPixelSize(resourceId)
         }
+        val device = UiDevice.getInstance(getInstrumentation())
         device.click(device.displayWidth / 2, device.displayHeight / 2 + result)
         Thread.sleep(1000)
         onView(withId(R.id.itemTitle)).check(matches(withText(itemTitle)));
