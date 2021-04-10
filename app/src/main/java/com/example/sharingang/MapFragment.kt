@@ -71,7 +71,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
-        Log.e("ERROR", "PASSING HERE")
         return binding.root
     }
 
