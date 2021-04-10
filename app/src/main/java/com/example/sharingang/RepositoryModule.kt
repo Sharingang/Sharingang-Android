@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.room.Room
 import com.example.sharingang.items.*
 import com.example.sharingang.users.*
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.firestoreSettings
@@ -70,7 +71,7 @@ object RepositoryModule {
     fun provideFirebaseFirestore(): FirebaseFirestore {
         val firestore = Firebase.firestore
         if (BuildConfig.DEBUG) {
-            Log.d("RepositoryModule", "Using Firebase emulator.")
+            Log.d("RepositoryModule", "Using Firestore emulator.")
             // 10.0.2.2 is the special IP address to connect to the 'localhost' of
             // the host computer from an Android emulator.
             firestore.useEmulator("10.0.2.2", 8080)
@@ -81,9 +82,28 @@ object RepositoryModule {
                 isPersistenceEnabled = false
             }
         } else {
-            Log.d("RepositoryModule", "Using production Firebase.")
+            Log.d("RepositoryModule", "Using production Firestore.")
         }
 
         return firestore
+    }
+
+    @Singleton
+    @Provides
+    fun provideFirebaseAuth(): FirebaseAuth {
+        val auth = FirebaseAuth.getInstance()
+        if (BuildConfig.DEBUG) {
+            Log.d("RepositoryModule", "Using FirebaseAuth emulator.")
+            auth.useEmulator("10.0.2.2", 9099)
+        } else {
+            Log.d("RepositoryModule", "Using production FirebaseAuth.")
+        }
+        return auth
+    }
+
+    @Singleton
+    @Provides
+    fun provideCurrentUserProvider(currentUserProvider: FirestoreCurrentUserProvider): CurrentUserProvider {
+        return currentUserProvider
     }
 }
