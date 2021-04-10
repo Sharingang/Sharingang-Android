@@ -25,7 +25,7 @@ class DetailedItemFragmentTest {
 
     private val itemTitle = "T"
     private val itemDescription = "D"
-
+/*
     @Test
     fun anItemCanBeEditedAndSeenOnItemsListFragment() {
         navigate_to(R.id.newItemFragment)
@@ -51,7 +51,7 @@ class DetailedItemFragmentTest {
         onView(withId(R.id.itemDescription))
             .check(matches(withText(itemDescription)))
     }
-
+*/
     @Test
     fun canSeeCategoryInDetailedItemFragment() {
         val testTitle: String = "Book Item"
