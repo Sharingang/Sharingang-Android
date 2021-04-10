@@ -2,7 +2,6 @@ package com.example.sharingang
 
 import android.Manifest
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -29,13 +28,14 @@ class MainActivityTest {
         GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION)
 
     @Test
-    fun clickingOnButtonOpensMap(){
-        onView(withId(R.id.go_to_map)).perform(click())
+    fun clickingOnButtonOpensMap() {
+        navigate_to(R.id.mapFragment)
         onView(withId(R.id.location_display)).check(matches(withText("")))
     }
+
     @Test
     fun clickingOnButtonStartsNewItemFragment() {
-        onView(withId(R.id.newItemButton)).perform(click())
+        navigate_to(R.id.newItemFragment)
         onView(withId(R.id.newItemPrompt))
             .check(matches(withText("New Item")))
     }

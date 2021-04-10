@@ -1,20 +1,19 @@
 package com.example.sharingang
 
 import android.Manifest
-import android.content.SharedPreferences
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.*
+import androidx.test.rule.GrantPermissionRule
+import org.junit.FixMethodOrder
+
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
-import androidx.test.rule.GrantPermissionRule
-import androidx.test.uiautomator.*
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers.not
-import org.junit.*
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runner.manipulation.Alphanumeric
 import org.junit.runners.MethodSorters
@@ -35,11 +34,12 @@ class AccountFragmentTest {
         GrantPermissionRule.grant(Manifest.permission.INTERNET)
 
     @Test
-    fun loginButtonMatchesText() {
-        onView(withId(R.id.gotoAccount)).check(matches(withText("Account")))
-        onView(withId(R.id.gotoAccount)).perform(click())
-        onView(withId(R.id.account_status)).check(matches(withText("Status: Logged Out")))
+
+    fun logoutButtonDoesNotAppearWhenLoggedOut() {
+        navigate_to(R.id.accountFragment)
+        onView(withId(R.id.loginButton)).check(matches(withText("Log In")))
         onView(withId(R.id.logoutButton)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.account_status)).check(matches(withText("Status: Logged Out")))
         onView(withId(R.id.loginButton)).check(matches(isDisplayed()))
     }
 
