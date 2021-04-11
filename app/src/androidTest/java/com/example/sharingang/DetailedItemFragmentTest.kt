@@ -23,35 +23,6 @@ class DetailedItemFragmentTest {
     @get:Rule(order = 1)
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
-    private val itemTitle = "T"
-    private val itemDescription = "D"
-/*
-    @Test
-    fun anItemCanBeEditedAndSeenOnItemsListFragment() {
-        navigate_to(R.id.newItemFragment)
-        onView(withId(R.id.newItemPrompt))
-            .check(matches(withText("New Item")))
-        onView(withId(R.id.editItemTitle)).perform(
-            typeText(itemTitle),
-            closeSoftKeyboard()
-        )
-        onView(withId(R.id.editItemDescription)).perform(
-            typeText(itemDescription),
-            closeSoftKeyboard()
-        )
-        val buttonCreate = onView(withId(R.id.createItemButton))
-        buttonCreate.check(matches(withText("Create Item")))
-        buttonCreate.perform(click())
-
-        onView(withText(itemTitle)).perform(click())
-
-        onView(withId(R.id.itemTitle))
-            .check(matches(withText(itemTitle)))
-
-        onView(withId(R.id.itemDescription))
-            .check(matches(withText(itemDescription)))
-    }*/
-
     @Test
     fun canSeeCategoryInDetailedItemFragment() {
         val testTitle: String = "Book Item"

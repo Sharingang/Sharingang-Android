@@ -35,6 +35,7 @@ class MapFragmentTest {
 
 
     private val itemTitle = "T"
+    private val waitingTime = 6000L
 
     @Test
     fun itemsAddedAreDisplayedOnTheMap() {
@@ -44,14 +45,15 @@ class MapFragmentTest {
             ViewActions.closeSoftKeyboard()
         )
         onView(withId(R.id.new_item_get_location)).perform(click())
-        Thread.sleep(6000)
+        Thread.sleep(waitingTime)
         onView(withId(R.id.createItemButton)).perform(click())
         navigate_to(R.id.mapFragment)
-        Thread.sleep(6000)
+        Thread.sleep(waitingTime)
         var activity: Activity? = null
         activityRule.scenario.onActivity {
             activity = it
         }
+        // This part gets the height of the status bar, in order to find the center of the map
         var result = 0
         val resourceId: Int =
             activity!!.resources.getIdentifier("status_bar_height", "dimen", "android")
@@ -67,7 +69,7 @@ class MapFragmentTest {
     @Test
     fun clickingOnButtonResetsCamera() {
         navigate_to(R.id.mapFragment)
-        Thread.sleep(6000)
+        Thread.sleep(waitingTime)
         onView(withId(R.id.map_get_my_location)).perform(click())
     }
 }
