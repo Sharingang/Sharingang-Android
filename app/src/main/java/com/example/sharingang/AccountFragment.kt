@@ -54,16 +54,8 @@ class AccountFragment : Fragment() {
             container,
             false
         )
-
-        binding.loginButton.setOnClickListener {
-            signIn()
-        }
-        binding.logoutButton.setOnClickListener {
-            signOut()
-        }
-
+        setupButtons()
         restoreLoginStatus()
-
         return binding.root
     }
 
@@ -71,12 +63,10 @@ class AccountFragment : Fragment() {
         val providers = arrayListOf(
             AuthUI.IdpConfig.GoogleBuilder().build()
         )
-
         val intent = AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
             .build()
-
         resultLauncher.launch(intent)
     }
 
@@ -93,7 +83,7 @@ class AccountFragment : Fragment() {
             addUserToDatabase(user!!)
             binding.loginButton.visibility = View.GONE
             binding.logoutButton.visibility = View.VISIBLE
-            binding.accountStatus.text = "Status: Logged in as \n${user?.displayName}"
+            binding.accountStatus.text = "Status: Logged in as \n${user.displayName}"
         } else {
             binding.loginButton.visibility = View.VISIBLE
             binding.logoutButton.visibility = View.GONE
@@ -115,6 +105,15 @@ class AccountFragment : Fragment() {
                     profilePicture = user.photoUrl?.toString()
                 )
             )
+        }
+    }
+
+    private fun setupButtons() {
+        binding.loginButton.setOnClickListener {
+            signIn()
+        }
+        binding.logoutButton.setOnClickListener {
+            signOut()
         }
     }
 }
