@@ -21,7 +21,6 @@ import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.runner.manipulation.Alphanumeric
 import org.junit.runners.MethodSorters
 
 
@@ -63,13 +62,13 @@ class AccountFragmentTest {
         createAct.click()
         createAct.text = "sharingang.test"
         device.findObject(UiSelector().textContains("ext")).click()
-        Thread.sleep(5000)
+        Thread.sleep(2000)
         val secondfield = device.findObject(UiSelector().className("android.widget.EditText"))
         secondfield.text = "sharingangtest2021"
         device.findObject(UiSelector().textContains("ext")).click()
-        Thread.sleep(5000)
+        Thread.sleep(2000)
         device.findObject(UiSelector()).swipeUp(1000)
-        device.findObject(UiSelector().className("android.widget.Button").instance(3)).clickAndWaitForNewWindow(20000)
+        device.findObject(UiSelector().className("android.widget.Button").instance(3)).clickAndWaitForNewWindow(5000)
         try {
             val scrollable = UiScrollable(UiSelector().scrollable(true))
             scrollable.scrollToEnd(100)
@@ -102,5 +101,6 @@ class AccountFragmentTest {
         onView(withId(R.id.nameText)).check(matches(withText("")))
     }
     */
+
 
 }

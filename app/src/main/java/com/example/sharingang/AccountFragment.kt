@@ -33,12 +33,9 @@ class AccountFragment : Fragment() {
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-                val user = auth.currentUser!!
-                addUserToDatabase(user)
-                binding.accountStatus.text = "Status: Logged in as \n${user.displayName}"
-                updateUI(accountStatus = AccountStatus.LOGGED_IN)
+                update(AccountStatus.LOGGED_IN, auth.currentUser!!)
             } else {
-                updateUI(AccountStatus.LOGGED_OUT)
+                update(AccountStatus.LOGGED_OUT, null)
             }
         }
 
@@ -87,14 +84,16 @@ class AccountFragment : Fragment() {
         AuthUI.getInstance()
             .signOut(requireContext())
             .addOnCompleteListener {
-                updateUI(AccountStatus.LOGGED_OUT)
+                update(AccountStatus.LOGGED_OUT, null)
             }
     }
 
-    private fun updateUI(accountStatus: AccountStatus) {
+    private fun update(accountStatus: AccountStatus, user: FirebaseUser?) {
         if (accountStatus == AccountStatus.LOGGED_IN) {
+            addUserToDatabase(user!!)
             binding.loginButton.visibility = View.GONE
             binding.logoutButton.visibility = View.VISIBLE
+            binding.accountStatus.text = "Status: Logged in as \n${user?.displayName}"
         } else {
             binding.loginButton.visibility = View.VISIBLE
             binding.logoutButton.visibility = View.GONE
@@ -103,13 +102,8 @@ class AccountFragment : Fragment() {
     }
 
     private fun restoreLoginStatus() {
-        val user = auth.currentUser
-        if (user != null) {
-            binding.accountStatus.text = "Status: Logged in as \n${user.displayName}"
-            updateUI(AccountStatus.LOGGED_IN)
-        } else {
-            updateUI(AccountStatus.LOGGED_OUT)
-        }
+        if (auth.currentUser != null) update(AccountStatus.LOGGED_IN, auth.currentUser)
+        else update(AccountStatus.LOGGED_OUT, null)
     }
 
     private fun addUserToDatabase(user: FirebaseUser) {
