@@ -2,6 +2,7 @@ package com.example.sharingang
 
 import android.Manifest
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.rule.GrantPermissionRule
 import org.junit.FixMethodOrder
 
@@ -9,6 +10,11 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
+import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiObjectNotFoundException
+import androidx.test.uiautomator.UiScrollable
+import androidx.test.uiautomator.UiSelector
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers.not
@@ -47,9 +53,9 @@ class AccountFragmentTest {
     /*
     @Test
     fun loginClick() {
-        onView(withId(R.id.gotoAccount)).perform(click())
+        navigate_to(R.id.accountFragment)
         onView(withId(R.id.loginButton)).perform(click())
-        Thread.sleep(10000)
+        Thread.sleep(5000)
         val device: UiDevice = UiDevice.getInstance(getInstrumentation())
         //device.pressBack()
         //onView(withId(R.id.loginButton)).check(matches(withText("Log In")))
@@ -57,11 +63,11 @@ class AccountFragmentTest {
         createAct.click()
         createAct.text = "sharingang.test"
         device.findObject(UiSelector().textContains("ext")).click()
-        Thread.sleep(10000)
+        Thread.sleep(5000)
         val secondfield = device.findObject(UiSelector().className("android.widget.EditText"))
         secondfield.text = "sharingangtest2021"
         device.findObject(UiSelector().textContains("ext")).click()
-        Thread.sleep(10000)
+        Thread.sleep(5000)
         device.findObject(UiSelector()).swipeUp(1000)
         device.findObject(UiSelector().className("android.widget.Button").instance(3)).clickAndWaitForNewWindow(20000)
         try {
@@ -75,13 +81,13 @@ class AccountFragmentTest {
         device.findObject(UiSelector().className("android.widget.Button").instance(0)).click()
         Thread.sleep(2000)
         device.pressBack()
-        onView(withId(R.id.userProfileButton)).perform(click())
+        navigate_to(R.id.userProfileFragment)
         onView(withId(R.id.nameText)).check(matches(withText("Sharingang Test")))
     }
 
     @Test
     fun loginScreenMatchesWhenLoggedIn() {
-        onView(withId(R.id.gotoAccount)).perform(click())
+        navigate_to(R.id.accountFragment)
         onView(withId(R.id.account_status)).check(matches(withText("Status: Logged in as \nSharingang Test")))
         onView(withId(R.id.loginButton)).check(matches(not(isDisplayed())))
         onView(withId(R.id.logoutButton)).check(matches(isDisplayed()))
@@ -92,8 +98,9 @@ class AccountFragmentTest {
 
     @Test
     fun logoutUpdatesUserProfile() {
-        onView(withId(R.id.userProfileButton)).perform(click())
+        navigate_to(R.id.userProfileFragment)
         onView(withId(R.id.nameText)).check(matches(withText("")))
     }
     */
+
 }
