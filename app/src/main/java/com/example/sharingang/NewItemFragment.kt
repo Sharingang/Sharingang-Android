@@ -87,10 +87,10 @@ class NewItemFragment : Fragment() {
             view.findNavController().navigate(R.id.action_newItemFragment_to_itemsListFragment)
         }
         binding.newItemImage.setOnClickListener {
-            observer.openGallery(requireActivity())
+            observer.openGallery()
         }
         binding.newItemTakePicture.setOnClickListener {
-            observer.openCamera(requireActivity())
+            observer.openCamera()
         }
     }
 

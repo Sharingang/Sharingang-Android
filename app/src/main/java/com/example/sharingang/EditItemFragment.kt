@@ -57,10 +57,10 @@ class EditItemFragment : Fragment() {
         binding.longitude = existingItem.longitude.toString()
         existingItem.imageUri?.let { binding.editItemImage.setImageURI(Uri.parse(it)) }
         binding.editItemImage.setOnClickListener {
-            observer.openGallery(requireActivity())
+            observer.openGallery()
         }
         binding.editItemTakePicture.setOnClickListener {
-            observer.openCamera(requireActivity())
+            observer.openCamera()
         }
         editItemClickListener()
     }

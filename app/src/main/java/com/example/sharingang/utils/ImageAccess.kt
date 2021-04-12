@@ -22,12 +22,10 @@ import java.util.*
 
 
 class ImageAccess(
-    private val registry: FragmentActivity
+    private val activity: FragmentActivity
 ) :
     DefaultLifecycleObserver {
 
-    private var storagePermissionGranted: Boolean = false
-    private var cameraPermissionGranted: Boolean = false
     private lateinit var requestStoragePermissionLauncher: ActivityResultLauncher<String>
     private lateinit var requestCameraPermissionLauncher: ActivityResultLauncher<String>
 
@@ -41,13 +39,13 @@ class ImageAccess(
 
     override fun onCreate(owner: LifecycleOwner) {
         setupPermissionLaunchers(owner)
-        pickImage = registry.activityResultRegistry.register(
+        pickImage = activity.activityResultRegistry.register(
             "openGallery",
             owner,
             ActivityResultContracts.GetContent(),
             ::galleryCallback
         )
-        takePicture = registry.activityResultRegistry.register(
+        takePicture = activity.activityResultRegistry.register(
             "takePicture",
             owner,
             ActivityResultContracts.TakePicture(),
@@ -81,77 +79,69 @@ class ImageAccess(
         owner: LifecycleOwner,
         permission: String
     ): ActivityResultLauncher<String> {
-        return registry.activityResultRegistry.register(
+        return activity.activityResultRegistry.register(
             key,
             owner,
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
             if (!isGranted)
                 Toast.makeText(
-                    registry,
+                    activity,
                     "$permission permission successfully denied. Feature is disabled.",
                     Toast.LENGTH_LONG
                 ).show()
-            when (permission) {
-                Manifest.permission.CAMERA -> cameraPermissionGranted = isGranted
-                Manifest.permission.READ_EXTERNAL_STORAGE -> storagePermissionGranted = isGranted
-            }
+            else
+                launchCorrectImageAccess(permission)
         }
     }
 
-    private fun checkAndRequestPermission(
-        permission: String,
-        rationale: String,
-        context: Activity
-    ) {
-        when {
-            ContextCompat.checkSelfPermission(
-                context,
+    private fun launchCorrectImageAccess(permission: String) {
+        when (permission) {
+            Manifest.permission.READ_EXTERNAL_STORAGE -> pickImage.launch("image/*")
+            Manifest.permission.CAMERA -> launchCamera()
+        }
+    }
+
+    private fun checkAndRequestPermission(permission: String, rationale: String) {
+        if (ContextCompat.checkSelfPermission(
+                activity,
                 permission
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                when (permission) {
-                    Manifest.permission.READ_EXTERNAL_STORAGE -> storagePermissionGranted = true
-                    Manifest.permission.CAMERA -> cameraPermissionGranted = true
-                }
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            launchCorrectImageAccess(permission)
+        } else {
+            if (shouldShowRequestPermissionRationale(activity, permission)) {
+                Toast.makeText(activity, rationale, Toast.LENGTH_LONG).show()
             }
-            shouldShowRequestPermissionRationale(context, permission) -> {
-                Toast.makeText(context, rationale, Toast.LENGTH_LONG).show()
-            }
-            else -> {
-                when (permission) {
-                    Manifest.permission.READ_EXTERNAL_STORAGE -> requestStoragePermissionLauncher.launch(
-                        permission
-                    )
-                    Manifest.permission.CAMERA -> requestCameraPermissionLauncher.launch(permission)
-                }
+            when (permission) {
+                Manifest.permission.READ_EXTERNAL_STORAGE -> requestStoragePermissionLauncher.launch(
+                    permission
+                )
+                Manifest.permission.CAMERA -> requestCameraPermissionLauncher.launch(permission)
             }
         }
     }
 
-    fun openGallery(activity: Activity) {
+    private fun launchCamera() {
+        val file = createImageFile(activity)
+        val uri =
+            FileProvider.getUriForFile(activity, "com.example.sharingang.fileprovider", file)
+        takePicture.launch(uri)
+        cameraUri = uri
+    }
+
+    fun openGallery() {
         checkAndRequestPermission(
             Manifest.permission.READ_EXTERNAL_STORAGE,
-            "Storage permission is required to add an image from your phone.",
-            activity
+            "Storage permission is required to add an image from your phone."
         )
-        if (storagePermissionGranted) {
-            pickImage.launch("image/*")
-        }
     }
 
-    fun openCamera(activity: Activity) {
+    fun openCamera() {
         checkAndRequestPermission(
             Manifest.permission.CAMERA,
-            "Camera permission is required to take a picture.",
-            activity
+            "Camera permission is required to take a picture."
         )
-        if (cameraPermissionGranted) {
-            val file = createImageFile(activity)
-            val uri =
-                FileProvider.getUriForFile(activity, "com.example.sharingang.fileprovider", file)
-            takePicture.launch(uri)
-            cameraUri = uri
-        }
     }
 
     private fun createImageFile(activity: Activity): File {
