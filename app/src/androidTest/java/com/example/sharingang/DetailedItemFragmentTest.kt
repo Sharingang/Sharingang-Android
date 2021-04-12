@@ -48,6 +48,8 @@ class DetailedItemFragmentTest {
 
     @Test
     fun anItemBeSharedFromDetailedItemFragment() {
+        val itemTitle = "T"
+
         navigate_to(R.id.newItemFragment)
         onView(withId(R.id.newItemPrompt))
             .check(matches(withText("New Item")))
@@ -59,7 +61,7 @@ class DetailedItemFragmentTest {
         buttonCreate.check(matches(withText("Create Item")))
         buttonCreate.perform(click())
 
-        onView(withText(itemTitle)).perform(click())
+        onView(withId(R.id.item_list_view_title)).perform(click())
 
         onView(withId(R.id.itemTitle))
             .check(matches(withText(itemTitle)))

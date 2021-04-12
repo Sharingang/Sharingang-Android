@@ -138,11 +138,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             map?.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
             if (marker != lastLocationMarker) {
                 val temp: Item = marker.tag as Item
-                viewModel.onViewItem(temp)
                 this.findNavController().navigate(
-                    MapFragmentDirections.actionMapFragmentToDetailedItemFragment()
+                    MapFragmentDirections.actionMapFragmentToDetailedItemFragment(temp)
                 )
-                viewModel.onViewItemNavigated()
             }
             true
         }
