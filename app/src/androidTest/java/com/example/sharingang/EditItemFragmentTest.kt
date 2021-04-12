@@ -138,9 +138,9 @@ class EditItemFragmentTest {
     fun aPictureCanBeTakenAndDisplayed() {
         savePickedImage(mActivityTestRule.activity)
         val imgGalleryResult = createImageGallerySetResultStub(mActivityTestRule.activity)
-        Intents.intending(IntentMatchers.hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgGalleryResult)
+        intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgGalleryResult)
 
-        onView(withId(R.id.newItemButton)).perform(click())
+        navigate_to(R.id.newItemFragment)
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
 
         onView(withId(R.id.new_item_take_picture)).perform(click())
@@ -149,7 +149,7 @@ class EditItemFragmentTest {
 
     @Test
     fun clickingOnGetLocationDisplaysLocation() {
-        onView(withId(R.id.newItemButton)).perform(click())
+        navigate_to(R.id.newItemFragment)
         val button = onView(withId(R.id.new_item_get_location))
         button.check(matches(withText("Get Location")))
         button.perform(click())
