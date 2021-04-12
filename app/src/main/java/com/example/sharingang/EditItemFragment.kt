@@ -12,6 +12,7 @@ import androidx.navigation.findNavController
 import com.example.sharingang.databinding.FragmentEditItemBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsViewModel
+import com.example.sharingang.utils.ImageAccess
 
 class EditItemFragment : Fragment() {
 
@@ -26,10 +27,7 @@ class EditItemFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        observer = ImageAccess(requireActivity()) { uri: Uri? ->
-            uri?.let { binding.editItemImage.setImageURI(uri)
-                imageUri = uri }
-        }
+        observer = ImageAccess(requireActivity())
         lifecycle.addObserver(observer)
     }
 
@@ -40,6 +38,8 @@ class EditItemFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_item, container, false)
 
         val args = EditItemFragmentArgs.fromBundle(requireArguments())
+
+        observer.setupImageView(binding.editItemImage)
 
         existingItem = args.item
 
@@ -57,13 +57,17 @@ class EditItemFragment : Fragment() {
         binding.longitude = existingItem.longitude.toString()
         existingItem.imageUri?.let { binding.editItemImage.setImageURI(Uri.parse(it)) }
         binding.editItemImage.setOnClickListener {
-            observer.openGallery(requireActivity())
+            observer.openGallery()
+        }
+        binding.editItemTakePicture.setOnClickListener {
+            observer.openCamera()
         }
         editItemClickListener()
     }
 
     private fun editItemClickListener() {
         binding.editItemButton.setOnClickListener { view: View ->
+            imageUri = observer.getImageUri()
             viewModel.updateItem(
                 existingItem.copy(
                     title = binding.title ?: "",
