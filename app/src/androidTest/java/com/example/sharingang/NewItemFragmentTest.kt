@@ -1,8 +1,8 @@
 package com.example.sharingang
 
-import android.content.Intent
 import android.Manifest
 import android.provider.MediaStore
+import android.content.Intent
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -45,7 +45,7 @@ class NewItemFragmentTest {
 
     @Test
     fun aDescriptionCanBeEnteredAndSeenOnMainActivity() {
-        onView(withId(R.id.newItemButton)).perform(click())
+        navigate_to(R.id.newItemFragment)
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
 
         onView(withId(R.id.editItemTitle)).perform(
@@ -58,7 +58,7 @@ class NewItemFragmentTest {
 
         onView(withText(firstItem)).check(matches(isDisplayed()))
 
-        onView(withId(R.id.newItemButton)).perform(click())
+        navigate_to(R.id.newItemFragment)
         onView(withId(R.id.editItemTitle)).perform(
             typeText(secondItem),
             closeSoftKeyboard()
@@ -75,7 +75,7 @@ class NewItemFragmentTest {
         val imgGalleryResult = createImageGallerySetResultStub(mActivityTestRule.activity)
         Intents.intending(IntentMatchers.hasAction(Intent.ACTION_GET_CONTENT)).respondWith(imgGalleryResult)
 
-        onView(withId(R.id.newItemButton)).perform(click())
+        navigate_to(R.id.newItemFragment)
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
 
         onView(withId(R.id.new_item_image)).perform(click())
@@ -88,7 +88,7 @@ class NewItemFragmentTest {
         val imgGalleryResult = createImageGallerySetResultStub(mActivityTestRule.activity)
         Intents.intending(IntentMatchers.hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgGalleryResult)
 
-        onView(withId(R.id.newItemButton)).perform(click())
+        navigate_to(R.id.newItemFragment)
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
 
         onView(withId(R.id.new_item_take_picture)).perform(click())
@@ -97,7 +97,7 @@ class NewItemFragmentTest {
 
     @Test
     fun clickingOnGetLocationDisplaysLocation() {
-        onView(withId(R.id.newItemButton)).perform(click())
+        navigate_to(R.id.newItemFragment)
         val button = onView(withId(R.id.new_item_get_location))
         button.check(matches(withText("Get Location")))
         button.perform(click())
@@ -108,7 +108,7 @@ class NewItemFragmentTest {
 
     @Test
     fun aLocationCanBeWrittenInNewItemFragment() {
-        onView(withId(R.id.newItemButton)).perform(click())
+        navigate_to(R.id.newItemFragment)
         onView(withId(R.id.write_latitude)).perform(
             typeText("45.01"),
             closeSoftKeyboard()

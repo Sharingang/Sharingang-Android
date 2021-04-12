@@ -1,6 +1,7 @@
 package com.example.sharingang
 
 import android.Manifest
+import android.app.Activity
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
@@ -12,10 +13,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.UiSelector
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import org.hamcrest.core.StringContains.containsString
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,19 +33,43 @@ class MapFragmentTest {
     val grantPermissionRule: GrantPermissionRule =
         GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION)
 
+
+    private val itemTitle = "T"
+    private val waitingTime = 6000L
+
     @Test
     fun itemsAddedAreDisplayedOnTheMap() {
-        onView(withId(R.id.newItemButton)).perform(click())
+        navigate_to(R.id.newItemFragment)
+        onView(withId(R.id.editItemTitle)).perform(
+            ViewActions.typeText(itemTitle),
+            ViewActions.closeSoftKeyboard()
+        )
         onView(withId(R.id.new_item_get_location)).perform(click())
-        Thread.sleep(3000)
+        Thread.sleep(waitingTime)
         onView(withId(R.id.createItemButton)).perform(click())
-        onView(withId(R.id.go_to_map)).perform(click())
-        val text = onView(withId(R.id.location_display))
-        //text.check(matches(withText("")))
-        Thread.sleep(6000)
-        text.check(matches(withText(containsString("Your location"))))
+        navigate_to(R.id.mapFragment)
+        Thread.sleep(waitingTime)
+        var activity: Activity? = null
+        activityRule.scenario.onActivity {
+            activity = it
+        }
+        // This part gets the height of the status bar, in order to find the center of the map
+        var result = 0
+        val resourceId: Int =
+            activity!!.resources.getIdentifier("status_bar_height", "dimen", "android")
+        if (resourceId > 0) {
+            result = activity!!.resources.getDimensionPixelSize(resourceId)
+        }
         val device = UiDevice.getInstance(getInstrumentation())
-        val marker = device.findObject(UiSelector().descriptionContains(""))
-        marker.click()
+        device.click(device.displayWidth / 2, device.displayHeight / 2 + result)
+        Thread.sleep(1000)
+        onView(withId(R.id.itemTitle)).check(matches(withText(itemTitle)));
+    }
+
+    @Test
+    fun clickingOnButtonResetsCamera() {
+        navigate_to(R.id.mapFragment)
+        Thread.sleep(waitingTime)
+        onView(withId(R.id.map_get_my_location)).perform(click())
     }
 }

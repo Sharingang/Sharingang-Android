@@ -6,6 +6,6 @@
 - Install [Firebase CLI](https://firebase.google.com/docs/cli?hl=en)
 
 When running the app, you will have to run the Firebase emulator. For that, go to the root directory of the project and run:
-`firebase emulators:start --only firestore`
+`firebase emulators:start`. This will launch both the Firestore (for items) and the Auth (for authentication) emulator.
 
-If you want to run the app on a physical phone instead of the emulator, you will have to replace the IP address in `FirestoreItemRepository` by the IP address of your computer.
+If you want to run the app on a physical phone instead of the emulator, you will have to replace the IP address in `RepositoryModule` by the IP address of your computer.
