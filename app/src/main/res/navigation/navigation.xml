@@ -64,7 +64,11 @@
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.example.sharingang.MapFragment"
-        android:label="Map" />
+        android:label="Map" >
+        <action
+            android:id="@+id/action_mapFragment_to_detailedItemFragment"
+            app:destination="@id/detailedItemFragment" />
+    </fragment>
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.example.sharingang.UserProfileFragment"
