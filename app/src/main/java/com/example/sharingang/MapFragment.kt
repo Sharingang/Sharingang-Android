@@ -8,10 +8,10 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.sharingang.databinding.FragmentMapBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsViewModel
@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlin.properties.Delegates
 
 const val DEFAULT_ZOOM = 15
 
@@ -42,7 +43,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private var map: GoogleMap? = null
 
     private val viewModel: ItemsViewModel by activityViewModels()
-    private var hasCameraMovedOnce = false
+    private var hasCameraMovedOnce by Delegates.notNull<Boolean>()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,10 +51,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        hasCameraMovedOnce = false
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 lastLocation = locationResult.lastLocation
-                updateLocationText()
                 if (!hasCameraMovedOnce) {
                     moveCameraToLastLocation()
                     hasCameraMovedOnce = true
@@ -62,6 +63,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
         }
         setupItemsMarkers()
+        binding.mapGetMyLocation.setOnClickListener {
+            if (lastLocation != null) {
+                moveCameraToLastLocation()
+            }
+        }
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
         return binding.root
@@ -74,11 +80,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 addLastLocationMarker()
             }
             for (item: Item in it) {
-                val addedMarker = map?.addMarker(
-                    MarkerOptions().position(LatLng(item.latitude, item.longitude))
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                )
-                addedMarker?.tag = item
+                if (!item.sold) {
+                    val addedMarker = map?.addMarker(
+                        MarkerOptions().position(LatLng(item.latitude, item.longitude))
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                    )
+                    addedMarker?.tag = item
+                }
             }
         })
     }
@@ -93,14 +101,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             },
             locationCallback,
             Looper.getMainLooper()
-        )
-    }
-
-    private fun updateLocationText() {
-        binding.locationDisplay.text = String.format(
-            "Your location is: %s %s",
-            lastLocation!!.latitude,
-            lastLocation!!.longitude
         )
     }
 
@@ -135,11 +135,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         this.map = googleMap
         map?.setOnMarkerClickListener { marker: Marker ->
+            map?.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
             if (marker != lastLocationMarker) {
                 val temp: Item = marker.tag as Item
-                Toast.makeText(context, "$temp", Toast.LENGTH_SHORT).show()
+                viewModel.onViewItem(temp)
+                this.findNavController().navigate(
+                    MapFragmentDirections.actionMapFragmentToDetailedItemFragment()
+                )
+                viewModel.onViewItemNavigated()
             }
-            map?.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
             true
         }
     }
