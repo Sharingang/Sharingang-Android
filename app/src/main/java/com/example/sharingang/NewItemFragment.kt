@@ -14,6 +14,7 @@ import androidx.navigation.findNavController
 import com.example.sharingang.databinding.FragmentNewItemBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsViewModel
+import com.example.sharingang.utils.ImageAccess
 import com.example.sharingang.utils.consumeLocation
 import com.example.sharingang.utils.doOrGetPermission
 import com.example.sharingang.utils.requestPermissionLauncher
@@ -33,10 +34,7 @@ class NewItemFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        observer = ImageAccess(requireActivity()) { uri: Uri? ->
-            uri?.let { imageUri = uri
-                binding.newItemImage.setImageURI(uri) }
-        }
+        observer = ImageAccess(requireActivity())
         lifecycle.addObserver(observer)
     }
 
@@ -63,6 +61,8 @@ class NewItemFragment : Fragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_item, container, false)
 
+        observer.setupImageView(binding.newItemImage)
+
         bind()
         setupLocationCreate()
 
@@ -71,6 +71,7 @@ class NewItemFragment : Fragment() {
 
     private fun bind() {
         binding.createItemButton.setOnClickListener { view: View ->
+            imageUri = observer.getImageUri()
             viewModel.addItem(Item(
                 price = binding.price?.toDoubleOrNull() ?: 0.0,
                 description = binding.description ?: "",
@@ -86,7 +87,10 @@ class NewItemFragment : Fragment() {
             view.findNavController().navigate(R.id.action_newItemFragment_to_itemsListFragment)
         }
         binding.newItemImage.setOnClickListener {
-            observer.openGallery(requireActivity())
+            observer.openGallery()
+        }
+        binding.newItemTakePicture.setOnClickListener {
+            observer.openCamera()
         }
     }
 
