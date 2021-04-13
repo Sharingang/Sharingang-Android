@@ -35,24 +35,34 @@ class DetailedItemFragment : Fragment() {
 
     private fun shareItem() {
         val item = args.item
-        val link = generateLink(item)
+        val link = generateFirebaseDynamicLink(item)
         val shareIntent = Intent.createChooser(Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, link.toString())
-            putExtra(Intent.EXTRA_TITLE, item.title + " - " + getString(R.string.app_name))
+            putExtra(Intent.EXTRA_TITLE, generateLinkTitle(item))
             type = "text/plain"
         }, null)
         startActivity(shareIntent)
     }
 
-    private fun generateLink(item: Item): Uri {
+    private fun generateFirebaseDynamicLink(item: Item): Uri {
         val dynamicLink = Firebase.dynamicLinks.dynamicLink {
-            link = Uri.parse("https://sharingang.page.link/item?id=${item.id}")
+            link = generateDeepLink(item)
             domainUriPrefix = "https://sharingang.page.link"
             // Open links with this app on Android
             androidParameters { }
         }
 
         return dynamicLink.uri
+    }
+
+    private fun generateDeepLink(item: Item): Uri {
+        val itemDeepLinkPrefix = "https://sharingang.page.link/item?id="
+        val deepLink = itemDeepLinkPrefix + item.id
+        return Uri.parse(deepLink)
+    }
+
+    private fun generateLinkTitle(item: Item): String {
+        return item.title + " - " + getString(R.string.app_name)
     }
 }
