@@ -60,22 +60,21 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         val navController = getNavController()
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
-     */
+    */
 
     private fun handleDeepLink() {
         Firebase.dynamicLinks
             .getDynamicLink(intent)
             .addOnSuccessListener(this) { pendingDynamicLinkData ->
                 val deepLink = pendingDynamicLinkData?.link
-                if (deepLink?.path == "/item") {
-                    deepLink.getQueryParameter("id")?.let {
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            val item = itemRepository.get(it)
-                            if (item != null) {
-                                runOnUiThread {
-                                    getNavController().navigate(ItemsListFragmentDirections
-                                        .actionItemsListFragmentToDetailedItemFragment(item))
-                                }
+                val id = deepLink?.getQueryParameter("id")
+                if (deepLink?.path == "/item" && id != null) {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val item = itemRepository.get(id)
+                        if (item != null) {
+                            runOnUiThread {
+                                getNavController().navigate(ItemsListFragmentDirections
+                                    .actionItemsListFragmentToDetailedItemFragment(item))
                             }
                         }
                     }
