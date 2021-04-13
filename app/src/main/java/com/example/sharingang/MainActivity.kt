@@ -54,14 +54,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         handleDeepLink()
     }
 
-    /*
-    We don't have an option menu yet
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val navController = getNavController()
-        return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
-    }
-    */
-
     private fun handleDeepLink() {
         Firebase.dynamicLinks
             .getDynamicLink(intent)
