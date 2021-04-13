@@ -30,12 +30,19 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btn_changePfp"
+                android:id="@+id/btn_open_camera"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="0"
-                android:text="@string/change_pfp_text"
+                android:text="@string/open_camera"
                 tools:ignore="InefficientWeight" />
+
+            <Button
+                android:id="@+id/btn_open_gallery"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:text="@string/open_gallery" />
         </LinearLayout>
 
         <TextView

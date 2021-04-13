@@ -1,25 +1,41 @@
 package com.example.sharingang
 
+import android.R
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
-import android.app.Instrumentation
+import android.content.Context
 import android.content.Intent
+import android.content.pm.ResolveInfo
+import android.gesture.GestureLibraries.fromFile
+import android.net.Uri
+import android.net.Uri.fromFile
+import android.net.Uri.parse
 import android.os.Bundle
+import android.os.Parcelable
 import android.provider.MediaStore
+import android.provider.MediaStore.ACTION_IMAGE_CAPTURE
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
+import androidx.core.graphics.TypefaceCompatUtil.getTempFile
+import androidx.documentfile.provider.DocumentFile.fromFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.bumptech.glide.util.ByteBufferUtil.fromFile
 import com.example.sharingang.databinding.UserProfileFragmentBinding
 import com.example.sharingang.users.CurrentUserProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuth.getInstance
+import com.example.sharingang.utils.ImageAccess
+import com.google.android.gms.maps.model.BitmapDescriptorFactory.fromFile
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class UserProfileFragment : Fragment() {
@@ -33,13 +49,6 @@ class UserProfileFragment : Fragment() {
         fun newInstance() = UserProfileFragment()
     }
 
-    private val resultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if(result.resultCode == RESULT_OK) {
-                handle_success(result)
-            }
-        }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,7 +57,7 @@ class UserProfileFragment : Fragment() {
 
         // If no userId is provided, we get the user that is currently logged in.
         val userId = when(args.userId) {
-                null, "" -> currentUserProvider.getCurrentUserId()
+            null, "" -> currentUserProvider.getCurrentUserId()
                 else -> args.userId
 
         }
@@ -63,29 +72,19 @@ class UserProfileFragment : Fragment() {
         })
 
         binding.viewModel = viewModel
-        setupPfpButton()
-        binding.btnChangePfp.setOnClickListener() {
-            changeProfilePicture()
-        }
+        setupPfpButtons()
 
         return binding.root
     }
 
-    private fun changeProfilePicture() {
-        val pickPhotoIntent = Intent(
-            Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        )
-        resultLauncher.launch(pickPhotoIntent)
-    }
-
-    private fun setupPfpButton() {
-        binding.btnChangePfp.visibility =
-                if (currentUserProvider.getCurrentUserId() != null) View.VISIBLE
+    private fun setupPfpButtons() {
+        val buttons = Arrays.asList(binding.btnOpenGallery, binding.btnOpenCamera)
+        for(button: Button in buttons) {
+            button.visibility =
+                if(currentUserProvider.getCurrentUserId() != null) View.VISIBLE
                 else View.GONE
+        }
     }
 
-    private fun handle_success(result: ActivityResult) {
-        binding.imageView.setImageURI(result.data!!.data)
-    }
 
 }
