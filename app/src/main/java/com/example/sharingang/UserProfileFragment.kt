@@ -42,6 +42,7 @@ class UserProfileFragment : Fragment() {
     private val viewModel: UserProfileViewModel by viewModels()
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var binding: UserProfileFragmentBinding
+    private lateinit var imageAccess: ImageAccess
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
 
@@ -61,6 +62,9 @@ class UserProfileFragment : Fragment() {
                 else -> args.userId
 
         }
+        imageAccess = ImageAccess(requireActivity())
+        imageAccess.setupImageView(binding.imageView)
+        lifecycle.addObserver(imageAccess)
 
         viewModel.setUser(userId)
 
@@ -83,6 +87,16 @@ class UserProfileFragment : Fragment() {
             button.visibility =
                 if(currentUserProvider.getCurrentUserId() != null) View.VISIBLE
                 else View.GONE
+            val imageUri = imageAccess.getImageUri()
+            button.setOnClickListener {
+                binding.imageView.setImageURI(imageUri)
+            }
+        }
+        binding.btnOpenGallery.setOnClickListener {
+            imageAccess.openGallery()
+        }
+        binding.btnOpenCamera.setOnClickListener {
+            imageAccess.openCamera()
         }
     }
 
