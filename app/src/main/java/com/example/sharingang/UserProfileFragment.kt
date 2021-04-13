@@ -50,8 +50,22 @@ class UserProfileFragment : Fragment() {
         })
 
         binding.viewModel = viewModel
+        setupPfpButton()
+        binding.btnChangePfp.setOnClickListener() {
+            changeProfilePicture()
+        }
 
         return binding.root
+    }
+
+    private fun changeProfilePicture() {
+
+    }
+
+    private fun setupPfpButton() {
+        binding.btnChangePfp.visibility =
+                if (currentUserProvider.getCurrentUserId() != null) View.VISIBLE
+                else View.GONE
     }
 
 }
