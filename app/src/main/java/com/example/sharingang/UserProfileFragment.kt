@@ -1,9 +1,15 @@
 package com.example.sharingang
 
+import android.app.Activity.RESULT_OK
+import android.app.Instrumentation
+import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -26,6 +32,13 @@ class UserProfileFragment : Fragment() {
     companion object {
         fun newInstance() = UserProfileFragment()
     }
+
+    private val resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if(result.resultCode == RESULT_OK) {
+                handle_success(result)
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,13 +72,20 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun changeProfilePicture() {
-
+        val pickPhotoIntent = Intent(
+            Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        )
+        resultLauncher.launch(pickPhotoIntent)
     }
 
     private fun setupPfpButton() {
         binding.btnChangePfp.visibility =
                 if (currentUserProvider.getCurrentUserId() != null) View.VISIBLE
                 else View.GONE
+    }
+
+    private fun handle_success(result: ActivityResult) {
+        binding.imageView.setImageURI(result.data!!.data)
     }
 
 }
