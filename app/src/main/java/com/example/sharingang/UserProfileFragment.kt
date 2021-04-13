@@ -25,14 +25,20 @@ import androidx.core.graphics.TypefaceCompatUtil.getTempFile
 import androidx.documentfile.provider.DocumentFile.fromFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.util.ByteBufferUtil.fromFile
 import com.example.sharingang.databinding.UserProfileFragmentBinding
 import com.example.sharingang.users.CurrentUserProvider
+import com.example.sharingang.users.User
+import com.example.sharingang.users.UserRepository
 import com.example.sharingang.utils.ImageAccess
 import com.google.android.gms.maps.model.BitmapDescriptorFactory.fromFile
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
@@ -43,8 +49,11 @@ class UserProfileFragment : Fragment() {
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var binding: UserProfileFragmentBinding
     private lateinit var imageAccess: ImageAccess
+    private lateinit var auth: FirebaseAuth
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
+    @Inject
+    lateinit var userRepository: UserRepository
 
     companion object {
         fun newInstance() = UserProfileFragment()
@@ -62,6 +71,7 @@ class UserProfileFragment : Fragment() {
                 else -> args.userId
 
         }
+        auth = FirebaseAuth.getInstance()
         imageAccess = ImageAccess(requireActivity())
         imageAccess.setupImageView(binding.imageView)
         lifecycle.addObserver(imageAccess)
@@ -82,7 +92,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupPfpButtons() {
-        val buttons = Arrays.asList(binding.btnOpenGallery, binding.btnOpenCamera)
+        val buttons = listOf(binding.btnOpenGallery, binding.btnOpenCamera)
         for(button: Button in buttons) {
             button.visibility =
                 if(currentUserProvider.getCurrentUserId() != null) View.VISIBLE
@@ -90,6 +100,15 @@ class UserProfileFragment : Fragment() {
             val imageUri = imageAccess.getImageUri()
             button.setOnClickListener {
                 binding.imageView.setImageURI(imageUri)
+                lifecycleScope.launch(Dispatchers.IO) {
+                    userRepository.add(
+                        User(
+                            id = auth.currentUser!!.uid,
+                            name = auth.currentUser!!.displayName!!,
+                            profilePicture = imageUri.toString()
+                        )
+                    )
+                }
             }
         }
         binding.btnOpenGallery.setOnClickListener {
