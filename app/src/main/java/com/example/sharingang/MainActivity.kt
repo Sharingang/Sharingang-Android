@@ -1,7 +1,6 @@
 package com.example.sharingang
 
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -9,7 +8,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.example.sharingang.items.ItemRepository
 import com.google.android.material.navigation.NavigationView
@@ -56,9 +54,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         handleDeepLink()
     }
 
+    /*
+    We don't have an option menu yet
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return item.onNavDestinationSelected(getNavController()) || super.onOptionsItemSelected(item)
+        val navController = getNavController()
+        return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
+    */
 
     private fun handleDeepLink() {
         Firebase.dynamicLinks
