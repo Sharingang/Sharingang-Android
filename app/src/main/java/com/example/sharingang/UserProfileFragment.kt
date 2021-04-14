@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.provider.MediaStore
 import android.provider.MediaStore.ACTION_IMAGE_CAPTURE
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,10 +34,12 @@ import com.example.sharingang.databinding.UserProfileFragmentBinding
 import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.User
 import com.example.sharingang.users.UserRepository
+import com.example.sharingang.users.UserStore
 import com.example.sharingang.utils.ImageAccess
 import com.google.android.gms.maps.model.BitmapDescriptorFactory.fromFile
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.DEBUG_PROPERTY_NAME
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
@@ -49,7 +52,6 @@ class UserProfileFragment : Fragment() {
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var binding: UserProfileFragmentBinding
     private lateinit var imageAccess: ImageAccess
-    private lateinit var auth: FirebaseAuth
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
     @Inject
@@ -71,7 +73,6 @@ class UserProfileFragment : Fragment() {
                 else -> args.userId
 
         }
-        auth = FirebaseAuth.getInstance()
         imageAccess = ImageAccess(requireActivity())
         imageAccess.setupImageView(binding.imageView)
         lifecycle.addObserver(imageAccess)
@@ -101,13 +102,14 @@ class UserProfileFragment : Fragment() {
             button.setOnClickListener {
                 binding.imageView.setImageURI(imageUri)
                 lifecycleScope.launch(Dispatchers.IO) {
-                    userRepository.add(
-                        User(
-                            id = auth.currentUser!!.uid,
-                            name = auth.currentUser!!.displayName!!,
-                            profilePicture = imageUri.toString()
-                        )
+                    val user = userRepository.get(currentUserProvider.getCurrentUserId()!!)
+                    val updatedUser = user!!.copy(
+                        id = user.id,
+                        name = user.name,
+                        profilePicture = imageUri.toString()
                     )
+                    userRepository.add(updatedUser)
+
                 }
             }
         }
