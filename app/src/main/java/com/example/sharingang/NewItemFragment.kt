@@ -14,6 +14,7 @@ import androidx.navigation.findNavController
 import com.example.sharingang.databinding.FragmentNewItemBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsViewModel
+import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.utils.ImageAccess
 import com.example.sharingang.utils.consumeLocation
 import com.example.sharingang.utils.doOrGetPermission
@@ -21,7 +22,10 @@ import com.example.sharingang.utils.requestPermissionLauncher
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.CancellationTokenSource
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class NewItemFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
@@ -32,11 +36,9 @@ class NewItemFragment : Fragment() {
 
     lateinit var binding: FragmentNewItemBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        observer = ImageAccess(requireActivity())
-        lifecycle.addObserver(observer)
-    }
+    @Inject
+    lateinit var currentUserProvider: CurrentUserProvider
+    private var userId: String? = null
 
     private lateinit var fusedLocationCreate: FusedLocationProviderClient
 
@@ -54,12 +56,19 @@ class NewItemFragment : Fragment() {
         )
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        observer = ImageAccess(requireActivity())
+        lifecycle.addObserver(observer)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_item, container, false)
+
+        userId = currentUserProvider.getCurrentUserId()
 
         observer.setupImageView(binding.newItemImage)
 
@@ -81,7 +90,8 @@ class NewItemFragment : Fragment() {
                 latitude = binding.latitude?.toDoubleOrNull() ?: 0.0,
                 longitude = binding.longitude?.toDoubleOrNull() ?: 0.0,
                 sold = false,
-                imageUri = imageUri?.toString()
+                imageUri = imageUri?.toString(),
+                userId = userId
             ))
             observer.unregister()
             view.findNavController().navigate(R.id.action_newItemFragment_to_itemsListFragment)
