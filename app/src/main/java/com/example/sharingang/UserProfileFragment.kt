@@ -10,8 +10,6 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.UserProfileFragmentBinding
 import com.example.sharingang.users.CurrentUserProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuth.getInstance
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -23,10 +21,6 @@ class UserProfileFragment : Fragment() {
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
 
-    companion object {
-        fun newInstance() = UserProfileFragment()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,7 +31,6 @@ class UserProfileFragment : Fragment() {
         val userId = when(args.userId) {
                 null, "" -> currentUserProvider.getCurrentUserId()
                 else -> args.userId
-
         }
 
         viewModel.setUser(userId)

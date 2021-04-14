@@ -6,7 +6,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.HashSet
 
 /**
  * ItemsViewModel models the state of the fragment for viewing items
@@ -30,13 +29,9 @@ class ItemsViewModel @Inject constructor(
     val navigateToEditItem: LiveData<Item?>
         get() = _navigateToEditItem
 
-    private val _focusedItem = MutableLiveData<Item?>()
-    val focusedItem: LiveData<Item?>
-        get() = _focusedItem
-
-    private val _viewingItem = MutableLiveData(false)
-    val viewingItem: LiveData<Boolean>
-        get() = _viewingItem
+    private val _navigateToDetailItem = MutableLiveData<Item?>()
+    val navigateToDetailItem: LiveData<Item?>
+        get() = _navigateToDetailItem
 
     private val _refreshing = MutableLiveData(false)
     val refreshing: LiveData<Boolean>
@@ -112,12 +107,11 @@ class ItemsViewModel @Inject constructor(
     }
 
     fun onViewItem(item: Item) {
-        _focusedItem.value = item
-        _viewingItem.value = true
+        _navigateToDetailItem.value = item
     }
 
     fun onViewItemNavigated() {
-        _viewingItem.value = false
+        _navigateToDetailItem.value = null
     }
 
     fun onSellItem(item: Item) {
@@ -139,7 +133,7 @@ class ItemsViewModel @Inject constructor(
             OBSERVABLES.SEARCH_RESULTS -> searchResults
         }
         observable.observe(LifeCycleOwner, {
-            it?.let { adapter.submitList(it) }
+            adapter.submitList(it)
         })
     }
 
