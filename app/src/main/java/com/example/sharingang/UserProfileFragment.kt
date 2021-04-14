@@ -1,6 +1,7 @@
 package com.example.sharingang
 
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -79,8 +80,6 @@ class UserProfileFragment : Fragment() {
                 lifecycleScope.launch(Dispatchers.IO) {
                     val user = userRepository.get(currentUserProvider.getCurrentUserId()!!)
                     val updatedUser = user!!.copy(
-                        id = user.id,
-                        name = user.name,
                         profilePicture = imageUri.toString()
                     )
                     userRepository.add(updatedUser)
