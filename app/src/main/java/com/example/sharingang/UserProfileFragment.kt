@@ -1,48 +1,23 @@
 package com.example.sharingang
 
-import android.R
-import android.annotation.SuppressLint
-import android.app.Activity.RESULT_OK
-import android.content.Context
-import android.content.Intent
-import android.content.pm.ResolveInfo
-import android.gesture.GestureLibraries.fromFile
-import android.net.Uri
-import android.net.Uri.fromFile
-import android.net.Uri.parse
+
 import android.os.Bundle
-import android.os.Parcelable
-import android.provider.MediaStore
-import android.provider.MediaStore.ACTION_IMAGE_CAPTURE
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.FileProvider
-import androidx.core.graphics.TypefaceCompatUtil.getTempFile
-import androidx.documentfile.provider.DocumentFile.fromFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.bumptech.glide.util.ByteBufferUtil.fromFile
 import com.example.sharingang.databinding.UserProfileFragmentBinding
 import com.example.sharingang.users.CurrentUserProvider
-import com.example.sharingang.users.User
 import com.example.sharingang.users.UserRepository
-import com.example.sharingang.users.UserStore
 import com.example.sharingang.utils.ImageAccess
-import com.google.android.gms.maps.model.BitmapDescriptorFactory.fromFile
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.DEBUG_PROPERTY_NAME
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 
