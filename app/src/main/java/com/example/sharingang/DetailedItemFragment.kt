@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.sharingang.databinding.FragmentDetailedItemBinding
 import com.example.sharingang.items.Item
@@ -31,15 +32,20 @@ class DetailedItemFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_detailed_item, container, false)
 
         binding.item = args.item
-
-        viewModel.setUser(args.item.userId)
-
-        viewModel.user.observe(viewLifecycleOwner, { user ->
-            binding.username = "Posted by " + user?.name
-        })
-
         binding.shareButton.setOnClickListener { shareItem() }
 
+        viewModel.setUser(args.item.userId)
+        viewModel.user.observe(viewLifecycleOwner, { user ->
+            binding.username = "Posted by " + user?.name
+            binding.itemPostedBy.visibility = if (user != null) View.VISIBLE else View.GONE
+            binding.itemPostedBy.setOnClickListener { view ->
+                view.findNavController().navigate(
+                    DetailedItemFragmentDirections.actionDetailedItemFragmentToUserProfileFragment(
+                        user?.id
+                    )
+                )
+            }
+        })
         return binding.root
     }
 
