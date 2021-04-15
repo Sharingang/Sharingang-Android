@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.sharingang.databinding.FragmentDetailedItemBinding
 import com.example.sharingang.items.Item
+import com.example.sharingang.utils.ImageAccess
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
@@ -24,6 +25,14 @@ class DetailedItemFragment : Fragment() {
     private val args: DetailedItemFragmentArgs by navArgs()
     private val viewModel: UserProfileViewModel by viewModels()
 
+    private lateinit var observer: ImageAccess
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        observer = ImageAccess(requireActivity())
+        lifecycle.addObserver(observer)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,6 +41,11 @@ class DetailedItemFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_detailed_item, container, false)
 
         binding.item = args.item
+        observer.setupImageView(binding.editItemImage)
+        args.item.imageUri?.let {
+            binding.editItemImage.setImageURI(Uri.parse(it))
+        }
+
         binding.shareButton.setOnClickListener { shareItem() }
 
         viewModel.setUser(args.item.userId)
