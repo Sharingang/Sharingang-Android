@@ -44,7 +44,7 @@ class ItemShareLinkTest {
 
         onView(withId(R.id.itemTitle))
             .check(matches(withText(itemTitle)))
-        onView(withId(R.id.edit_item_image)).check(matches(isDisplayed()))
+        onView(withId(R.id.detailed_item_image)).check(matches(isDisplayed()))
 
         Intents.init()
         onView(withId(R.id.shareButton)).perform(click())
