@@ -65,6 +65,7 @@ class DetailedItemFragmentTest {
 
         onView(withId(R.id.itemTitle))
             .check(matches(withText(itemTitle)))
+        onView(withId(R.id.edit_item_image)).check(matches(isDisplayed()))
 
         onView(withId(R.id.itemPostedBy)).perform(click())
         val textView = onView(withId(R.id.nameText))
