@@ -1,12 +1,13 @@
+# Necessary in order to adjust maintainability checks
+version: "2"
+checks:
+  similar-code:
+    config:
+      threshold: 100
+  identical-code:
+    config:
+      threshold: 100
 exclude_patterns:
   - "**/test/"
   - "**/androidTest/"
   - "**test"
-similar-code:
-  enabled: true
-  config:
-    threshold: 100
-identical-code:
-  enabled: true
-  config:
-    threshold: 100
