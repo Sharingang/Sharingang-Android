@@ -8,6 +8,9 @@
         <variable
             name="item"
             type="com.example.sharingang.items.Item" />
+        <variable
+            name="username"
+            type="String" />
     </data>
 
     <LinearLayout
@@ -47,6 +50,14 @@
             android:text="@{item.description}"
             android:textSize="18sp"
             tools:text="Here goes the description of the item." />
+
+        <TextView
+            android:id="@+id/itemPostedBy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="@{username}"
+            tools:text="Posted by TestUser" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/shareButton"

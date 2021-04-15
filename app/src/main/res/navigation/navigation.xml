@@ -60,6 +60,9 @@
         <argument
             android:name="item"
             app:argType="com.example.sharingang.items.Item" />
+        <action
+            android:id="@+id/action_detailedItemFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"

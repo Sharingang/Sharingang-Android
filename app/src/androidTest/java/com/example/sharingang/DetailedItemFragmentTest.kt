@@ -7,12 +7,12 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.hamcrest.Matchers
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -66,6 +66,14 @@ class DetailedItemFragmentTest {
         onView(withId(R.id.itemTitle))
             .check(matches(withText(itemTitle)))
 
+        onView(withId(R.id.itemPostedBy)).perform(click())
+        val textView = onView(withId(R.id.nameText))
+        textView.check(matches(withText(FakeCurrentUserProvider.fakeUser.name)))
+
+        val backButton =
+            onView(Matchers.allOf(withContentDescription("Navigate up"), isDisplayed()))
+        backButton.perform(click())
+
         Intents.init()
         onView(withId(R.id.shareButton)).perform(click())
 
@@ -76,7 +84,8 @@ class DetailedItemFragmentTest {
         val link = sendIntent?.extras?.getString(Intent.EXTRA_TEXT)
         Intents.release()
 
-        val linkPrefix = "https://sharingang.page.link?apn=com.example.sharingang&link=https%3A%2F%2Fsharingang.page.link%2Fitem%3Fid%3D"
+        val linkPrefix =
+            "https://sharingang.page.link?apn=com.example.sharingang&link=https%3A%2F%2Fsharingang.page.link%2Fitem%3Fid%3D"
         assert(link?.startsWith(linkPrefix) ?: false)
     }
 }
