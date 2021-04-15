@@ -28,6 +28,8 @@
     <string name="clear_search_button">Clear search</string>
     <string name="share">Share</string>
     <string name="take_picture">Take Picture</string>
+    <string name="add_wishlist">Add wishlist</string>
+    <string name="remove_wishlist">Remove wishlist</string>
     <string-array name="categories">
         <item>None</item>
         <item>Book</item>
