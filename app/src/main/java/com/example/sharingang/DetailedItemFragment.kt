@@ -36,7 +36,7 @@ class DetailedItemFragment : Fragment() {
 
         viewModel.setUser(args.item.userId)
         viewModel.user.observe(viewLifecycleOwner, { user ->
-            binding.username = "Posted by " + user?.name
+            binding.username = "Posted by ${user?.name}"
             binding.itemPostedBy.visibility = if (user != null) View.VISIBLE else View.GONE
             binding.itemPostedBy.setOnClickListener { view ->
                 view.findNavController().navigate(
