@@ -41,9 +41,9 @@ class DetailedItemFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_detailed_item, container, false)
 
         binding.item = args.item
-        observer.setupImageView(binding.editItemImage)
+        observer.setupImageView(binding.detailedItemImage)
         args.item.imageUri?.let {
-            binding.editItemImage.setImageURI(Uri.parse(it))
+            binding.detailedItemImage.setImageURI(Uri.parse(it))
         }
 
         binding.shareButton.setOnClickListener { shareItem() }
