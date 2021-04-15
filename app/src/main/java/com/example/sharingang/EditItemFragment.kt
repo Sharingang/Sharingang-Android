@@ -77,7 +77,7 @@ class EditItemFragment : Fragment() {
                     categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
                     latitude = binding.latitude?.toDoubleOrNull() ?: 0.0,
                     longitude = binding.longitude?.toDoubleOrNull() ?: 0.0,
-                    imageUri = imageUri?.toString()
+                    imageUri = if(imageUri != null) imageUri.toString() else existingItem.imageUri
                 )
             )
             observer.unregister()
