@@ -1,18 +1,12 @@
 package com.example.sharingang
 
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -22,17 +16,13 @@ import com.example.sharingang.databinding.UserProfileFragmentBinding
 import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.UserRepository
 import com.example.sharingang.utils.ImageAccess
-import com.google.firebase.firestore.remote.Datastore
 
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.util.prefs.Preferences
+
 import javax.inject.Inject
-import kotlin.properties.ReadOnlyProperty
-import kotlin.reflect.KProperty
+
 
 
 @AndroidEntryPoint
