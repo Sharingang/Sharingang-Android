@@ -49,7 +49,7 @@ abstract class AbstractFirestoreStore<T: Any>(
             firestore.collection(collectionName).document(id)
                 .set(element)
                 .await()
-            Log.d(TAG, "Updated $collectionName with ID: $id")
+            Log.d(TAG, "Updated $collectionName with LOL ID: $id")
             true
         } catch (e: Exception) {
             Log.e(TAG, "Error updating $collectionName with ID: $id", e)

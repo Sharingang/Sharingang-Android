@@ -2,10 +2,7 @@ package com.example.sharingang.users
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Index
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.example.sharingang.items.Item
 import java.util.Date
 
@@ -30,7 +27,7 @@ data class User(
     /** URLs of the images */
     val profilePicture: String? = null,
 
-    val wishlist: MutableLiveData<MutableList<String>> = MutableLiveData(ArrayList<String>()),
+    var wishlist: String = "",
 
     @ServerTimestamp
     val createdAt: Date? = null,
