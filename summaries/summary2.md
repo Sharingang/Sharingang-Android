@@ -1,5 +1,13 @@
 # Week 2
 
+## Bastien
+I checked with Samuel the integration concerning the database and the other features.
+Then I started researching how to add images from the gallery in the app and started implementing it.
+
+The feature is not finished because I needed to refactor the code, but I can't find a way to make it work while being separated despite receiving help from Lucas.
+
+My time estimate was again far from reality.
+
 ## Ben
 A feature that has been added this week is putting the price into the New and Edit item view. Therefore, when a user wants to create a new item or edit an already existing one, they can now also set the price and edit it, not only the title and the description. When the field for the price is left blank, a default price of 0.0 is set for that particular item.
 
@@ -38,14 +46,6 @@ This week I finished the kotlin course from the previous sprint, I also implemen
 I had estimated only an hour for this task but in the end it took over 6h to complete. Merging with the main branch also proved quite difficult as my branch was many commits behind.
 
 I was unable to finish the implementation of the search functionality due to time constraints so I intend to finish it during the next sprint.
-
-## Bastien
-I checked with Samuel the integration concerning the database and the other features.
-Then I started researching how to add images from the gallery in the app and started implementing it.
-
-The feature is not finished because I needed to refactor the code, but I can't find a way to make it work while being separated despite receiving help from Lucas.
-
-My time estimate was again far from reality.
 
 ## Overall team
 We only had one stand-up meeting at the beginning of the week but we stayed in contact on the WhatsApp group.
