@@ -19,7 +19,6 @@ import kotlin.collections.ArrayList
 
 @HiltViewModel
 class UserProfileViewModel @Inject constructor(
-    private val itemRepository : ItemRepository,
     private val currentUserProvider: CurrentUserProvider,
     private val userRepository: UserRepository
 ) : ViewModel() {
