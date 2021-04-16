@@ -41,6 +41,11 @@ class UserProfileFragment : Fragment() {
         fun newInstance() = UserProfileFragment()
     }
 
+    enum class ImageAccessType {
+        CAMERA,
+        GALLERY
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,7 +58,6 @@ class UserProfileFragment : Fragment() {
                 else -> args.userId
 
         }
-
         imageAccess = ImageAccess(requireActivity())
         imageAccess.setupImageView(binding.imageView)
         lifecycle.addObserver(imageAccess)
@@ -77,11 +81,13 @@ class UserProfileFragment : Fragment() {
                 else View.GONE
         }
         binding.btnApply.visibility = View.GONE
+        setupActionButtons()
+        setupApplyButton()
+    }
+    private fun setupActionButtons() {
         binding.btnOpenGallery.setOnClickListener {
             imageAccess.openGallery()
             binding.btnApply.visibility = View.VISIBLE
-
-
 
         }
         binding.btnOpenCamera.setOnClickListener {
@@ -90,6 +96,9 @@ class UserProfileFragment : Fragment() {
 
 
         }
+    }
+
+    private fun setupApplyButton() {
         binding.btnApply.setOnClickListener {
             imageUri = imageAccess.getImageUri()
             if (imageUri != Uri.EMPTY && imageUri != null) {
