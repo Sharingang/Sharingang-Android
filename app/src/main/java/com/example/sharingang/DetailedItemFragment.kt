@@ -59,7 +59,7 @@ class DetailedItemFragment : Fragment() {
         userViewModel.wishlistContains.observe(viewLifecycleOwner, {
             binding.addToWishlist.text = getButtonText(it)
         })
-        userViewModel.wishlistContains(args.item, currentUserProvider.getCurrentUserId())
+        userViewModel.wishlistContains(args.item)
     }
 
     private fun getButtonText(contains: Boolean): String {
@@ -68,8 +68,7 @@ class DetailedItemFragment : Fragment() {
     }
 
     private fun updateWishlist(binding: FragmentDetailedItemBinding){
-        val userId = currentUserProvider.getCurrentUserId()
-        userViewModel.modifyWishList(args.item, userId)
+        userViewModel.modifyWishList(args.item)
     }
 
     private fun shareItem() {

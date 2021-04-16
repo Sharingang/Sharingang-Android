@@ -32,20 +32,16 @@ object DateConverter {
         return date.time
     }
 
-
-    @RequiresApi(Build.VERSION_CODES.N)
     @TypeConverter
-    fun fromList(wishlist: MutableLiveData<List<String>>): String{
-        val returnString : StringJoiner = StringJoiner(",")
-        wishlist!!.value!!.map { str ->
-            returnString.add(str)
+    fun toList(stringList: String?): List<String?>{
+        if(stringList == null){
+            return ArrayList()
         }
-        return returnString.toString()
+        return stringList.split(',')
     }
 
     @TypeConverter
-    fun toList(data: String): MutableLiveData<MutableList<String>>? {
-        val list = data.split(',')
-        return MutableLiveData(ArrayList(list))
+    fun fromList(list : List<String?>): String {
+        return list.joinToString(separator = ",")
     }
 }

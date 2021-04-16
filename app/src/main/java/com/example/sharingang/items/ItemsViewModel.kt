@@ -1,6 +1,9 @@
 package com.example.sharingang.items
 
 import androidx.lifecycle.*
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import com.example.sharingang.ItemsListFragmentDirections
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -134,6 +137,26 @@ class ItemsViewModel @Inject constructor(
         }
         observable.observe(LifeCycleOwner, {
             adapter.submitList(it)
+        })
+    }
+
+    fun setupItemNavigation(LifeCycleOwner: LifecycleOwner, navController: NavController){
+        navigateToEditItem.observe(LifeCycleOwner, { item ->
+            item?.let {
+                navController.navigate(
+                    ItemsListFragmentDirections.actionItemsListFragmentToEditItemFragment(item)
+                )
+                onEditItemNavigated()
+            }
+        })
+
+        navigateToDetailItem.observe(LifeCycleOwner, { item ->
+            item?.let {
+                navController.navigate(
+                    ItemsListFragmentDirections.actionItemsListFragmentToDetailedItemFragment(item)
+                )
+                onViewItemNavigated()
+            }
         })
     }
 
