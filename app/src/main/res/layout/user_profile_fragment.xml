@@ -5,6 +5,9 @@
         <variable
             name="viewModel"
             type="com.example.sharingang.UserProfileViewModel" />
+        <variable
+            name="pfp_changed"
+            type="Boolean" />
     </data>
 
     <LinearLayout
@@ -35,14 +38,28 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0"
                 android:text="@string/open_camera"
-                tools:ignore="InefficientWeight" />
+                tools:ignore="ButtonStyle,InefficientWeight" />
 
             <Button
                 android:id="@+id/btn_open_gallery"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="0"
-                android:text="@string/open_gallery" />
+                android:text="@string/open_gallery"
+                tools:ignore="ButtonStyle" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnApply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/apply_changes" />
         </LinearLayout>
 
         <TextView

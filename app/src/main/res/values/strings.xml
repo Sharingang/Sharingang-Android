@@ -30,6 +30,7 @@
     <string name="open_gallery">Open Gallery</string>
     <string name="open_camera">Open Camera</string>
     <string name="txt_user_profile_picture">User Profile Picture</string>
+    <string name="apply_changes">Apply Changes</string>
     <string-array name="categories">
         <item>None</item>
         <item>Book</item>
