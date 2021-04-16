@@ -1,7 +1,6 @@
 package com.example.sharingang
 
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +15,7 @@ import com.example.sharingang.databinding.UserProfileFragmentBinding
 import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.UserRepository
 import com.example.sharingang.utils.ImageAccess
+
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -78,6 +78,7 @@ class UserProfileFragment : Fragment() {
             button.setOnClickListener {
                 binding.imageView.setImageURI(imageUri)
                 lifecycleScope.launch(Dispatchers.IO) {
+
                     val user = userRepository.get(currentUserProvider.getCurrentUserId()!!)
                     val updatedUser = user!!.copy(
                         profilePicture = imageUri.toString()
