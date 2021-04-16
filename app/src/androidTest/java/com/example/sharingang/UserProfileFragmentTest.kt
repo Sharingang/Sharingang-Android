@@ -7,6 +7,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
@@ -15,7 +16,9 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
 class UserProfileFragmentTest {
 
@@ -48,7 +51,7 @@ class UserProfileFragmentTest {
         onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
     }
 
-    /*
+
     @Test
     fun applyButtonIsDisplayedUponClickOnOpenCamera() {
         val device: UiDevice = UiDevice.getInstance(getInstrumentation())
@@ -70,5 +73,5 @@ class UserProfileFragmentTest {
         onView(withId(R.id.btnApply)).perform(click())
         onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
     }
-    */
+
 }
