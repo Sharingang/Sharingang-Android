@@ -70,6 +70,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
+        doOrGetPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            { startLocationUpdates() },
+            requestPermissionLauncher
+        )
         return binding.root
     }
 
@@ -148,12 +154,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onResume() {
         binding.mapView.onResume()
-        doOrGetPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            { startLocationUpdates() },
-            requestPermissionLauncher
-        )
         super.onResume()
     }
 
