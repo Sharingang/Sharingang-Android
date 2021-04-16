@@ -94,17 +94,15 @@ class UserProfileFragment : Fragment() {
     private fun setupApplyButton() {
         binding.btnApply.setOnClickListener {
             imageUri = imageAccess.getImageUri()
-            if (imageUri != Uri.EMPTY && imageUri != null) {
-                binding.imageView.setImageURI(imageUri)
-                lifecycleScope.launch(Dispatchers.IO) {
-                    val user = userRepository.get(currentUserProvider.getCurrentUserId()!!)
-                    val updatedUser = user!!.copy(
-                        id = user.id,
-                        name = user.name,
-                        profilePicture = imageUri.toString()
-                    )
-                    userRepository.add(updatedUser)
-                }
+            binding.imageView.setImageURI(imageUri)
+            lifecycleScope.launch(Dispatchers.IO) {
+                val user = userRepository.get(currentUserProvider.getCurrentUserId()!!)
+                val updatedUser = user!!.copy(
+                    id = user.id,
+                    name = user.name,
+                    profilePicture = imageUri.toString()
+                )
+                userRepository.add(updatedUser)
             }
             binding.btnApply.visibility = View.GONE
         }
