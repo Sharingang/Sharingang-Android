@@ -31,6 +31,7 @@ class UserProfileFragment : Fragment() {
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var binding: UserProfileFragmentBinding
     private lateinit var imageAccess: ImageAccess
+    private var imageUri: Uri? = null
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
     @Inject
@@ -52,6 +53,9 @@ class UserProfileFragment : Fragment() {
                 else -> args.userId
 
         }
+        imageAccess = ImageAccess(requireActivity())
+        imageAccess.setupImageView(binding.imageView)
+        lifecycle.addObserver(imageAccess)
         viewModel.setUser(userId)
         viewModel.user.observe(viewLifecycleOwner, { user ->
             if (user != null) {
@@ -60,22 +64,16 @@ class UserProfileFragment : Fragment() {
             }
         })
         binding.viewModel = viewModel
-        setupImageAccess()
         setupPfpButtons()
         return binding.root
-    }
-
-    private fun setupImageAccess() {
-        val activity = requireActivity()
-        imageAccess = ImageAccess(activity)
-        imageAccess.setupImageView(binding.imageView)
-        lifecycle.addObserver(imageAccess)
     }
 
     private fun setupPfpButtons() {
         val buttons = listOf(binding.btnOpenGallery, binding.btnOpenCamera, binding.btnApply)
         for(button: Button in buttons) {
-            fixButtonDisplay(button)
+            button.visibility =
+                if(currentUserProvider.getCurrentUserId() != null) View.VISIBLE
+                else View.GONE
         }
         binding.btnApply.visibility = View.GONE
         setupActionButtons()
@@ -83,41 +81,32 @@ class UserProfileFragment : Fragment() {
     }
     private fun setupActionButtons() {
         val buttons = listOf(binding.btnOpenCamera, binding.btnOpenGallery)
-        val buttonApply = binding.btnApply
         for(button: Button in buttons) {
             button.setOnClickListener {
-                buttonApply.visibility = View.VISIBLE
+                binding.btnApply.visibility = View.VISIBLE
                 if(button == binding.btnOpenCamera) imageAccess.openCamera()
-                else {
-                    imageAccess.openGallery()
-                }
+                else imageAccess.openGallery()
             }
 
         }
     }
 
     private fun setupApplyButton() {
-        val imageUri = imageAccess.getImageUri()
-        val btnApply = binding.btnApply
-        val currentImageView = binding.imageView
-        btnApply.setOnClickListener {
+        binding.btnApply.setOnClickListener {
+            imageUri = imageAccess.getImageUri()
             if (imageUri != Uri.EMPTY && imageUri != null) {
-                currentImageView.setImageURI(imageAccess.getImageUri())
+                binding.imageView.setImageURI(imageUri)
                 lifecycleScope.launch(Dispatchers.IO) {
-                    userRepository.add(userRepository.get(currentUserProvider.getCurrentUserId()!!)!!
-                        .copy(profilePicture = imageUri.toString()))
+                    val user = userRepository.get(currentUserProvider.getCurrentUserId()!!)
+                    val updatedUser = user!!.copy(
+                        id = user.id,
+                        name = user.name,
+                        profilePicture = imageUri.toString()
+                    )
+                    userRepository.add(updatedUser)
                 }
             }
-            btnApply.visibility = View.GONE
-        }
-    }
-
-    private fun fixButtonDisplay(button: Button) {
-        if(currentUserProvider.getCurrentUserId() != null) {
-            button.visibility = View.VISIBLE
-        }
-        else {
-            button.visibility = View.GONE
+            binding.btnApply.visibility = View.GONE
         }
     }
 
