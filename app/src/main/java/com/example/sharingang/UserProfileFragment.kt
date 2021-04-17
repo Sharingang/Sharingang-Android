@@ -14,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.UserProfileFragmentBinding
 import com.example.sharingang.users.CurrentUserProvider
+import com.example.sharingang.users.User
 import com.example.sharingang.users.UserRepository
 import com.example.sharingang.utils.ImageAccess
 
@@ -32,6 +33,7 @@ class UserProfileFragment : Fragment() {
     private lateinit var binding: UserProfileFragmentBinding
     private lateinit var imageAccess: ImageAccess
     private var imageUri: Uri? = null
+    private var currentUserId: String? = ""
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
     @Inject
@@ -46,10 +48,10 @@ class UserProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = UserProfileFragmentBinding.inflate(inflater, container, false)
-
+        currentUserId = currentUserProvider.getCurrentUserId()
         // If no userId is provided, we get the user that is currently logged in.
         val userId = when(args.userId) {
-            null, "" -> currentUserProvider.getCurrentUserId()
+            null, "" -> currentUserId
                 else -> args.userId
 
         }
@@ -69,10 +71,11 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupPfpButtons() {
+        currentUserId = currentUserProvider.getCurrentUserId()
         val buttons = listOf(binding.btnOpenGallery, binding.btnOpenCamera, binding.btnApply)
         for(button: Button in buttons) {
             button.visibility =
-                if(currentUserProvider.getCurrentUserId() != null) View.VISIBLE
+                if(currentUserId != null) View.VISIBLE
                 else View.GONE
         }
         binding.btnApply.visibility = View.GONE
@@ -87,7 +90,6 @@ class UserProfileFragment : Fragment() {
                 if(button == binding.btnOpenCamera) imageAccess.openCamera()
                 else imageAccess.openGallery()
             }
-
         }
     }
 
@@ -97,9 +99,8 @@ class UserProfileFragment : Fragment() {
             if (imageUri != Uri.EMPTY && imageUri != null) {
                 binding.imageView.setImageURI(imageUri)
                 lifecycleScope.launch(Dispatchers.IO) {
-                    val updatedUser = userRepository.get(currentUserProvider.getCurrentUserId()!!)!!
-                        .copy(profilePicture = imageUri.toString())
-                    userRepository.add(updatedUser)
+                    userRepository.add(userRepository.get(currentUserId!!)!!
+                        .copy(profilePicture = imageUri.toString()))
                 }
             }
             binding.btnApply.visibility = View.GONE
