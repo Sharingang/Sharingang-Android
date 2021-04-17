@@ -83,9 +83,10 @@ class UserProfileFragment : Fragment() {
     }
     private fun setupActionButtons() {
         val buttons = listOf(binding.btnOpenCamera, binding.btnOpenGallery)
+        val buttonApply = binding.btnApply
         for(button: Button in buttons) {
             button.setOnClickListener {
-                binding.btnApply.visibility = View.VISIBLE
+                buttonApply.visibility = View.VISIBLE
                 if(button == binding.btnOpenCamera) imageAccess.openCamera()
                 else {
                     imageAccess.openGallery()
@@ -97,16 +98,17 @@ class UserProfileFragment : Fragment() {
 
     private fun setupApplyButton() {
         val imageUri = imageAccess.getImageUri()
-        binding.btnApply.setOnClickListener {
+        val btnApply = binding.btnApply
+        val currentImageView = binding.imageView
+        btnApply.setOnClickListener {
             if (imageUri != Uri.EMPTY && imageUri != null) {
-                binding.imageView.setImageURI(imageAccess.getImageUri())
+                currentImageView.setImageURI(imageAccess.getImageUri())
                 lifecycleScope.launch(Dispatchers.IO) {
-                    val user = userRepository.get(currentUserProvider.getCurrentUserId()!!)!!
-                    val updatedUser = user.copy(profilePicture = imageUri.toString())
-                    userRepository.add(updatedUser)
+                    userRepository.add(userRepository.get(currentUserProvider.getCurrentUserId()!!)!!
+                        .copy(profilePicture = imageUri.toString()))
                 }
             }
-            binding.btnApply.visibility = View.GONE
+            btnApply.visibility = View.GONE
         }
     }
 
