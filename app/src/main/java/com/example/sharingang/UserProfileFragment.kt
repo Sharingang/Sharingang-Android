@@ -97,12 +97,8 @@ class UserProfileFragment : Fragment() {
             if (imageUri != Uri.EMPTY && imageUri != null) {
                 binding.imageView.setImageURI(imageUri)
                 lifecycleScope.launch(Dispatchers.IO) {
-                    val user = userRepository.get(currentUserProvider.getCurrentUserId()!!)
-                    val updatedUser = user!!.copy(
-                        id = user.id,
-                        name = user.name,
-                        profilePicture = imageUri.toString()
-                    )
+                    val updatedUser = userRepository.get(currentUserProvider.getCurrentUserId()!!)!!
+                        .copy(profilePicture = imageUri.toString())
                     userRepository.add(updatedUser)
                 }
             }
