@@ -98,7 +98,6 @@ class AccountFragment : Fragment() {
 
     private fun addUserToDatabase(user: FirebaseUser) {
         lifecycleScope.launch(Dispatchers.IO) {
-            if(userRepository.get(user.uid) == null) {
                 userRepository.add(
                     User(
                         id = user.uid,
@@ -106,7 +105,6 @@ class AccountFragment : Fragment() {
                         profilePicture = user.photoUrl?.toString()
                     )
                 )
-            }
         }
     }
 
