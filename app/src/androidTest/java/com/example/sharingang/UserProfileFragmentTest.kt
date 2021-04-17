@@ -2,12 +2,14 @@ package com.example.sharingang
 
 
 import android.Manifest
+import android.bluetooth.BluetoothClass
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
@@ -52,13 +54,12 @@ class UserProfileFragmentTest {
     }
 
 
-    /*
+
     @Test
     fun applyButtonIsDisplayedUponClickOnOpenCamera() {
-        val device: UiDevice = UiDevice.getInstance(getInstrumentation())
         navigate_to(R.id.userProfileFragment)
         onView(withId(R.id.btn_open_camera)).perform(click())
-        device.pressBack()
+        UiDevice.getInstance(getInstrumentation()).pressBack()
         onView(withId(R.id.btnApply)).check(matches(isDisplayed()))
         onView(withId(R.id.btnApply)).perform(click())
         onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
@@ -66,14 +67,13 @@ class UserProfileFragmentTest {
     }
     @Test
     fun applyButtonIsDisplayedUponClickOnOpenGallery() {
-        val device: UiDevice = UiDevice.getInstance(getInstrumentation())
         navigate_to(R.id.userProfileFragment)
         onView(withId(R.id.btn_open_gallery)).perform(click())
-        device.pressBack()
+        UiDevice.getInstance(getInstrumentation()).pressBack()
         onView(withId(R.id.btnApply)).check(matches(isDisplayed()))
         onView(withId(R.id.btnApply)).perform(click())
         onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
     }
-    */
+
 
 }
