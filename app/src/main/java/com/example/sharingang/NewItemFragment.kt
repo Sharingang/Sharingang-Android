@@ -115,18 +115,7 @@ class NewItemFragment : Fragment() {
         binding.createItemButton.setOnClickListener { view: View ->
             imageUri = observer.getImageUri()
             viewModel.addItem(
-                Item(
-                    price = binding.price?.toDoubleOrNull() ?: 0.0,
-                    description = binding.description ?: "",
-                    title = binding.title ?: "",
-                    category = binding.categorySpinner.selectedItemPosition,
-                    categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
-                    latitude = binding.latitude?.toDoubleOrNull() ?: 0.0,
-                    longitude = binding.longitude?.toDoubleOrNull() ?: 0.0,
-                    sold = false,
-                    imageUri = imageUri?.toString(),
-                    userId = userId
-                )
+                itemToAdd()
             )
             observer.unregister()
             view.findNavController().navigate(R.id.action_newItemFragment_to_itemsListFragment)
@@ -137,6 +126,21 @@ class NewItemFragment : Fragment() {
         binding.newItemTakePicture.setOnClickListener {
             observer.openCamera()
         }
+    }
+
+    private fun itemToAdd(): Item {
+        return Item(
+            price = binding.price?.toDoubleOrNull() ?: 0.0,
+            description = binding.description ?: "",
+            title = binding.title ?: "",
+            category = binding.categorySpinner.selectedItemPosition,
+            categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
+            latitude = binding.latitude?.toDoubleOrNull() ?: 0.0,
+            longitude = binding.longitude?.toDoubleOrNull() ?: 0.0,
+            sold = false,
+            imageUri = imageUri?.toString(),
+            userId = userId
+        )
     }
 
     private fun setupLocationCreate() {
