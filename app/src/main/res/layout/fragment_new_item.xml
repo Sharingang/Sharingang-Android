@@ -15,9 +15,11 @@
         <variable
             name="price"
             type="String" />
+
         <variable
             name="latitude"
             type="String" />
+
         <variable
             name="longitude"
             type="String" />
@@ -44,16 +46,16 @@
             <ImageView
                 android:id="@+id/new_item_image"
                 android:layout_width="match_parent"
-                android:layout_weight="1"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:contentDescription="@string/item_image_description"
                 android:src="@drawable/ic_baseline_image_24" />
 
             <ImageView
                 android:id="@+id/new_item_take_picture"
                 android:layout_width="match_parent"
-                android:layout_weight="1"
                 android:layout_height="70dp"
+                android:layout_weight="1"
                 android:contentDescription="@string/item_image_description"
                 android:src="@android:drawable/ic_menu_camera" />
         </LinearLayout>
@@ -98,10 +100,12 @@
             android:importantForAutofill="yes"
             android:inputType="numberDecimal"
             android:text="@={price}" />
-        <androidx.fragment.app.FragmentContainerView android:id="@+id/autocomplete_fragment"
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/autocomplete_fragment"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment" >
+            android:layout_height="wrap_content">
 
         </androidx.fragment.app.FragmentContainerView>
 
