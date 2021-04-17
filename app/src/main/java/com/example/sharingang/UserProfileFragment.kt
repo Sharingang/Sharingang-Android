@@ -31,7 +31,6 @@ class UserProfileFragment : Fragment() {
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var binding: UserProfileFragmentBinding
     private lateinit var imageAccess: ImageAccess
-    private var imageUri: Uri? = null
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
     @Inject
@@ -53,9 +52,6 @@ class UserProfileFragment : Fragment() {
                 else -> args.userId
 
         }
-        imageAccess = ImageAccess(requireActivity())
-        imageAccess.setupImageView(binding.imageView)
-        lifecycle.addObserver(imageAccess)
         viewModel.setUser(userId)
         viewModel.user.observe(viewLifecycleOwner, { user ->
             if (user != null) {
@@ -64,8 +60,16 @@ class UserProfileFragment : Fragment() {
             }
         })
         binding.viewModel = viewModel
+        setupImageAccess()
         setupPfpButtons()
         return binding.root
+    }
+
+    private fun setupImageAccess() {
+        val activity = requireActivity()
+        imageAccess = ImageAccess(activity)
+        imageAccess.setupImageView(binding.imageView)
+        lifecycle.addObserver(imageAccess)
     }
 
     private fun setupPfpButtons() {
@@ -95,10 +99,8 @@ class UserProfileFragment : Fragment() {
             if (imageUri != Uri.EMPTY && imageUri != null) {
                 binding.imageView.setImageURI(imageAccess.getImageUri())
                 lifecycleScope.launch(Dispatchers.IO) {
-                    val updatedUser = userRepository.get(currentUserProvider.getCurrentUserId()!!)!!.copy(
-                        profilePicture = imageUri.toString()
-                    )
-                    userRepository.add(updatedUser)
+                    userRepository.add(userRepository.get(currentUserProvider.getCurrentUserId()!!)!!
+                        .copy(profilePicture = imageUri.toString()))
                 }
             }
             binding.btnApply.visibility = View.GONE

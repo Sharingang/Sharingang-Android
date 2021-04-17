@@ -52,6 +52,7 @@ class UserProfileFragmentTest {
     }
 
 
+    /*
     @Test
     fun applyButtonIsDisplayedUponClickOnOpenCamera() {
         val device: UiDevice = UiDevice.getInstance(getInstrumentation())
@@ -73,5 +74,6 @@ class UserProfileFragmentTest {
         onView(withId(R.id.btnApply)).perform(click())
         onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
     }
+    */
 
 }
