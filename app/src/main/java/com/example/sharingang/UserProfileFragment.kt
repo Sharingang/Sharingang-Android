@@ -66,11 +66,11 @@ class UserProfileFragment : Fragment() {
             }
         })
         binding.viewModel = viewModel
-        setupPfpButtons()
+        setupButtonsVisibility()
         return binding.root
     }
 
-    private fun setupPfpButtons() {
+    private fun setupButtonsVisibility() {
         currentUserId = currentUserProvider.getCurrentUserId()
         val buttons = listOf(binding.btnOpenGallery, binding.btnOpenCamera, binding.btnApply)
         for(button: Button in buttons) {
@@ -79,36 +79,38 @@ class UserProfileFragment : Fragment() {
                 else View.GONE
         }
         binding.btnApply.visibility = View.GONE
-        setupActionButtons()
-        setupApplyButton()
+        setupButtons()
+
     }
-    private fun setupActionButtons() {
-        val buttons = listOf(binding.btnOpenCamera, binding.btnOpenGallery)
+    private fun setupButtons() {
+        val buttons = listOf(binding.btnApply, binding.btnOpenCamera, binding.btnOpenGallery)
         for(button: Button in buttons) {
             button.setOnClickListener {
-                binding.btnApply.visibility = View.VISIBLE
+                binding.btnApply.visibility =
+                    if(button == binding.btnOpenCamera || button == binding.btnOpenGallery)
+                        View.VISIBLE
+                    else View.GONE
                 getAction(button)
             }
         }
     }
 
-    private fun setupApplyButton() {
-        binding.btnApply.setOnClickListener {
-            imageUri = imageAccess.getImageUri()
-            if (imageUri != Uri.EMPTY && imageUri != null) {
-                binding.imageView.setImageURI(imageUri)
-                lifecycleScope.launch(Dispatchers.IO) {
-                    userRepository.add(userRepository.get(currentUserId!!)!!
-                        .copy(profilePicture = imageUri.toString()))
-                }
-            }
-            binding.btnApply.visibility = View.GONE
-        }
-    }
-
     private fun getAction(button: Button) {
-        if (button == binding.btnOpenCamera) imageAccess.openCamera()
-        else imageAccess.openGallery()
+        when (button) {
+            binding.btnOpenCamera -> imageAccess.openCamera()
+            binding.btnOpenGallery -> imageAccess.openGallery()
+            binding.btnApply -> {
+                imageUri = imageAccess.getImageUri()
+                if (imageUri != Uri.EMPTY && imageUri != null) {
+                    binding.imageView.setImageURI(imageUri)
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        userRepository.add(userRepository.get(currentUserId!!)!!
+                            .copy(profilePicture = imageUri.toString()))
+                    }
+                }
+                binding.btnApply.visibility = View.GONE
+            }
+        }
     }
 
 
