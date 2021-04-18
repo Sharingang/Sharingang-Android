@@ -165,6 +165,6 @@ class NewItemFragment : Fragment() {
         binding.longitude = location.longitude.toString()
         val address =
             geocoder.getFromLocation(location.latitude, location.longitude, 1).getOrNull(0)
-        binding.postalAddress.text = address?.getAddressLine(0)
+        binding.postalAddress.text = if(address!=null) address.getAddressLine(0) else ""
     }
 }
