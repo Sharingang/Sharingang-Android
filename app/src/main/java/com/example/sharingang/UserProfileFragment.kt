@@ -83,7 +83,7 @@ class UserProfileFragment : Fragment() {
         setupApplyButton()
     }
     private fun setupActionButtons() {
-        val buttons = listOf(binding.btnOpenCamera, binding.btnOpenCamera)
+        val buttons = listOf(binding.btnOpenCamera, binding.btnOpenGallery)
         for(button: Button in buttons) {
             button.setOnClickListener {
                 binding.btnApply.visibility = View.VISIBLE
