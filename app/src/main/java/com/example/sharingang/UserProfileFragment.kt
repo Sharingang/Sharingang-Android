@@ -87,29 +87,9 @@ class UserProfileFragment : Fragment() {
         for(button: Button in buttons) {
             button.setOnClickListener {
                 binding.btnApply.visibility = View.VISIBLE
-                val action: Unit =
-                    if (button == binding.btnOpenCamera) imageAccess.openCamera()
-                    else imageAccess.openGallery()
-                action
+                getAction(button)
             }
         }
-        binding.btnOpenGallery.setOnClickListener {
-            binding.btnApply.visibility = View.VISIBLE
-            imageAccess.openCamera()
-        }
-        binding.btnOpenCamera.setOnClickListener {
-            binding.btnApply.visibility = View.VISIBLE
-            imageAccess.openCamera()
-        }
-        /*
-        for(button: Button in buttons) {
-            button.setOnClickListener {
-                binding.btnApply.visibility = View.VISIBLE
-                if(button == binding.btnOpenCamera) imageAccess.openCamera()
-                else imageAccess.openGallery()
-            }
-        }
-        */
     }
 
     private fun setupApplyButton() {
@@ -124,6 +104,11 @@ class UserProfileFragment : Fragment() {
             }
             binding.btnApply.visibility = View.GONE
         }
+    }
+
+    private fun getAction(button: Button) {
+        if (button == binding.btnOpenCamera) imageAccess.openCamera()
+        else imageAccess.openGallery()
     }
 
 
