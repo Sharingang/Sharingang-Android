@@ -84,6 +84,15 @@ class UserProfileFragment : Fragment() {
     }
     private fun setupActionButtons() {
         val buttons = listOf(binding.btnOpenCamera, binding.btnOpenGallery)
+        binding.btnOpenGallery.setOnClickListener {
+            binding.btnApply.visibility = View.VISIBLE
+            imageAccess.openCamera()
+        }
+        binding.btnOpenCamera.setOnClickListener {
+            binding.btnApply.visibility = View.VISIBLE
+            imageAccess.openCamera()
+        }
+        /*
         for(button: Button in buttons) {
             button.setOnClickListener {
                 binding.btnApply.visibility = View.VISIBLE
@@ -91,6 +100,7 @@ class UserProfileFragment : Fragment() {
                 else imageAccess.openGallery()
             }
         }
+        */
     }
 
     private fun setupApplyButton() {
