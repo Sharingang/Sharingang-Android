@@ -144,16 +144,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
             true
         }
-    }
-
-    override fun onResume() {
-        binding.mapView.onResume()
         doOrGetPermission(
             this,
             Manifest.permission.ACCESS_FINE_LOCATION,
             { startLocationUpdates() },
             requestPermissionLauncher
         )
+    }
+
+    override fun onResume() {
+        binding.mapView.onResume()
         super.onResume()
     }
 
