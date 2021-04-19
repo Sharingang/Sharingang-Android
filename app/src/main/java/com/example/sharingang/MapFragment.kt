@@ -68,6 +68,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 moveCameraToLastLocation()
             }
         }
+        binding.mapStartSearch.setOnClickListener {
+            this.findNavController()
+                .navigate(MapFragmentDirections.actionMapFragmentToSearchFragment())
+        }
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
         return binding.root
