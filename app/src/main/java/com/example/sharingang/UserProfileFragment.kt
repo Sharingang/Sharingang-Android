@@ -32,7 +32,6 @@ class UserProfileFragment : Fragment() {
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var binding: UserProfileFragmentBinding
     private lateinit var imageAccess: ImageAccess
-    private var imageUri: Uri? = null
     private var currentUserId: String? = ""
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
@@ -41,6 +40,7 @@ class UserProfileFragment : Fragment() {
 
     companion object {
         fun newInstance() = UserProfileFragment()
+        var imageUri: Uri? = null
     }
 
     override fun onCreateView(
