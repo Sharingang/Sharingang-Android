@@ -74,7 +74,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun setupItemsMarkers() {
-        viewModel.items.observe(viewLifecycleOwner, {
+        viewModel.searchResults.observe(viewLifecycleOwner, {
             map?.clear() // need to remove all markers, otherwise they will be added once more on the map, stacking them up
             if (lastLocation != null) {
                 addLastLocationMarker()
