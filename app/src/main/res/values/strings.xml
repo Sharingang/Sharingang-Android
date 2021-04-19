@@ -28,6 +28,7 @@
     <string name="clear_search_button">Clear search</string>
     <string name="share">Share</string>
     <string name="take_picture">Take Picture</string>
+    <string name="enter_address">Enter Address</string>
     <string-array name="categories">
         <item>None</item>
         <item>Book</item>

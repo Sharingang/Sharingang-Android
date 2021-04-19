@@ -1,8 +1,8 @@
 package com.example.sharingang
 
 import android.Manifest
-import android.provider.MediaStore
 import android.content.Intent
+import android.provider.MediaStore
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -12,9 +12,12 @@ import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
+import androidx.test.uiautomator.UiDevice
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
@@ -73,7 +76,8 @@ class NewItemFragmentTest {
     fun anImageCanBeChosenFromGallery() {
         savePickedImage(mActivityTestRule.activity)
         val imgGalleryResult = createImageGallerySetResultStub(mActivityTestRule.activity)
-        Intents.intending(IntentMatchers.hasAction(Intent.ACTION_GET_CONTENT)).respondWith(imgGalleryResult)
+        Intents.intending(IntentMatchers.hasAction(Intent.ACTION_GET_CONTENT))
+            .respondWith(imgGalleryResult)
 
         navigate_to(R.id.newItemFragment)
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
@@ -86,7 +90,8 @@ class NewItemFragmentTest {
     fun aPictureCanBeTakenAndDisplayed() {
         savePickedImage(mActivityTestRule.activity)
         val imgGalleryResult = createImageGallerySetResultStub(mActivityTestRule.activity)
-        Intents.intending(IntentMatchers.hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgGalleryResult)
+        Intents.intending(IntentMatchers.hasAction(MediaStore.ACTION_IMAGE_CAPTURE))
+            .respondWith(imgGalleryResult)
 
         navigate_to(R.id.newItemFragment)
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
@@ -102,21 +107,28 @@ class NewItemFragmentTest {
         button.check(matches(withText("Get Location")))
         button.perform(click())
         Thread.sleep(5000)
-        onView(withId(R.id.write_latitude)).check(matches(not(withText(""))))
-        onView(withId(R.id.write_longitude)).check(matches(not(withText(""))))
+        onView(withId(R.id.postal_address)).check(matches(not(withText(""))))
     }
 
     @Test
-    fun aLocationCanBeWrittenInNewItemFragment() {
+    fun aLocationCanBeSetInNewItemFragment() {
         navigate_to(R.id.newItemFragment)
-        onView(withId(R.id.write_latitude)).perform(
-            typeText("45.01"),
-            closeSoftKeyboard()
-        )
-        onView(withId(R.id.write_longitude)).perform(
-            typeText("5.014"),
-            closeSoftKeyboard()
-        )
-        onView(withId(R.id.createItemButton)).perform(click())
+        onView(withId(R.id.autocomplete_fragment)).perform(click())
+        onView(withHint("Enter Address")).perform(typeText("Taj"), closeSoftKeyboard())
+        Thread.sleep(3000)
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        device.click(device.displayWidth / 2, device.displayHeight / 2)
+        Thread.sleep(3000)
+        onView(withId(R.id.postal_address)).check(matches(withText(containsString("Taj"))))
+    }
+
+    @Test
+    fun addressSearchCanBeCanceled(){
+        navigate_to(R.id.newItemFragment)
+        onView(withId(R.id.autocomplete_fragment)).perform(click())
+        val device = UiDevice.getInstance((InstrumentationRegistry.getInstrumentation()))
+        device.pressBack()
+        device.pressBack()
+        onView(withId(R.id.postal_address)).check(matches(withText("")))
     }
 }
