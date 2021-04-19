@@ -51,7 +51,7 @@
                 android:contentDescription="@string/item_image_description"
                 android:src="@drawable/ic_baseline_image_24" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/new_item_take_picture"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
