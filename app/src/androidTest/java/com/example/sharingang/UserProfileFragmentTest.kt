@@ -72,10 +72,10 @@ class UserProfileFragmentTest {
     fun applyButtonApplies() {
         val device: UiDevice = UiDevice.getInstance(getInstrumentation())
         navigate_to(R.id.userProfileFragment)
-        UserProfileFragment.imageUri = Uri.parse("https://picsum.photos/200")
         onView(withId(R.id.btn_open_gallery)).perform(click())
         device.pressBack()
         onView(withId(R.id.btnApply)).check(matches(isDisplayed()))
+        UserProfileFragment.imageUri = Uri.parse("https://picsum.photos/200")
         onView(withId(R.id.btnApply)).perform(click())
         onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
     }
