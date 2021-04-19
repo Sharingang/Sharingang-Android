@@ -1,5 +1,6 @@
 package com.example.sharingang.items
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import java.util.*
@@ -28,6 +29,12 @@ class InMemoryItemRepository : ItemRepository {
 
     override fun items(): LiveData<List<Item>> {
         return itemsLiveData
+    }
+
+    override suspend fun userItems(userId: String): List<Item>? {
+        return itemsMap.values.filter { item ->
+            item.userId.equals(userId)
+        }
     }
 
     override suspend fun refreshItems() {

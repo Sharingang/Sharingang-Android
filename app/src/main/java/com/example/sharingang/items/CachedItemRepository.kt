@@ -1,5 +1,6 @@
 package com.example.sharingang.items
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -44,6 +45,10 @@ class CachedItemRepository @Inject constructor(
 
     override suspend fun getAll(): List<Item> {
         return doRefreshItems()
+    }
+
+    override suspend fun userItems(userId: String): List<Item>? {
+        return itemDao.getUserItem(userId)
     }
 
     override suspend fun update(item: Item): Boolean {

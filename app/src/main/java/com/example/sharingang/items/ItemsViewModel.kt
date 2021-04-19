@@ -22,7 +22,7 @@ class ItemsViewModel @Inject constructor(
     }
 
     enum class OBSERVABLES {
-        ALL_ITEMS, SEARCH_RESULTS
+        ALL_ITEMS, SEARCH_RESULTS, USER_ITEMS
     }
 
     private val _navigateToEditItem = MutableLiveData<Item?>()
@@ -42,6 +42,10 @@ class ItemsViewModel @Inject constructor(
     val searchResults: LiveData<List<Item>>
         get() = _searchResults
 
+    private val _userItems = MutableLiveData<List<Item>>()
+    val userItems: LiveData<List<Item>>
+        get() = _userItems
+
     /**
      * The last item created
      */
@@ -56,6 +60,19 @@ class ItemsViewModel @Inject constructor(
     fun addItem(item: Item) {
         viewModelScope.launch(Dispatchers.IO) {
             itemRepository.add(item)
+        }
+    }
+
+    /**
+     * Get all the items of the user
+     *
+     * @param userId the id of the user
+     */
+    fun getUserItem(userId: String?) {
+        if (userId != null) {
+            viewModelScope.launch(Dispatchers.IO) {
+                _userItems.postValue(itemRepository.userItems(userId))
+            }
         }
     }
 
@@ -131,6 +148,7 @@ class ItemsViewModel @Inject constructor(
         val observable: LiveData<List<Item>> = when (type) {
             OBSERVABLES.ALL_ITEMS -> items
             OBSERVABLES.SEARCH_RESULTS -> searchResults
+            OBSERVABLES.USER_ITEMS -> userItems
         }
         observable.observe(LifeCycleOwner, {
             adapter.submitList(it)

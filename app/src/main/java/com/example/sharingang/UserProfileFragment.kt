@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.UserProfileFragmentBinding
+import com.example.sharingang.items.ItemsViewModel
 import com.example.sharingang.users.CurrentUserProvider
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -16,6 +17,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class UserProfileFragment : Fragment() {
     private val viewModel: UserProfileViewModel by viewModels()
+    private val itemsViewModel: ItemsViewModel by viewModels()
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var binding: UserProfileFragmentBinding
     @Inject
@@ -34,6 +36,11 @@ class UserProfileFragment : Fragment() {
         }
 
         viewModel.setUser(userId)
+
+        val adapter = itemsViewModel.setupItemAdapter()
+        binding.userItemList.adapter = adapter
+        itemsViewModel.getUserItem(userId)
+        itemsViewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.USER_ITEMS)
 
         viewModel.user.observe(viewLifecycleOwner, { user ->
             if (user != null) {
