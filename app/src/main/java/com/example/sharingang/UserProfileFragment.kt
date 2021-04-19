@@ -38,11 +38,9 @@ class UserProfileFragment : Fragment() {
     lateinit var currentUserProvider: CurrentUserProvider
     @Inject
     lateinit var userRepository: UserRepository
-    private val TESTURI = "https://picsum.photos/200"
 
     companion object {
         fun newInstance() = UserProfileFragment()
-        var isTestCase: Boolean = false
     }
 
     override fun onCreateView(
@@ -57,7 +55,6 @@ class UserProfileFragment : Fragment() {
                 else -> args.userId
 
         }
-        isTestCase = false
         imageAccess = ImageAccess(requireActivity())
         imageAccess.setupImageView(binding.imageView)
         lifecycle.addObserver(imageAccess)
@@ -103,7 +100,7 @@ class UserProfileFragment : Fragment() {
             binding.btnOpenCamera -> imageAccess.openCamera()
             binding.btnOpenGallery -> imageAccess.openGallery()
             binding.btnApply -> {
-                imageUri = if (!isTestCase) imageAccess.getImageUri() else Uri.parse(TESTURI)
+                imageUri = imageAccess.getImageUri()
                 if (imageUri != Uri.EMPTY && imageUri != null) {
                     binding.imageView.setImageURI(imageUri)
                     lifecycleScope.launch(Dispatchers.IO) {

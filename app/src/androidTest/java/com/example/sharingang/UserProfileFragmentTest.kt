@@ -2,6 +2,7 @@ package com.example.sharingang
 
 
 import android.Manifest
+import android.util.Range
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -9,7 +10,9 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
+import androidx.test.uiautomator.SearchCondition
 import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiSelector
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers.not
@@ -33,7 +36,7 @@ class UserProfileFragmentTest {
     )
 
     @Test
-    fun canOpenSearchFragment() {
+    fun canOpenUserProfileFragment() {
         navigate_to(R.id.userProfileFragment)
 
         val textView = onView(withId(R.id.nameText))
@@ -49,6 +52,21 @@ class UserProfileFragmentTest {
     }
 
 
+    @Test
+    fun cameraTest() {
+        navigate_to(R.id.userProfileFragment)
+        onView(withId(R.id.btn_open_camera)).perform(click())
+        Thread.sleep(2000)
+        val device = UiDevice.getInstance(getInstrumentation())
+        val clickable = device.findObject(UiSelector().clickable(true).instance(1))
+        clickable.click()
+        Thread.sleep(2000)
+        val clickable2 = device.findObject(UiSelector().clickable(true).instance(1))
+        clickable2.click()
+        onView(withId(R.id.btnApply)).perform(click())
+
+    }
+
 
     @Test
     fun applyButtonIsDisplayedUponClickOnOpenGallery() {
@@ -59,18 +77,5 @@ class UserProfileFragmentTest {
         onView(withId(R.id.btnApply)).check(matches(isDisplayed()))
         onView(withId(R.id.btnApply)).perform(click())
         onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
-    }
-
-    @Test
-    fun applyButtonApplies() {
-        val device: UiDevice = UiDevice.getInstance(getInstrumentation())
-        navigate_to(R.id.userProfileFragment)
-        onView(withId(R.id.btn_open_gallery)).perform(click())
-        device.pressBack()
-        onView(withId(R.id.btnApply)).check(matches(isDisplayed()))
-        UserProfileFragment.isTestCase = true
-        onView(withId(R.id.btnApply)).perform(click())
-        onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
-        UserProfileFragment.isTestCase = false
     }
 }
