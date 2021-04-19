@@ -137,25 +137,23 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         map?.setOnMarkerClickListener { marker: Marker ->
             map?.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
             if (marker != lastLocationMarker) {
-                val temp: Item = marker.tag as Item
-                viewModel.onViewItem(temp)
+                val markerItem = marker.tag as Item
                 this.findNavController().navigate(
-                    MapFragmentDirections.actionMapFragmentToDetailedItemFragment()
+                    MapFragmentDirections.actionMapFragmentToDetailedItemFragment(markerItem)
                 )
-                viewModel.onViewItemNavigated()
             }
             true
         }
-    }
-
-    override fun onResume() {
-        binding.mapView.onResume()
         doOrGetPermission(
             this,
             Manifest.permission.ACCESS_FINE_LOCATION,
             { startLocationUpdates() },
             requestPermissionLauncher
         )
+    }
+
+    override fun onResume() {
+        binding.mapView.onResume()
         super.onResume()
     }
 

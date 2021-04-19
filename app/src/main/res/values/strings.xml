@@ -26,6 +26,7 @@
     <string name="text_logged_out">Status: Logged Out</string>
     <string name="log_in">Log In</string>
     <string name="clear_search_button">Clear search</string>
+    <string name="share">Share</string>
     <string name="take_picture">Take Picture</string>
     <string name="open_gallery">Open Gallery</string>
     <string name="open_camera">Open Camera</string>

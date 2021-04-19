@@ -1,6 +1,5 @@
 package com.example.sharingang
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,10 +25,10 @@ class ItemsListFragment : Fragment() {
                 viewModel.onEditItemNavigated()
             }
         })
-        viewModel.viewingItem.observe(viewLifecycleOwner, {
-            if (it) {
+        viewModel.navigateToDetailItem.observe(viewLifecycleOwner, { item ->
+            item?.let {
                 this.findNavController().navigate(
-                    ItemsListFragmentDirections.actionItemsListFragmentToDetailedItemFragment()
+                    ItemsListFragmentDirections.actionItemsListFragmentToDetailedItemFragment(item)
                 )
                 viewModel.onViewItemNavigated()
             }

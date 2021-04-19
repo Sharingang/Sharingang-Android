@@ -15,7 +15,6 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.UserProfileFragmentBinding
 import com.example.sharingang.users.CurrentUserProvider
-import com.example.sharingang.users.User
 import com.example.sharingang.users.UserRepository
 import com.example.sharingang.utils.ImageAccess
 

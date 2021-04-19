@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
-            name="viewModel"
-            type="com.example.sharingang.items.ItemsViewModel" />
+            name="item"
+            type="com.example.sharingang.items.Item" />
+        <variable
+            name="username"
+            type="String" />
     </data>
 
     <LinearLayout
@@ -18,28 +23,56 @@
             android:id="@+id/itemTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.focusedItem.title}"
-            android:textSize="30sp" />
+            android:text="@{item.title}"
+            android:textSize="30sp"
+            tools:text="Title" />
+
+        <ImageView
+            android:id="@+id/detailed_item_image"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:contentDescription="@string/item_image_description"
+            android:src="@drawable/ic_baseline_image_24" />
 
         <TextView
             android:id="@+id/itemCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.focusedItem.categoryString}"
-            android:textSize="25sp"/>
+            android:text="@{item.categoryString}"
+            android:textSize="25sp"
+            tools:text="Category" />
 
         <TextView
             android:id="@+id/itemPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{@string/display_price(viewModel.focusedItem.price)}"
-            android:textSize="18sp" />
+            android:text="@{@string/display_price(item.price)}"
+            android:textSize="18sp"
+            tools:text="10.00" />
 
         <TextView
             android:id="@+id/itemDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.focusedItem.description}"
-            android:textSize="18sp" />
+            android:text="@{item.description}"
+            android:textSize="18sp"
+            tools:text="Here goes the description of the item." />
+
+        <TextView
+            android:id="@+id/itemPostedBy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="@{username}"
+            tools:text="Posted by TestUser" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/shareButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/share"
+            app:srcCompat="?attr/actionModeShareDrawable" />
     </LinearLayout>
 </layout>

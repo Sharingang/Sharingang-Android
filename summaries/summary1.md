@@ -1,10 +1,21 @@
 # Week 1
 
-# Ben
+## Bastien
+
+I followed the [android kotlin codelabs](https://developer.android.com/courses/kotlin-android-fundamentals/overview) to to understand how to have a good architecture.
+I then converted the existing Activities in Fragments and added navigation while keeping the same functionality.
+Finally, by following the codelab concerning RecyclerViews, I added a button next to an item to be able to edit it.
+I did not have enough time to start on researching how to add images in the application from the phone nor to implement it.
+
+My time estimate was way off because I had to look up a lot of resources to understand the existing code and try to implement my functionalites nicely.
+
+Next time, I'll know where some specific resources are so that I won't spend as much time looking for it.
+
+## Ben
 
 Another feature added this week was setting the price of an item in a separate view. By clicking on "Set Price" from the Main Activity, we are prompted to another activity where we can type in the price. If nothing is typed then the default price set will be 0.0. After clicking on OK when having typed on the price, a new activity prompts (a summary of setting the price) that shows the price we typed in previously.
 
-# Lúcás
+## Lúcás
 
 First I implemented a simple form for creating new items. This took 3 hours instead of the
 2 hours I estimated, because I was a bit rustier on Android than I thought, so figuring
@@ -17,7 +28,7 @@ than I anticpated.
 I had started working on adding persistence, and basically finished, but then Samuel's
 work on Firebase basically upended my work, at least for now.
 
-# Sebastian
+## Sebastian
 
 I first needed a refresh on android and Kotlin, so I read a basics course.
 This took me 5 hours, which is what I estimated.
@@ -28,7 +39,7 @@ Instead of 3 hours, it took my around 8 hours, because a lot of documentation wa
 
 Then I had some troubles with the pull requests and merging, as I had never done that before.
 
-# Samuel
+## Samuel
 
 I did some research about Firebase, and documented my findings.
 Then I implemented a repository to store and retrieve items using Firestore.
@@ -37,7 +48,7 @@ My time estimate was accurate for the research but for the implementation it too
 
 For this first sprint, we were a bit late to merge all the changes. I had to wait for other tasks before merging but luckily the architecture we had was good and I didn't have to change a lot of code to merge.
 
-# Zach
+## Zach
 
 I have read and done the vast majority of the Android Kotlin course provided by Goole. I have also read the report about firebase made by Samuel.
 
@@ -47,7 +58,7 @@ My time estimation and management was very much wrong and it is taking longer th
 
 Next time, I'd like to finish the view for the search page as well as it's actual functionality.
 
-# Scrum Master (Lúcás)
+## Scrum Master (Lúcás)
 
 One issue at the start of the week was that too little work was assigned. Thankfully
 we had a special meeting on Monday to resolve this.
@@ -67,14 +78,3 @@ throughout the week, and avoid the aforementioned pile-ups.
 
 On the bright side, our standup meetings did go well, although we should be a bit
 more forward next time to try and avoid all merging a bunch of work at the same time.
-
-# Bastien
-
-I followed the [android kotlin codelabs](https://developer.android.com/courses/kotlin-android-fundamentals/overview) to to understand how to have a good architecture.
-I then converted the existing Activities in Fragments and added navigation while keeping the same functionality.
-Finally, by following the codelab concerning RecyclerViews, I added a button next to an item to be able to edit it.
-I did not have enough time to start on researching how to add images in the application from the phone nor to implement it.
-
-My time estimate was way off because I had to look up a lot of resources to understand the existing code and try to implement my functionalites nicely.
-
-Next time, I'll know where some specific resources are so that I won't spend as much time looking for it.
