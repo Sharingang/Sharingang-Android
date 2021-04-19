@@ -33,6 +33,7 @@ class UserProfileFragment : Fragment() {
     private lateinit var binding: UserProfileFragmentBinding
     private var currentUserId: String? = ""
     private lateinit var imageAccess: ImageAccess
+    private var imageUri: Uri? = null
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
     @Inject
@@ -41,7 +42,6 @@ class UserProfileFragment : Fragment() {
 
     companion object {
         fun newInstance() = UserProfileFragment()
-        var imageUri: Uri? = null
         var isTestCase: Boolean = false
     }
 
