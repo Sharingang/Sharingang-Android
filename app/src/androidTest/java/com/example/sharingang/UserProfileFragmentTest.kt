@@ -56,13 +56,14 @@ class UserProfileFragmentTest {
     fun cameraTest() {
         navigate_to(R.id.userProfileFragment)
         onView(withId(R.id.btn_open_camera)).perform(click())
-        Thread.sleep(2000)
+        Thread.sleep(10000)
         val device = UiDevice.getInstance(getInstrumentation())
         val clickable = device.findObject(UiSelector().clickable(true).instance(1))
         clickable.click()
-        Thread.sleep(2000)
+        Thread.sleep(10000)
         val clickable2 = device.findObject(UiSelector().clickable(true).instance(1))
         clickable2.click()
+        Thread.sleep(5000)
         onView(withId(R.id.btnApply)).perform(click())
 
     }
