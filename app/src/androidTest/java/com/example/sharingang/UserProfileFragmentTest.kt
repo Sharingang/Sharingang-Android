@@ -6,6 +6,7 @@ import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -75,8 +76,9 @@ class UserProfileFragmentTest {
         onView(withId(R.id.btn_open_gallery)).perform(click())
         device.pressBack()
         onView(withId(R.id.btnApply)).check(matches(isDisplayed()))
-        UserProfileFragment.imageUri = Uri.parse("https://picsum.photos/200")
+        UserProfileFragment.isTestCase = true
         onView(withId(R.id.btnApply)).perform(click())
         onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
+        UserProfileFragment.isTestCase = false
     }
 }

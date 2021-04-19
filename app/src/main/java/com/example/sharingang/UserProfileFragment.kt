@@ -3,6 +3,7 @@ package com.example.sharingang
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,16 +32,18 @@ class UserProfileFragment : Fragment() {
     private val viewModel: UserProfileViewModel by viewModels()
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var binding: UserProfileFragmentBinding
-    private lateinit var imageAccess: ImageAccess
     private var currentUserId: String? = ""
+    private lateinit var imageAccess: ImageAccess
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
     @Inject
     lateinit var userRepository: UserRepository
+    private val TESTURI = "https://picsum.photos/200"
 
     companion object {
         fun newInstance() = UserProfileFragment()
         var imageUri: Uri? = null
+        var isTestCase: Boolean = false
     }
 
     override fun onCreateView(
@@ -55,6 +58,7 @@ class UserProfileFragment : Fragment() {
                 else -> args.userId
 
         }
+        isTestCase = false
         imageAccess = ImageAccess(requireActivity())
         imageAccess.setupImageView(binding.imageView)
         lifecycle.addObserver(imageAccess)
@@ -100,12 +104,13 @@ class UserProfileFragment : Fragment() {
             binding.btnOpenCamera -> imageAccess.openCamera()
             binding.btnOpenGallery -> imageAccess.openGallery()
             binding.btnApply -> {
-                imageUri = imageAccess.getImageUri()
+                imageUri = if (!isTestCase) imageAccess.getImageUri() else Uri.parse(TESTURI)
                 if (imageUri != Uri.EMPTY && imageUri != null) {
                     binding.imageView.setImageURI(imageUri)
                     lifecycleScope.launch(Dispatchers.IO) {
-                        userRepository.add(userRepository.get(currentUserId!!)!!
-                            .copy(profilePicture = imageUri.toString()))
+                        val currentUser = userRepository.get(currentUserId!!)
+                        val updatedUser = currentUser!!.copy(profilePicture = imageUri.toString())
+                        userRepository.add(updatedUser)
                     }
                 }
                 binding.btnApply.visibility = View.GONE
