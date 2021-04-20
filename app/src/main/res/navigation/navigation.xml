@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_itemsListFragment_to_accountFragment"
             app:destination="@id/accountFragment" />
+        <action
+            android:id="@+id/action_itemsListFragment_to_wishlistViewFragment"
+            app:destination="@id/wishlistViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/newItemFragment"
@@ -89,4 +92,15 @@
         android:id="@+id/accountFragment"
         android:name="com.example.sharingang.AccountFragment"
         android:label="Account" />
+    <fragment
+        android:id="@+id/wishlistViewFragment"
+        android:name="com.example.sharingang.wishlistViewFragment"
+        android:label="wishlistViewFragment" >
+        <action
+            android:id="@+id/action_wishlistViewFragment_to_detailedItemFragment"
+            app:destination="@id/detailedItemFragment" />
+        <action
+            android:id="@+id/action_wishlistViewFragment_to_editItemFragment"
+            app:destination="@id/editItemFragment" />
+    </fragment>
 </navigation>

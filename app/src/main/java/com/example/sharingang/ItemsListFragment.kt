@@ -27,7 +27,9 @@ class ItemsListFragment : Fragment() {
         binding.itemList.adapter = adapter
         viewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.ALL_ITEMS)
 
-        viewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController())
+        viewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
+                {item -> ItemsListFragmentDirections.actionItemsListFragmentToEditItemFragment(item)},
+                {item -> ItemsListFragmentDirections.actionItemsListFragmentToDetailedItemFragment(item)})
 
         binding.swiperefresh.setOnRefreshListener { viewModel.refresh() }
         viewModel.refreshing.observe(viewLifecycleOwner, {

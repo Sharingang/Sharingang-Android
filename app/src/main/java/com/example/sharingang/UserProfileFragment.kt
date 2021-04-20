@@ -18,7 +18,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class UserProfileFragment : Fragment() {
-    private val itemViewModel : ItemsViewModel by activityViewModels()
     private val userViewModel: UserProfileViewModel by viewModels()
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var binding: UserProfileFragmentBinding
@@ -38,12 +37,7 @@ class UserProfileFragment : Fragment() {
         }
 
         userViewModel.setUser(userId)
-        val adapter = itemViewModel.setupItemAdapter()
-        binding.wishList.adapter = adapter
-        userViewModel.addWishlistObserver(viewLifecycleOwner, adapter)
 
-
-        itemViewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController())
 
         userViewModel.user.observe(viewLifecycleOwner, { user ->
             if (user != null) {
