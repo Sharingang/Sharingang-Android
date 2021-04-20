@@ -28,7 +28,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class UserProfileFragment : Fragment() {
-    private val viewModel: UserProfileViewModel by viewModels()
+    private val userViewModel: UserProfileViewModel by viewModels()
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var binding: UserProfileFragmentBinding
     private var currentUserId: String? = ""
@@ -52,20 +52,19 @@ class UserProfileFragment : Fragment() {
         // If no userId is provided, we get the user that is currently logged in.
         val userId = when(args.userId) {
             null, "" -> currentUserId
-                else -> args.userId
-
+            else -> args.userId
         }
+        userViewModel.setUser(userId)
         imageAccess = ImageAccess(requireActivity())
         imageAccess.setupImageView(binding.imageView)
         lifecycle.addObserver(imageAccess)
-        viewModel.setUser(userId)
-        viewModel.user.observe(viewLifecycleOwner, { user ->
+        userViewModel.user.observe(viewLifecycleOwner, { user ->
             if (user != null) {
                 binding.nameText.text = user.name
                 Glide.with(this).load(user.profilePicture).into(binding.imageView)
             }
         })
-        binding.viewModel = viewModel
+        binding.viewModel = userViewModel
         setupButtonsVisibility()
         return binding.root
     }

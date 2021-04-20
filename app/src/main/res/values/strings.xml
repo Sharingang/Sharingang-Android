@@ -32,6 +32,9 @@
     <string name="open_camera">Open Camera</string>
     <string name="txt_user_profile_picture">User Profile Picture</string>
     <string name="apply_changes">Apply</string>
+    <string name="add_wishlist">Add wishlist</string>
+    <string name="remove_wishlist">Remove wishlist</string>
+    <string name="wishlist_menu_title">Wish List</string>
     <string name="enter_address">Enter Address</string>
     <string-array name="categories">
         <item>None</item>

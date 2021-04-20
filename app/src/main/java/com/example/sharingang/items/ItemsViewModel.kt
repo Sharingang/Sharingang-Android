@@ -1,6 +1,8 @@
 package com.example.sharingang.items
 
 import androidx.lifecycle.*
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,7 +24,7 @@ class ItemsViewModel @Inject constructor(
     }
 
     enum class OBSERVABLES {
-        ALL_ITEMS, SEARCH_RESULTS
+        ALL_ITEMS, SEARCH_RESULTS, WISHLIST
     }
 
     private val _navigateToEditItem = MutableLiveData<Item?>()
@@ -41,6 +43,10 @@ class ItemsViewModel @Inject constructor(
     private val _searchResults = MutableLiveData<List<Item>>(listOf())
     val searchResults: LiveData<List<Item>>
         get() = _searchResults
+
+    private val _wishlistItem : MutableLiveData<List<Item>> = MutableLiveData(ArrayList())
+    val wishlistItem : LiveData<List<Item>>
+        get() = _wishlistItem
 
     /**
      * The last item created
@@ -61,7 +67,13 @@ class ItemsViewModel @Inject constructor(
 
 
     fun clearSearchResults() {
-        _searchResults.value = listOf<Item>()
+        _searchResults.value = listOf()
+    }
+
+    fun setWishList(list: List<Item>){
+        viewModelScope.launch {
+            _wishlistItem.postValue(list)
+        }
     }
 
     /**
@@ -131,9 +143,31 @@ class ItemsViewModel @Inject constructor(
         val observable: LiveData<List<Item>> = when (type) {
             OBSERVABLES.ALL_ITEMS -> items
             OBSERVABLES.SEARCH_RESULTS -> searchResults
+            OBSERVABLES.WISHLIST -> wishlistItem
         }
         observable.observe(LifeCycleOwner, {
             adapter.submitList(it)
+        })
+    }
+
+    fun setupItemNavigation(LifeCycleOwner: LifecycleOwner, navController: NavController,
+                            actionEdit: (Item)->NavDirections, actionDetail: (Item)->NavDirections ){
+        navigateToEditItem.observe(LifeCycleOwner, { item ->
+            item?.let {
+                navController.navigate(
+                        actionEdit(item)
+                )
+                onEditItemNavigated()
+            }
+        })
+
+        navigateToDetailItem.observe(LifeCycleOwner, { item ->
+            item?.let {
+                navController.navigate(
+                        actionDetail(item)
+                )
+                onViewItemNavigated()
+            }
         })
     }
 

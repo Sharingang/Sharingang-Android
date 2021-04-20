@@ -16,26 +16,6 @@ class ItemsListFragment : Fragment() {
     private lateinit var binding: FragmentItemsListBinding
     private val viewModel: ItemsViewModel by activityViewModels()
 
-    private fun setupNavigation() {
-        viewModel.navigateToEditItem.observe(viewLifecycleOwner, { item ->
-            item?.let {
-                this.findNavController().navigate(
-                    ItemsListFragmentDirections.actionItemsListFragmentToEditItemFragment(item)
-                )
-                viewModel.onEditItemNavigated()
-            }
-        })
-        viewModel.navigateToDetailItem.observe(viewLifecycleOwner, { item ->
-            item?.let {
-                this.findNavController().navigate(
-                    ItemsListFragmentDirections.actionItemsListFragmentToDetailedItemFragment(item)
-                )
-                viewModel.onViewItemNavigated()
-            }
-        })
-    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,7 +27,9 @@ class ItemsListFragment : Fragment() {
         binding.itemList.adapter = adapter
         viewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.ALL_ITEMS)
 
-        setupNavigation()
+        viewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
+                {item -> ItemsListFragmentDirections.actionItemsListFragmentToEditItemFragment(item)},
+                {item -> ItemsListFragmentDirections.actionItemsListFragmentToDetailedItemFragment(item)})
 
         binding.swiperefresh.setOnRefreshListener { viewModel.refresh() }
         viewModel.refreshing.observe(viewLifecycleOwner, {
