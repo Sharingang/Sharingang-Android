@@ -2,7 +2,6 @@ package com.example.sharingang
 
 import androidx.room.TypeConverter
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * A utility object needed to store Date fields in our Room entities.

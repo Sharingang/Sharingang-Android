@@ -28,7 +28,6 @@ class DetailedItemFragment : Fragment() {
     private val args: DetailedItemFragmentArgs by navArgs()
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
-    private val userViewModel : UserProfileViewModel by viewModels()
     private val viewModel: UserProfileViewModel by viewModels()
 
     private lateinit var observer: ImageAccess
@@ -37,7 +36,6 @@ class DetailedItemFragment : Fragment() {
         super.onCreate(savedInstanceState)
         observer = ImageAccess(requireActivity())
         lifecycle.addObserver(observer)
-        userViewModel.setUser(currentUserProvider.getCurrentUserId())
     }
 
     override fun onCreateView(
@@ -73,11 +71,11 @@ class DetailedItemFragment : Fragment() {
     }
 
     private fun initiateWishlistButton(binding: FragmentDetailedItemBinding){
-        userViewModel.wishlistContains.observe(viewLifecycleOwner, {
+        viewModel.wishlistContains.observe(viewLifecycleOwner, {
             binding.addToWishlist.text = getButtonText(it)
         })
         binding.addToWishlist.setOnClickListener { updateWishlist(binding) }
-        userViewModel.wishlistContains(args.item)
+        viewModel.wishlistContains(args.item)
     }
 
     private fun getButtonText(contains: Boolean): String {
@@ -86,7 +84,7 @@ class DetailedItemFragment : Fragment() {
     }
 
     private fun updateWishlist(binding: FragmentDetailedItemBinding){
-        userViewModel.modifyWishList(args.item)
+        viewModel.modifyWishList(args.item)
     }
 
     private fun shareItem() {
