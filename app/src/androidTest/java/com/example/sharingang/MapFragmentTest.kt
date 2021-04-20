@@ -48,6 +48,14 @@ class MapFragmentTest {
         Thread.sleep(waitingTime)
         onView(withId(R.id.createItemButton)).perform(click())
         navigate_to(R.id.mapFragment)
+        onView(withId(R.id.map_start_search)).perform(click())
+        onView(withId(R.id.searchText)).perform(
+            ViewActions.typeText(itemTitle),
+            ViewActions.closeSoftKeyboard()
+        )
+        onView(withId(R.id.sflSearchButton)).perform(click())
+        navigate_up()
+        onView(withId(R.id.map_get_my_location)).perform(click())
         Thread.sleep(waitingTime)
         var activity: Activity? = null
         activityRule.scenario.onActivity {
@@ -63,7 +71,7 @@ class MapFragmentTest {
         val device = UiDevice.getInstance(getInstrumentation())
         device.click(device.displayWidth / 2, device.displayHeight / 2 + result)
         Thread.sleep(1000)
-        onView(withId(R.id.itemTitle)).check(matches(withText(itemTitle)));
+        onView(withId(R.id.itemTitle)).check(matches(withText(itemTitle)))
     }
 
     @Test

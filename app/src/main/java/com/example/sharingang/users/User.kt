@@ -4,11 +4,12 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import java.util.Date
-
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.ServerTimestamp
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.List
 
 /**
  * User contains the public information about a user.
@@ -26,6 +27,8 @@ data class User(
 
     /** URLs of the images */
     val profilePicture: String? = null,
+
+    var wishlist: List<String> = ArrayList(),
 
     @ServerTimestamp
     val createdAt: Date? = null,
