@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,7 +63,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 moveLastLocationMarker()
             }
         }
-        setupItemsMarkers()
+        viewModel.searchResults.observe(viewLifecycleOwner, {
+            addItemMarkers(it)
+        })
         binding.mapGetMyLocation.setOnClickListener {
             if (lastLocation != null) {
                 moveCameraToLastLocation()
@@ -77,22 +80,20 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         return binding.root
     }
 
-    private fun setupItemsMarkers() {
-        viewModel.searchResults.observe(viewLifecycleOwner, {
-            map?.clear() // need to remove all markers, otherwise they will be added once more on the map, stacking them up
-            if (lastLocation != null) {
-                addLastLocationMarker()
+    private fun addItemMarkers(items: List<Item>) {
+        map?.clear()
+        if (lastLocation != null) {
+            addLastLocationMarker()
+        }
+        for (item: Item in items) {
+            if (!item.sold) {
+                val addedMarker = map?.addMarker(
+                    MarkerOptions().position(LatLng(item.latitude, item.longitude))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                )
+                addedMarker?.tag = item
             }
-            for (item: Item in it) {
-                if (!item.sold) {
-                    val addedMarker = map?.addMarker(
-                        MarkerOptions().position(LatLng(item.latitude, item.longitude))
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                    )
-                    addedMarker?.tag = item
-                }
-            }
-        })
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -137,7 +138,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        this.map = googleMap
+        map = googleMap
         map?.setOnMarkerClickListener { marker: Marker ->
             map?.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
             if (marker != lastLocationMarker) {
@@ -148,6 +149,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
             true
         }
+        addItemMarkers(viewModel.searchResults.value ?: listOf())
+
         doOrGetPermission(
             this,
             Manifest.permission.ACCESS_FINE_LOCATION,
