@@ -39,12 +39,22 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         )
     }
     private var lastLocation: Location? = null
-    private lateinit var locationCallback: LocationCallback
+    private val locationCallback: LocationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            lastLocation = locationResult.lastLocation
+            if (!hasCameraMovedOnce) {
+                moveCameraToLastLocation()
+                hasCameraMovedOnce = true
+            }
+            moveLastLocationMarker()
+        }
+    }
     private var lastLocationMarker: Marker? = null
     private var map: GoogleMap? = null
 
     private val viewModel: ItemsViewModel by activityViewModels()
     private var hasCameraMovedOnce by Delegates.notNull<Boolean>()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -53,16 +63,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         hasCameraMovedOnce = false
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                lastLocation = locationResult.lastLocation
-                if (!hasCameraMovedOnce) {
-                    moveCameraToLastLocation()
-                    hasCameraMovedOnce = true
-                }
-                moveLastLocationMarker()
-            }
-        }
         viewModel.searchResults.observe(viewLifecycleOwner, {
             addItemMarkers(it)
         })
