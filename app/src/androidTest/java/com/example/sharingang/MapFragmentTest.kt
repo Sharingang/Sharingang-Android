@@ -48,6 +48,14 @@ class MapFragmentTest {
         Thread.sleep(waitingTime)
         onView(withId(R.id.createItemButton)).perform(click())
         navigate_to(R.id.mapFragment)
+        onView(withId(R.id.map_start_search)).perform(click())
+        onView(withId(R.id.searchText)).perform(
+            ViewActions.typeText(itemTitle),
+            ViewActions.closeSoftKeyboard()
+        )
+        onView(withId(R.id.sflSearchButton)).perform(click())
+        navigate_up()
+        onView(withId(R.id.map_get_my_location)).perform(click())
         Thread.sleep(waitingTime)
         var activity: Activity? = null
         activityRule.scenario.onActivity {

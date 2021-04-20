@@ -38,12 +38,22 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         )
     }
     private var lastLocation: Location? = null
-    private lateinit var locationCallback: LocationCallback
+    private val locationCallback: LocationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            lastLocation = locationResult.lastLocation
+            if (!hasCameraMovedOnce) {
+                moveCameraToLastLocation()
+                hasCameraMovedOnce = true
+            }
+            moveLastLocationMarker()
+        }
+    }
     private var lastLocationMarker: Marker? = null
     private var map: GoogleMap? = null
 
     private val viewModel: ItemsViewModel by activityViewModels()
     private var hasCameraMovedOnce by Delegates.notNull<Boolean>()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,43 +62,37 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         hasCameraMovedOnce = false
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                lastLocation = locationResult.lastLocation
-                if (!hasCameraMovedOnce) {
-                    moveCameraToLastLocation()
-                    hasCameraMovedOnce = true
-                }
-                moveLastLocationMarker()
-            }
-        }
-        setupItemsMarkers()
+        viewModel.searchResults.observe(viewLifecycleOwner, {
+            addItemMarkers(it)
+        })
         binding.mapGetMyLocation.setOnClickListener {
             if (lastLocation != null) {
                 moveCameraToLastLocation()
             }
+        }
+        binding.mapStartSearch.setOnClickListener {
+            this.findNavController()
+                .navigate(MapFragmentDirections.actionMapFragmentToSearchFragment())
         }
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
         return binding.root
     }
 
-    private fun setupItemsMarkers() {
-        viewModel.items.observe(viewLifecycleOwner, {
-            map?.clear() // need to remove all markers, otherwise they will be added once more on the map, stacking them up
-            if (lastLocation != null) {
-                addLastLocationMarker()
+    private fun addItemMarkers(items: List<Item>) {
+        map?.clear()
+        if (lastLocation != null) {
+            addLastLocationMarker()
+        }
+        for (item: Item in items) {
+            if (!item.sold) {
+                val addedMarker = map?.addMarker(
+                    MarkerOptions().position(LatLng(item.latitude, item.longitude))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                )
+                addedMarker?.tag = item
             }
-            for (item: Item in it) {
-                if (!item.sold) {
-                    val addedMarker = map?.addMarker(
-                        MarkerOptions().position(LatLng(item.latitude, item.longitude))
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                    )
-                    addedMarker?.tag = item
-                }
-            }
-        })
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -133,7 +137,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        this.map = googleMap
+        map = googleMap
         map?.setOnMarkerClickListener { marker: Marker ->
             map?.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
             if (marker != lastLocationMarker) {
@@ -144,6 +148,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
             true
         }
+        addItemMarkers(viewModel.searchResults.value ?: listOf())
+
         doOrGetPermission(
             this,
             Manifest.permission.ACCESS_FINE_LOCATION,
