@@ -55,3 +55,23 @@ fun navigate_to(id: Int) {
     )
     navigationMenuItemView.perform(ViewActions.click())
 }
+
+fun navigate_up() {
+    val appCompatImageButton2 = Espresso.onView(
+        Matchers.allOf(
+            ViewMatchers.withContentDescription("Navigate up"),
+            childAtPosition(
+                Matchers.allOf(
+                    ViewMatchers.withId(R.id.toolbar),
+                    childAtPosition(
+                        ViewMatchers.withClassName(Matchers.`is`("android.widget.LinearLayout")),
+                        0
+                    )
+                ),
+                1
+            ),
+            ViewMatchers.isDisplayed()
+        )
+    )
+    appCompatImageButton2.perform(ViewActions.click())
+}
