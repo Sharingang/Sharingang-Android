@@ -3,8 +3,6 @@ package com.example.sharingang.items
 import androidx.lifecycle.*
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
-import androidx.navigation.fragment.findNavController
-import com.example.sharingang.ItemsListFragmentDirections
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -69,7 +67,7 @@ class ItemsViewModel @Inject constructor(
 
 
     fun clearSearchResults() {
-        _searchResults.value = listOf<Item>()
+        _searchResults.value = listOf()
     }
 
     fun setWishList(list: List<Item>){

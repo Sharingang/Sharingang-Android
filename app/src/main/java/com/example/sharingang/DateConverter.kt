@@ -1,14 +1,6 @@
 package com.example.sharingang
 
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.lifecycle.MutableLiveData
 import androidx.room.TypeConverter
-import com.example.sharingang.items.Item
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.GlobalScope
-import java.lang.StringBuilder
 import java.util.*
 import kotlin.collections.ArrayList
 

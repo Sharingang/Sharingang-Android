@@ -15,10 +15,10 @@ class SearchFragment : Fragment() {
     private val viewModel : ItemsViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         val binding : FragmentSearchBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
         val adapter = viewModel.setupItemAdapter()
-        binding.itemSearchList.adapter = adapter;
+        binding.itemSearchList.adapter = adapter
         viewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.SEARCH_RESULTS)
 
         binding.sflSearchButton.setOnClickListener{

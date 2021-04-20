@@ -63,7 +63,7 @@ class MapFragmentTest {
         val device = UiDevice.getInstance(getInstrumentation())
         device.click(device.displayWidth / 2, device.displayHeight / 2 + result)
         Thread.sleep(1000)
-        onView(withId(R.id.itemTitle)).check(matches(withText(itemTitle)));
+        onView(withId(R.id.itemTitle)).check(matches(withText(itemTitle)))
     }
 
     @Test

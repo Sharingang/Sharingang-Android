@@ -1,14 +1,15 @@
 package com.example.sharingang.users
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.room.*
-import com.example.sharingang.items.Item
-import java.util.Date
-
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.ServerTimestamp
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.List
 
 /**
  * User contains the public information about a user.

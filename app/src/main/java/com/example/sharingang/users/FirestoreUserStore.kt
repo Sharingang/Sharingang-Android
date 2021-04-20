@@ -13,7 +13,7 @@ private const val TAG = "FirestoreUserStore"
  * During development it requires running the Firebase emulator (see README.md)
  */
 @Singleton
-class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFirestore) :
+class FirestoreUserStore @Inject constructor(firestore: FirebaseFirestore) :
     UserStore, AbstractFirestoreStore<User>("users", User::class.java, firestore) {
 
     override suspend fun add(user: User): String? {

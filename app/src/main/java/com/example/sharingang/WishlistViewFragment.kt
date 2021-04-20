@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.sharingang.databinding.FragmentWishlistViewBinding
 import com.example.sharingang.items.ItemsViewModel
 
-class wishlistViewFragment : Fragment() {
+class WishlistViewFragment : Fragment() {
 
     private lateinit var binding: FragmentWishlistViewBinding
     private val viewModel: ItemsViewModel by activityViewModels()

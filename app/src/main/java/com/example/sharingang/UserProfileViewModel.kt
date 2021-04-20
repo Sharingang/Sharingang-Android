@@ -1,13 +1,8 @@
 package com.example.sharingang
 
-import android.os.Build
-import android.util.Log
-import androidx.annotation.RequiresApi
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.*
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemRepository
-import com.example.sharingang.items.ItemsAdapter
 import com.example.sharingang.items.ItemsViewModel
 import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.User
@@ -15,13 +10,11 @@ import com.example.sharingang.users.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 @HiltViewModel
 class UserProfileViewModel @Inject constructor(
-    private val currentUserProvider: CurrentUserProvider,
+    currentUserProvider: CurrentUserProvider,
     private val itemRepository: ItemRepository,
     private val userRepository: UserRepository
 ) : ViewModel() {
@@ -56,7 +49,6 @@ class UserProfileViewModel @Inject constructor(
                         itemList.add(item)
                     }
                 }
-                Log.d("wishlist", "Value of wishlist is: ${itemList.joinToString(",")}")
                 viewModel.setWishList(itemList)
             }
         }
@@ -85,10 +77,8 @@ class UserProfileViewModel @Inject constructor(
                 val add = user.wishlist.contains(item.id!!)
                 _wishlistContains.postValue(!add)
                 if(!add){
-                    Log.d("wishlist", "Item " + item.id + " was added")
                     currentList.add(item.id)
                 } else {
-                    Log.d("wishlist", "Item " + item.id + " was removed")
                     currentList.remove(item.id)
                 }
                 user.wishlist = currentList

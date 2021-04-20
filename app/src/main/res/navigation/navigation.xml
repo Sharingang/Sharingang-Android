@@ -97,7 +97,7 @@
         android:label="Account" />
     <fragment
         android:id="@+id/wishlistViewFragment"
-        android:name="com.example.sharingang.wishlistViewFragment"
+        android:name="com.example.sharingang.WishlistViewFragment"
         android:label="wishlistViewFragment" >
         <action
             android:id="@+id/action_wishlistViewFragment_to_detailedItemFragment"
