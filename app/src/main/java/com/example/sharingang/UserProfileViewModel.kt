@@ -14,12 +14,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserProfileViewModel @Inject constructor(
-    currentUserProvider: CurrentUserProvider,
+    private val currentUserProvider: CurrentUserProvider,
     private val itemRepository: ItemRepository,
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val _userId = MutableLiveData<String?>(currentUserProvider.getCurrentUserId())
+
+    private val _userId = MutableLiveData<String?>()
     val userId: LiveData<String?>
         get() = _userId
 
@@ -40,10 +41,11 @@ class UserProfileViewModel @Inject constructor(
         }
 
     fun refreshListUI(viewModel: ItemsViewModel){
+        val userId = currentUserProvider.getCurrentUserId()
         viewModelScope.launch(Dispatchers.IO){
-            if(userId.value!= null){
+            if(userId != null){
                 val itemList = ArrayList<Item>()
-                for(str in userRepository.get(userId.value!!)!!.wishlist){
+                for(str in userRepository.get(userId)!!.wishlist){
                     val item = itemRepository.get(str)
                     if(item != null){
                         itemList.add(item)
@@ -60,18 +62,22 @@ class UserProfileViewModel @Inject constructor(
 
 
     fun wishlistContains(item: Item?){
-        if(item != null){
+        val userId = currentUserProvider.getCurrentUserId()
+        if(item != null && userId != null){
             viewModelScope.launch(Dispatchers.IO) {
-                _wishlistContains.postValue(userRepository.get(userId.value!!)!!.wishlist.contains(item.id!!))
+                _wishlistContains.postValue(userRepository.get(userId)!!.wishlist.contains(item.id!!))
             }
+        }else{
+            _wishlistContains.postValue(false)
         }
     }
 
 
     fun modifyWishList(item: Item?) {
-        if(item != null){
+        val userId = currentUserProvider.getCurrentUserId()
+        if(item != null && userId != null){
             viewModelScope.launch(Dispatchers.IO) {
-                val user : User? = userRepository.get(userId.value!!)
+                val user : User? = userRepository.get(userId)
 
                 val currentList = ArrayList(user!!.wishlist)
                 val add = user.wishlist.contains(item.id!!)

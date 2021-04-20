@@ -24,16 +24,5 @@ object DateConverter {
         return date.time
     }
 
-    @TypeConverter
-    fun toList(stringList: String?): List<String?>{
-        if(stringList == null){
-            return ArrayList()
-        }
-        return stringList.split(',')
-    }
 
-    @TypeConverter
-    fun fromList(list : List<String?>): String {
-        return list.joinToString(separator = ",")
-    }
 }

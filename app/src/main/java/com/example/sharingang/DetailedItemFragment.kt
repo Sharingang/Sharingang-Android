@@ -56,7 +56,6 @@ class DetailedItemFragment : Fragment() {
         initiateWishlistButton(binding)
 
         binding.shareButton.setOnClickListener { shareItem() }
-        binding.addToWishlist.setOnClickListener { updateWishlist(binding) }
 
         viewModel.setUser(args.item.userId)
         viewModel.user.observe(viewLifecycleOwner, { user ->
@@ -77,6 +76,7 @@ class DetailedItemFragment : Fragment() {
         userViewModel.wishlistContains.observe(viewLifecycleOwner, {
             binding.addToWishlist.text = getButtonText(it)
         })
+        binding.addToWishlist.setOnClickListener { updateWishlist(binding) }
         userViewModel.wishlistContains(args.item)
     }
 

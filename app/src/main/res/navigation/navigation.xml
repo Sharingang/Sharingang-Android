@@ -98,7 +98,7 @@
     <fragment
         android:id="@+id/wishlistViewFragment"
         android:name="com.example.sharingang.WishlistViewFragment"
-        android:label="WishlistViewFragment" >
+        android:label="@string/wishlist_menu_title" >
         <action
             android:id="@+id/action_wishlistViewFragment_to_detailedItemFragment"
             app:destination="@id/detailedItemFragment" />
