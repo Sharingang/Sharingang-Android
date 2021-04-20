@@ -92,6 +92,12 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null"/>
+        <action
+            android:id="@+id/action_userProfileFragment_to_detailedItemFragment"
+            app:destination="@id/detailedItemFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_editItemFragment"
+            app:destination="@id/editItemFragment" />
 
     </fragment>
     <fragment

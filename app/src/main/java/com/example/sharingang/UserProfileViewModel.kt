@@ -28,9 +28,6 @@ class UserProfileViewModel @Inject constructor(
     val wishlistContains : LiveData<Boolean>
         get() = _wishlistContains
 
-
-
-
     val user: LiveData<User?> =
         Transformations.switchMap(_userId) { id ->
             if (id != null) {

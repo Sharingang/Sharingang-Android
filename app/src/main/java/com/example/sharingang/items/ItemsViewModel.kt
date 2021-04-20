@@ -28,28 +28,27 @@ class ItemsViewModel @Inject constructor(
     }
 
     private val _navigateToEditItem = MutableLiveData<Item?>()
-    val navigateToEditItem: LiveData<Item?>
+    private val navigateToEditItem: LiveData<Item?>
         get() = _navigateToEditItem
 
     private val _navigateToDetailItem = MutableLiveData<Item?>()
-    val navigateToDetailItem: LiveData<Item?>
+    private val navigateToDetailItem: LiveData<Item?>
         get() = _navigateToDetailItem
 
     private val _refreshing = MutableLiveData(false)
     val refreshing: LiveData<Boolean>
         get() = _refreshing
 
-
     private val _searchResults = MutableLiveData<List<Item>>(listOf())
     val searchResults: LiveData<List<Item>>
         get() = _searchResults
 
     private val _userItems = MutableLiveData<List<Item>>()
-    val userItems: LiveData<List<Item>>
+    private val userItems: LiveData<List<Item>>
         get() = _userItems
 
     private val _wishlistItem : MutableLiveData<List<Item>> = MutableLiveData(ArrayList())
-    val wishlistItem : LiveData<List<Item>>
+    private val wishlistItem : LiveData<List<Item>>
         get() = _wishlistItem
 
     /**
@@ -81,7 +80,6 @@ class ItemsViewModel @Inject constructor(
             }
         }
     }
-
 
     fun clearSearchResults() {
         _searchResults.value = listOf()
@@ -127,23 +125,23 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
-    fun onEditItemClicked(item: Item) {
+    private fun onEditItemClicked(item: Item) {
         _navigateToEditItem.value = item
     }
 
-    fun onEditItemNavigated() {
+    private fun onEditItemNavigated() {
         _navigateToEditItem.value = null
     }
 
-    fun onViewItem(item: Item) {
+    private fun onViewItem(item: Item) {
         _navigateToDetailItem.value = item
     }
 
-    fun onViewItemNavigated() {
+    private fun onViewItemNavigated() {
         _navigateToDetailItem.value = null
     }
 
-    fun onSellItem(item: Item) {
+    private fun onSellItem(item: Item) {
         viewModelScope.launch {
             itemRepository.update(item.copy(sold = !item.sold))
         }

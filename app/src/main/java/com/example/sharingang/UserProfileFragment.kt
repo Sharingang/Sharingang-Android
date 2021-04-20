@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.UserProfileFragmentBinding
@@ -34,13 +35,9 @@ class UserProfileFragment : Fragment() {
                 null, "" -> currentUserProvider.getCurrentUserId()
                 else -> args.userId
         }
-
         viewModel.setUser(userId)
 
-        val adapter = itemsViewModel.setupItemAdapter()
-        binding.userItemList.adapter = adapter
-        itemsViewModel.getUserItem(userId)
-        itemsViewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.USER_ITEMS)
+        setupRecyclerView(userId)
 
         viewModel.user.observe(viewLifecycleOwner, { user ->
             if (user != null) {
@@ -52,6 +49,17 @@ class UserProfileFragment : Fragment() {
         binding.viewModel = viewModel
 
         return binding.root
+    }
+
+    private fun setupRecyclerView(userId: String?) {
+        val adapter = itemsViewModel.setupItemAdapter()
+        binding.userItemList.adapter = adapter
+        itemsViewModel.getUserItem(userId)
+        itemsViewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.USER_ITEMS)
+
+        itemsViewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
+            {item -> UserProfileFragmentDirections.actionUserProfileFragmentToEditItemFragment(item)},
+            {item -> UserProfileFragmentDirections.actionUserProfileFragmentToDetailedItemFragment(item)})
     }
 
 }
