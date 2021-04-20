@@ -1,9 +1,11 @@
 package com.example.sharingang
 
-import android.net.Uri
 import android.Manifest
+import android.location.Geocoder
 import android.location.Location
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,9 +21,15 @@ import com.example.sharingang.utils.ImageAccess
 import com.example.sharingang.utils.consumeLocation
 import com.example.sharingang.utils.doOrGetPermission
 import com.example.sharingang.utils.requestPermissionLauncher
+import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.model.TypeFilter
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -41,6 +49,7 @@ class NewItemFragment : Fragment() {
     private var userId: String? = null
 
     private lateinit var fusedLocationCreate: FusedLocationProviderClient
+    private lateinit var geocoder: Geocoder
 
     // Allows the cancellation of a location request if, for example, the user exists the activity
     private var cancellationTokenSource = CancellationTokenSource()
@@ -74,25 +83,40 @@ class NewItemFragment : Fragment() {
 
         bind()
         setupLocationCreate()
-
+        setupAutocomplete()
         return binding.root
+    }
+
+    private fun setupAutocomplete() {
+        geocoder = Geocoder(requireContext())
+        if (!Places.isInitialized()) {
+            Places.initialize(requireContext(), getString(R.string.google_api_key))
+        }
+        val autocompleteSupportFragment =
+            childFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
+        autocompleteSupportFragment.setHint(getString(R.string.enter_address))
+        autocompleteSupportFragment.setTypeFilter(TypeFilter.ADDRESS)
+        autocompleteSupportFragment.setPlaceFields(listOf(Place.Field.ADDRESS))
+        autocompleteSupportFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(place: Place) {
+                binding.postalAddress.text = place.address
+                val address = geocoder.getFromLocationName(place.address, 1).getOrNull(0)
+                binding.latitude = address?.latitude.toString()
+                binding.longitude = address?.longitude.toString()
+            }
+
+            override fun onError(status: Status) {
+                Log.e("Error", "$status")
+            }
+        })
     }
 
     private fun bind() {
         binding.createItemButton.setOnClickListener { view: View ->
             imageUri = observer.getImageUri()
-            viewModel.addItem(Item(
-                price = binding.price?.toDoubleOrNull() ?: 0.0,
-                description = binding.description ?: "",
-                title = binding.title ?: "",
-                category = binding.categorySpinner.selectedItemPosition,
-                categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
-                latitude = binding.latitude?.toDoubleOrNull() ?: 0.0,
-                longitude = binding.longitude?.toDoubleOrNull() ?: 0.0,
-                sold = false,
-                imageUri = imageUri?.toString(),
-                userId = userId
-            ))
+            viewModel.addItem(
+                itemToAdd()
+            )
             observer.unregister()
             view.findNavController().navigate(R.id.action_newItemFragment_to_itemsListFragment)
         }
@@ -102,6 +126,21 @@ class NewItemFragment : Fragment() {
         binding.newItemTakePicture.setOnClickListener {
             observer.openCamera()
         }
+    }
+
+    private fun itemToAdd(): Item {
+        return Item(
+            price = binding.price?.toDoubleOrNull() ?: 0.0,
+            description = binding.description ?: "",
+            title = binding.title ?: "",
+            category = binding.categorySpinner.selectedItemPosition,
+            categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
+            latitude = binding.latitude?.toDoubleOrNull() ?: 0.0,
+            longitude = binding.longitude?.toDoubleOrNull() ?: 0.0,
+            sold = false,
+            imageUri = imageUri?.toString(),
+            userId = userId
+        )
     }
 
     private fun setupLocationCreate() {
@@ -124,5 +163,8 @@ class NewItemFragment : Fragment() {
     private fun updateLocation(location: Location) {
         binding.latitude = location.latitude.toString()
         binding.longitude = location.longitude.toString()
+        val address =
+            geocoder.getFromLocation(location.latitude, location.longitude, 1).getOrNull(0)
+        binding.postalAddress.text = address?.getAddressLine(0) ?: ""
     }
 }
