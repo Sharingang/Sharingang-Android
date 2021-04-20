@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class UserProfileFragment : Fragment() {
-    private val viewModel: UserProfileViewModel by viewModels()
+    private val userViewModel: UserProfileViewModel by viewModels()
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var binding: UserProfileFragmentBinding
     @Inject
@@ -33,16 +33,17 @@ class UserProfileFragment : Fragment() {
                 else -> args.userId
         }
 
-        viewModel.setUser(userId)
+        userViewModel.setUser(userId)
 
-        viewModel.user.observe(viewLifecycleOwner, { user ->
+
+        userViewModel.user.observe(viewLifecycleOwner, { user ->
             if (user != null) {
                 binding.nameText.text = user.name
                 Glide.with(this).load(user.profilePicture).into(binding.imageView)
             }
         })
 
-        binding.viewModel = viewModel
+        binding.viewModel = userViewModel
 
         return binding.root
     }

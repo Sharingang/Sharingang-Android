@@ -13,6 +13,7 @@
         android:orientation="vertical"
         tools:context=".UserProfileFragment">
 
+
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="100dp"
@@ -30,5 +31,6 @@
             android:layout_marginBottom="16dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             tools:text="John Doe" />
+
     </LinearLayout>
 </layout>

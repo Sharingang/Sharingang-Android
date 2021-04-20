@@ -13,16 +13,21 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.sharingang.databinding.FragmentDetailedItemBinding
 import com.example.sharingang.items.Item
+import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.utils.ImageAccess
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class DetailedItemFragment : Fragment() {
+
     private val args: DetailedItemFragmentArgs by navArgs()
+    @Inject
+    lateinit var currentUserProvider: CurrentUserProvider
     private val viewModel: UserProfileViewModel by viewModels()
 
     private lateinit var observer: ImageAccess
@@ -46,6 +51,8 @@ class DetailedItemFragment : Fragment() {
             binding.detailedItemImage.setImageURI(Uri.parse(it))
         }
 
+        initiateWishlistButton(binding)
+
         binding.shareButton.setOnClickListener { shareItem() }
 
         viewModel.setUser(args.item.userId)
@@ -61,6 +68,23 @@ class DetailedItemFragment : Fragment() {
             }
         })
         return binding.root
+    }
+
+    private fun initiateWishlistButton(binding: FragmentDetailedItemBinding){
+        viewModel.wishlistContains.observe(viewLifecycleOwner, {
+            binding.addToWishlist.text = getButtonText(it)
+        })
+        binding.addToWishlist.setOnClickListener { updateWishlist(binding) }
+        viewModel.wishlistContains(args.item)
+    }
+
+    private fun getButtonText(contains: Boolean): String {
+        return if(contains) getString(R.string.remove_wishlist)
+        else getString(R.string.add_wishlist)
+    }
+
+    private fun updateWishlist(binding: FragmentDetailedItemBinding){
+        viewModel.modifyWishList(args.item)
     }
 
     private fun shareItem() {

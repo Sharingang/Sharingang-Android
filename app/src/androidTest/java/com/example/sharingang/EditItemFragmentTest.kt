@@ -43,9 +43,8 @@ class EditItemFragmentTest {
     @Test
     fun canEditItemCategory() {
         navigate_to(R.id.newItemFragment)
-        onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
         onView(withId(R.id.editItemTitle)).perform(
-            typeText("Book_item"),
+            typeText(item),
             closeSoftKeyboard()
         )
 
@@ -54,7 +53,7 @@ class EditItemFragmentTest {
 
         onView(withId(R.id.createItemButton)).perform(click())
 
-        onView(withText("Book_item")).check(matches(isDisplayed()))
+        onView(withText(item)).check(matches(isDisplayed()))
         onView(withId(R.id.item_list_view_edit_btn)).check(matches(withText("Edit")))
             .perform(click())
 
