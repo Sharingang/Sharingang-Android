@@ -14,16 +14,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.sharingang.databinding.FragmentDetailedItemBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.users.CurrentUserProvider
+import com.example.sharingang.utils.ImageAccess
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DetailedItemFragment : Fragment() {
@@ -32,6 +36,15 @@ class DetailedItemFragment : Fragment() {
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
     private val userViewModel : UserProfileViewModel by viewModels()
+    private val viewModel: UserProfileViewModel by viewModels()
+
+    private lateinit var observer: ImageAccess
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        observer = ImageAccess(requireActivity())
+        lifecycle.addObserver(observer)
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,12 +59,28 @@ class DetailedItemFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_detailed_item, container, false)
 
         binding.item = args.item
+        observer.setupImageView(binding.detailedItemImage)
+        args.item.imageUri?.let {
+            binding.detailedItemImage.setImageURI(Uri.parse(it))
+        }
 
         initiateWishlistButton(binding)
 
         binding.shareButton.setOnClickListener { shareItem() }
         binding.addToWishlist.setOnClickListener { updateWishlist(binding) }
 
+        viewModel.setUser(args.item.userId)
+        viewModel.user.observe(viewLifecycleOwner, { user ->
+            binding.username = "Posted by ${user?.name}"
+            binding.itemPostedBy.visibility = if (user != null) View.VISIBLE else View.GONE
+            binding.itemPostedBy.setOnClickListener { view ->
+                view.findNavController().navigate(
+                    DetailedItemFragmentDirections.actionDetailedItemFragmentToUserProfileFragment(
+                        user?.id
+                    )
+                )
+            }
+        })
         return binding.root
     }
 

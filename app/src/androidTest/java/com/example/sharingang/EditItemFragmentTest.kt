@@ -14,7 +14,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import org.hamcrest.Matchers
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -143,16 +142,5 @@ class EditItemFragmentTest {
 
         onView(withId(R.id.new_item_take_picture)).perform(click())
         onView(withId(R.id.new_item_image)).check(matches(hasContentDescription()))
-    }
-
-    @Test
-    fun clickingOnGetLocationDisplaysLocation() {
-        navigate_to(R.id.newItemFragment)
-        val button = onView(withId(R.id.new_item_get_location))
-        button.check(matches(withText("Get Location")))
-        button.perform(click())
-        Thread.sleep(5000)
-        onView(withId(R.id.write_latitude)).check(matches(Matchers.not(withText(""))))
-        onView(withId(R.id.write_longitude)).check(matches(Matchers.not(withText(""))))
     }
 }
