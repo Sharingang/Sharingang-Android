@@ -92,19 +92,23 @@ class AccountFragment : Fragment() {
     }
 
     private fun restoreLoginStatus() {
-        if (auth.currentUser != null) update(AccountStatus.LOGGED_IN, auth.currentUser)
+        val loggedInUser = auth.currentUser
+        if (loggedInUser != null) update(AccountStatus.LOGGED_IN, loggedInUser)
         else update(AccountStatus.LOGGED_OUT, null)
     }
 
     private fun addUserToDatabase(user: FirebaseUser) {
+        val userToConnectId = user.uid
         lifecycleScope.launch(Dispatchers.IO) {
-            userRepository.add(
-                User(
-                    id = user.uid,
-                    name = user.displayName!!,
-                    profilePicture = user.photoUrl?.toString()
+            if (userRepository.get(userToConnectId) == null) {
+                userRepository.add(
+                    User(
+                        id = userToConnectId,
+                        name = user.displayName!!,
+                        profilePicture = user.photoUrl?.toString()
+                    )
                 )
-            )
+            }
         }
     }
 
