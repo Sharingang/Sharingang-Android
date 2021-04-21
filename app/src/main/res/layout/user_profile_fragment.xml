@@ -80,6 +80,12 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             tools:text="John Doe" />
 
+        <Button
+            android:id="@+id/btn_report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Report User" />
+
         <TextView
             android:id="@+id/text_email"
             android:layout_width="wrap_content"

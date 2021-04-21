@@ -65,6 +65,7 @@ class UserProfileFragment : Fragment() {
         loggedInUserEmail = currentUserProvider.getCurrentUserEmail()
         initSetup()
         setupViewAndButtonsAction()
+        setupReportButton()
         return binding.root
     }
 
@@ -74,7 +75,8 @@ class UserProfileFragment : Fragment() {
             binding.gallerycameraholder,
             binding.nameText,
             binding.textEmail,
-            binding.applyholder
+            binding.applyholder,
+            binding.btnReport
         )
         for(view: View in fields) {
             view.visibility = View.GONE
@@ -167,6 +169,20 @@ class UserProfileFragment : Fragment() {
                 }
                 binding.applyholder.visibility = View.GONE
             }
+        }
+    }
+
+    private fun setupReportButton() {
+        if(currentUserId != null)
+            binding.btnReport.visibility = View.VISIBLE
+
+        binding.btnReport.setOnClickListener {
+            lifecycleScope.launch(Dispatchers.IO) {
+                val reporterUser = userRepository.get(currentUserId!!)!!
+                val reportedUser = userRepository.get(shownUserProfileId!!)!!
+                userRepository.report(reportedUser, reporterUser)
+            }
+            binding.btnReport.visibility = View.GONE
         }
     }
 
