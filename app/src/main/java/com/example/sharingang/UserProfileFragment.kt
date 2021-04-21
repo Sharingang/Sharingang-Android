@@ -1,6 +1,8 @@
 package com.example.sharingang
 
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -177,22 +179,26 @@ class UserProfileFragment : Fragment() {
         var username = ""
         if(currentUserId != null) {
             binding.btnReport.visibility = View.VISIBLE
+            lifecycleScope.launch(Dispatchers.IO) {
+                username = userRepository.get(shownUserProfileId!!)!!.name
+            }
         }
-        lifecycleScope.launch(Dispatchers.IO) {
-            username = userRepository.get(shownUserProfileId!!)!!.name
-        }
+
         binding.btnReport.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 val reporterUser = userRepository.get(currentUserId!!)!!
                 val reportedUser = userRepository.get(shownUserProfileId!!)!!
                 userRepository.report(reportedUser, reporterUser)
             }
-            Toast.makeText(requireContext(),
-                "Successfully reported $username.",
-                Toast.LENGTH_SHORT
-            ).show()
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Report Result")
+            builder.setMessage("Successfully reported $username.")
+            builder.setPositiveButton("OK") { _: DialogInterface, _: Int -> }
+            builder.show()
+
         }
     }
+
 
 }
 
