@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.sharingang.databinding.FragmentSearchBinding
 import com.example.sharingang.items.ItemsViewModel
 
@@ -23,6 +24,10 @@ class SearchFragment : Fragment() {
         binding.sflSearchButton.setOnClickListener{
             viewModel.searchItems(binding.searchText.text.toString() , binding.searchCategorySpinner.selectedItemPosition)
         }
+
+        viewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
+            {item -> SearchFragmentDirections.actionSearchFragmentToEditItemFragment(item)},
+            {item -> SearchFragmentDirections.actionSearchFragmentToDetailedItemFragment(item)})
 
         binding.clearSearchButton.setOnClickListener {clearSearch(it)}
 
