@@ -45,7 +45,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 moveCameraToLastLocation()
                 hasCameraMovedOnce = true
             }
-            moveLastLocationMarker()
         }
     }
     private var lastLocationMarker: Marker? = null
@@ -81,22 +80,25 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun addItemMarkers(items: List<Item>) {
         map?.clear()
-        if (lastLocation != null) {
-            addLastLocationMarker()
-        }
         for (item: Item in items) {
-            if (!item.sold) {
-                val addedMarker = map?.addMarker(
-                    MarkerOptions().position(LatLng(item.latitude, item.longitude))
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                )
-                addedMarker?.tag = item
-            }
+            val addedMarker = map?.addMarker(
+                MarkerOptions().position(LatLng(item.latitude, item.longitude))
+                    .title(item.title)
+                    .snippet(item.description)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+            )
+            addedMarker?.showInfoWindow()
+            addedMarker?.tag = item
         }
     }
 
     @SuppressLint("MissingPermission")
     private fun startLocationUpdates() {
+        // Show blue dot at current location
+        map?.isMyLocationEnabled = true
+        // We already have a custom button so we remove the default one
+        map?.uiSettings?.isMyLocationButtonEnabled = false
+
         fusedLocationClient.requestLocationUpdates(
             LocationRequest.create().apply {
                 interval = 5000
@@ -116,22 +118,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     lastLocation!!.latitude,
                     lastLocation!!.longitude
                 ), DEFAULT_ZOOM.toFloat()
-            )
-        )
-    }
-
-    private fun moveLastLocationMarker() {
-        lastLocationMarker?.remove()
-        addLastLocationMarker()
-    }
-
-    private fun addLastLocationMarker() {
-        lastLocationMarker = map?.addMarker(
-            MarkerOptions().position(
-                LatLng(
-                    lastLocation!!.latitude,
-                    lastLocation!!.longitude
-                )
             )
         )
     }
