@@ -80,23 +80,7 @@ class UserProfileFragment : Fragment() {
         val buttons = listOf(binding.btnApply, binding.btnOpenCamera, binding.btnOpenGallery)
         for(button: Button in buttons) {
             button.setOnClickListener {
-                when (button) {
-                    binding.btnOpenCamera, binding.btnOpenGallery -> {
-                        binding.applyholder.visibility = View.VISIBLE
-                        if(button == binding.btnOpenGallery) imageAccess.openGallery()
-                        else imageAccess.openCamera()
-                    }
-                    binding.btnApply -> {
-                        imageUri = imageAccess.getImageUri()
-                        if (imageUri != Uri.EMPTY && imageUri != null) {
-                            binding.imageView.setImageURI(imageUri)
-                            lifecycleScope.launch(Dispatchers.IO) {
-                                userRepository.add(userRepository.get(currentUserId!!)!!.copy(profilePicture = imageUri.toString()))
-                            }
-                        }
-                        binding.applyholder.visibility = View.GONE
-                    }
-                }
+                getAction(button)
             }
         }
     }
@@ -147,6 +131,26 @@ class UserProfileFragment : Fragment() {
             binding.nameText.text = user.name
             Glide.with(this).load(user.profilePicture).into(binding.imageView)
             setEmailText()
+        }
+    }
+
+    private fun getAction(button: Button) {
+        when (button) {
+            binding.btnOpenCamera, binding.btnOpenGallery -> {
+                binding.applyholder.visibility = View.VISIBLE
+                if(button == binding.btnOpenGallery) imageAccess.openGallery()
+                else imageAccess.openCamera()
+            }
+            binding.btnApply -> {
+                imageUri = imageAccess.getImageUri()
+                if (imageUri != Uri.EMPTY && imageUri != null) {
+                    binding.imageView.setImageURI(imageUri)
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        userRepository.add(userRepository.get(currentUserId!!)!!.copy(profilePicture = imageUri.toString()))
+                    }
+                }
+                binding.applyholder.visibility = View.GONE
+            }
         }
     }
 
