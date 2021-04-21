@@ -44,7 +44,6 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
                         reporterUser.id to Calendar.getInstance().time.toString()
                     )
                 )
-            //.collection("reports").add(reporterUser.id!!)
             Log.d("TESTING FIRE", "User ${reporterUser.id} reported ${reportedUser.id}")
             true
         } catch (e: Exception) {

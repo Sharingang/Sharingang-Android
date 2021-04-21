@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -173,16 +174,23 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupReportButton() {
-        if(currentUserId != null)
+        var username = ""
+        if(currentUserId != null) {
             binding.btnReport.visibility = View.VISIBLE
-
+        }
+        lifecycleScope.launch(Dispatchers.IO) {
+            username = userRepository.get(shownUserProfileId!!)!!.name
+        }
         binding.btnReport.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 val reporterUser = userRepository.get(currentUserId!!)!!
                 val reportedUser = userRepository.get(shownUserProfileId!!)!!
                 userRepository.report(reportedUser, reporterUser)
             }
-            binding.btnReport.visibility = View.GONE
+            Toast.makeText(requireContext(),
+                "Successfully reported $username.",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
