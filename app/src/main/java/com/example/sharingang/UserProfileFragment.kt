@@ -112,17 +112,15 @@ class UserProfileFragment : Fragment() {
 
     private fun setEmailText() {
         val emailText = binding.textEmail
-        if(isAuthUserDisplayedUser() && currentUserId != null) {
+        if(currentUserId != null && isAuthUserDisplayedUser()) {
             emailText.text = loggedInUserEmail
-        }
-        if(currentUserId != null) {
             emailText.visibility = View.VISIBLE
         }
     }
 
     private fun setupTopInfoVisibility() {
         val topInfoText = binding.upfTopinfo
-        if(currentUserId != null) {
+        if(currentUserId != null || args.userId != null) {
             topInfoText.visibility = View.GONE
         }
     }
@@ -132,12 +130,13 @@ class UserProfileFragment : Fragment() {
         return shownUserId == null || shownUserId == currentUserId
     }
 
+
     private fun setupImageAndNameVisibility() {
         val profilePictureImageView = binding.imageView
         val userDisplayName = binding.nameText
         val mainFields = listOf(profilePictureImageView, userDisplayName)
         for(view: View in mainFields) {
-            if(currentUserId != null) {
+            if(currentUserId != null || args.userId != null) {
                 view.visibility = View.VISIBLE
             }
         }
