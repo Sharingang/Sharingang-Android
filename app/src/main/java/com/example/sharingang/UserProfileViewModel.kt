@@ -57,7 +57,6 @@ class UserProfileViewModel @Inject constructor(
         _userId.postValue(userId)
     }
 
-
     fun wishlistContains(item: Item?){
         val userId = currentUserProvider.getCurrentUserId()
         if(item != null && userId != null){
@@ -68,7 +67,6 @@ class UserProfileViewModel @Inject constructor(
             _wishlistContains.postValue(false)
         }
     }
-
 
     fun modifyWishList(item: Item?) {
         val userId = currentUserProvider.getCurrentUserId()
@@ -89,6 +87,5 @@ class UserProfileViewModel @Inject constructor(
             }
         }
     }
-
 }
 

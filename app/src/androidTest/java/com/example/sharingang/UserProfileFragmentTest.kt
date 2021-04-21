@@ -2,16 +2,10 @@ package com.example.sharingang
 
 
 import android.Manifest
-import android.os.Environment
-import android.os.Environment.DIRECTORY_PICTURES
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
@@ -22,7 +16,6 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
-import java.io.File
 
 @HiltAndroidTest
 class UserProfileFragmentTest {
@@ -60,7 +53,6 @@ class UserProfileFragmentTest {
         onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
     }
 
-
     @Test
     fun applyButtonIsDisplayedUponClickOnOpenGallery() {
         val device: UiDevice = UiDevice.getInstance(getInstrumentation())
@@ -83,12 +75,12 @@ class UserProfileFragmentTest {
         )
         val button = onView(withId(R.id.createItemButton))
         button.check(matches(withText("Create Item")))
-        button.perform(ViewActions.click())
+        button.perform(click())
 
         navigate_to(R.id.userProfileFragment)
 
         val textView = onView(withId(R.id.nameText))
         textView.check(matches(withText(FakeCurrentUserProvider.fakeUser.name)))
-        onView(withText(fakeText)).check(matches(ViewMatchers.isDisplayed()))
+        onView(withText(fakeText)).check(matches(isDisplayed()))
     }
 }

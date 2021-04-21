@@ -47,17 +47,14 @@ class UserProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = UserProfileFragmentBinding.inflate(inflater, container, false)
-        val currentActivity = requireActivity()
-        val profilePicture = binding.imageView
-        currentUserId = currentUserProvider.getCurrentUserId()
         // If no userId is provided, we get the user that is currently logged in.
         shownUserProfileId = when(args.userId) {
-            null, "" -> currentUserId
+            null, "" -> currentUserProvider.getCurrentUserId()
             else -> args.userId
         }
         userViewModel.setUser(shownUserProfileId)
-        imageAccess = ImageAccess(currentActivity)
-        imageAccess.setupImageView(profilePicture)
+        imageAccess = ImageAccess(requireActivity())
+        imageAccess.setupImageView(binding.imageView)
         lifecycle.addObserver(imageAccess)
         userViewModel.user.observe(viewLifecycleOwner, { user ->
             displayUserFields(user)
@@ -92,6 +89,7 @@ class UserProfileFragment : Fragment() {
             pictureButtonsRow.visibility = View.VISIBLE
         }
     }
+
     private fun setupRecyclerView(userId: String?) {
         val adapter = itemsViewModel.setupItemAdapter()
         binding.userItemList.adapter = adapter
@@ -102,8 +100,6 @@ class UserProfileFragment : Fragment() {
             {item -> UserProfileFragmentDirections.actionUserProfileFragmentToEditItemFragment(item)},
             {item -> UserProfileFragmentDirections.actionUserProfileFragmentToDetailedItemFragment(item)})
     }
-
-}
 
     private fun setupButtonsAction() {
         val buttons = listOf(binding.btnApply, binding.btnOpenCamera, binding.btnOpenGallery)

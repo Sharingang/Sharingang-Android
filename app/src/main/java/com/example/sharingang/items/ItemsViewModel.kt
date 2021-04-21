@@ -28,11 +28,11 @@ class ItemsViewModel @Inject constructor(
     }
 
     private val _navigateToEditItem = MutableLiveData<Item?>()
-    private val navigateToEditItem: LiveData<Item?>
+    val navigateToEditItem: LiveData<Item?>
         get() = _navigateToEditItem
 
     private val _navigateToDetailItem = MutableLiveData<Item?>()
-    private val navigateToDetailItem: LiveData<Item?>
+    val navigateToDetailItem: LiveData<Item?>
         get() = _navigateToDetailItem
 
     private val _refreshing = MutableLiveData(false)
@@ -44,11 +44,11 @@ class ItemsViewModel @Inject constructor(
         get() = _searchResults
 
     private val _userItems = MutableLiveData<List<Item>>()
-    private val userItems: LiveData<List<Item>>
+    val userItems: LiveData<List<Item>>
         get() = _userItems
 
     private val _wishlistItem : MutableLiveData<List<Item>> = MutableLiveData(ArrayList())
-    private val wishlistItem : LiveData<List<Item>>
+    val wishlistItem : LiveData<List<Item>>
         get() = _wishlistItem
 
     /**
