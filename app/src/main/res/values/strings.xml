@@ -37,6 +37,7 @@
     <string name="wishlist_menu_title">Wish List</string>
     <string name="enter_address">Enter Address</string>
     <string name="upfNotLoggedInInfo">You need to be logged in to view User Profiles.</string>
+    <string name="text_email_unavailable">e-mail not available</string>
     <string-array name="categories">
         <item>None</item>
         <item>Book</item>

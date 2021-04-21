@@ -34,6 +34,7 @@ class UserProfileFragment : Fragment() {
     private lateinit var imageAccess: ImageAccess
     // This is the user whose profile is shown (can be different from currentUserId)
     private var shownUserProfileId: String? = null
+    private var loggedInUserEmail: String? = null
     private var imageUri: Uri? = null
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
@@ -65,6 +66,7 @@ class UserProfileFragment : Fragment() {
             displayUserFields(user)
         })
         binding.viewModel = userViewModel
+        loggedInUserEmail = currentUserProvider.getCurrentUserEmail()
         initSetup()
         setupViewAndButtonsAction()
         return binding.root
@@ -81,13 +83,12 @@ class UserProfileFragment : Fragment() {
         for(view: View in fields) {
             view.visibility = View.GONE
         }
-        binding.textEmail.text = "e-mail not available"
+        binding.textEmail.text = getString(R.string.text_email_unavailable)
     }
 
     private fun setupButtonsVisibility() {
         currentUserId = currentUserProvider.getCurrentUserId()
         val pictureButtonsRow = binding.gallerycameraholder
-        val applyButtonRow = binding.applyholder
         if(currentUserId != null && isAuthUserDisplayedUser()) {
             pictureButtonsRow.visibility = View.VISIBLE
         }
@@ -105,7 +106,7 @@ class UserProfileFragment : Fragment() {
     private fun setEmailText() {
         val emailText = binding.textEmail
         if(isAuthUserDisplayedUser() && currentUserId != null) {
-            emailText.text = currentUserProvider.getCurrentUserEmail()
+            emailText.text = loggedInUserEmail
         }
         if(currentUserId != null) {
             emailText.visibility = View.VISIBLE
