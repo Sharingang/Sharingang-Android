@@ -30,6 +30,12 @@ class InMemoryItemRepository : ItemRepository {
         return itemsLiveData
     }
 
+    override suspend fun userItems(userId: String): List<Item>? {
+        return itemsMap.values.filter { item ->
+            item.userId.equals(userId)
+        }
+    }
+
     override suspend fun refreshItems() {
     }
 

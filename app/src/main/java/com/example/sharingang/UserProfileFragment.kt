@@ -9,10 +9,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.UserProfileFragmentBinding
+import com.example.sharingang.items.ItemsViewModel
 import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.User
 import com.example.sharingang.users.UserRepository
@@ -22,11 +24,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
-
 @AndroidEntryPoint
 class UserProfileFragment : Fragment() {
     private val userViewModel: UserProfileViewModel by viewModels()
+    private val itemsViewModel: ItemsViewModel by viewModels()
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var binding: UserProfileFragmentBinding
     // This is the currently logged in user
@@ -46,21 +47,20 @@ class UserProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = UserProfileFragmentBinding.inflate(inflater, container, false)
-        val currentActivity = requireActivity()
-        val profilePicture = binding.imageView
-        currentUserId = currentUserProvider.getCurrentUserId()
         // If no userId is provided, we get the user that is currently logged in.
         shownUserProfileId = when(args.userId) {
-            null, "" -> currentUserId
+            null, "" -> currentUserProvider.getCurrentUserId()
             else -> args.userId
         }
         userViewModel.setUser(shownUserProfileId)
-        imageAccess = ImageAccess(currentActivity)
-        imageAccess.setupImageView(profilePicture)
+        imageAccess = ImageAccess(requireActivity())
+        imageAccess.setupImageView(binding.imageView)
         lifecycle.addObserver(imageAccess)
         userViewModel.user.observe(viewLifecycleOwner, { user ->
             displayUserFields(user)
         })
+
+        setupRecyclerView(shownUserProfileId)
         binding.viewModel = userViewModel
         loggedInUserEmail = currentUserProvider.getCurrentUserEmail()
         initSetup()
@@ -88,6 +88,17 @@ class UserProfileFragment : Fragment() {
         if(currentUserId != null && isAuthUserDisplayedUser()) {
             pictureButtonsRow.visibility = View.VISIBLE
         }
+    }
+
+    private fun setupRecyclerView(userId: String?) {
+        val adapter = itemsViewModel.setupItemAdapter()
+        binding.userItemList.adapter = adapter
+        itemsViewModel.getUserItem(userId)
+        itemsViewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.USER_ITEMS)
+
+        itemsViewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
+            {item -> UserProfileFragmentDirections.actionUserProfileFragmentToEditItemFragment(item)},
+            {item -> UserProfileFragmentDirections.actionUserProfileFragmentToDetailedItemFragment(item)})
     }
 
     private fun setupButtonsAction() {

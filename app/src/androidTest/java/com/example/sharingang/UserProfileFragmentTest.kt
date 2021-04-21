@@ -2,10 +2,8 @@ package com.example.sharingang
 
 
 import android.Manifest
-import android.os.Environment
-import android.os.Environment.DIRECTORY_PICTURES
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -18,7 +16,6 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
-import java.io.File
 
 @HiltAndroidTest
 class UserProfileFragmentTest {
@@ -35,6 +32,8 @@ class UserProfileFragmentTest {
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.CAMERA
     )
+
+    private val fakeText = "Fake"
 
     @Test
     fun canOpenUserProfileFragment() {
@@ -54,7 +53,6 @@ class UserProfileFragmentTest {
         onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
     }
 
-
     @Test
     fun applyButtonIsDisplayedUponClickOnOpenGallery() {
         val device: UiDevice = UiDevice.getInstance(getInstrumentation())
@@ -64,5 +62,25 @@ class UserProfileFragmentTest {
         onView(withId(R.id.btnApply)).check(matches(isDisplayed()))
         onView(withId(R.id.btnApply)).perform(click())
         onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
+    }
+
+    @Test
+    fun aUserCanSeeTheirItems() {
+        navigate_to(R.id.newItemFragment)
+        onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
+
+        onView(withId(R.id.editItemTitle)).perform(
+            ViewActions.typeText(fakeText),
+            ViewActions.closeSoftKeyboard()
+        )
+        val button = onView(withId(R.id.createItemButton))
+        button.check(matches(withText("Create Item")))
+        button.perform(click())
+
+        navigate_to(R.id.userProfileFragment)
+
+        val textView = onView(withId(R.id.nameText))
+        textView.check(matches(withText(FakeCurrentUserProvider.fakeUser.name)))
+        onView(withText(fakeText)).check(matches(isDisplayed()))
     }
 }
