@@ -4,6 +4,7 @@ package com.example.sharingang
 import android.Manifest
 import android.os.Environment
 import android.os.Environment.DIRECTORY_PICTURES
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -38,14 +39,18 @@ class UserProfileFragmentTest {
     @Test
     fun canOpenUserProfileFragment() {
         navigate_to(R.id.userProfileFragment)
-
+        Thread.sleep(3000)
         val textView = onView(withId(R.id.nameText))
         textView.check(matches(withText(FakeCurrentUserProvider.fakeUser.name)))
+        onView(withId(R.id.text_email)).check(matches(withText("test user email")))
+        onView(withId(R.id.upf_topinfo)).check(matches(withText(
+            "You need to be logged in to view User Profiles.")))
     }
 
     @Test
     fun pictureButtonsAreDisplayedCorrectly() {
         navigate_to(R.id.userProfileFragment)
+        Thread.sleep(3000)
         onView(withId(R.id.btn_open_camera)).check(matches(withText("Open Camera")))
         onView(withId(R.id.btn_open_gallery)).check(matches(withText("Open Gallery")))
         onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
@@ -56,10 +61,14 @@ class UserProfileFragmentTest {
     fun applyButtonIsDisplayedUponClickOnOpenGallery() {
         val device: UiDevice = UiDevice.getInstance(getInstrumentation())
         navigate_to(R.id.userProfileFragment)
+        Thread.sleep(3000)
         onView(withId(R.id.btn_open_gallery)).perform(click())
+        Thread.sleep(3000)
         device.pressBack()
+        Thread.sleep(3000)
         onView(withId(R.id.btnApply)).check(matches(isDisplayed()))
         onView(withId(R.id.btnApply)).perform(click())
+        Thread.sleep(3000)
         onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
     }
 }

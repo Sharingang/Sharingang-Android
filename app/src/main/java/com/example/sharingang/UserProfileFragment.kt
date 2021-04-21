@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -17,10 +18,11 @@ import com.example.sharingang.databinding.UserProfileFragmentBinding
 import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.UserRepository
 import com.example.sharingang.utils.ImageAccess
-
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.w3c.dom.Text
 
 import javax.inject.Inject
 
@@ -38,6 +40,8 @@ class UserProfileFragment : Fragment() {
     lateinit var currentUserProvider: CurrentUserProvider
     @Inject
     lateinit var userRepository: UserRepository
+    @Inject
+    lateinit var auth: FirebaseAuth
 
     companion object {
         fun newInstance() = UserProfileFragment()
@@ -62,22 +66,23 @@ class UserProfileFragment : Fragment() {
             if (user != null) {
                 binding.nameText.text = user.name
                 Glide.with(this).load(user.profilePicture).into(binding.imageView)
+                setEmailText()
             }
         })
         binding.viewModel = userViewModel
         setupButtonsVisibility()
+        setupTopInfoVisibility()
+        setupPfpAndNameVisibility()
         return binding.root
     }
 
     private fun setupButtonsVisibility() {
         currentUserId = currentUserProvider.getCurrentUserId()
         val buttons = listOf(binding.btnOpenGallery, binding.btnOpenCamera, binding.btnApply)
-        for(button: Button in buttons) {
-            button.visibility =
-                if(currentUserId != null) View.VISIBLE
-                else View.GONE
-        }
-        binding.btnApply.visibility = View.GONE
+        binding.gallerycameraholder.visibility =
+            if(currentUserId != null && isAuthUserDisplayedUser()) View.VISIBLE
+            else View.GONE
+        binding.applyholder.visibility = View.GONE
         setupButtons()
 
     }
@@ -85,7 +90,7 @@ class UserProfileFragment : Fragment() {
         val buttons = listOf(binding.btnApply, binding.btnOpenCamera, binding.btnOpenGallery)
         for(button: Button in buttons) {
             button.setOnClickListener {
-                binding.btnApply.visibility =
+                binding.applyholder.visibility =
                     if(button == binding.btnOpenCamera || button == binding.btnOpenGallery)
                         View.VISIBLE
                     else View.GONE
@@ -108,11 +113,36 @@ class UserProfileFragment : Fragment() {
                         userRepository.add(updatedUser)
                     }
                 }
-                binding.btnApply.visibility = View.GONE
+                binding.applyholder.visibility = View.GONE
             }
         }
     }
 
+    private fun setEmailText() {
+        binding.textEmail.text =
+            if(isAuthUserDisplayedUser() && currentUserId != null)
+                currentUserProvider.getCurrentUserEmail()
+            else "e-mail not available"
+        binding.textEmail.visibility = if(currentUserId != null) View.VISIBLE
+        else View.GONE
+    }
+
+    private fun setupTopInfoVisibility() {
+        binding.upfTopinfo.visibility =
+            if(currentUserProvider.getCurrentUserId() != null) View.GONE
+            else View.VISIBLE
+    }
+
+    private fun isAuthUserDisplayedUser(): Boolean {
+        return args.userId == null || args.userId == currentUserId
+    }
+
+    private fun setupPfpAndNameVisibility() {
+        val mainFields = listOf(binding.imageView, binding.nameText)
+        for(view: View in mainFields) {
+            view.visibility = if(currentUserId == null) View.GONE else View.VISIBLE
+        }
+    }
 
 }
 

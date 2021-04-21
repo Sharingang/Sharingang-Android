@@ -11,9 +11,17 @@
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
         tools:context=".UserProfileFragment">
 
+
+        <TextView
+            android:id="@+id/upf_topinfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/upfNotLoggedInInfo"
+            android:textSize="14sp" />
 
         <ImageView
             android:id="@+id/imageView"
@@ -25,6 +33,7 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <LinearLayout
+            android:id="@+id/gallerycameraholder"
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:gravity="center"
@@ -48,6 +57,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/applyholder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -69,6 +79,11 @@
             android:layout_marginBottom="16dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             tools:text="John Doe" />
+
+        <TextView
+            android:id="@+id/text_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 </layout>
