@@ -21,8 +21,8 @@ class FakeCurrentUserProvider @Inject constructor(
         return fakeUser.id
     }
 
-    override fun getCurrentUserEmail(): String? {
-        return "test user email"
+    override fun getCurrentUserEmail(): String {
+        return "test-user@example.com"
     }
 
     companion object {

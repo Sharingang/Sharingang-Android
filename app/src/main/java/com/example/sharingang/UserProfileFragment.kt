@@ -30,7 +30,7 @@ class UserProfileFragment : Fragment() {
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var binding: UserProfileFragmentBinding
     // This is the currently logged in user
-    private var currentUserId: String? = ""
+    private var currentUserId: String? = null
     private lateinit var imageAccess: ImageAccess
     // This is the user whose profile is shown (can be different from currentUserId)
     private var shownUserProfileId: String? = null
@@ -40,10 +40,6 @@ class UserProfileFragment : Fragment() {
     lateinit var currentUserProvider: CurrentUserProvider
     @Inject
     lateinit var userRepository: UserRepository
-
-    companion object {
-        fun newInstance() = UserProfileFragment()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -125,7 +121,7 @@ class UserProfileFragment : Fragment() {
         return shownUserId == null || shownUserId == currentUserId
     }
 
-    private fun setupPfpAndNameVisibility() {
+    private fun setupImageAndNameVisibility() {
         val profilePictureImageView = binding.imageView
         val userDisplayName = binding.nameText
         val mainFields = listOf(profilePictureImageView, userDisplayName)
@@ -140,7 +136,7 @@ class UserProfileFragment : Fragment() {
         setupButtonsAction()
         setupButtonsVisibility()
         setupTopInfoVisibility()
-        setupPfpAndNameVisibility()
+        setupImageAndNameVisibility()
     }
 
     private fun displayUserFields(requestedUser: User?) {
