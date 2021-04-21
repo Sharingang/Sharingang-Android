@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
             name="viewModel"
             type="com.example.sharingang.UserProfileViewModel" />
     </data>
 
-    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
         tools:context=".UserProfileFragment">
 
+
+        <TextView
+            android:id="@+id/upf_topinfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/upfNotLoggedInInfo"
+            android:textSize="14sp" />
 
         <ImageView
             android:id="@+id/imageView"
@@ -20,7 +29,46 @@
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
+            android:contentDescription="@string/txt_user_profile_picture"
             tools:srcCompat="@tools:sample/avatars" />
+
+        <LinearLayout
+            android:id="@+id/gallerycameraholder"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_open_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:text="@string/open_camera"
+                tools:ignore="ButtonStyle,InefficientWeight" />
+
+            <Button
+                android:id="@+id/btn_open_gallery"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:text="@string/open_gallery"
+                tools:ignore="ButtonStyle" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/applyholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnApply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/apply_changes" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/nameText"
@@ -31,6 +79,11 @@
             android:layout_marginBottom="16dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             tools:text="John Doe" />
+
+        <TextView
+            android:id="@+id/text_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 </layout>
