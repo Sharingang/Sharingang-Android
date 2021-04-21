@@ -49,6 +49,8 @@ class UserProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = UserProfileFragmentBinding.inflate(inflater, container, false)
+        val currentActivity = requireActivity()
+        val profilePicture = binding.imageView
         currentUserId = currentUserProvider.getCurrentUserId()
         // If no userId is provided, we get the user that is currently logged in.
         shownUserProfileId = when(args.userId) {
@@ -56,14 +58,14 @@ class UserProfileFragment : Fragment() {
             else -> args.userId
         }
         userViewModel.setUser(shownUserProfileId)
-        imageAccess = ImageAccess(requireActivity())
-        imageAccess.setupImageView(binding.imageView)
+        imageAccess = ImageAccess(currentActivity)
+        imageAccess.setupImageView(profilePicture)
         lifecycle.addObserver(imageAccess)
         userViewModel.user.observe(viewLifecycleOwner, { user ->
             displayUserFields(user)
         })
         binding.viewModel = userViewModel
-        setupViewAndButtons()
+        setupViewAndButtonsAction()
         return binding.root
     }
 
@@ -76,7 +78,7 @@ class UserProfileFragment : Fragment() {
             else View.GONE
         applyButtonRow.visibility = View.GONE
     }
-    private fun setupButtons() {
+    private fun setupButtonsAction() {
         val buttons = listOf(binding.btnApply, binding.btnOpenCamera, binding.btnOpenGallery)
         for(button: Button in buttons) {
             button.setOnClickListener {
@@ -91,7 +93,7 @@ class UserProfileFragment : Fragment() {
             if(isAuthUserDisplayedUser() && currentUserId != null)
                 currentUserProvider.getCurrentUserEmail()
             else "e-mail not available"
-        binding.textEmail.visibility =
+        emailText.visibility =
             if(currentUserId != null) View.VISIBLE
             else View.GONE
     }
@@ -99,7 +101,7 @@ class UserProfileFragment : Fragment() {
     private fun setupTopInfoVisibility() {
         val topInfoText = binding.upfTopinfo
         topInfoText.visibility =
-            if(currentUserProvider.getCurrentUserId() != null) View.GONE
+            if(currentUserId != null) View.GONE
             else View.VISIBLE
     }
 
@@ -119,17 +121,20 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    private fun setupViewAndButtons() {
-        setupButtons()
+    private fun setupViewAndButtonsAction() {
+        setupButtonsAction()
         setupButtonsVisibility()
         setupTopInfoVisibility()
         setupPfpAndNameVisibility()
     }
 
-    private fun displayUserFields(user: User?) {
-        if (user != null) {
-            binding.nameText.text = user.name
-            Glide.with(this).load(user.profilePicture).into(binding.imageView)
+    private fun displayUserFields(requestedUser: User?) {
+        if (requestedUser != null) {
+            val requestedUserDisplayName = binding.nameText
+            requestedUserDisplayName.text = requestedUser.name
+            val userPictureUri = requestedUser.profilePicture
+            val userProfilePicture = binding.imageView
+            Glide.with(this).load(userPictureUri).into(userProfilePicture)
             setEmailText()
         }
     }
