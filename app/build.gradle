@@ -55,10 +55,13 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
-    // Location
+    // Location / map
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.libraries.places:places:2.4.0'
+    implementation 'com.google.maps.android:maps-ktx:3.0.0'
+    implementation 'com.google.maps.android:maps-utils-ktx:3.0.0'
+    implementation 'com.google.maps.android:android-maps-utils:2.2.2'
 
     // Navigation Component
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
@@ -82,10 +85,10 @@ dependencies {
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "androidx.room:room-runtime:2.4.0-alpha01"
-    implementation "androidx.room:room-ktx:2.4.0-alpha01"
+    implementation "androidx.room:room-runtime:2.3.0"
+    implementation "androidx.room:room-ktx:2.3.0"
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
-    kapt "androidx.room:room-compiler:2.4.0-alpha01"
+    kapt "androidx.room:room-compiler:2.3.0"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
     implementation 'com.github.bumptech.glide:glide:4.12.0'
