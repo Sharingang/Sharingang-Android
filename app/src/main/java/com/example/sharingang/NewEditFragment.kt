@@ -187,16 +187,11 @@ class NewEditFragment : Fragment() {
     private fun setupNewOrEditFragment() {
         val args = NewEditFragmentArgs.fromBundle(requireArguments())
         existingItem = args.item
-        if (existingItem == null) {
-            binding.editItemPrompt.visibility = View.GONE
-            binding.editItemButton.visibility = View.GONE
-            binding.newItemPrompt.visibility = View.VISIBLE
-            binding.createItemButton.visibility = View.VISIBLE
-        } else {
-            binding.editItemPrompt.visibility = View.VISIBLE
-            binding.editItemButton.visibility = View.VISIBLE
-            binding.newItemPrompt.visibility = View.GONE
-            binding.createItemButton.visibility = View.GONE
+        listOf(binding.editItemPrompt,binding.editItemButton).forEach {
+            it.visibility = if(existingItem==null) View.GONE else View.VISIBLE
+        }
+        listOf(binding.newItemPrompt,binding.createItemButton).forEach{
+            it.visibility = if(existingItem==null) View.VISIBLE else View.GONE
         }
     }
 
