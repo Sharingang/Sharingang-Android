@@ -59,6 +59,10 @@ class DetailedItemFragmentTest {
     fun canRateAUser(){
         val testTitle = "Book Item"
 
+        navigate_to(R.id.userProfileFragment)
+        onView(withId(R.id.rating_textview)).check(matches(withText("No Ratings")))
+        pressBack()
+
         navigate_to(R.id.newEditFragment)
         onView(withId(R.id.itemTitle)).perform(
             typeText(testTitle),
