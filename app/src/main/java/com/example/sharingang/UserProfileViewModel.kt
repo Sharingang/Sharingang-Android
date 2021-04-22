@@ -87,5 +87,15 @@ class UserProfileViewModel @Inject constructor(
             }
         }
     }
+
+    fun report(reportedUserId: String, reporterUserId: String)  {
+        viewModelScope.launch(Dispatchers.IO) {
+            val reporterUser = userRepository.get(reporterUserId)
+            val reportedUser = userRepository.get(reportedUserId)
+            userRepository.report(reportedUser!!, reporterUser!!)
+        }
+    }
+
+
 }
 

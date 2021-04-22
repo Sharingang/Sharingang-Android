@@ -208,11 +208,7 @@ class UserProfileFragment : Fragment() {
         }
 
         binding.btnReport.setOnClickListener {
-            lifecycleScope.launch(Dispatchers.IO) {
-                val reporterUser = userRepository.get(currentUserId!!)!!
-                val reportedUser = userRepository.get(shownUserProfileId!!)!!
-                userRepository.report(reportedUser, reporterUser)
-            }
+            userViewModel.report(shownUserProfileId!!, currentUserId!!)
             val builder = AlertDialog.Builder(requireContext())
             builder.setTitle("Report Result")
             builder.setMessage("Successfully reported $username.")

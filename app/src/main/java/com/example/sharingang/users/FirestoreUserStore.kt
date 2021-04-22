@@ -42,7 +42,7 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
                 .collection("reports").document(reporterUser.id!!).set(
                     hashMapOf(
                         "reporter" to reporterUser.id,
-                        "reportedAt" to Calendar.getInstance().time.toString()
+                        "reportedAt" to Date()
                     )
                 )
             Log.d(TAG, "User ${reporterUser.id} reported ${reportedUser.id}")
