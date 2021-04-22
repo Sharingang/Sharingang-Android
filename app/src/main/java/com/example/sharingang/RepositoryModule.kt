@@ -107,4 +107,10 @@ object RepositoryModule {
     fun provideCurrentUserProvider(currentUserProvider: FirestoreCurrentUserProvider): CurrentUserProvider {
         return currentUserProvider
     }
+
+    @Singleton
+    @Provides
+    fun provideImageStore(imageStore: FirebaseImageStore): ImageStore {
+        return imageStore
+    }
 }
