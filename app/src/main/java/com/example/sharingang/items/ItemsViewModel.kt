@@ -147,11 +147,11 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
-    fun setupItemAdapter(): ItemsAdapter {
+    fun setupItemAdapter(userId: String?): ItemsAdapter {
         val onEdit = { item: Item -> onEditItemClicked(item) }
         val onView = { item: Item -> onViewItem(item) }
         val onSell = { item: Item -> onSellItem(item) }
-        return ItemsAdapter(ItemListener(onEdit, onView, onSell))
+        return ItemsAdapter(ItemListener(onEdit, onView, onSell), userId)
     }
 
     fun addObserver(LifeCycleOwner: LifecycleOwner, adapter: ItemsAdapter, type: OBSERVABLES) {
