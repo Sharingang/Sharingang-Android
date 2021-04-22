@@ -2,7 +2,6 @@ package com.example.sharingang
 
 
 import android.Manifest
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.*
@@ -12,8 +11,6 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.UiSelector
-import com.example.sharingang.users.UserRepository
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers.not
@@ -39,10 +36,9 @@ class UserProfileFragmentTest {
 
     @Test
     fun canOpenUserProfileFragment() {
-        FakeCurrentUserProvider.userInstance = 1
         navigate_to(R.id.userProfileFragment)
         val textView = onView(withId(R.id.nameText))
-        textView.check(matches(withText(FakeCurrentUserProvider.fakeUser1.name)))
+        textView.check(matches(withText(FakeCurrentUserProvider.fakeUser.name)))
         onView(withId(R.id.text_email)).check(matches(withText("test-user@example.com")))
         onView(withId(R.id.upf_topinfo)).check(matches(withText(
             "You need to be logged in to view your User Profile.")))
@@ -98,7 +94,6 @@ class UserProfileFragmentTest {
 
     @Test
     fun aUserCanSeeTheirItems() {
-        FakeCurrentUserProvider.userInstance = 1
         navigate_to(R.id.newEditFragment)
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
 
@@ -113,7 +108,7 @@ class UserProfileFragmentTest {
         navigate_to(R.id.userProfileFragment)
 
         val textView = onView(withId(R.id.nameText))
-        textView.check(matches(withText(FakeCurrentUserProvider.fakeUser1.name)))
+        textView.check(matches(withText(FakeCurrentUserProvider.fakeUser.name)))
         onView(withText(fakeText)).check(matches(isDisplayed()))
     }
 }
