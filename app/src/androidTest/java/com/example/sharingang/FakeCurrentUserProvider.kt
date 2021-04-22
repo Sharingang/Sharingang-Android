@@ -8,17 +8,18 @@ import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class FakeCurrentUserProvider @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) : CurrentUserProvider {
 
     init {
         runBlocking(Dispatchers.IO) {
-            userRepository.add(fakeUser)
+            userRepository.add(fakeUser1)
+            userRepository.add(fakeUser2)
         }
     }
 
     override fun getCurrentUserId(): String? {
-        return fakeUser.id
+        return if (userInstance == 1) fakeUser1.id else fakeUser2.id
     }
 
     override fun getCurrentUserEmail(): String {
@@ -30,10 +31,17 @@ class FakeCurrentUserProvider @Inject constructor(
     }
 
     companion object {
-        val fakeUser = User(
-            id = "fakeUserID",
+        val fakeUser1 = User(
+            id = "fakeUserID1",
             name = "Test User",
             profilePicture = "https://picsum.photos/200",
         )
+
+        val fakeUser2 = User(
+            id = "fakeUserID2",
+            name = "Test User",
+            profilePicture = "https://picsum.photos/200"
+        )
+        var userInstance = 1
     }
 }
