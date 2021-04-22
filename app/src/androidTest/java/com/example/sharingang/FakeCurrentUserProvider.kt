@@ -13,13 +13,12 @@ class FakeCurrentUserProvider @Inject constructor(
 
     init {
         runBlocking(Dispatchers.IO) {
-            userRepository.add(fakeUser1)
-            userRepository.add(fakeUser2)
+            userRepository.add(fakeUser)
         }
     }
 
     override fun getCurrentUserId(): String? {
-        return if (userInstance == 1) fakeUser1.id else fakeUser2.id
+        return fakeUser.id
     }
 
     override fun getCurrentUserEmail(): String {
@@ -31,17 +30,10 @@ class FakeCurrentUserProvider @Inject constructor(
     }
 
     companion object {
-        val fakeUser1 = User(
-            id = "fakeUserID1",
+        val fakeUser = User(
+            id = "fakeUserID",
             name = "Test User",
             profilePicture = "https://picsum.photos/200",
         )
-
-        val fakeUser2 = User(
-            id = "fakeUserID2",
-            name = "Test User",
-            profilePicture = "https://picsum.photos/200"
-        )
-        var userInstance = 1
     }
 }
