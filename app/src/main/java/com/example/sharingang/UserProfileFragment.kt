@@ -185,7 +185,7 @@ class UserProfileFragment : Fragment() {
 
     private fun setupReportButton() {
         var username = ""
-        if(currentUserId != null && !isAuthUserDisplayedUser()) {
+        if(currentUserId != null) {
             binding.btnReport.visibility = View.VISIBLE
             lifecycleScope.launch(Dispatchers.IO) {
                 username = userRepository.get(shownUserProfileId!!)!!.name

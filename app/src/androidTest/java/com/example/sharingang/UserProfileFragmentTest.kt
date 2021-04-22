@@ -11,6 +11,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiSelector
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers.not
@@ -63,24 +64,10 @@ class UserProfileFragmentTest {
         onView(withId(R.id.btnApply)).perform(click())
         onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
     }
-    /*
+
     @Test
     fun reportUserIsDisplayedAndSendsReport() {
-        FakeCurrentUserProvider.userInstance = 1
         navigate_to(R.id.userProfileFragment)
-        onView(withId(R.id.btn_report)).check(matches(not(isDisplayed())))
-        Espresso.pressBack()
-        navigate_to(R.id.newEditFragment)
-        onView(withId(R.id.itemTitle)).perform(
-            typeText("Something"),
-            closeSoftKeyboard()
-        )
-        onView(withId(R.id.createItemButton)).perform(click())
-        FakeCurrentUserProvider.userInstance = 2
-        onView(withText("Something")).perform(click())
-        Thread.sleep(2000)
-        onView(withText("Test User")).perform(click())
-        Thread.sleep(2000)
         onView(withId(R.id.btn_report)).check(matches(isDisplayed()))
         onView(withId(R.id.btn_report)).perform(click())
         val device: UiDevice = UiDevice.getInstance(getInstrumentation())
@@ -90,7 +77,7 @@ class UserProfileFragmentTest {
         assert(okButton.text.toString() == "OK")
         okButton.click()
     }
-    */
+
 
     @Test
     fun aUserCanSeeTheirItems() {
