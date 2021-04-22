@@ -35,7 +35,7 @@ class MapFragmentTest {
 
 
     private val itemTitle = "T"
-    private val waitingTime = 6000L
+    private val waitingTime = 8000L
 
     @Test
     fun itemsAddedAreDisplayedOnTheMap() {
