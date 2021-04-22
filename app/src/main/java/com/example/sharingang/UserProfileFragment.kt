@@ -79,7 +79,6 @@ class UserProfileFragment : Fragment() {
         for(view: View in fields) {
             view.visibility = View.GONE
         }
-        binding.textEmail.text = getString(R.string.text_email_unavailable)
     }
 
     private fun setupButtonsVisibility() {
