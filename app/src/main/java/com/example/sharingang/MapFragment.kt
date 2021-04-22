@@ -32,7 +32,6 @@ import com.google.maps.android.ktx.awaitMap
 import com.google.maps.android.ui.IconGenerator
 import kotlin.properties.Delegates
 
-
 const val DEFAULT_ZOOM = 15
 
 class MapFragment : Fragment() {
@@ -116,7 +115,6 @@ class MapFragment : Fragment() {
         )
     }
 
-
     private fun moveCameraToLastLocation() {
         map?.animateCamera(
             CameraUpdateFactory.newLatLngZoom(
@@ -198,10 +196,10 @@ class MapFragment : Fragment() {
         clusterManager: ClusterManager<T>?
     ) : DefaultClusterRenderer<T>(context, map, clusterManager) {
         private val iconGenerator: IconGenerator = IconGenerator(context)
+        @SuppressLint("InflateParams")
         private var markerView: View = layoutInflater.inflate(R.layout.item_marker, null)
 
         init {
-            // TODO binding
             super.setMinClusterSize(3)
             iconGenerator.setContentView(markerView)
         }
