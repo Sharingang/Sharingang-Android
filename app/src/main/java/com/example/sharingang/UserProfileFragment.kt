@@ -47,9 +47,10 @@ class UserProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = UserProfileFragmentBinding.inflate(inflater, container, false)
+        currentUserId = currentUserProvider.getCurrentUserId()
         // If no userId is provided, we get the user that is currently logged in.
         shownUserProfileId = when(args.userId) {
-            null, "" -> currentUserProvider.getCurrentUserId()
+            null, "" -> currentUserId
             else -> args.userId
         }
         userViewModel.setUser(shownUserProfileId)
@@ -59,7 +60,6 @@ class UserProfileFragment : Fragment() {
         userViewModel.user.observe(viewLifecycleOwner, { user ->
             displayUserFields(user)
         })
-
         setupRecyclerView(shownUserProfileId)
         binding.viewModel = userViewModel
         loggedInUserEmail = currentUserProvider.getCurrentUserEmail()
@@ -83,7 +83,6 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupButtonsVisibility() {
-        currentUserId = currentUserProvider.getCurrentUserId()
         val pictureButtonsRow = binding.gallerycameraholder
         if(currentUserId != null && isAuthUserDisplayedUser()) {
             pictureButtonsRow.visibility = View.VISIBLE
@@ -91,7 +90,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupRecyclerView(userId: String?) {
-        val adapter = itemsViewModel.setupItemAdapter()
+        val adapter = itemsViewModel.setupItemAdapter(currentUserId)
         binding.userItemList.adapter = adapter
         itemsViewModel.getUserItem(userId)
         itemsViewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.USER_ITEMS)
