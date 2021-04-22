@@ -48,7 +48,7 @@ class NewItemFragmentTest {
 
     @Test
     fun aDescriptionCanBeEnteredAndSeenOnMainActivity() {
-        navigate_to(R.id.editItemFragment)
+        navigate_to(R.id.newEditFragment)
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
 
         onView(withId(R.id.itemTitle)).perform(
@@ -61,7 +61,7 @@ class NewItemFragmentTest {
 
         onView(withText(firstItem)).check(matches(isDisplayed()))
 
-        navigate_to(R.id.editItemFragment)
+        navigate_to(R.id.newEditFragment)
         onView(withId(R.id.itemTitle)).perform(
             typeText(secondItem),
             closeSoftKeyboard()
@@ -79,7 +79,7 @@ class NewItemFragmentTest {
         Intents.intending(IntentMatchers.hasAction(Intent.ACTION_GET_CONTENT))
             .respondWith(imgGalleryResult)
 
-        navigate_to(R.id.editItemFragment)
+        navigate_to(R.id.newEditFragment)
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
 
         onView(withId(R.id.item_image)).perform(click())
@@ -93,7 +93,7 @@ class NewItemFragmentTest {
         Intents.intending(IntentMatchers.hasAction(MediaStore.ACTION_IMAGE_CAPTURE))
             .respondWith(imgGalleryResult)
 
-        navigate_to(R.id.editItemFragment)
+        navigate_to(R.id.newEditFragment)
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
 
         onView(withId(R.id.item_take_picture)).perform(click())
@@ -102,7 +102,7 @@ class NewItemFragmentTest {
 
     @Test
     fun clickingOnGetLocationDisplaysLocation() {
-        navigate_to(R.id.editItemFragment)
+        navigate_to(R.id.newEditFragment)
         val button = onView(withId(R.id.item_get_location))
         button.check(matches(withText("Get Location")))
         button.perform(click())
@@ -112,7 +112,7 @@ class NewItemFragmentTest {
 
     @Test
     fun aLocationCanBeSetInNewItemFragment() {
-        navigate_to(R.id.editItemFragment)
+        navigate_to(R.id.newEditFragment)
         onView(withId(R.id.autocomplete_fragment)).perform(click())
         onView(withHint("Enter Address")).perform(typeText("Taj"), closeSoftKeyboard())
         Thread.sleep(3000)
@@ -124,7 +124,7 @@ class NewItemFragmentTest {
 
     @Test
     fun addressSearchCanBeCanceled(){
-        navigate_to(R.id.editItemFragment)
+        navigate_to(R.id.newEditFragment)
         onView(withId(R.id.autocomplete_fragment)).perform(click())
         val device = UiDevice.getInstance((InstrumentationRegistry.getInstrumentation()))
         device.pressBack()

@@ -31,7 +31,7 @@ class WishlistViewFragment : Fragment() {
         userviewModel.refreshListUI(viewModel)
 
         viewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
-                {item -> WishlistViewFragmentDirections.actionWishlistViewFragmentToEditItemFragment(item)},
+                {item -> WishlistViewFragmentDirections.actionWishlistViewFragmentToNewEditFragment(item)},
                 {item -> WishlistViewFragmentDirections.actionWishlistViewFragmentToDetailedItemFragment(item)})
 
         return binding.root

@@ -67,7 +67,7 @@ class WishlistViewTest {
 
     private fun addItemsToDb(vararg itemNames: String){
         for(itemName in itemNames){
-            navigate_to(R.id.editItemFragment)
+            navigate_to(R.id.newEditFragment)
             onView(withId(R.id.itemTitle)).perform(
                     typeText(itemName),
                     closeSoftKeyboard()

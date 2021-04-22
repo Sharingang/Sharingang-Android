@@ -97,7 +97,7 @@ class UserProfileFragment : Fragment() {
         itemsViewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.USER_ITEMS)
 
         itemsViewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
-            {item -> UserProfileFragmentDirections.actionUserProfileFragmentToEditItemFragment(item)},
+            {item -> UserProfileFragmentDirections.actionUserProfileFragmentToNewEditFragment(item)},
             {item -> UserProfileFragmentDirections.actionUserProfileFragmentToDetailedItemFragment(item)})
     }
 

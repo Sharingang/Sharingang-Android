@@ -41,7 +41,7 @@ class DetailedItemFragmentTest {
     fun canSeeCategoryInDetailedItemFragment() {
         val testTitle = "Book Item"
         val testCategory = "Book"
-        navigate_to(R.id.editItemFragment)
+        navigate_to(R.id.newEditFragment)
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
         onView(withId(R.id.itemTitle)).perform(
             typeText(testTitle),
@@ -61,7 +61,7 @@ class DetailedItemFragmentTest {
         val imgGalleryResult = createImageGallerySetResultStub(mActivityTestRule.activity)
         Intents.intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgGalleryResult)
 
-        navigate_to(R.id.editItemFragment)
+        navigate_to(R.id.newEditFragment)
         onView(withId(R.id.item_take_picture)).perform(click())
         onView(withId(R.id.item_image)).check(matches(hasContentDescription()))
         val buttonCreate = onView(withId(R.id.createItemButton))

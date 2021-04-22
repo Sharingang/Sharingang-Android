@@ -66,7 +66,7 @@ class UserProfileFragmentTest {
 
     @Test
     fun aUserCanSeeTheirItems() {
-        navigate_to(R.id.editItemFragment)
+        navigate_to(R.id.newEditFragment)
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
 
         onView(withId(R.id.itemTitle)).perform(

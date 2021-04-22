@@ -15,7 +15,7 @@
         android:icon="@drawable/baseline_search_black_24dp"
         android:title="@string/search" />
     <item
-        android:id="@+id/editItemFragment"
+        android:id="@+id/newEditFragment"
         android:icon="@drawable/baseline_add_box_black_24dp"
         android:title="@string/new_item" />
     <item

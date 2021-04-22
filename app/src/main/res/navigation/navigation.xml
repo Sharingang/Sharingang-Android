@@ -11,8 +11,8 @@
         android:label="Items"
         tools:layout="@layout/fragment_items_list">
         <action
-            android:id="@+id/action_itemsListFragment_to_editItemFragment"
-            app:destination="@id/editItemFragment" />
+            android:id="@+id/action_itemsListFragment_to_newEditFragment"
+            app:destination="@id/newEditFragment" />
         <action
             android:id="@+id/action_itemsListFragment_to_detailedItemFragment"
             app:destination="@id/detailedItemFragment" />
@@ -33,12 +33,12 @@
             app:destination="@id/wishlistViewFragment" />
     </fragment>
     <fragment
-        android:id="@+id/editItemFragment"
-        android:name="com.example.sharingang.EditItemFragment"
+        android:id="@+id/newEditFragment"
+        android:name="com.example.sharingang.NewEditFragment"
         android:label="@string/item"
-        tools:layout="@layout/fragment_edit_item">
+        tools:layout="@layout/fragment_new_edit_item">
         <action
-            android:id="@+id/action_editItemFragment_to_itemsListFragment"
+            android:id="@+id/action_newEditFragment_to_itemsListFragment"
             app:destination="@id/itemsListFragment" />
         <argument
             android:name="item"
@@ -66,8 +66,8 @@
             android:id="@+id/action_searchFragment_to_detailedItemFragment"
             app:destination="@id/detailedItemFragment" />
         <action
-            android:id="@+id/action_searchFragment_to_editItemFragment"
-            app:destination="@id/editItemFragment" />
+            android:id="@+id/action_searchFragment_to_newEditFragment"
+            app:destination="@id/newEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapFragment"
@@ -94,8 +94,8 @@
             android:id="@+id/action_userProfileFragment_to_detailedItemFragment"
             app:destination="@id/detailedItemFragment" />
         <action
-            android:id="@+id/action_userProfileFragment_to_editItemFragment"
-            app:destination="@id/editItemFragment" />
+            android:id="@+id/action_userProfileFragment_to_newEditFragment"
+            app:destination="@id/newEditFragment" />
 
     </fragment>
     <fragment
@@ -110,7 +110,7 @@
             android:id="@+id/action_wishlistViewFragment_to_detailedItemFragment"
             app:destination="@id/detailedItemFragment" />
         <action
-            android:id="@+id/action_wishlistViewFragment_to_editItemFragment"
-            app:destination="@id/editItemFragment" />
+            android:id="@+id/action_wishlistViewFragment_to_newEditFragment"
+            app:destination="@id/newEditFragment" />
     </fragment>
 </navigation>

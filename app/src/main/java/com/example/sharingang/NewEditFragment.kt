@@ -13,7 +13,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
-import com.example.sharingang.databinding.FragmentEditItemBinding
+import com.example.sharingang.databinding.FragmentNewEditItemBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsViewModel
 import com.example.sharingang.users.CurrentUserProvider
@@ -34,7 +34,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class EditItemFragment : Fragment() {
+class NewEditFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
     private var existingItem: Item? = null
@@ -43,7 +43,7 @@ class EditItemFragment : Fragment() {
 
     private var imageUri: Uri? = null
 
-    private lateinit var binding: FragmentEditItemBinding
+    private lateinit var binding: FragmentNewEditItemBinding
 
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
@@ -76,7 +76,8 @@ class EditItemFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_item, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_new_edit_item, container, false)
         setupAutocomplete()
         setupNewOrEditFragment()
         userId = currentUserProvider.getCurrentUserId()
@@ -129,7 +130,7 @@ class EditItemFragment : Fragment() {
                 itemToAdd()
             )
             observer.unregister()
-            view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)
+            view.findNavController().navigate(R.id.action_newEditFragment_to_itemsListFragment)
         }
         binding.itemImage.setOnClickListener {
             observer.openGallery()
@@ -198,7 +199,7 @@ class EditItemFragment : Fragment() {
             binding.editItemButton.visibility = View.VISIBLE
             binding.newItemPrompt.visibility = View.GONE
             binding.createItemButton.visibility = View.GONE
-            val args = EditItemFragmentArgs.fromBundle(requireArguments())
+            val args = NewEditFragmentArgs.fromBundle(requireArguments())
             existingItem = args.item
         }
     }
