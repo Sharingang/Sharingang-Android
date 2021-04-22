@@ -26,6 +26,7 @@ class WishlistViewTest {
     @get:Rule(order = 1)
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
+
     @Test
     fun canAddAndRemoveItemToWishlist(){
         addItemsToDb(firstItem)

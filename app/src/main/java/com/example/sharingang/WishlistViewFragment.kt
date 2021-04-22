@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.sharingang.databinding.FragmentWishlistViewBinding
@@ -24,6 +25,7 @@ class WishlistViewFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        checkUser()
         userViewModel.refreshListUI(viewModel)
     }
 
@@ -39,8 +41,14 @@ class WishlistViewFragment : Fragment() {
         viewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
                 {item -> WishlistViewFragmentDirections.actionWishlistViewFragmentToEditItemFragment(item)},
                 {item -> WishlistViewFragmentDirections.actionWishlistViewFragmentToDetailedItemFragment(item)})
-
+        checkUser()
         return binding.root
+    }
+
+    private fun checkUser(){
+        if(currentUserProvider.getCurrentUserId() == null){
+            Toast.makeText(this.context, "Login to view your wish list", Toast.LENGTH_SHORT).show()
+        }
     }
 
 }
