@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.sharingang.databinding.FragmentDetailedItemBinding
 import com.example.sharingang.items.Item
+import com.example.sharingang.items.ItemsViewModel
 import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.utils.ImageAccess
 import com.google.firebase.dynamiclinks.ktx.androidParameters
@@ -29,6 +30,7 @@ class DetailedItemFragment : Fragment() {
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
     private val viewModel: UserProfileViewModel by viewModels()
+    private val itemViewModel: ItemsViewModel by viewModels()
 
     private lateinit var observer: ImageAccess
 
@@ -52,6 +54,7 @@ class DetailedItemFragment : Fragment() {
         }
 
         initiateWishlistButton(binding)
+        initRating(binding)
 
         binding.shareButton.setOnClickListener { shareItem() }
 
@@ -80,7 +83,34 @@ class DetailedItemFragment : Fragment() {
         }else{
             binding.addToWishlist.visibility = View.GONE;
         }
+    }
 
+    private fun initRating(binding: FragmentDetailedItemBinding){
+        updateRatingVisibility(binding)
+        binding.ratingButton.setOnClickListener {
+            val selectedOPtion: Int = binding.radioGroup1.checkedRadioButtonId
+            if(selectedOPtion != -1){
+                val rating = when(selectedOPtion){
+                    binding.radioButton1.id -> 1
+                    binding.radioButton2.id -> 2
+                    binding.radioButton3.id -> 3
+                    binding.radioButton4.id -> 4
+                    binding.radioButton5.id -> 5
+                    else -> 0
+                }
+                viewModel.updateUserRating(args.item.userId, rating)
+                itemViewModel.rateItem(args.item)
+                updateRatingVisibility(binding)
+            }
+        }
+    }
+
+    private fun updateRatingVisibility(binding: FragmentDetailedItemBinding){
+        val visibility = if(!args.item.rated && args.item.userId != null
+            && args.item.sold && currentUserProvider.getCurrentUserId() != null)
+                View.VISIBLE
+            else View.GONE
+        binding.ratingVisibility = visibility
     }
 
     private fun getButtonText(contains: Boolean): String {

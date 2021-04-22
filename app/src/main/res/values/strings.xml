@@ -39,6 +39,8 @@
     <string name="item">Item</string>
     <string name="userNotLoggedInInfo">You need to be logged in to view your User Profile.</string>
     <string name="text_email_unavailable">e-mail not available</string>
+    <string name="default_rating">No Ratings</string>
+    <string name="apply_rating">Rate</string>
     <string-array name="categories">
         <item>None</item>
         <item>Book</item>

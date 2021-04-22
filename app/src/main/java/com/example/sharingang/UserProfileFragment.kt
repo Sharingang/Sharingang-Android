@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.UserProfileFragmentBinding
@@ -65,6 +66,7 @@ class UserProfileFragment : Fragment() {
         loggedInUserEmail = currentUserProvider.getCurrentUserEmail()
         initSetup()
         setupViewAndButtonsAction()
+        setupRatingView()
         return binding.root
     }
 
@@ -74,11 +76,19 @@ class UserProfileFragment : Fragment() {
             binding.gallerycameraholder,
             binding.nameText,
             binding.textEmail,
-            binding.applyholder
+            binding.applyholder,
+            binding.ratingTextview
         )
         for(view: View in fields) {
             view.visibility = View.GONE
         }
+    }
+
+    private fun setupRatingView(){
+        userViewModel.refreshRating(shownUserProfileId)
+        userViewModel.rating.observe(viewLifecycleOwner, {
+            binding.ratingTextview.text = String.format("%.2f", it)
+        })
     }
 
     private fun setupButtonsVisibility() {
@@ -140,11 +150,17 @@ class UserProfileFragment : Fragment() {
         }
     }
 
+    private fun setupRatingVisibility(){
+        if(currentUserId != null || args.userId != null){
+            binding.ratingTextview.visibility = View.VISIBLE
+        }
+    }
     private fun setupViewAndButtonsAction() {
         setupButtonsAction()
         setupButtonsVisibility()
         setupTopInfoVisibility()
         setupImageAndNameVisibility()
+        setupRatingVisibility()
     }
 
     private fun displayUserFields(requestedUser: User?) {

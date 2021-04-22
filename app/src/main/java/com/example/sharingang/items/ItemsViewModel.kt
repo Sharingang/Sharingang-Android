@@ -13,7 +13,7 @@ import javax.inject.Inject
  * ItemsViewModel models the state of the fragment for viewing items
  */
 @HiltViewModel
-class ItemsViewModel @Inject constructor(
+class  ItemsViewModel @Inject constructor(
     private val itemRepository: ItemRepository
 ) : ViewModel() {
 
@@ -50,6 +50,7 @@ class ItemsViewModel @Inject constructor(
     private val _wishlistItem: MutableLiveData<List<Item>> = MutableLiveData(ArrayList())
     val wishlistItem: LiveData<List<Item>>
         get() = _wishlistItem
+
 
     /**
      * The last item created
@@ -164,6 +165,13 @@ class ItemsViewModel @Inject constructor(
         observable.observe(LifeCycleOwner, {
             adapter.submitList(it)
         })
+    }
+
+    fun rateItem(item: Item){
+        item.rated = true
+        viewModelScope.launch(Dispatchers.IO) {
+            itemRepository.update(item)
+        }
     }
 
     fun setupItemNavigation(

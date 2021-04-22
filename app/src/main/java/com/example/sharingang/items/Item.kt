@@ -46,6 +46,8 @@ data class Item(
     /** Id of the user that created the item */
     val userId: String? = null,
 
+    var rated: Boolean = false,
+
     @ServerTimestamp
     val createdAt: Date? = null,
 
