@@ -8,7 +8,7 @@ import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class FakeCurrentUserProvider @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) : CurrentUserProvider {
 
     init {

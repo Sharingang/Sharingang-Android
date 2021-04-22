@@ -4,13 +4,14 @@ package com.example.sharingang
 import android.Manifest
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiSelector
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers.not
@@ -32,7 +33,6 @@ class UserProfileFragmentTest {
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.CAMERA
     )
-
     private val fakeText = "Fake"
 
     @Test
@@ -53,6 +53,7 @@ class UserProfileFragmentTest {
         onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
     }
 
+
     @Test
     fun applyButtonIsDisplayedUponClickOnOpenGallery() {
         val device: UiDevice = UiDevice.getInstance(getInstrumentation())
@@ -63,6 +64,18 @@ class UserProfileFragmentTest {
         onView(withId(R.id.btnApply)).perform(click())
         onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
     }
+
+    @Test
+    fun reportUserIsDisplayedAndSendsReport() {
+        navigate_to(R.id.userProfileFragment)
+        onView(withId(R.id.btn_report)).check(matches(isDisplayed()))
+        onView(withId(R.id.btn_report)).perform(click())
+        onView(withText("Report Result")).check(matches(isDisplayed()))
+        onView(withText("Successfully reported Test User.")).check(matches(isDisplayed()))
+        onView(withText("OK")).check(matches(isDisplayed()))
+        onView(withText("OK")).perform(click())
+    }
+
 
     @Test
     fun aUserCanSeeTheirItems() {

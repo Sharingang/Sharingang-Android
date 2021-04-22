@@ -9,6 +9,7 @@ import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.ServerTimestamp
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashSet
 import kotlin.collections.List
 
 /**
@@ -32,7 +33,6 @@ data class User(
     var numberOfRatings: Int = 0,
 
     var wishlist: List<String> = ArrayList(),
-
     @ServerTimestamp
     val createdAt: Date? = null,
 

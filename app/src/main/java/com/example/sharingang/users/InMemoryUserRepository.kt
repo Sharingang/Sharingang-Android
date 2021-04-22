@@ -42,4 +42,8 @@ class InMemoryUserRepository : UserRepository {
         usersMap[user.id] = user
         return true
     }
+
+    override suspend fun report(reportedUser: User, reporterUser: User): Boolean {
+        return true
+    }
 }
