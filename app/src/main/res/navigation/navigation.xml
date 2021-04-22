@@ -43,9 +43,6 @@
         <argument
             android:name="item"
             app:argType="com.example.sharingang.items.Item" />
-        <action
-            android:id="@+id/action_newItemFragment_to_itemsListFragment"
-            app:destination="@id/itemsListFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailedItemFragment"

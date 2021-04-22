@@ -116,21 +116,18 @@ class NewEditFragment : Fragment() {
     }
 
     private fun setupButtonActions() {
-        binding.createItemButton.setOnClickListener { view: View ->
-            imageUri = observer.getImageUri()
-            viewModel.addItem(
-                itemToAdd()
-            )
-            observer.unregister()
-            view.findNavController().navigate(R.id.action_newItemFragment_to_itemsListFragment)
-        }
-        binding.editItemButton.setOnClickListener { view: View ->
-            imageUri = observer.getImageUri()
-            viewModel.updateItem(
-                itemToAdd()
-            )
-            observer.unregister()
-            view.findNavController().navigate(R.id.action_newEditFragment_to_itemsListFragment)
+        listOf(binding.createItemButton, binding.editItemButton).forEach {
+            it.setOnClickListener { view: View ->
+                imageUri = observer.getImageUri()
+                val item = itemToAdd()
+                if (existingItem == null) {
+                    viewModel.addItem(item)
+                } else {
+                    viewModel.updateItem(item)
+                }
+                observer.unregister()
+                view.findNavController().navigate(R.id.action_newEditFragment_to_itemsListFragment)
+            }
         }
         binding.itemImage.setOnClickListener {
             observer.openGallery()
