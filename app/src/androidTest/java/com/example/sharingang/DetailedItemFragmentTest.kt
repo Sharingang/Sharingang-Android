@@ -57,7 +57,6 @@ class DetailedItemFragmentTest {
 
     @Test
     fun weCanSeeTheImageWePickedForAnItem() {
-        FakeCurrentUserProvider.userInstance = 1
         savePickedImage(mActivityTestRule.activity)
         val imgGalleryResult = createImageGallerySetResultStub(mActivityTestRule.activity)
         Intents.intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgGalleryResult)
@@ -73,7 +72,7 @@ class DetailedItemFragmentTest {
         onView(withId(R.id.detailed_item_image)).check(matches(isDisplayed()))
         onView(withId(R.id.itemPostedBy)).perform(click())
         val textView = onView(withId(R.id.nameText))
-        textView.check(matches(withText(FakeCurrentUserProvider.fakeUser1.name)))
+        textView.check(matches(withText(FakeCurrentUserProvider.fakeUser.name)))
 
         val backButton =
             onView(Matchers.allOf(withContentDescription("Navigate up"), isDisplayed()))
