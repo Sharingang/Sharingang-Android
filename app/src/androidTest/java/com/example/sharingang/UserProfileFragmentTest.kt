@@ -70,12 +70,10 @@ class UserProfileFragmentTest {
         navigate_to(R.id.userProfileFragment)
         onView(withId(R.id.btn_report)).check(matches(isDisplayed()))
         onView(withId(R.id.btn_report)).perform(click())
-        val device: UiDevice = UiDevice.getInstance(getInstrumentation())
-        onView(withText("Report Result")).check(matches(isDisplayed()));
-        onView(withText("Successfully reported Test User.")).check(matches(isDisplayed()));
-        val okButton = device.findObject(UiSelector().className("android.widget.Button"))
-        assert(okButton.text.toString() == "OK")
-        okButton.click()
+        onView(withText("Report Result")).check(matches(isDisplayed()))
+        onView(withText("Successfully reported Test User.")).check(matches(isDisplayed()))
+        onView(withText("OK")).check(matches(isDisplayed()))
+        onView(withText("OK")).perform(click())
     }
 
 

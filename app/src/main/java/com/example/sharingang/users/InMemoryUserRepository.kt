@@ -44,6 +44,6 @@ class InMemoryUserRepository : UserRepository {
     }
 
     override suspend fun report(reportedUser: User, reporterUser: User): Boolean {
-        return false
+        return true
     }
 }

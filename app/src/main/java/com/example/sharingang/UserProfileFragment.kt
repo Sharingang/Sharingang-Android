@@ -33,15 +33,19 @@ class UserProfileFragment : Fragment() {
     private val itemsViewModel: ItemsViewModel by viewModels()
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var binding: UserProfileFragmentBinding
+
     // This is the currently logged in user
     private var currentUserId: String? = null
     private lateinit var imageAccess: ImageAccess
+
     // This is the user whose profile is shown (can be different from currentUserId)
     private var shownUserProfileId: String? = null
     private var loggedInUserEmail: String? = null
     private var imageUri: Uri? = null
+
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
+
     @Inject
     lateinit var userRepository: UserRepository
 
@@ -52,7 +56,7 @@ class UserProfileFragment : Fragment() {
         binding = UserProfileFragmentBinding.inflate(inflater, container, false)
         currentUserId = currentUserProvider.getCurrentUserId()
         // If no userId is provided, we get the user that is currently logged in.
-        shownUserProfileId = when(args.userId) {
+        shownUserProfileId = when (args.userId) {
             null, "" -> currentUserId
             else -> args.userId
         }
@@ -81,14 +85,14 @@ class UserProfileFragment : Fragment() {
             binding.applyholder,
             binding.btnReport
         )
-        for(view: View in fields) {
+        for (view: View in fields) {
             view.visibility = View.GONE
         }
     }
 
     private fun setupButtonsVisibility() {
         val pictureButtonsRow = binding.gallerycameraholder
-        if(currentUserId != null && isAuthUserDisplayedUser()) {
+        if (currentUserId != null && isAuthUserDisplayedUser()) {
             pictureButtonsRow.visibility = View.VISIBLE
         }
     }
@@ -97,16 +101,24 @@ class UserProfileFragment : Fragment() {
         val adapter = itemsViewModel.setupItemAdapter(currentUserId)
         binding.userItemList.adapter = adapter
         itemsViewModel.getUserItem(userId)
-        itemsViewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.USER_ITEMS)
+        itemsViewModel.addObserver(
+            viewLifecycleOwner,
+            adapter,
+            ItemsViewModel.OBSERVABLES.USER_ITEMS
+        )
 
         itemsViewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
-            {item -> UserProfileFragmentDirections.actionUserProfileFragmentToNewEditFragment(item)},
-            {item -> UserProfileFragmentDirections.actionUserProfileFragmentToDetailedItemFragment(item)})
+            { item -> UserProfileFragmentDirections.actionUserProfileFragmentToNewEditFragment(item) },
+            { item ->
+                UserProfileFragmentDirections.actionUserProfileFragmentToDetailedItemFragment(
+                    item
+                )
+            })
     }
 
     private fun setupButtonsAction() {
         val buttons = listOf(binding.btnApply, binding.btnOpenCamera, binding.btnOpenGallery)
-        for(button: Button in buttons) {
+        for (button: Button in buttons) {
             button.setOnClickListener {
                 getAction(button)
             }
@@ -115,7 +127,7 @@ class UserProfileFragment : Fragment() {
 
     private fun setEmailText() {
         val emailText = binding.textEmail
-        if(currentUserId != null && isAuthUserDisplayedUser()) {
+        if (currentUserId != null && isAuthUserDisplayedUser()) {
             emailText.text = loggedInUserEmail
             emailText.visibility = View.VISIBLE
         }
@@ -123,7 +135,7 @@ class UserProfileFragment : Fragment() {
 
     private fun setupTopInfoVisibility() {
         val topInfoText = binding.upfTopinfo
-        if(currentUserId != null || args.userId != null) {
+        if (currentUserId != null || args.userId != null) {
             topInfoText.visibility = View.GONE
         }
     }
@@ -138,8 +150,8 @@ class UserProfileFragment : Fragment() {
         val profilePictureImageView = binding.imageView
         val userDisplayName = binding.nameText
         val mainFields = listOf(profilePictureImageView, userDisplayName)
-        for(view: View in mainFields) {
-            if(currentUserId != null || args.userId != null) {
+        for (view: View in mainFields) {
+            if (currentUserId != null || args.userId != null) {
                 view.visibility = View.VISIBLE
             }
         }
@@ -167,7 +179,7 @@ class UserProfileFragment : Fragment() {
         when (button) {
             binding.btnOpenCamera, binding.btnOpenGallery -> {
                 binding.applyholder.visibility = View.VISIBLE
-                if(button == binding.btnOpenGallery) imageAccess.openGallery()
+                if (button == binding.btnOpenGallery) imageAccess.openGallery()
                 else imageAccess.openCamera()
             }
             binding.btnApply -> {
@@ -175,7 +187,10 @@ class UserProfileFragment : Fragment() {
                 if (imageUri != Uri.EMPTY && imageUri != null) {
                     binding.imageView.setImageURI(imageUri)
                     lifecycleScope.launch(Dispatchers.IO) {
-                        userRepository.add(userRepository.get(currentUserId!!)!!.copy(profilePicture = imageUri.toString()))
+                        userRepository.add(
+                            userRepository.get(currentUserId!!)!!
+                                .copy(profilePicture = imageUri.toString())
+                        )
                     }
                 }
                 binding.applyholder.visibility = View.GONE
@@ -185,7 +200,7 @@ class UserProfileFragment : Fragment() {
 
     private fun setupReportButton() {
         var username = ""
-        if(currentUserId != null) {
+        if (currentUserId != null) {
             binding.btnReport.visibility = View.VISIBLE
             lifecycleScope.launch(Dispatchers.IO) {
                 username = userRepository.get(shownUserProfileId!!)!!.name
@@ -206,8 +221,6 @@ class UserProfileFragment : Fragment() {
 
         }
     }
-
-
 }
 
 

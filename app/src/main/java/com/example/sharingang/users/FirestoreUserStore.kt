@@ -41,14 +41,15 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
                 .collection("users").document(reportedUser.id!!)
                 .collection("reports").document(reporterUser.id!!).set(
                     hashMapOf(
-                        reporterUser.id to Calendar.getInstance().time.toString()
+                        "reporter" to reporterUser,
+                        "reportedAt" to Calendar.getInstance().time.toString()
                     )
                 )
-            Log.d("TESTING FIRE", "User ${reporterUser.id} reported ${reportedUser.id}")
+            Log.d(TAG, "User ${reporterUser.id} reported ${reportedUser.id}")
             true
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.e("TESTING FIRE", "Error reporting user ${reportedUser.id} by ${reporterUser.id}")
+            Log.d(TAG, "User ${reporterUser.id} reported ${reportedUser.id}")
             false
         }
     }
