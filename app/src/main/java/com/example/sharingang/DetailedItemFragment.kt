@@ -71,11 +71,16 @@ class DetailedItemFragment : Fragment() {
     }
 
     private fun initiateWishlistButton(binding: FragmentDetailedItemBinding){
-        viewModel.wishlistContains.observe(viewLifecycleOwner, {
-            binding.addToWishlist.text = getButtonText(it)
-        })
-        binding.addToWishlist.setOnClickListener { updateWishlist(binding) }
-        viewModel.wishlistContains(args.item)
+        if(currentUserProvider.getCurrentUserId() != null){
+            viewModel.wishlistContains.observe(viewLifecycleOwner, {
+                binding.addToWishlist.text = getButtonText(it)
+            })
+            binding.addToWishlist.setOnClickListener { updateWishlist(binding) }
+            viewModel.wishlistContains(args.item)
+        }else{
+            binding.addToWishlist.visibility = View.GONE;
+        }
+
     }
 
     private fun getButtonText(contains: Boolean): String {
