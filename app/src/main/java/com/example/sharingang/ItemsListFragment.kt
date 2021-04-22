@@ -10,11 +10,17 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.sharingang.databinding.FragmentItemsListBinding
 import com.example.sharingang.items.ItemsViewModel
+import com.example.sharingang.users.CurrentUserProvider
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ItemsListFragment : Fragment() {
 
     private lateinit var binding: FragmentItemsListBinding
     private val viewModel: ItemsViewModel by activityViewModels()
+    @Inject
+    lateinit var currentUserProvider: CurrentUserProvider
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,7 +29,7 @@ class ItemsListFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_items_list, container, false)
         binding.viewModel = viewModel
 
-        val adapter = viewModel.setupItemAdapter()
+        val adapter = viewModel.setupItemAdapter(currentUserProvider.getCurrentUserId())
         binding.itemList.adapter = adapter
         viewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.ALL_ITEMS)
 
