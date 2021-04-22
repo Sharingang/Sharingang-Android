@@ -2,12 +2,14 @@ package com.example.sharingang
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -21,17 +23,15 @@ import com.example.sharingang.utils.requestPermissionLauncher
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.*
 import com.google.maps.android.clustering.ClusterItem
 import com.google.maps.android.clustering.ClusterManager
-import com.google.maps.android.clustering.view.ClusterRenderer
 import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import com.google.maps.android.collections.MarkerManager
-import com.google.maps.android.ktx.addMarker
 import com.google.maps.android.ktx.awaitMap
+import com.google.maps.android.ui.IconGenerator
 import kotlin.properties.Delegates
+
 
 const val DEFAULT_ZOOM = 15
 
@@ -148,6 +148,7 @@ class MapFragment : Fragment() {
     private fun initCluster() {
         markerManager = MarkerManager(map)
         clusterManager = ClusterManager<MapItem>(context, map, markerManager)
+        clusterManager!!.renderer = ItemRenderer(context, map, clusterManager)
         clusterManager!!.setOnClusterItemClickListener { marker ->
             map!!.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
             findNavController().navigate(
@@ -184,10 +185,40 @@ class MapFragment : Fragment() {
     inner class MapItem(val item: Item) : ClusterItem {
         private val position = LatLng(item.latitude, item.longitude)
         private val title: String = item.title
-        private val snippet: String = item.categoryString
+        private val snippet: String = "$ %.2f".format(item.price)
 
         override fun getPosition() = position
         override fun getTitle() = title
         override fun getSnippet() = snippet
+    }
+
+    inner class ItemRenderer<T : ClusterItem>(
+        context: Context?,
+        map: GoogleMap?,
+        clusterManager: ClusterManager<T>?
+    ) : DefaultClusterRenderer<T>(context, map, clusterManager) {
+        private val iconGenerator: IconGenerator = IconGenerator(context)
+        private var markerView: View = layoutInflater.inflate(R.layout.item_marker, null)
+
+        init {
+            // TODO binding
+            super.setMinClusterSize(3)
+            iconGenerator.setContentView(markerView)
+        }
+
+        override fun onBeforeClusterItemRendered(item: T, markerOptions: MarkerOptions) {
+            markerOptions.icon(getItemIcon(item))
+        }
+
+        override fun onClusterItemUpdated(item: T, marker: Marker) {
+            marker.setIcon(getItemIcon(item))
+        }
+
+        private fun getItemIcon(item: ClusterItem): BitmapDescriptor? {
+            markerView.findViewById<TextView>(R.id.titleText).text = item.title
+            markerView.findViewById<TextView>(R.id.descriptionText).text = item.snippet
+            val icon = iconGenerator.makeIcon()
+            return BitmapDescriptorFactory.fromBitmap(icon)
+        }
     }
 }
