@@ -15,6 +15,11 @@ interface ItemRepository : ItemStore {
     fun items(): LiveData<List<Item>>
 
     /**
+     * The current user items that are available, as LiveData
+     */
+    suspend fun userItems(userId: String): List<Item>?
+
+    /**
      * Make sure that the repository holds up to date items
      */
     suspend fun refreshItems()

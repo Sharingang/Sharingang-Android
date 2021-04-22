@@ -24,7 +24,7 @@ class ItemsViewModel @Inject constructor(
     }
 
     enum class OBSERVABLES {
-        ALL_ITEMS, SEARCH_RESULTS, WISHLIST
+        ALL_ITEMS, SEARCH_RESULTS, USER_ITEMS, WISHLIST
     }
 
     private val _navigateToEditItem = MutableLiveData<Item?>()
@@ -39,13 +39,16 @@ class ItemsViewModel @Inject constructor(
     val refreshing: LiveData<Boolean>
         get() = _refreshing
 
-
     private val _searchResults = MutableLiveData<List<Item>>(listOf())
     val searchResults: LiveData<List<Item>>
         get() = _searchResults
 
-    private val _wishlistItem: MutableLiveData<List<Item>> = MutableLiveData(ArrayList())
-    val wishlistItem: LiveData<List<Item>>
+    private val _userItems = MutableLiveData<List<Item>>()
+    val userItems: LiveData<List<Item>>
+        get() = _userItems
+
+    private val _wishlistItem : MutableLiveData<List<Item>> = MutableLiveData(ArrayList())
+    val wishlistItem : LiveData<List<Item>>
         get() = _wishlistItem
 
     private val _onEditFragment = MutableLiveData(false)
@@ -69,6 +72,18 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Get all the items of the user
+     *
+     * @param userId the id of the user
+     */
+    fun getUserItem(userId: String?) {
+        if (userId != null) {
+            viewModelScope.launch(Dispatchers.IO) {
+                _userItems.postValue(itemRepository.userItems(userId))
+            }
+        }
+    }
 
     fun clearSearchResults() {
         _searchResults.value = listOf()
@@ -114,23 +129,23 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
-    fun onEditItemClicked(item: Item) {
+    private fun onEditItemClicked(item: Item) {
         _navigateToEditItem.value = item
     }
 
-    fun onEditItemNavigated() {
+    private fun onEditItemNavigated() {
         _navigateToEditItem.value = null
     }
 
-    fun onViewItem(item: Item) {
+    private fun onViewItem(item: Item) {
         _navigateToDetailItem.value = item
     }
 
-    fun onViewItemNavigated() {
+    private fun onViewItemNavigated() {
         _navigateToDetailItem.value = null
     }
 
-    fun onSellItem(item: Item) {
+    private fun onSellItem(item: Item) {
         viewModelScope.launch {
             itemRepository.update(item.copy(sold = !item.sold))
         }
@@ -154,6 +169,7 @@ class ItemsViewModel @Inject constructor(
         val observable: LiveData<List<Item>> = when (type) {
             OBSERVABLES.ALL_ITEMS -> items
             OBSERVABLES.SEARCH_RESULTS -> searchResults
+            OBSERVABLES.USER_ITEMS -> userItems
             OBSERVABLES.WISHLIST -> wishlistItem
         }
         observable.observe(LifeCycleOwner, {

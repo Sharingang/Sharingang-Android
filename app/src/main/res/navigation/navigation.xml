@@ -64,7 +64,14 @@
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.sharingang.SearchFragment"
-        android:label="Search" />
+        android:label="Search" >
+        <action
+            android:id="@+id/action_searchFragment_to_detailedItemFragment"
+            app:destination="@id/detailedItemFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_editItemFragment"
+            app:destination="@id/editItemFragment" />
+    </fragment>
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.example.sharingang.MapFragment"
@@ -86,6 +93,12 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null"/>
+        <action
+            android:id="@+id/action_userProfileFragment_to_detailedItemFragment"
+            app:destination="@id/detailedItemFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_editItemFragment"
+            app:destination="@id/editItemFragment" />
 
     </fragment>
     <fragment

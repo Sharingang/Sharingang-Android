@@ -14,6 +14,9 @@ interface ItemDao {
     @Query("SELECT * FROM item WHERE id = :id")
     suspend fun getItem(id: String): Item?
 
+    @Query("SELECT * FROM item WHERE userId = :userId")
+    suspend fun getUserItem(userId: String): List<Item>?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(items: List<Item>)
 }

@@ -46,6 +46,10 @@ class CachedItemRepository @Inject constructor(
         return doRefreshItems()
     }
 
+    override suspend fun userItems(userId: String): List<Item>? {
+        return itemDao.getUserItem(userId)
+    }
+
     override suspend fun update(item: Item): Boolean {
         return thenRefresh { store.update(item) }
     }
