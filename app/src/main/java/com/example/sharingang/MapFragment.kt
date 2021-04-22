@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import com.example.sharingang.databinding.FragmentMapBinding
 import com.example.sharingang.items.Item
@@ -20,16 +21,21 @@ import com.example.sharingang.utils.requestPermissionLauncher
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.maps.android.clustering.ClusterItem
+import com.google.maps.android.clustering.ClusterManager
+import com.google.maps.android.clustering.view.ClusterRenderer
+import com.google.maps.android.clustering.view.DefaultClusterRenderer
+import com.google.maps.android.collections.MarkerManager
+import com.google.maps.android.ktx.addMarker
+import com.google.maps.android.ktx.awaitMap
 import kotlin.properties.Delegates
 
 const val DEFAULT_ZOOM = 15
 
-class MapFragment : Fragment(), OnMapReadyCallback {
+class MapFragment : Fragment() {
     private lateinit var binding: FragmentMapBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val requestPermissionLauncher = requestPermissionLauncher(this) {
@@ -47,8 +53,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
         }
     }
-    private var lastLocationMarker: Marker? = null
+
     private var map: GoogleMap? = null
+    private var markerManager: MarkerManager? = null
+    private var clusterManager: ClusterManager<MapItem>? = null
 
     private val viewModel: ItemsViewModel by activityViewModels()
     private var hasCameraMovedOnce by Delegates.notNull<Boolean>()
@@ -61,35 +69,33 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         hasCameraMovedOnce = false
+
         viewModel.searchResults.observe(viewLifecycleOwner, {
             addItemMarkers(it)
         })
+
         binding.mapGetMyLocation.setOnClickListener {
             if (lastLocation != null) {
                 moveCameraToLastLocation()
             }
         }
+
         binding.mapStartSearch.setOnClickListener {
             this.findNavController()
                 .navigate(MapFragmentDirections.actionMapFragmentToSearchFragment())
         }
+
         binding.mapView.onCreate(savedInstanceState)
-        binding.mapView.getMapAsync(this)
+
+        initMap()
+
         return binding.root
     }
 
     private fun addItemMarkers(items: List<Item>) {
-        map?.clear()
-        for (item: Item in items) {
-            val addedMarker = map?.addMarker(
-                MarkerOptions().position(LatLng(item.latitude, item.longitude))
-                    .title(item.title)
-                    .snippet(item.description)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-            )
-            addedMarker?.showInfoWindow()
-            addedMarker?.tag = item
-        }
+        clusterManager?.clearItems()
+        clusterManager?.addItems(items.map { MapItem(it) })
+        clusterManager?.cluster()
     }
 
     @SuppressLint("MissingPermission")
@@ -122,26 +128,35 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         )
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        map = googleMap
-        map?.setOnMarkerClickListener { marker: Marker ->
-            map?.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
-            if (marker != lastLocationMarker) {
-                val markerItem = marker.tag as Item
-                this.findNavController().navigate(
-                    MapFragmentDirections.actionMapFragmentToDetailedItemFragment(markerItem)
-                )
-            }
+    private fun initMap() {
+        lifecycle.coroutineScope.launchWhenCreated {
+            map = binding.mapView.awaitMap()
+
+            initCluster()
+
+            addItemMarkers(viewModel.searchResults.value ?: listOf())
+
+            doOrGetPermission(
+                this@MapFragment,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                { startLocationUpdates() },
+                requestPermissionLauncher
+            )
+        }
+    }
+
+    private fun initCluster() {
+        markerManager = MarkerManager(map)
+        clusterManager = ClusterManager<MapItem>(context, map, markerManager)
+        clusterManager!!.setOnClusterItemClickListener { marker ->
+            map!!.animateCamera(CameraUpdateFactory.newLatLng(marker.position))
+            findNavController().navigate(
+                MapFragmentDirections.actionMapFragmentToDetailedItemFragment(marker.item)
+            )
             true
         }
-        addItemMarkers(viewModel.searchResults.value ?: listOf())
 
-        doOrGetPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            { startLocationUpdates() },
-            requestPermissionLauncher
-        )
+        map!!.setOnCameraIdleListener(clusterManager)
     }
 
     override fun onResume() {
@@ -164,5 +179,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onLowMemory() {
         super.onLowMemory()
         binding.mapView.onLowMemory()
+    }
+
+    inner class MapItem(val item: Item) : ClusterItem {
+        private val position = LatLng(item.latitude, item.longitude)
+        private val title: String = item.title
+        private val snippet: String = item.categoryString
+
+        override fun getPosition() = position
+        override fun getTitle() = title
+        override fun getSnippet() = snippet
     }
 }
