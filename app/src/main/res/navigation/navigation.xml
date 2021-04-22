@@ -42,7 +42,9 @@
             app:destination="@id/itemsListFragment" />
         <argument
             android:name="item"
-            app:argType="com.example.sharingang.items.Item" />
+            android:defaultValue="@null"
+            app:argType="com.example.sharingang.items.Item"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/detailedItemFragment"

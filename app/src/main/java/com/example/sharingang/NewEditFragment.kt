@@ -78,8 +78,8 @@ class NewEditFragment : Fragment() {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_new_edit_item, container, false)
-        setupAutocomplete()
         setupNewOrEditFragment()
+        setupAutocomplete()
         userId = currentUserProvider.getCurrentUserId()
 
         observer.setupImageView(binding.itemImage)
@@ -87,7 +87,6 @@ class NewEditFragment : Fragment() {
 
         setupButtonActions()
         setupLocation()
-        viewModel.onEditFragmentExit()
         return binding.root
     }
 
@@ -186,7 +185,9 @@ class NewEditFragment : Fragment() {
     }
 
     private fun setupNewOrEditFragment() {
-        if (viewModel.onEdit.value == false) {
+        val args = NewEditFragmentArgs.fromBundle(requireArguments())
+        existingItem = args.item
+        if (existingItem == null) {
             binding.editItemPrompt.visibility = View.GONE
             binding.editItemButton.visibility = View.GONE
             binding.newItemPrompt.visibility = View.VISIBLE
@@ -196,8 +197,6 @@ class NewEditFragment : Fragment() {
             binding.editItemButton.visibility = View.VISIBLE
             binding.newItemPrompt.visibility = View.GONE
             binding.createItemButton.visibility = View.GONE
-            val args = NewEditFragmentArgs.fromBundle(requireArguments())
-            existingItem = args.item
         }
     }
 
