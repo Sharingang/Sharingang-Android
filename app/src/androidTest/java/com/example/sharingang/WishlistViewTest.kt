@@ -26,6 +26,7 @@ class WishlistViewTest {
     @get:Rule(order = 1)
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
+
     @Test
     fun canAddAndRemoveItemToWishlist(){
         addItemsToDb(firstItem)
@@ -67,8 +68,8 @@ class WishlistViewTest {
 
     private fun addItemsToDb(vararg itemNames: String){
         for(itemName in itemNames){
-            navigate_to(R.id.newItemFragment)
-            onView(withId(R.id.editItemTitle)).perform(
+            navigate_to(R.id.newEditFragment)
+            onView(withId(R.id.itemTitle)).perform(
                     typeText(itemName),
                     closeSoftKeyboard()
             )

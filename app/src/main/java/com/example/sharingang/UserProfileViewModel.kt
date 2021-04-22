@@ -28,9 +28,6 @@ class UserProfileViewModel @Inject constructor(
     val wishlistContains : LiveData<Boolean>
         get() = _wishlistContains
 
-
-
-
     val user: LiveData<User?> =
         Transformations.switchMap(_userId) { id ->
             if (id != null) {
@@ -60,7 +57,6 @@ class UserProfileViewModel @Inject constructor(
         _userId.postValue(userId)
     }
 
-
     fun wishlistContains(item: Item?){
         val userId = currentUserProvider.getCurrentUserId()
         if(item != null && userId != null){
@@ -71,7 +67,6 @@ class UserProfileViewModel @Inject constructor(
             _wishlistContains.postValue(false)
         }
     }
-
 
     fun modifyWishList(item: Item?) {
         val userId = currentUserProvider.getCurrentUserId()
@@ -92,6 +87,5 @@ class UserProfileViewModel @Inject constructor(
             }
         }
     }
-
 }
 

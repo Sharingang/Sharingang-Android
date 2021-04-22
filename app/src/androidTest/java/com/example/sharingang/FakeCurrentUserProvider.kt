@@ -25,6 +25,10 @@ class FakeCurrentUserProvider @Inject constructor(
         return "test-user@example.com"
     }
 
+    override fun getCurrentUserName(): String? {
+        return "Test User"
+    }
+
     companion object {
         val fakeUser = User(
             id = "fakeUserID",

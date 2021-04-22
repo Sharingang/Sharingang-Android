@@ -24,7 +24,7 @@ class ItemsViewModel @Inject constructor(
     }
 
     enum class OBSERVABLES {
-        ALL_ITEMS, SEARCH_RESULTS, WISHLIST
+        ALL_ITEMS, SEARCH_RESULTS, USER_ITEMS, WISHLIST
     }
 
     private val _navigateToEditItem = MutableLiveData<Item?>()
@@ -39,13 +39,16 @@ class ItemsViewModel @Inject constructor(
     val refreshing: LiveData<Boolean>
         get() = _refreshing
 
-
     private val _searchResults = MutableLiveData<List<Item>>(listOf())
     val searchResults: LiveData<List<Item>>
         get() = _searchResults
 
-    private val _wishlistItem : MutableLiveData<List<Item>> = MutableLiveData(ArrayList())
-    val wishlistItem : LiveData<List<Item>>
+    private val _userItems = MutableLiveData<List<Item>>()
+    val userItems: LiveData<List<Item>>
+        get() = _userItems
+
+    private val _wishlistItem: MutableLiveData<List<Item>> = MutableLiveData(ArrayList())
+    val wishlistItem: LiveData<List<Item>>
         get() = _wishlistItem
 
     /**
@@ -65,12 +68,24 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Get all the items of the user
+     *
+     * @param userId the id of the user
+     */
+    fun getUserItem(userId: String?) {
+        if (userId != null) {
+            viewModelScope.launch(Dispatchers.IO) {
+                _userItems.postValue(itemRepository.userItems(userId))
+            }
+        }
+    }
 
     fun clearSearchResults() {
         _searchResults.value = listOf()
     }
 
-    fun setWishList(list: List<Item>){
+    fun setWishList(list: List<Item>) {
         viewModelScope.launch {
             _wishlistItem.postValue(list)
         }
@@ -93,7 +108,7 @@ class ItemsViewModel @Inject constructor(
                 val matchName = searchName.isEmpty() || item.title.toLowerCase(Locale.getDefault())
                     .contains(searchName.toLowerCase(Locale.getDefault()))
 
-                matchCategory && matchName
+                matchCategory && matchName && !item.sold
             }
             _searchResults.postValue(results)
         }
@@ -110,39 +125,40 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
-    fun onEditItemClicked(item: Item) {
+    private fun onEditItemClicked(item: Item) {
         _navigateToEditItem.value = item
     }
 
-    fun onEditItemNavigated() {
+    private fun onEditItemNavigated() {
         _navigateToEditItem.value = null
     }
 
-    fun onViewItem(item: Item) {
+    private fun onViewItem(item: Item) {
         _navigateToDetailItem.value = item
     }
 
-    fun onViewItemNavigated() {
+    private fun onViewItemNavigated() {
         _navigateToDetailItem.value = null
     }
 
-    fun onSellItem(item: Item) {
+    private fun onSellItem(item: Item) {
         viewModelScope.launch {
             itemRepository.update(item.copy(sold = !item.sold))
         }
     }
 
-    fun setupItemAdapter(): ItemsAdapter {
+    fun setupItemAdapter(userId: String?): ItemsAdapter {
         val onEdit = { item: Item -> onEditItemClicked(item) }
         val onView = { item: Item -> onViewItem(item) }
         val onSell = { item: Item -> onSellItem(item) }
-        return ItemsAdapter(ItemListener(onEdit, onView, onSell))
+        return ItemsAdapter(ItemListener(onEdit, onView, onSell), userId)
     }
 
     fun addObserver(LifeCycleOwner: LifecycleOwner, adapter: ItemsAdapter, type: OBSERVABLES) {
         val observable: LiveData<List<Item>> = when (type) {
             OBSERVABLES.ALL_ITEMS -> items
             OBSERVABLES.SEARCH_RESULTS -> searchResults
+            OBSERVABLES.USER_ITEMS -> userItems
             OBSERVABLES.WISHLIST -> wishlistItem
         }
         observable.observe(LifeCycleOwner, {
@@ -150,12 +166,14 @@ class ItemsViewModel @Inject constructor(
         })
     }
 
-    fun setupItemNavigation(LifeCycleOwner: LifecycleOwner, navController: NavController,
-                            actionEdit: (Item)->NavDirections, actionDetail: (Item)->NavDirections ){
+    fun setupItemNavigation(
+        LifeCycleOwner: LifecycleOwner, navController: NavController,
+        actionEdit: (Item) -> NavDirections, actionDetail: (Item) -> NavDirections
+    ) {
         navigateToEditItem.observe(LifeCycleOwner, { item ->
             item?.let {
                 navController.navigate(
-                        actionEdit(item)
+                    actionEdit(item)
                 )
                 onEditItemNavigated()
             }
@@ -164,7 +182,7 @@ class ItemsViewModel @Inject constructor(
         navigateToDetailItem.observe(LifeCycleOwner, { item ->
             item?.let {
                 navController.navigate(
-                        actionDetail(item)
+                    actionDetail(item)
                 )
                 onViewItemNavigated()
             }
