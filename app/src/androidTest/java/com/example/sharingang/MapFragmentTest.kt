@@ -35,16 +35,16 @@ class MapFragmentTest {
 
 
     private val itemTitle = "T"
-    private val waitingTime = 6000L
+    private val waitingTime = 8000L
 
     @Test
     fun itemsAddedAreDisplayedOnTheMap() {
-        navigate_to(R.id.newItemFragment)
-        onView(withId(R.id.editItemTitle)).perform(
+        navigate_to(R.id.newEditFragment)
+        onView(withId(R.id.itemTitle)).perform(
             ViewActions.typeText(itemTitle),
             ViewActions.closeSoftKeyboard()
         )
-        onView(withId(R.id.new_item_get_location)).perform(click())
+        onView(withId(R.id.item_get_location)).perform(click())
         Thread.sleep(waitingTime)
         onView(withId(R.id.createItemButton)).perform(click())
         navigate_to(R.id.mapFragment)
