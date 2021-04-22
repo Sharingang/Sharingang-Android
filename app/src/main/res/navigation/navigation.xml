@@ -11,9 +11,6 @@
         android:label="Items"
         tools:layout="@layout/fragment_items_list">
         <action
-            android:id="@+id/action_itemsListFragment_to_newItemFragment"
-            app:destination="@id/editItemFragment" />
-        <action
             android:id="@+id/action_itemsListFragment_to_editItemFragment"
             app:destination="@id/editItemFragment" />
         <action
@@ -53,7 +50,7 @@
     <fragment
         android:id="@+id/detailedItemFragment"
         android:name="com.example.sharingang.DetailedItemFragment"
-        android:label="Detailed View" >
+        android:label="Detailed View">
         <argument
             android:name="item"
             app:argType="com.example.sharingang.items.Item" />
@@ -64,7 +61,7 @@
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.sharingang.SearchFragment"
-        android:label="Search" >
+        android:label="Search">
         <action
             android:id="@+id/action_searchFragment_to_detailedItemFragment"
             app:destination="@id/detailedItemFragment" />
@@ -75,7 +72,7 @@
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.example.sharingang.MapFragment"
-        android:label="Map" >
+        android:label="Map">
         <action
             android:id="@+id/action_mapFragment_to_detailedItemFragment"
             app:destination="@id/detailedItemFragment" />
@@ -90,9 +87,9 @@
         tools:layout="@layout/user_profile_fragment">
         <argument
             android:name="userId"
+            android:defaultValue="@null"
             app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null"/>
+            app:nullable="true" />
         <action
             android:id="@+id/action_userProfileFragment_to_detailedItemFragment"
             app:destination="@id/detailedItemFragment" />
@@ -108,7 +105,7 @@
     <fragment
         android:id="@+id/wishlistViewFragment"
         android:name="com.example.sharingang.WishlistViewFragment"
-        android:label="@string/wishlist_menu_title" >
+        android:label="@string/wishlist_menu_title">
         <action
             android:id="@+id/action_wishlistViewFragment_to_detailedItemFragment"
             app:destination="@id/detailedItemFragment" />
