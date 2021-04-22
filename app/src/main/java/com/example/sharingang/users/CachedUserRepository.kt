@@ -48,4 +48,8 @@ class CachedUserRepository @Inject constructor(
     override suspend fun update(user: User): Boolean {
         return thenRefresh { store.update(user) }
     }
+
+    override suspend fun report(reportedUser: User, reporterUser: User): Boolean {
+        return thenRefresh { store.report(reportedUser, reporterUser) }
+    }
 }
