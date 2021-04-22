@@ -32,7 +32,7 @@ class SearchFragment : Fragment() {
         }
 
         viewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
-            {item -> SearchFragmentDirections.actionSearchFragmentToEditItemFragment(item)},
+            {item -> SearchFragmentDirections.actionSearchFragmentToNewEditFragment(item)},
             {item -> SearchFragmentDirections.actionSearchFragmentToDetailedItemFragment(item)})
 
         binding.clearSearchButton.setOnClickListener {clearSearch(it)}

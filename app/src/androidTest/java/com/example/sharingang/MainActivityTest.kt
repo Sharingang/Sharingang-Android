@@ -29,7 +29,7 @@ class MainActivityTest {
 
     @Test
     fun clickingOnButtonStartsNewItemFragment() {
-        navigate_to(R.id.newItemFragment)
+        navigate_to(R.id.newEditFragment)
         onView(withId(R.id.newItemPrompt))
             .check(matches(withText("New Item")))
     }
