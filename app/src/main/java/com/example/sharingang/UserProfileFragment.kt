@@ -85,7 +85,7 @@ class UserProfileFragment : Fragment() {
             binding.nameText,
             binding.textEmail,
             binding.applyholder,
-            binding.ratingTextview
+            binding.ratingTextview,
             binding.applyholder,
             binding.btnReport
         )
