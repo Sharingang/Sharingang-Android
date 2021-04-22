@@ -20,7 +20,7 @@
             android:id="@+id/upf_topinfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/upfNotLoggedInInfo"
+            android:text="@string/userNotLoggedInInfo"
             android:textSize="14sp" />
 
         <ImageView
