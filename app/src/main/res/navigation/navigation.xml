@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_items_list">
         <action
             android:id="@+id/action_itemsListFragment_to_newItemFragment"
-            app:destination="@id/newItemFragment" />
+            app:destination="@id/editItemFragment" />
         <action
             android:id="@+id/action_itemsListFragment_to_editItemFragment"
             app:destination="@id/editItemFragment" />
@@ -36,15 +36,6 @@
             app:destination="@id/wishlistViewFragment" />
     </fragment>
     <fragment
-        android:id="@+id/newItemFragment"
-        android:name="com.example.sharingang.NewItemFragment"
-        android:label="New Item"
-        tools:layout="@layout/fragment_new_item">
-        <action
-            android:id="@+id/action_newItemFragment_to_itemsListFragment"
-            app:destination="@id/itemsListFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/editItemFragment"
         android:name="com.example.sharingang.EditItemFragment"
         android:label="Edit Item"
@@ -55,6 +46,9 @@
         <argument
             android:name="item"
             app:argType="com.example.sharingang.items.Item" />
+        <action
+            android:id="@+id/action_newItemFragment_to_itemsListFragment"
+            app:destination="@id/itemsListFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailedItemFragment"

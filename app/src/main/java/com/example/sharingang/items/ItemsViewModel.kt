@@ -44,9 +44,13 @@ class ItemsViewModel @Inject constructor(
     val searchResults: LiveData<List<Item>>
         get() = _searchResults
 
-    private val _wishlistItem : MutableLiveData<List<Item>> = MutableLiveData(ArrayList())
-    val wishlistItem : LiveData<List<Item>>
+    private val _wishlistItem: MutableLiveData<List<Item>> = MutableLiveData(ArrayList())
+    val wishlistItem: LiveData<List<Item>>
         get() = _wishlistItem
+
+    private val _onEditFragment = MutableLiveData(false)
+    val onEdit: LiveData<Boolean>
+        get() = _onEditFragment
 
     /**
      * The last item created
@@ -70,7 +74,7 @@ class ItemsViewModel @Inject constructor(
         _searchResults.value = listOf()
     }
 
-    fun setWishList(list: List<Item>){
+    fun setWishList(list: List<Item>) {
         viewModelScope.launch {
             _wishlistItem.postValue(list)
         }
@@ -132,8 +136,15 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
+    fun onEditFragmentExit() {
+        _onEditFragment.value = false
+    }
+
     fun setupItemAdapter(): ItemsAdapter {
-        val onEdit = { item: Item -> onEditItemClicked(item) }
+        val onEdit = { item: Item ->
+            onEditItemClicked(item)
+            _onEditFragment.value = true
+        }
         val onView = { item: Item -> onViewItem(item) }
         val onSell = { item: Item -> onSellItem(item) }
         return ItemsAdapter(ItemListener(onEdit, onView, onSell))
@@ -150,12 +161,14 @@ class ItemsViewModel @Inject constructor(
         })
     }
 
-    fun setupItemNavigation(LifeCycleOwner: LifecycleOwner, navController: NavController,
-                            actionEdit: (Item)->NavDirections, actionDetail: (Item)->NavDirections ){
+    fun setupItemNavigation(
+        LifeCycleOwner: LifecycleOwner, navController: NavController,
+        actionEdit: (Item) -> NavDirections, actionDetail: (Item) -> NavDirections
+    ) {
         navigateToEditItem.observe(LifeCycleOwner, { item ->
             item?.let {
                 navController.navigate(
-                        actionEdit(item)
+                    actionEdit(item)
                 )
                 onEditItemNavigated()
             }
@@ -164,7 +177,7 @@ class ItemsViewModel @Inject constructor(
         navigateToDetailItem.observe(LifeCycleOwner, { item ->
             item?.let {
                 navController.navigate(
-                        actionDetail(item)
+                    actionDetail(item)
                 )
                 onViewItemNavigated()
             }

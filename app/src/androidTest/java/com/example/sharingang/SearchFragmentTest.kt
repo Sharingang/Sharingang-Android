@@ -113,8 +113,8 @@ class SearchFragmentTest {
     }
 
     private fun addSingleItemToDB(name: String, category: String) {
-        navigate_to(R.id.newItemFragment)
-        onView(withId(R.id.editItemTitle)).perform(
+        navigate_to(R.id.editItemFragment)
+        onView(withId(R.id.itemTitle)).perform(
             typeText(name),
             closeSoftKeyboard()
         )

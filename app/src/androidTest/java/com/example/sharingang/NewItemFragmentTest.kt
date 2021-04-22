@@ -48,10 +48,10 @@ class NewItemFragmentTest {
 
     @Test
     fun aDescriptionCanBeEnteredAndSeenOnMainActivity() {
-        navigate_to(R.id.newItemFragment)
+        navigate_to(R.id.editItemFragment)
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
 
-        onView(withId(R.id.editItemTitle)).perform(
+        onView(withId(R.id.itemTitle)).perform(
             typeText(firstItem),
             closeSoftKeyboard()
         )
@@ -61,8 +61,8 @@ class NewItemFragmentTest {
 
         onView(withText(firstItem)).check(matches(isDisplayed()))
 
-        navigate_to(R.id.newItemFragment)
-        onView(withId(R.id.editItemTitle)).perform(
+        navigate_to(R.id.editItemFragment)
+        onView(withId(R.id.itemTitle)).perform(
             typeText(secondItem),
             closeSoftKeyboard()
         )
@@ -79,11 +79,11 @@ class NewItemFragmentTest {
         Intents.intending(IntentMatchers.hasAction(Intent.ACTION_GET_CONTENT))
             .respondWith(imgGalleryResult)
 
-        navigate_to(R.id.newItemFragment)
+        navigate_to(R.id.editItemFragment)
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
 
-        onView(withId(R.id.new_item_image)).perform(click())
-        onView(withId(R.id.new_item_image)).check(matches(hasContentDescription()))
+        onView(withId(R.id.item_image)).perform(click())
+        onView(withId(R.id.item_image)).check(matches(hasContentDescription()))
     }
 
     @Test
@@ -93,17 +93,17 @@ class NewItemFragmentTest {
         Intents.intending(IntentMatchers.hasAction(MediaStore.ACTION_IMAGE_CAPTURE))
             .respondWith(imgGalleryResult)
 
-        navigate_to(R.id.newItemFragment)
+        navigate_to(R.id.editItemFragment)
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
 
-        onView(withId(R.id.new_item_take_picture)).perform(click())
-        onView(withId(R.id.new_item_image)).check(matches(hasContentDescription()))
+        onView(withId(R.id.item_take_picture)).perform(click())
+        onView(withId(R.id.item_image)).check(matches(hasContentDescription()))
     }
 
     @Test
     fun clickingOnGetLocationDisplaysLocation() {
-        navigate_to(R.id.newItemFragment)
-        val button = onView(withId(R.id.new_item_get_location))
+        navigate_to(R.id.editItemFragment)
+        val button = onView(withId(R.id.item_get_location))
         button.check(matches(withText("Get Location")))
         button.perform(click())
         Thread.sleep(5000)
@@ -112,7 +112,7 @@ class NewItemFragmentTest {
 
     @Test
     fun aLocationCanBeSetInNewItemFragment() {
-        navigate_to(R.id.newItemFragment)
+        navigate_to(R.id.editItemFragment)
         onView(withId(R.id.autocomplete_fragment)).perform(click())
         onView(withHint("Enter Address")).perform(typeText("Taj"), closeSoftKeyboard())
         Thread.sleep(3000)
@@ -124,7 +124,7 @@ class NewItemFragmentTest {
 
     @Test
     fun addressSearchCanBeCanceled(){
-        navigate_to(R.id.newItemFragment)
+        navigate_to(R.id.editItemFragment)
         onView(withId(R.id.autocomplete_fragment)).perform(click())
         val device = UiDevice.getInstance((InstrumentationRegistry.getInstrumentation()))
         device.pressBack()

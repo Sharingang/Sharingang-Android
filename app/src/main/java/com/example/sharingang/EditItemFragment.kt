@@ -1,7 +1,11 @@
 package com.example.sharingang
 
+import android.Manifest
+import android.location.Geocoder
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,18 +16,55 @@ import androidx.navigation.findNavController
 import com.example.sharingang.databinding.FragmentEditItemBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsViewModel
+import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.utils.ImageAccess
+import com.example.sharingang.utils.consumeLocation
+import com.example.sharingang.utils.doOrGetPermission
+import com.example.sharingang.utils.requestPermissionLauncher
+import com.google.android.gms.common.api.Status
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.model.TypeFilter
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class EditItemFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
-    private lateinit var existingItem: Item
+    private var existingItem: Item? = null
 
     private lateinit var observer: ImageAccess
 
     private var imageUri: Uri? = null
 
     private lateinit var binding: FragmentEditItemBinding
+
+    @Inject
+    lateinit var currentUserProvider: CurrentUserProvider
+    private var userId: String? = null
+
+    private lateinit var fusedLocationCreate: FusedLocationProviderClient
+    private lateinit var geocoder: Geocoder
+
+    // Allows the cancellation of a location request if, for example, the user exists the activity
+    private var cancellationTokenSource = CancellationTokenSource()
+    private val requestPermissionLauncher = requestPermissionLauncher(this) {
+        doOrGetPermission(
+            this, Manifest.permission.ACCESS_FINE_LOCATION,
+            {
+                consumeLocation(
+                    fusedLocationCreate,
+                    cancellationTokenSource
+                ) { updateLocation(it) }
+            }, null
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,52 +77,144 @@ class EditItemFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_item, container, false)
+        setupAutocomplete()
+        setupNewOrEditFragment()
+        userId = currentUserProvider.getCurrentUserId()
 
-        val args = EditItemFragmentArgs.fromBundle(requireArguments())
-
-        observer.setupImageView(binding.editItemImage)
-
-        existingItem = args.item
-
+        observer.setupImageView(binding.itemImage)
         setupBinding()
 
+        setupButtonActions()
+        setupLocation()
+        viewModel.onEditFragmentExit()
         return binding.root
     }
 
-    private fun setupBinding() {
-        binding.title = existingItem.title
-        binding.description = existingItem.description
-        binding.price = existingItem.price.toString().format("%.2f")
-        binding.categorySpinner.setSelection(existingItem.category)
-        binding.latitude = existingItem.latitude.toString()
-        binding.longitude = existingItem.longitude.toString()
-        existingItem.imageUri?.let { binding.editItemImage.setImageURI(Uri.parse(it)) }
-        binding.editItemImage.setOnClickListener {
-            observer.openGallery()
+    private fun setupAutocomplete() {
+        geocoder = Geocoder(requireContext())
+        if (!Places.isInitialized()) {
+            Places.initialize(requireContext(), getString(R.string.google_api_key))
         }
-        binding.editItemTakePicture.setOnClickListener {
-            observer.openCamera()
-        }
-        editItemClickListener()
+        val autocompleteSupportFragment =
+            childFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
+        autocompleteSupportFragment.setHint(getString(R.string.enter_address))
+        autocompleteSupportFragment.setTypeFilter(TypeFilter.ADDRESS)
+        autocompleteSupportFragment.setPlaceFields(listOf(Place.Field.ADDRESS))
+        autocompleteSupportFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(place: Place) {
+                binding.postalAddress.text = place.address
+                val address = geocoder.getFromLocationName(place.address, 1).getOrNull(0)
+                binding.latitude = address?.latitude.toString()
+                binding.longitude = address?.longitude.toString()
+            }
+
+            override fun onError(status: Status) {
+                Log.e("Error", "$status")
+            }
+        })
     }
 
-    private fun editItemClickListener() {
+    private fun setupButtonActions() {
+        binding.createItemButton.setOnClickListener { view: View ->
+            imageUri = observer.getImageUri()
+            viewModel.addItem(
+                itemToAdd()
+            )
+            observer.unregister()
+            view.findNavController().navigate(R.id.action_newItemFragment_to_itemsListFragment)
+        }
         binding.editItemButton.setOnClickListener { view: View ->
             imageUri = observer.getImageUri()
             viewModel.updateItem(
-                existingItem.copy(
-                    title = binding.title ?: "",
-                    description = binding.description ?: "",
-                    price = binding.price?.toDoubleOrNull() ?: 0.0,
-                    category = binding.categorySpinner.selectedItemPosition,
-                    categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
-                    latitude = binding.latitude?.toDoubleOrNull() ?: 0.0,
-                    longitude = binding.longitude?.toDoubleOrNull() ?: 0.0,
-                    imageUri = imageUri?.toString() ?: existingItem.imageUri
-                )
+                itemToAdd()
             )
             observer.unregister()
             view.findNavController().navigate(R.id.action_editItemFragment_to_itemsListFragment)
+        }
+        binding.itemImage.setOnClickListener {
+            observer.openGallery()
+        }
+        binding.itemTakePicture.setOnClickListener {
+            observer.openCamera()
+        }
+    }
+
+    private fun itemToAdd(): Item {
+        return Item(
+            id = existingItem?.id,
+            title = binding.title ?: "",
+            description = binding.description ?: "",
+            //image = existingItem?.image ?: "",
+            imageUri = imageUri?.toString() ?: existingItem?.imageUri,
+            price = binding.price?.toDoubleOrNull() ?: 0.0,
+            sold = existingItem?.sold ?: false,
+            category = binding.categorySpinner.selectedItemPosition,
+            categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
+            latitude = binding.latitude?.toDoubleOrNull() ?: 0.0,
+            longitude = binding.longitude?.toDoubleOrNull() ?: 0.0,
+            userId = existingItem?.userId ?: userId,
+            createdAt = existingItem?.createdAt,
+            localId = existingItem?.localId ?: 0
+        )
+    }
+
+    private fun setupLocation() {
+        fusedLocationCreate = LocationServices.getFusedLocationProviderClient(requireContext())
+        binding.itemGetLocation.setOnClickListener {
+            doOrGetPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                {
+                    consumeLocation(fusedLocationCreate, cancellationTokenSource) {
+                        updateLocation(
+                            it
+                        )
+                    }
+                }, requestPermissionLauncher
+            )
+        }
+    }
+
+    private fun updateLocation(location: Location) {
+        updateLocationWithCoordinates(location.latitude, location.longitude)
+    }
+
+    private fun updateLocationWithCoordinates(latitude: Double, longitude: Double) {
+        binding.latitude = latitude.toString()
+        binding.longitude = longitude.toString()
+        val address =
+            geocoder.getFromLocation(latitude, longitude, 1).getOrNull(0)
+        binding.postalAddress.text = address?.getAddressLine(0) ?: ""
+    }
+
+    private fun setupNewOrEditFragment() {
+        if (viewModel.onEdit.value == false) {
+            binding.editItemPrompt.visibility = View.GONE
+            binding.editItemButton.visibility = View.GONE
+            binding.newItemPrompt.visibility = View.VISIBLE
+            binding.createItemButton.visibility = View.VISIBLE
+        } else {
+            binding.editItemPrompt.visibility = View.VISIBLE
+            binding.editItemButton.visibility = View.VISIBLE
+            binding.newItemPrompt.visibility = View.GONE
+            binding.createItemButton.visibility = View.GONE
+            val args = EditItemFragmentArgs.fromBundle(requireArguments())
+            existingItem = args.item
+        }
+    }
+
+    private fun setupBinding() {
+        existingItem?.let {
+            binding.title = it.title
+            binding.description = it.description
+            binding.price = it.price.toString().format("%.2f")
+            binding.categorySpinner.setSelection(it.category)
+            binding.latitude = it.latitude.toString()
+            binding.longitude = it.longitude.toString()
+            it.imageUri?.let { uri ->
+                binding.itemImage.setImageURI(Uri.parse(uri))
+            }
+            updateLocationWithCoordinates(it.latitude, it.longitude)
         }
     }
 }

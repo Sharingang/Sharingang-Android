@@ -31,8 +31,8 @@ class ItemShareLinkTest {
     fun anItemBeSharedFromDetailedItemFragment() {
         val itemTitle = "T"
 
-        navigate_to(R.id.newItemFragment)
-        onView(withId(R.id.editItemTitle)).perform(
+        navigate_to(R.id.editItemFragment)
+        onView(withId(R.id.itemTitle)).perform(
             typeText(itemTitle),
             closeSoftKeyboard()
         )

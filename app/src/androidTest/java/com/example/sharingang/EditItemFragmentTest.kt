@@ -42,8 +42,8 @@ class EditItemFragmentTest {
 
     @Test
     fun canEditItemCategory() {
-        navigate_to(R.id.newItemFragment)
-        onView(withId(R.id.editItemTitle)).perform(
+        navigate_to(R.id.editItemFragment)
+        onView(withId(R.id.itemTitle)).perform(
             typeText(item),
             closeSoftKeyboard()
         )
@@ -76,10 +76,10 @@ class EditItemFragmentTest {
         intending(hasAction(Intent.ACTION_GET_CONTENT)).respondWith(imgGalleryResult)
         intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgGalleryResult)
 
-        navigate_to(R.id.newItemFragment)
+        navigate_to(R.id.editItemFragment)
         onView(withId(R.id.newItemPrompt))
             .check(matches(withText("New Item")))
-        onView(withId(R.id.editItemTitle)).perform(
+        onView(withId(R.id.itemTitle)).perform(
             typeText(item),
             closeSoftKeyboard()
         )
@@ -97,13 +97,13 @@ class EditItemFragmentTest {
         onView(withId(R.id.editItemPrompt))
             .check(matches(withText("Edit Item")))
 
-        onView(withId(R.id.edit_item_image)).perform(click())
-        onView(withId(R.id.edit_item_image)).check(matches(hasContentDescription()))
+        onView(withId(R.id.item_image)).perform(click())
+        onView(withId(R.id.item_image)).check(matches(hasContentDescription()))
 
-        onView(withId(R.id.edit_item_take_picture)).perform(click())
-        onView(withId(R.id.edit_item_image)).check(matches(hasContentDescription()))
+        onView(withId(R.id.item_take_picture)).perform(click())
+        onView(withId(R.id.item_image)).check(matches(hasContentDescription()))
 
-        onView(withId(R.id.editItemTitle)).perform(
+        onView(withId(R.id.itemTitle)).perform(
             typeText(editedItem),
             closeSoftKeyboard()
         )
@@ -115,31 +115,15 @@ class EditItemFragmentTest {
     }
 
     @Test
-    fun aLocationCanBeWrittenInEditFragment() {
-        navigate_to(R.id.newItemFragment)
-        onView(withId(R.id.createItemButton)).perform(click())
-        onView(withId(R.id.item_list_view_edit_btn)).perform(click())
-        onView(withId(R.id.edit_latitude)).perform(
-            typeText("45.01"),
-            closeSoftKeyboard()
-        )
-        onView(withId(R.id.edit_longitude)).perform(
-            typeText("5.014"),
-            closeSoftKeyboard()
-        )
-        onView(withId(R.id.editItemButton)).perform(click())
-    }
-
-    @Test
     fun aPictureCanBeTakenAndDisplayed() {
         savePickedImage(mActivityTestRule.activity)
         val imgGalleryResult = createImageGallerySetResultStub(mActivityTestRule.activity)
         intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgGalleryResult)
 
-        navigate_to(R.id.newItemFragment)
+        navigate_to(R.id.editItemFragment)
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
 
-        onView(withId(R.id.new_item_take_picture)).perform(click())
-        onView(withId(R.id.new_item_image)).check(matches(hasContentDescription()))
+        onView(withId(R.id.item_take_picture)).perform(click())
+        onView(withId(R.id.item_image)).check(matches(hasContentDescription()))
     }
 }

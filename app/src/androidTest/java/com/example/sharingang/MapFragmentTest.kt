@@ -39,12 +39,12 @@ class MapFragmentTest {
 
     @Test
     fun itemsAddedAreDisplayedOnTheMap() {
-        navigate_to(R.id.newItemFragment)
-        onView(withId(R.id.editItemTitle)).perform(
+        navigate_to(R.id.editItemFragment)
+        onView(withId(R.id.itemTitle)).perform(
             ViewActions.typeText(itemTitle),
             ViewActions.closeSoftKeyboard()
         )
-        onView(withId(R.id.new_item_get_location)).perform(click())
+        onView(withId(R.id.item_get_location)).perform(click())
         Thread.sleep(waitingTime)
         onView(withId(R.id.createItemButton)).perform(click())
         navigate_to(R.id.mapFragment)
