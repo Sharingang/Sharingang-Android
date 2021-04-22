@@ -66,10 +66,10 @@ class UserProfileFragmentTest {
 
     @Test
     fun aUserCanSeeTheirItems() {
-        navigate_to(R.id.newItemFragment)
+        navigate_to(R.id.newEditFragment)
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
 
-        onView(withId(R.id.editItemTitle)).perform(
+        onView(withId(R.id.itemTitle)).perform(
             ViewActions.typeText(fakeText),
             ViewActions.closeSoftKeyboard()
         )

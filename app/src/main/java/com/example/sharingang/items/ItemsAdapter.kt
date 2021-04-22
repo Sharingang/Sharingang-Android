@@ -6,8 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sharingang.databinding.ItemViewBinding
+import com.example.sharingang.users.CurrentUserProvider
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class ItemsAdapter(private val clickListener: ItemListener) :
+class ItemsAdapter(private val clickListener: ItemListener, private val userId: String?) :
     ListAdapter<Item, ItemsAdapter.ItemViewHolder>(ItemsDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -15,16 +18,17 @@ class ItemsAdapter(private val clickListener: ItemListener) :
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(getItem(position)!!, clickListener)
+        holder.bind(getItem(position)!!, clickListener, userId)
     }
 
     class ItemViewHolder private constructor(private val binding: ItemViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Item, clickListener: ItemListener) {
+        fun bind(item: Item, clickListener: ItemListener, userId: String?) {
             binding.itemListViewTitle.text = item.title
             binding.item = item
             binding.clickListener = clickListener
+            binding.isVisible = item.userId?.equals(userId) ?: false
         }
 
         companion object {

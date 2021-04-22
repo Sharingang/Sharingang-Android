@@ -27,10 +27,10 @@ class SellItemFragmentTest {
 
     @Test
     fun anItemCanBeEditedAndSeenOnItemsListFragment() {
-        navigate_to(R.id.newItemFragment)
+        navigate_to(R.id.newEditFragment)
         onView(ViewMatchers.withId(R.id.newItemPrompt))
             .check(ViewAssertions.matches(ViewMatchers.withText("New Item")))
-        onView(ViewMatchers.withId(R.id.editItemTitle)).perform(
+        onView(ViewMatchers.withId(R.id.itemTitle)).perform(
             ViewActions.typeText(itemTitle),
             ViewActions.closeSoftKeyboard()
         )

@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="item"
             type="com.example.sharingang.items.Item" />
@@ -11,6 +13,10 @@
         <variable
             name="clickListener"
             type="com.example.sharingang.items.ItemListener" />
+
+        <variable
+            name="isVisible"
+            type="boolean" />
     </data>
 
     <LinearLayout
@@ -24,10 +30,10 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
-            android:textColor="@{item.sold ? @android:color/holo_red_dark : @color/black}"
             android:onClick="@{() -> clickListener.onView(item)}"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
+            android:textColor="@{item.sold ? @android:color/holo_red_dark : @color/black}"
             android:textSize="24sp"
             tools:text="Test" />
 
@@ -37,7 +43,8 @@
             android:layout_height="wrap_content"
             android:onClick="@{() -> clickListener.onEdit(item)}"
             android:text="@string/edit"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:visibility="@{isVisible ? View.VISIBLE : View.GONE}" />
 
         <Button
             android:id="@+id/item_list_view_sell_button"
@@ -46,7 +53,8 @@
             android:layout_weight="0"
             android:onClick="@{() -> clickListener.onSell(item)}"
             android:text="@{item.sold ? @string/unsell : @string/sell}"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:visibility="@{isVisible ? View.VISIBLE : View.GONE}" />
 
     </LinearLayout>
 </layout>
