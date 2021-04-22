@@ -26,6 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/rounded_corner"
+                android:layout_marginBottom="8dp"
                 app:icon="@android:drawable/ic_menu_search" />
 
             <Button

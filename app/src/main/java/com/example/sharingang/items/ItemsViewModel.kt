@@ -108,7 +108,7 @@ class ItemsViewModel @Inject constructor(
                 val matchName = searchName.isEmpty() || item.title.toLowerCase(Locale.getDefault())
                     .contains(searchName.toLowerCase(Locale.getDefault()))
 
-                matchCategory && matchName
+                matchCategory && matchName && !item.sold
             }
             _searchResults.postValue(results)
         }
