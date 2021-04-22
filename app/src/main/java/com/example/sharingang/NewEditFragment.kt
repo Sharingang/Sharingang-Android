@@ -13,7 +13,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
-import com.example.sharingang.databinding.FragmentNewItemBinding
+import com.example.sharingang.databinding.FragmentNewEditItemBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsViewModel
 import com.example.sharingang.users.CurrentUserProvider
@@ -34,15 +34,16 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class NewItemFragment : Fragment() {
+class NewEditFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
+    private var existingItem: Item? = null
 
     private lateinit var observer: ImageAccess
 
     private var imageUri: Uri? = null
 
-    lateinit var binding: FragmentNewItemBinding
+    private lateinit var binding: FragmentNewEditItemBinding
 
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
@@ -75,15 +76,17 @@ class NewItemFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_item, container, false)
-
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_new_edit_item, container, false)
+        setupNewOrEditFragment()
+        setupAutocomplete()
         userId = currentUserProvider.getCurrentUserId()
 
-        observer.setupImageView(binding.newItemImage)
+        observer.setupImageView(binding.itemImage)
+        setupBinding()
 
-        bind()
-        setupLocationCreate()
-        setupAutocomplete()
+        setupButtonActions()
+        setupLocation()
         return binding.root
     }
 
@@ -111,41 +114,50 @@ class NewItemFragment : Fragment() {
         })
     }
 
-    private fun bind() {
-        binding.createItemButton.setOnClickListener { view: View ->
-            imageUri = observer.getImageUri()
-            viewModel.addItem(
-                itemToAdd()
-            )
-            observer.unregister()
-            view.findNavController().navigate(R.id.action_newItemFragment_to_itemsListFragment)
+    private fun setupButtonActions() {
+        listOf(binding.createItemButton, binding.editItemButton).forEach {
+            it.setOnClickListener { view: View ->
+                imageUri = observer.getImageUri()
+                val item = itemToAdd()
+                if (existingItem == null) {
+                    viewModel.addItem(item)
+                } else {
+                    viewModel.updateItem(item)
+                }
+                observer.unregister()
+                view.findNavController().navigate(R.id.action_newEditFragment_to_itemsListFragment)
+            }
         }
-        binding.newItemImage.setOnClickListener {
+        binding.itemImage.setOnClickListener {
             observer.openGallery()
         }
-        binding.newItemTakePicture.setOnClickListener {
+        binding.itemTakePicture.setOnClickListener {
             observer.openCamera()
         }
     }
 
     private fun itemToAdd(): Item {
         return Item(
-            price = binding.price?.toDoubleOrNull() ?: 0.0,
-            description = binding.description ?: "",
+            id = existingItem?.id,
             title = binding.title ?: "",
+            description = binding.description ?: "",
+            //image = existingItem?.image ?: "",
+            imageUri = imageUri?.toString() ?: existingItem?.imageUri,
+            price = binding.price?.toDoubleOrNull() ?: 0.0,
+            sold = existingItem?.sold ?: false,
             category = binding.categorySpinner.selectedItemPosition,
             categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
             latitude = binding.latitude?.toDoubleOrNull() ?: 0.0,
             longitude = binding.longitude?.toDoubleOrNull() ?: 0.0,
-            sold = false,
-            imageUri = imageUri?.toString(),
-            userId = userId
+            userId = existingItem?.userId ?: userId,
+            createdAt = existingItem?.createdAt,
+            localId = existingItem?.localId ?: 0
         )
     }
 
-    private fun setupLocationCreate() {
+    private fun setupLocation() {
         fusedLocationCreate = LocationServices.getFusedLocationProviderClient(requireContext())
-        binding.newItemGetLocation.setOnClickListener {
+        binding.itemGetLocation.setOnClickListener {
             doOrGetPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -161,10 +173,40 @@ class NewItemFragment : Fragment() {
     }
 
     private fun updateLocation(location: Location) {
-        binding.latitude = location.latitude.toString()
-        binding.longitude = location.longitude.toString()
+        updateLocationWithCoordinates(location.latitude, location.longitude)
+    }
+
+    private fun updateLocationWithCoordinates(latitude: Double, longitude: Double) {
+        binding.latitude = latitude.toString()
+        binding.longitude = longitude.toString()
         val address =
-            geocoder.getFromLocation(location.latitude, location.longitude, 1).getOrNull(0)
+            geocoder.getFromLocation(latitude, longitude, 1).getOrNull(0)
         binding.postalAddress.text = address?.getAddressLine(0) ?: ""
+    }
+
+    private fun setupNewOrEditFragment() {
+        val args = NewEditFragmentArgs.fromBundle(requireArguments())
+        existingItem = args.item
+        listOf(binding.editItemPrompt,binding.editItemButton).forEach {
+            it.visibility = if(existingItem==null) View.GONE else View.VISIBLE
+        }
+        listOf(binding.newItemPrompt,binding.createItemButton).forEach{
+            it.visibility = if(existingItem==null) View.VISIBLE else View.GONE
+        }
+    }
+
+    private fun setupBinding() {
+        existingItem?.let {
+            binding.title = it.title
+            binding.description = it.description
+            binding.price = it.price.toString().format("%.2f")
+            binding.categorySpinner.setSelection(it.category)
+            binding.latitude = it.latitude.toString()
+            binding.longitude = it.longitude.toString()
+            it.imageUri?.let { uri ->
+                binding.itemImage.setImageURI(Uri.parse(uri))
+            }
+            updateLocationWithCoordinates(it.latitude, it.longitude)
+        }
     }
 }
