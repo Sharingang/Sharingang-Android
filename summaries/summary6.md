@@ -54,4 +54,4 @@ I didn't encounter many difficulties and my time estimates were fairly accurate.
 We did 2 stand-up meetings, the first one on Tuesday and the second on Thursday.
 The first meeting was mostly to figure out who had started which task and which ones they intended to finish by the end of the week.
 The second one went smoothly and was mostly used to complete most of the remaining pull requests.
-Everyone participated in a least a review.
+Everyone participated in at least a review.
