@@ -99,8 +99,9 @@ class UserProfileFragment : Fragment() {
         userViewModel.rating.observe(viewLifecycleOwner, {
             var text = resources.getString(R.string.default_rating)
             if(it > 0){
-                binding.ratingTextview.text = String.format("%.2f", it)
+                text = String.format("%.2f", it)
             }
+            binding.ratingTextview.text = text
         })
     }
 

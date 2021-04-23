@@ -31,6 +31,7 @@ class DetailedItemFragment : Fragment() {
     lateinit var currentUserProvider: CurrentUserProvider
     private val viewModel: UserProfileViewModel by viewModels()
     private val itemViewModel: ItemsViewModel by viewModels()
+    private lateinit var binding: FragmentDetailedItemBinding
 
     private lateinit var observer: ImageAccess
 
@@ -44,8 +45,7 @@ class DetailedItemFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding: FragmentDetailedItemBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_detailed_item, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detailed_item, container, false)
 
         binding.item = args.item
         observer.setupImageView(binding.detailedItemImage)
@@ -53,8 +53,8 @@ class DetailedItemFragment : Fragment() {
             binding.detailedItemImage.setImageURI(Uri.parse(it))
         }
 
-        initiateWishlistButton(binding)
-        initRating(binding)
+        initiateWishlistButton()
+        initRating()
 
         binding.shareButton.setOnClickListener { shareItem() }
 
@@ -73,7 +73,7 @@ class DetailedItemFragment : Fragment() {
         return binding.root
     }
 
-    private fun initiateWishlistButton(binding: FragmentDetailedItemBinding){
+    private fun initiateWishlistButton(){
         if(currentUserProvider.getCurrentUserId() != null){
             viewModel.wishlistContains.observe(viewLifecycleOwner, {
                 binding.addToWishlist.text = getButtonText(it)
@@ -85,8 +85,16 @@ class DetailedItemFragment : Fragment() {
         }
     }
 
-    private fun initRating(binding: FragmentDetailedItemBinding){
-        updateRatingVisibility(binding)
+    private fun initRating(){
+        itemViewModel.setRated(args.item)
+        itemViewModel.rated.observe(viewLifecycleOwner, {
+            val visibility = if(!it && args.item.userId != null
+                && args.item.sold && currentUserProvider.getCurrentUserId() != null)
+                View.VISIBLE
+            else View.GONE
+            binding.ratingVisibility = visibility
+        })
+
         binding.ratingButton.setOnClickListener {
             val selectedOPtion: Int = binding.radioGroup1.checkedRadioButtonId
             if(selectedOPtion != -1){
@@ -100,18 +108,11 @@ class DetailedItemFragment : Fragment() {
                 }
                 viewModel.updateUserRating(args.item.userId, rating)
                 itemViewModel.rateItem(args.item)
-                updateRatingVisibility(binding)
             }
         }
     }
 
-    private fun updateRatingVisibility(binding: FragmentDetailedItemBinding){
-        val visibility = if(!args.item.rated && args.item.userId != null
-            && args.item.sold && currentUserProvider.getCurrentUserId() != null)
-                View.VISIBLE
-            else View.GONE
-        binding.ratingVisibility = visibility
-    }
+
 
     private fun getButtonText(contains: Boolean): String {
         return if(contains) getString(R.string.remove_wishlist)

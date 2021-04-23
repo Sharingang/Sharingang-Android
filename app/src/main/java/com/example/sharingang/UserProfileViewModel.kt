@@ -80,9 +80,7 @@ class UserProfileViewModel @Inject constructor(
                 if(userTemp != null){
                     val newNumRatings = userTemp.numberOfRatings + 1
                     val newSumRating = userTemp.rating + rating
-                    userTemp.rating = newSumRating
-                    userTemp.numberOfRatings = newNumRatings
-                    userRepository.update(userTemp)
+                    userRepository.update(userTemp.copy(rating = newSumRating, numberOfRatings = newNumRatings))
                 }
             }
         }

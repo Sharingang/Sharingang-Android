@@ -51,6 +51,10 @@ class  ItemsViewModel @Inject constructor(
     val wishlistItem: LiveData<List<Item>>
         get() = _wishlistItem
 
+    private val _rated: MutableLiveData<Boolean> = MutableLiveData(true)
+    val rated: LiveData<Boolean>
+        get() = _rated
+
 
     /**
      * The last item created
@@ -148,6 +152,12 @@ class  ItemsViewModel @Inject constructor(
         }
     }
 
+    fun setRated(item: Item?){
+        if(item != null){
+            _rated.postValue(item.rated)
+        }
+    }
+
     fun setupItemAdapter(userId: String?): ItemsAdapter {
         val onEdit = { item: Item -> onEditItemClicked(item) }
         val onView = { item: Item -> onViewItem(item) }
@@ -168,9 +178,9 @@ class  ItemsViewModel @Inject constructor(
     }
 
     fun rateItem(item: Item){
-        item.rated = true
         viewModelScope.launch(Dispatchers.IO) {
-            itemRepository.update(item)
+            itemRepository.update(item.copy(rated = true))
+            _rated.postValue(true)
         }
     }
 

@@ -29,8 +29,8 @@ data class User(
     /** URLs of the images */
     val profilePicture: String? = null,
 
-    var rating: Int = 0,
-    var numberOfRatings: Int = 0,
+    val rating: Int = 0,
+    val numberOfRatings: Int = 0,
 
     var wishlist: List<String> = ArrayList(),
     @ServerTimestamp
