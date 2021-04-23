@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.sharingang.databinding.FragmentDetailedItemBinding
 import com.example.sharingang.items.Item
+import com.example.sharingang.items.ItemsViewModel
 import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.utils.ImageAccess
 import com.google.firebase.dynamiclinks.ktx.androidParameters
@@ -29,6 +30,8 @@ class DetailedItemFragment : Fragment() {
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
     private val viewModel: UserProfileViewModel by viewModels()
+    private val itemViewModel: ItemsViewModel by viewModels()
+    private lateinit var binding: FragmentDetailedItemBinding
 
     private lateinit var observer: ImageAccess
 
@@ -42,8 +45,7 @@ class DetailedItemFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding: FragmentDetailedItemBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_detailed_item, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detailed_item, container, false)
 
         binding.item = args.item
         observer.setupImageView(binding.detailedItemImage)
@@ -51,7 +53,8 @@ class DetailedItemFragment : Fragment() {
             binding.detailedItemImage.setImageURI(Uri.parse(it))
         }
 
-        initiateWishlistButton(binding)
+        initiateWishlistButton()
+        initRating()
 
         binding.shareButton.setOnClickListener { shareItem() }
 
@@ -70,7 +73,7 @@ class DetailedItemFragment : Fragment() {
         return binding.root
     }
 
-    private fun initiateWishlistButton(binding: FragmentDetailedItemBinding){
+    private fun initiateWishlistButton(){
         if(currentUserProvider.getCurrentUserId() != null){
             viewModel.wishlistContains.observe(viewLifecycleOwner, {
                 binding.addToWishlist.text = getButtonText(it)
@@ -80,8 +83,36 @@ class DetailedItemFragment : Fragment() {
         }else{
             binding.addToWishlist.visibility = View.GONE;
         }
-
     }
+
+    private fun initRating(){
+        itemViewModel.setRated(args.item)
+        itemViewModel.rated.observe(viewLifecycleOwner, {
+            val visibility = if(!it && args.item.userId != null
+                && args.item.sold && currentUserProvider.getCurrentUserId() != null)
+                View.VISIBLE
+            else View.GONE
+            binding.ratingVisibility = visibility
+        })
+
+        binding.ratingButton.setOnClickListener {
+            val selectedOption: Int = binding.radioGroup1.checkedRadioButtonId
+            if(selectedOption != -1){
+                val rating = when(selectedOption){
+                    binding.radioButton1.id -> 1
+                    binding.radioButton2.id -> 2
+                    binding.radioButton3.id -> 3
+                    binding.radioButton4.id -> 4
+                    binding.radioButton5.id -> 5
+                    else -> 0
+                }
+                viewModel.updateUserRating(args.item.userId, rating)
+                itemViewModel.rateItem(args.item)
+            }
+        }
+    }
+
+
 
     private fun getButtonText(contains: Boolean): String {
         return if(contains) getString(R.string.remove_wishlist)
