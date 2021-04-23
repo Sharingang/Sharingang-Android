@@ -96,9 +96,9 @@ class DetailedItemFragment : Fragment() {
         })
 
         binding.ratingButton.setOnClickListener {
-            val selectedOPtion: Int = binding.radioGroup1.checkedRadioButtonId
-            if(selectedOPtion != -1){
-                val rating = when(selectedOPtion){
+            val selectedOption: Int = binding.radioGroup1.checkedRadioButtonId
+            if(selectedOption != -1){
+                val rating = when(selectedOption){
                     binding.radioButton1.id -> 1
                     binding.radioButton2.id -> 2
                     binding.radioButton3.id -> 3
