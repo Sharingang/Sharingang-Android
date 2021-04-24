@@ -53,7 +53,7 @@ class InMemoryUserRepository : UserRepository {
     }
 
     override suspend fun hasBeenReported(reporterId: String, reportedId: String): Boolean {
-        return true
+        return false
     }
 
 }
