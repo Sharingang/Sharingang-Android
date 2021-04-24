@@ -97,7 +97,8 @@
             app:destination="@id/newEditFragment" />
         <action
             android:id="@+id/action_userProfileFragment_to_reportFragment"
-            app:destination="@id/reportFragment" />
+            app:destination="@id/reportFragment"
+            app:popUpTo="@id/itemsListFragment" />
 
     </fragment>
     <fragment
@@ -125,15 +126,13 @@
         <argument
             android:name="reportedId"
             app:argType="string" />
-        <action
-            android:id="@+id/action_reportFragment_pop"
-            app:popUpTo="@id/reportFragment"
-            app:popUpToInclusive="true" />
         <argument
             android:name="reportedName"
             app:argType="string" />
         <action
             android:id="@+id/action_reportFragment_to_userProfileFragment"
-            app:destination="@id/userProfileFragment" />
+            app:destination="@id/userProfileFragment"
+            app:popUpTo="@+id/reportFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

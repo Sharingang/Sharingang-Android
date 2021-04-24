@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,9 +25,13 @@ import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.User
 import com.example.sharingang.users.UserRepository
 import com.example.sharingang.utils.ImageAccess
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -221,7 +226,8 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupReportButton() {
-        if (currentUserId != null) {
+
+        if (currentUserId != null && !hasAlreadyReportedUser(currentUserId!!, shownUserProfileId!!)) {
             binding.btnReport.visibility = View.VISIBLE
         }
         binding.btnReport.setOnClickListener { view ->
@@ -231,6 +237,14 @@ class UserProfileFragment : Fragment() {
                 )
             )
         }
+    }
+
+    fun hasAlreadyReportedUser(reporterId: String, reportedId: String): Boolean {
+        var hasBeenReported = false
+        lifecycleScope.launch(Dispatchers.IO) {
+            hasBeenReported = userRepository.hasBeenReported(reporterId, reportedId)
+        }
+        return hasBeenReported
     }
 }
 

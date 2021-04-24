@@ -62,7 +62,7 @@ class ReportFragment : Fragment() {
     private fun setupCancelButton() {
         binding.buttonCancel.setOnClickListener { view ->
             view.findNavController().navigate(
-                ReportFragmentDirections.actionReportFragmentToUserProfileFragment(reportedId)
+                ItemsListFragmentDirections.actionItemsListFragmentToUserProfileFragment(reportedId)
             )
         }
     }
@@ -87,7 +87,9 @@ class ReportFragment : Fragment() {
                 )
             }
             view.findNavController().navigate(
-                ReportFragmentDirections.actionReportFragmentToUserProfileFragment(reportedId)
+                ReportFragmentDirections.actionReportFragmentToUserProfileFragment(
+                    reportedId
+                )
             )
         }
     }

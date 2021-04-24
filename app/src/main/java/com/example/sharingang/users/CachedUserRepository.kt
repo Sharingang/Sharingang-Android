@@ -57,4 +57,8 @@ class CachedUserRepository @Inject constructor(
     ): Boolean {
         return thenRefresh { store.report(reportedUser, reporterUser, description, reason) }
     }
+
+    override suspend fun hasBeenReported(reporterId: String, reportedId: String): Boolean {
+        return thenRefresh { store.hasBeenReported(reporterId, reportedId) }
+    }
 }
