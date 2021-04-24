@@ -35,13 +35,20 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
         return super.update(user, user.id)
     }
 
-    override suspend fun report(reportedUser: User, reporterUser: User): Boolean {
+    override suspend fun report(
+        reportedUser: User,
+        reporterUser: User,
+        description: String,
+        reason: String
+    ): Boolean {
         return try {
             firestore
                 .collection("users").document(reportedUser.id!!)
                 .collection("reports").document(reporterUser.id!!).set(
                     hashMapOf(
                         "reporter" to reporterUser.id,
+                        "reason" to reason,
+                        "description" to description,
                         "reportedAt" to Date()
                     )
                 )

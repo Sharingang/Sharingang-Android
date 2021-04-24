@@ -227,7 +227,7 @@ class UserProfileFragment : Fragment() {
         binding.btnReport.setOnClickListener { view ->
             view.findNavController().navigate(
                 UserProfileFragmentDirections.actionUserProfileFragmentToReportFragment(
-                    currentUserId!!, shownUserProfileId!!
+                    currentUserId!!, shownUserProfileId!!, binding.nameText.text.toString()
                 )
             )
         }

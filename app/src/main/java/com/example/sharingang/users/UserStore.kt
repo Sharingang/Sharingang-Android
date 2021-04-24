@@ -42,5 +42,5 @@ interface UserStore {
      *
      * @return whether the report succeeded
      */
-    suspend fun report(reportedUser: User, reporterUser: User): Boolean
+    suspend fun report(reportedUser: User, reporterUser: User, description: String, reason: String): Boolean
 }
