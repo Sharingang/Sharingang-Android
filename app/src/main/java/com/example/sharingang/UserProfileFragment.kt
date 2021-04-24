@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.UserProfileFragmentBinding
@@ -220,22 +221,15 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupReportButton() {
-        var username = ""
         if (currentUserId != null) {
             binding.btnReport.visibility = View.VISIBLE
-            lifecycleScope.launch(Dispatchers.IO) {
-                username = userRepository.get(shownUserProfileId!!)!!.name
-            }
         }
-
-        binding.btnReport.setOnClickListener {
-            userViewModel.report(shownUserProfileId!!, currentUserId!!)
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("Report Result")
-            builder.setMessage("Successfully reported $username.")
-            builder.setPositiveButton("OK") { _: DialogInterface, _: Int -> }
-            builder.show()
-
+        binding.btnReport.setOnClickListener { view ->
+            view.findNavController().navigate(
+                UserProfileFragmentDirections.actionUserProfileFragmentToReportFragment(
+                    currentUserId!!, shownUserProfileId!!
+                )
+            )
         }
     }
 }

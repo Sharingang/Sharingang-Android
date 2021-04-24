@@ -84,7 +84,7 @@
             android:id="@+id/btn_report"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Report User" />
+            android:text="@string/report_user" />
 
         <TextView
             android:id="@+id/text_email"

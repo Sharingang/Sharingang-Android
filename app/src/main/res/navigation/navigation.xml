@@ -95,6 +95,9 @@
         <action
             android:id="@+id/action_userProfileFragment_to_newEditFragment"
             app:destination="@id/newEditFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_reportFragment"
+            app:destination="@id/reportFragment" />
 
     </fragment>
     <fragment
@@ -111,5 +114,20 @@
         <action
             android:id="@+id/action_wishlistViewFragment_to_newEditFragment"
             app:destination="@id/newEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reportFragment"
+        android:name="com.example.sharingang.ReportFragment"
+        android:label="Report User">
+        <argument
+            android:name="reporterId"
+            app:argType="string" />
+        <argument
+            android:name="reportedId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_reportFragment_pop"
+            app:popUpTo="@id/reportFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

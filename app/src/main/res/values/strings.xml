@@ -49,4 +49,5 @@
         <item>Clothes</item>
         <item>Miscellaneous</item>
     </string-array>
+    <string name="report_user">Report User</string>
 </resources>
