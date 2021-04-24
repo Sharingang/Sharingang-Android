@@ -50,9 +50,9 @@
         <item>Miscellaneous</item>
     </string-array>
     <string name="report_user">Report User</string>
-    <string name="unappropriate_username">Unappropriate Username</string>
-    <string name="unappropriate_profile_picture">Unappropriate Profile Picture</string>
-    <string name="unappropriate_item">Unappropriate Item</string>
+    <string name="inappropriate_username">Inappropriate Username</string>
+    <string name="inappropriate_profile_picture">Inappropriate Profile Picture</string>
+    <string name="inappropriate_item">Inappropriate Item</string>
     <string name="other">Other</string>
     <string name="hint_report_description">Provide a description for the report (optional)</string>
     <string name="cancel">Cancel</string>

@@ -26,21 +26,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="@string/unappropriate_username" />
+                android:text="@string/inappropriate_username" />
 
             <RadioButton
                 android:id="@+id/radio_profile_picture"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="@string/unappropriate_profile_picture" />
+                android:text="@string/inappropriate_profile_picture" />
 
             <RadioButton
                 android:id="@+id/radio_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="@string/unappropriate_item" />
+                android:text="@string/inappropriate_item" />
 
             <RadioButton
                 android:id="@+id/radio_other"

@@ -96,9 +96,9 @@ class ReportFragment : Fragment() {
 
     private fun getName(radioButton: RadioButton): String {
         return when (radioButton) {
-            binding.radioUsername -> "Unappropriate Username"
-            binding.radioProfilePicture -> "Unappropriate Profile Picture"
-            binding.radioItem -> "Unappropriate Item"
+            binding.radioUsername -> "Inappropriate Username"
+            binding.radioProfilePicture -> "Inappropriate Profile Picture"
+            binding.radioItem -> "Inappropriate Item"
             binding.radioOther -> "Other"
             else -> ""
         }
