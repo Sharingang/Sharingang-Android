@@ -1,14 +1,8 @@
 package com.example.sharingang.users
 
 import android.util.Log
-import androidx.lifecycle.lifecycleScope
 import com.example.sharingang.AbstractFirestoreStore
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
@@ -67,10 +61,8 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
     }
 
     override suspend fun hasBeenReported(reporterId: String, reportedId: String): Boolean {
-        var documentReference: DocumentSnapshot? = null
-        val document = firestore.collection("users").document(reportedId)
-            .collection("reports").document(reporterId)
-        documentReference = document.get().await()
-        return documentReference != null && documentReference.exists()
+        val docIdRef = firestore.collection("users").document(reportedId)
+            .collection("reports").document(reporterId).get().await()
+        return docIdRef.exists()
     }
 }

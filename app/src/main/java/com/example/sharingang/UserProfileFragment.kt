@@ -226,25 +226,23 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupReportButton() {
-
-        if (currentUserId != null && !hasAlreadyReportedUser(currentUserId!!, shownUserProfileId!!)) {
-            binding.btnReport.visibility = View.VISIBLE
-        }
-        binding.btnReport.setOnClickListener { view ->
-            view.findNavController().navigate(
-                UserProfileFragmentDirections.actionUserProfileFragmentToReportFragment(
-                    currentUserId!!, shownUserProfileId!!, binding.nameText.text.toString()
+        if(currentUserId != null) {
+            lifecycleScope.launch(Dispatchers.Main) {
+                val hasBeenReported =
+                    userRepository.hasBeenReported(currentUserId!!, shownUserProfileId!!)
+                binding.btnReport.visibility =
+                    if(hasBeenReported) View.GONE
+                    else View.VISIBLE
+            }
+            binding.btnReport.setOnClickListener { view ->
+                view.findNavController().navigate(
+                    UserProfileFragmentDirections.actionUserProfileFragmentToReportFragment(
+                        currentUserId!!, shownUserProfileId!!, binding.nameText.text.toString()
+                    )
                 )
-            )
+            }
         }
-    }
 
-    fun hasAlreadyReportedUser(reporterId: String, reportedId: String): Boolean {
-        var hasBeenReported = false
-        lifecycleScope.launch(Dispatchers.IO) {
-            hasBeenReported = userRepository.hasBeenReported(reporterId, reportedId)
-        }
-        return hasBeenReported
     }
 }
 
