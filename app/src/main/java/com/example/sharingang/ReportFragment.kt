@@ -37,25 +37,17 @@ class ReportFragment : Fragment() {
         reportedId = args.reportedId
         reportedUsername = args.reportedName
 
-
-        val radioButtons = listOf(
-            binding.radioUsername, binding.radioProfilePicture, binding.radioItem, binding.radioOther
-        )
-        setupRadioButtons(radioButtons)
+        setupRadioButtons()
         setupCancelButton()
-        setupButtonOk(radioButtons)
-        binding.textReportedUsername.text = "Reporting $reportedUsername"
+        setupButtonOk()
+        "Reporting $reportedUsername".also { binding.textReportedUsername.text = it }
 
         return binding.root
     }
 
-    private fun setupRadioButtons(radioButtons: List<RadioButton>) {
-        for(radioButton: RadioButton in radioButtons) {
-            radioButton.setOnCheckedChangeListener { _, _ ->
-                binding.buttonOk.isEnabled =
-                    binding.radioUsername.isChecked || binding.radioProfilePicture.isChecked ||
-                    binding.radioItem.isChecked || binding.radioOther.isChecked
-            }
+    private fun setupRadioButtons() {
+        binding.reportRadioGroup.setOnCheckedChangeListener { _, _ ->
+            binding.buttonOk.isEnabled = true
         }
     }
 
@@ -67,14 +59,11 @@ class ReportFragment : Fragment() {
         }
     }
 
-    private fun setupButtonOk(radioButtons: List<RadioButton>) {
+    private fun setupButtonOk() {
         binding.buttonOk.setOnClickListener { view ->
-            var reason = ""
-            for (radioButton: RadioButton in radioButtons) {
-                if (radioButton.isChecked) {
-                    reason = getName(radioButton)
-                }
-            }
+            val checkedGroup = binding.reportRadioGroup.checkedRadioButtonId
+            val reason = getName(checkedGroup)
+
             val reportDescription = binding.reportDescription.text.toString()
             lifecycleScope.launch(Dispatchers.IO) {
                 val reporterUser = userRepository.get(reporterId)
@@ -94,14 +83,13 @@ class ReportFragment : Fragment() {
         }
     }
 
-    private fun getName(radioButton: RadioButton): String {
-        return when (radioButton) {
-            binding.radioUsername -> "Inappropriate Username"
-            binding.radioProfilePicture -> "Inappropriate Profile Picture"
-            binding.radioItem -> "Inappropriate Item"
-            binding.radioOther -> "Other"
+    private fun getName(radioButtonId: Int): String {
+        return when (radioButtonId) {
+            binding.radioUsername.id -> getString(R.string.eng_inappropriate_username)
+            binding.radioProfilePicture.id -> getString(R.string.eng_inappropriate_profile_picture)
+            binding.radioItem.id -> getString(R.string.eng_inappropriate_item)
+            binding.radioOther.id -> getString(R.string.eng_other)
             else -> ""
         }
     }
-
 }

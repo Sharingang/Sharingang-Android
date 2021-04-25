@@ -57,4 +57,8 @@
     <string name="hint_report_description">Provide a description for the report (optional)</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+    <string name="eng_inappropriate_username">Inappropriate Username</string>
+    <string name="eng_inappropriate_profile_picture">Inappropriate Profile Picture</string>
+    <string name="eng_inappropriate_item">Inappropriate Item</string>
+    <string name="eng_other">Other</string>
 </resources>
