@@ -45,10 +45,15 @@ class ReportFragmentTest {
         onView(withId(R.id.btn_report)).check(matches(isDisplayed()))
         onView(withId(R.id.btn_report)).perform(click())
         onView(withId(R.id.text_reportedUsername)).check(matches(withText("Reporting Test User 2")))
+        onView(withId(R.id.radio_username)).check(matches(withText("Inappropriate Username")))
+        onView(withId(R.id.radio_profile_picture)).check(matches(withText("Inappropriate Profile Picture")))
+        onView(withId(R.id.radio_item)).check(matches(withText("Inappropriate Item")))
+        onView(withId(R.id.radio_other)).check(matches(withText("Other")))
         onView(withId(R.id.button_ok)).check(matches(not(isEnabled())))
         onView(withId(R.id.radio_item)).perform(click())
         onView(withId(R.id.button_ok)).check(matches(isEnabled()))
         onView(withId(R.id.button_cancel)).check(matches(isEnabled()))
+        onView(withId(R.id.button_cancel)).check(matches(withText("Cancel")))
         onView(withId(R.id.button_cancel)).perform(click())
         onView(withId(R.id.btn_report)).check(matches(isDisplayed()))
     }
@@ -70,7 +75,10 @@ class ReportFragmentTest {
         onView(withId(R.id.btn_report)).check(matches(isDisplayed()))
         onView(withId(R.id.btn_report)).perform(click())
         onView(withId(R.id.text_reportedUsername)).check(matches(withText("Reporting Test User 2")))
+        onView(withId(R.id.report_description)).check(matches(withHint("Provide a description for the report (optional)")))
         onView(withId(R.id.radio_other)).perform(click())
+        onView(withId(R.id.button_ok)).check(matches(isEnabled()))
+        onView(withId(R.id.button_ok)).check(matches(withText("OK")))
         onView(withId(R.id.button_ok)).perform(click())
     }
 
