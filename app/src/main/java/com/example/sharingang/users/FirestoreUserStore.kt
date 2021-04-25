@@ -63,6 +63,6 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
     override suspend fun hasBeenReported(reporterId: String, reportedId: String): Boolean {
         val docIdRef = firestore.collection("users").document(reportedId)
             .collection("reports").document(reporterId).get().await()
-        return docIdRef.exists() || reportedId == reporterId
+        return docIdRef.exists()
     }
 }

@@ -40,7 +40,8 @@ class ReportFragment : Fragment() {
         setupRadioButtons()
         setupCancelButton()
         setupButtonOk()
-        "Reporting $reportedUsername".also { binding.textReportedUsername.text = it }
+        val reportingText = "${getString(R.string.eng_reporting)} $reportedUsername"
+        binding.textReportedUsername.text = reportingText
 
         return binding.root
     }
