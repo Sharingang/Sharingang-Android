@@ -6,9 +6,9 @@ import android.content.Context
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.inputmethod.EditorInfo
+import android.widget.AdapterView
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -31,6 +31,7 @@ import com.google.maps.android.collections.MarkerManager
 import com.google.maps.android.ktx.awaitMap
 import com.google.maps.android.ui.IconGenerator
 import kotlin.properties.Delegates
+
 
 const val DEFAULT_ZOOM = 15
 
@@ -68,7 +69,7 @@ class MapFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         hasCameraMovedOnce = false
-
+        binding.linearSearchOnMap.visibility = View.GONE
         viewModel.searchResults.observe(viewLifecycleOwner, {
             addItemMarkers(it)
         })
@@ -80,8 +81,30 @@ class MapFragment : Fragment() {
         }
 
         binding.mapStartSearch.setOnClickListener {
-            this.findNavController()
-                .navigate(MapFragmentDirections.actionMapFragmentToSearchFragment())
+            if(binding.linearSearchOnMap.visibility == View.VISIBLE){
+                binding.linearSearchOnMap.visibility = View.GONE
+            } else {
+                binding.linearSearchOnMap.visibility = View.VISIBLE
+            }
+        }
+        binding.searchOnMap.setOnKeyListener { _, keyCode, event ->
+            if (keyCode == EditorInfo.IME_ACTION_SEARCH ||
+                keyCode == EditorInfo.IME_ACTION_DONE ||
+                (event.action == KeyEvent.ACTION_DOWN &&
+                        event.keyCode == KeyEvent.KEYCODE_ENTER)
+            ) {
+                startSearch()
+                true
+            }
+            false
+        }
+        binding.mapCategorySpinner.onItemSelectedListener =  object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                startSearch()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
         }
 
         binding.mapView.onCreate(savedInstanceState)
@@ -89,6 +112,13 @@ class MapFragment : Fragment() {
         initMap()
 
         return binding.root
+    }
+
+    private fun startSearch() {
+        viewModel.searchItems(
+            binding.searchOnMap.text.toString(),
+            binding.mapCategorySpinner.selectedItemPosition
+        )
     }
 
     private fun addItemMarkers(items: List<Item>) {
@@ -196,6 +226,7 @@ class MapFragment : Fragment() {
         clusterManager: ClusterManager<T>?
     ) : DefaultClusterRenderer<T>(context, map, clusterManager) {
         private val iconGenerator: IconGenerator = IconGenerator(context)
+
         @SuppressLint("InflateParams")
         private var markerView: View = layoutInflater.inflate(R.layout.item_marker, null)
 
