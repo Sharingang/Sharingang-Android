@@ -228,10 +228,10 @@ class UserProfileFragment : Fragment() {
     private fun setupReportButton() {
         if(currentUserId != null && currentUserId != shownUserProfileId) {
             lifecycleScope.launch(Dispatchers.Main) {
-                val hasBeenReportedOrIsSelf =
+                val hasBeenReported =
                     userRepository.hasBeenReported(currentUserId!!, shownUserProfileId!!)
                 binding.btnReport.visibility =
-                    if(hasBeenReportedOrIsSelf) View.GONE
+                    if(hasBeenReported) View.GONE
                     else View.VISIBLE
             }
             binding.btnReport.setOnClickListener { view ->
