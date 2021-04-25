@@ -38,7 +38,7 @@ class UserProfileFragmentTest {
     fun canOpenUserProfileFragment() {
         navigate_to(R.id.userProfileFragment)
         val textView = onView(withId(R.id.nameText))
-        textView.check(matches(withText(FakeCurrentUserProvider.fakeUser.name)))
+        textView.check(matches(withText(FakeCurrentUserProvider.fakeUser1.name)))
         onView(withId(R.id.text_email)).check(matches(withText("test-user@example.com")))
         onView(withId(R.id.upf_topinfo)).check(matches(withText(
             "You need to be logged in to view your User Profile.")))
@@ -81,7 +81,7 @@ class UserProfileFragmentTest {
         navigate_to(R.id.userProfileFragment)
 
         val textView = onView(withId(R.id.nameText))
-        textView.check(matches(withText(FakeCurrentUserProvider.fakeUser.name)))
+        textView.check(matches(withText(FakeCurrentUserProvider.fakeUser1.name)))
         onView(withText(fakeText)).check(matches(isDisplayed()))
     }
 }

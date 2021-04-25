@@ -50,5 +50,5 @@ interface UserStore {
      *
      * @return true if yes, false if no
      */
-    suspend fun hasBeenReportedOrIsSelf(reporterId: String, reportedId: String): Boolean
+    suspend fun hasBeenReported(reporterId: String, reportedId: String): Boolean
 }

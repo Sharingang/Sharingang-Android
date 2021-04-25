@@ -2,6 +2,7 @@ package com.example.sharingang
 
 
 import android.Manifest
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.*
@@ -29,11 +30,21 @@ class ReportFragmentTest {
 
     @Test
     fun reportCanBeCancelled() {
-        navigate_to(R.id.userProfileFragment)
+        FakeCurrentUserProvider.instance = 2
+        navigate_to(R.id.newEditFragment)
+        Thread.sleep(500)
+        onView(withId(R.id.itemTitle)).perform(
+            typeText("TestItem"),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.createItemButton)).perform(click())
+        FakeCurrentUserProvider.instance = 1
+        onView(withId(R.id.item_list_view_title)).perform(click())
+        onView(withId(R.id.itemPostedBy)).perform(click())
         Thread.sleep(500)
         onView(withId(R.id.btn_report)).check(matches(isDisplayed()))
         onView(withId(R.id.btn_report)).perform(click())
-        onView(withId(R.id.text_reportedUsername)).check(matches(withText("Reporting Test User")))
+        onView(withId(R.id.text_reportedUsername)).check(matches(withText("Reporting Test User 2")))
         onView(withId(R.id.button_ok)).check(matches(not(isEnabled())))
         onView(withId(R.id.radio_item)).perform(click())
         onView(withId(R.id.button_ok)).check(matches(isEnabled()))
@@ -44,11 +55,30 @@ class ReportFragmentTest {
 
     @Test
     fun reportCanBeSent() {
-        navigate_to(R.id.userProfileFragment)
+        FakeCurrentUserProvider.instance = 2
+        navigate_to(R.id.newEditFragment)
         Thread.sleep(500)
+        onView(withId(R.id.itemTitle)).perform(
+            typeText("TestItem"),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.createItemButton)).perform(click())
+        FakeCurrentUserProvider.instance = 1
+        onView(withId(R.id.item_list_view_title)).perform(click())
+        onView(withId(R.id.itemPostedBy)).perform(click())
+        Thread.sleep(500)
+        onView(withId(R.id.btn_report)).check(matches(isDisplayed()))
         onView(withId(R.id.btn_report)).perform(click())
+        onView(withId(R.id.text_reportedUsername)).check(matches(withText("Reporting Test User 2")))
         onView(withId(R.id.radio_other)).perform(click())
         onView(withId(R.id.button_ok)).perform(click())
+    }
+
+    @Test
+    fun aUserCannotReportThemselves() {
+        FakeCurrentUserProvider.instance = 1
+        navigate_to(R.id.userProfileFragment)
+        onView(withId(R.id.btn_report)).check(matches(not(isDisplayed())))
     }
 
 
