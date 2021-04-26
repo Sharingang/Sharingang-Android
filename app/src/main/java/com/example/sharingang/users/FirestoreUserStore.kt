@@ -2,9 +2,8 @@ package com.example.sharingang.users
 
 import android.util.Log
 import com.example.sharingang.AbstractFirestoreStore
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
+import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -35,13 +34,20 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
         return super.update(user, user.id)
     }
 
-    override suspend fun report(reportedUser: User, reporterUser: User): Boolean {
+    override suspend fun report(
+        reportedUser: User,
+        reporterUser: User,
+        description: String,
+        reason: String
+    ): Boolean {
         return try {
             firestore
                 .collection("users").document(reportedUser.id!!)
                 .collection("reports").document(reporterUser.id!!).set(
                     hashMapOf(
                         "reporter" to reporterUser.id,
+                        "reason" to reason,
+                        "description" to description,
                         "reportedAt" to Date()
                     )
                 )
@@ -54,4 +60,9 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
         }
     }
 
+    override suspend fun hasBeenReported(reporterId: String, reportedId: String): Boolean {
+        val docIdRef = firestore.collection("users").document(reportedId)
+            .collection("reports").document(reporterId).get().await()
+        return docIdRef.exists()
+    }
 }

@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.UserProfileFragmentBinding
@@ -23,9 +25,13 @@ import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.User
 import com.example.sharingang.users.UserRepository
 import com.example.sharingang.utils.ImageAccess
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -220,23 +226,25 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupReportButton() {
-        var username = ""
-        if (currentUserId != null) {
-            binding.btnReport.visibility = View.VISIBLE
+        if(currentUserId != null && currentUserId != shownUserProfileId) {
             lifecycleScope.launch(Dispatchers.IO) {
-                username = userRepository.get(shownUserProfileId!!)!!.name
+                val hasBeenReported =
+                    userRepository.hasBeenReported(currentUserId!!, shownUserProfileId!!)
+                lifecycleScope.launch(Dispatchers.Main) {
+                    binding.btnReport.visibility =
+                        if (hasBeenReported) View.GONE
+                        else View.VISIBLE
+                }
+            }
+            binding.btnReport.setOnClickListener { view ->
+                view.findNavController().navigate(
+                    UserProfileFragmentDirections.actionUserProfileFragmentToReportFragment(
+                        currentUserId!!, shownUserProfileId!!, binding.nameText.text.toString()
+                    )
+                )
             }
         }
 
-        binding.btnReport.setOnClickListener {
-            userViewModel.report(shownUserProfileId!!, currentUserId!!)
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("Report Result")
-            builder.setMessage("Successfully reported $username.")
-            builder.setPositiveButton("OK") { _: DialogInterface, _: Int -> }
-            builder.show()
-
-        }
     }
 }
 
