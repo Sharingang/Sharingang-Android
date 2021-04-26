@@ -7,8 +7,6 @@ import android.location.Location
 import android.os.Bundle
 import android.os.Looper
 import android.view.*
-import android.view.inputmethod.EditorInfo
-import android.widget.AdapterView
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -73,7 +71,15 @@ class MapFragment : Fragment() {
         viewModel.searchResults.observe(viewLifecycleOwner, {
             addItemMarkers(it)
         })
+        setupButtons()
+        binding.mapView.onCreate(savedInstanceState)
 
+        initMap()
+
+        return binding.root
+    }
+
+    private fun setupButtons() {
         binding.mapGetMyLocation.setOnClickListener {
             if (lastLocation != null) {
                 moveCameraToLastLocation()
@@ -81,37 +87,13 @@ class MapFragment : Fragment() {
         }
 
         binding.mapStartSearch.setOnClickListener {
-            if(binding.linearSearchOnMap.visibility == View.VISIBLE){
+            if (binding.linearSearchOnMap.visibility == View.VISIBLE) {
+                startSearch()
                 binding.linearSearchOnMap.visibility = View.GONE
             } else {
                 binding.linearSearchOnMap.visibility = View.VISIBLE
             }
         }
-        binding.searchOnMap.setOnKeyListener { _, keyCode, event ->
-            if (keyCode == EditorInfo.IME_ACTION_SEARCH ||
-                keyCode == EditorInfo.IME_ACTION_DONE ||
-                (event.action == KeyEvent.ACTION_DOWN &&
-                        event.keyCode == KeyEvent.KEYCODE_ENTER)
-            ) {
-                startSearch()
-                true
-            }
-            false
-        }
-        binding.mapCategorySpinner.onItemSelectedListener =  object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                startSearch()
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-            }
-        }
-
-        binding.mapView.onCreate(savedInstanceState)
-
-        initMap()
-
-        return binding.root
     }
 
     private fun startSearch() {
