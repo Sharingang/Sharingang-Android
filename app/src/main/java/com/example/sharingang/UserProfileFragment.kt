@@ -1,22 +1,18 @@
 package com.example.sharingang
 
 
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.UserProfileFragmentBinding
@@ -25,13 +21,9 @@ import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.User
 import com.example.sharingang.users.UserRepository
 import com.example.sharingang.utils.ImageAccess
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -129,7 +121,6 @@ class UserProfileFragment : Fragment() {
         )
 
         itemsViewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
-            { item -> UserProfileFragmentDirections.actionUserProfileFragmentToNewEditFragment(item) },
             { item ->
                 UserProfileFragmentDirections.actionUserProfileFragmentToDetailedItemFragment(
                     item

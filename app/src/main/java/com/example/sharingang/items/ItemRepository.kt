@@ -15,7 +15,7 @@ interface ItemRepository : ItemStore {
     fun items(): LiveData<List<Item>>
 
     /**
-     * The current user items that are available, as LiveData
+     * The current user items that are available
      */
     suspend fun userItems(userId: String): List<Item>?
 

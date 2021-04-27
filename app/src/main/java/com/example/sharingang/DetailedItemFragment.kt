@@ -3,9 +3,7 @@ package com.example.sharingang
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -32,11 +30,13 @@ class DetailedItemFragment : Fragment() {
     private val viewModel: UserProfileViewModel by viewModels()
     private val itemViewModel: ItemsViewModel by viewModels()
     private lateinit var binding: FragmentDetailedItemBinding
+    private var soldStatus: Boolean = false
 
     private lateinit var observer: ImageAccess
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         observer = ImageAccess(requireActivity())
         lifecycle.addObserver(observer)
     }
@@ -46,7 +46,7 @@ class DetailedItemFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detailed_item, container, false)
-
+        soldStatus = args.item.sold
         binding.item = args.item
         observer.setupImageView(binding.detailedItemImage)
         args.item.imageUri?.let {
@@ -73,6 +73,51 @@ class DetailedItemFragment : Fragment() {
         return binding.root
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_detailed, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        val sell = menu.findItem(R.id.menuSell)
+        val resell = menu.findItem(R.id.menuResell)
+        if (!args.item.userId.equals(currentUserProvider.getCurrentUserId())) {
+            menu.findItem(R.id.menuEdit).isVisible = false
+            sell.isVisible = false
+            resell.isVisible = false
+        } else {
+            sell.isVisible = !soldStatus
+            resell.isVisible = soldStatus
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menuEdit -> {
+                view?.findNavController()?.navigate(
+                    DetailedItemFragmentDirections.actionDetailedItemFragmentToNewEditFragment(args.item)
+                )
+                true
+            }
+            R.id.menuSell -> {
+                updateSold(true)
+                true
+            }
+            R.id.menuResell -> {
+                updateSold(false)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun updateSold(sold: Boolean) {
+        itemViewModel.sellItem(args.item)
+        soldStatus = sold
+        activity?.invalidateOptionsMenu()
+    }
+
     private fun initiateWishlistButton(){
         if(currentUserProvider.getCurrentUserId() != null){
             viewModel.wishlistContains.observe(viewLifecycleOwner, {
@@ -81,7 +126,7 @@ class DetailedItemFragment : Fragment() {
             binding.addToWishlist.setOnClickListener { updateWishlist(binding) }
             viewModel.wishlistContains(args.item)
         }else{
-            binding.addToWishlist.visibility = View.GONE;
+            binding.addToWishlist.visibility = View.GONE
         }
     }
 

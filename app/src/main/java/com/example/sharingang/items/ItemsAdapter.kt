@@ -6,9 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sharingang.databinding.ItemViewBinding
-import com.example.sharingang.users.CurrentUserProvider
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 class ItemsAdapter(private val clickListener: ItemListener, private val userId: String?) :
     ListAdapter<Item, ItemsAdapter.ItemViewHolder>(ItemsDiffCallback()) {
@@ -28,7 +25,7 @@ class ItemsAdapter(private val clickListener: ItemListener, private val userId: 
             binding.itemListViewTitle.text = item.title
             binding.item = item
             binding.clickListener = clickListener
-            binding.isVisible = item.userId?.equals(userId) ?: false
+            //binding.isVisible = item.userId?.equals(userId) ?: false
         }
 
         companion object {
@@ -53,11 +50,11 @@ class ItemsDiffCallback : DiffUtil.ItemCallback<Item>() {
 
 // Replace the description with its ID once the database is set
 class ItemListener(
-    val onEditListener: (item: Item) -> Unit,
+    //val onEditListener: (item: Item) -> Unit,
     val onViewListener: (item: Item) -> Unit,
-    val onSellListener: (item: Item) -> Unit
+    //val onSellListener: (item: Item) -> Unit
 ) {
-    fun onEdit(item: Item) = onEditListener(item)
+    //fun onEdit(item: Item) = onEditListener(item)
     fun onView(item: Item) = onViewListener(item)
-    fun onSell(item: Item) = onSellListener(item)
+    //fun onSell(item: Item) = onSellListener(item)
 }
