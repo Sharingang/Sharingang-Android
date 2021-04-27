@@ -13,7 +13,7 @@ import javax.inject.Inject
  * ItemsViewModel models the state of the fragment for viewing items
  */
 @HiltViewModel
-class  ItemsViewModel @Inject constructor(
+class ItemsViewModel @Inject constructor(
     private val itemRepository: ItemRepository
 ) : ViewModel() {
 
@@ -152,8 +152,8 @@ class  ItemsViewModel @Inject constructor(
         }
     }
 
-    fun setRated(item: Item?){
-        if(item != null){
+    fun setRated(item: Item?) {
+        if (item != null) {
             _rated.postValue(item.rated)
         }
     }
@@ -177,7 +177,7 @@ class  ItemsViewModel @Inject constructor(
         })
     }
 
-    fun rateItem(item: Item){
+    fun rateItem(item: Item) {
         viewModelScope.launch(Dispatchers.IO) {
             itemRepository.update(item.copy(rated = true))
             _rated.postValue(true)
