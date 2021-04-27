@@ -52,7 +52,7 @@ class WishlistViewTest {
         onView(withId(R.id.addToWishlist)).check(matches(withText(R.string.remove_wishlist)))
         onView(withId(R.id.addToWishlist)).perform(click())
         onView(isRoot()).perform(pressBack())
-
+        Thread.sleep(1000)
         onView(withText(secondItem)).check(matches(isDisplayed()))
     }
 

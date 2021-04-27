@@ -3,6 +3,7 @@ package com.example.sharingang
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -38,10 +39,10 @@ class SellItemFragmentTest {
         buttonCreate.check(ViewAssertions.matches(ViewMatchers.withText("Create Item")))
         buttonCreate.perform(ViewActions.click())
 
-        onView(ViewMatchers.withText("Sell")).perform(ViewActions.click())
-        // Wait for RecyclerView to remove old button
-        Thread.sleep(1000)
-        onView(ViewMatchers.withId(R.id.item_list_view_sell_button))
-            .check(ViewAssertions.matches(ViewMatchers.withText("Resell")))
+        onView(ViewMatchers.withId(R.id.item_list_view_title)).perform(ViewActions.click())
+
+        onView(ViewMatchers.withId(R.id.menuSell)).perform(ViewActions.click())
+
+        onView(ViewMatchers.withId(R.id.menuResell)).check(matches(ViewMatchers.isDisplayed()))
     }
 }
