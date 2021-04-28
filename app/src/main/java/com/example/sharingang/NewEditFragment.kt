@@ -9,7 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.Button
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -118,31 +118,35 @@ class NewEditFragment : Fragment() {
 
     private fun setupButtonActions() {
         listOf(binding.createItemButton, binding.editItemButton).forEach {
-            it.setOnClickListener { view: View ->
-                it.isClickable = false
-                binding.isLoading = true
-
-                imageUri = observer.getImageUri()
-
-                val item = itemToAdd()
-                viewModel.setItem(item) { itemId ->
-                    binding.isLoading = false
-                    if (itemId != null) {
-                        Snackbar.make(binding.root, "Item saved successfully.", Snackbar.LENGTH_SHORT).show()
-                        observer.unregister()
-                        view.findNavController().navigate(R.id.action_newEditFragment_to_itemsListFragment)
-                    } else {
-                        it.isClickable = true
-                        Snackbar.make(binding.root, "Cannot save the item.", Snackbar.LENGTH_SHORT).show()
-                    }
-                }
-            }
+            onSaveButtonClicked(it)
         }
         binding.itemImage.setOnClickListener {
             observer.openGallery()
         }
         binding.itemTakePicture.setOnClickListener {
             observer.openCamera()
+        }
+    }
+
+    private fun onSaveButtonClicked(button: Button) {
+        button.setOnClickListener { view: View ->
+            button.isClickable = false
+            binding.isLoading = true
+
+            imageUri = observer.getImageUri()
+
+            val item = itemToAdd()
+            viewModel.setItem(item) { itemId ->
+                binding.isLoading = false
+                if (itemId != null) {
+                    Snackbar.make(binding.root, "Item saved successfully.", Snackbar.LENGTH_SHORT).show()
+                    observer.unregister()
+                    view.findNavController().navigate(R.id.action_newEditFragment_to_itemsListFragment)
+                } else {
+                    button.isClickable = true
+                    Snackbar.make(binding.root, "Cannot save the item.", Snackbar.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
