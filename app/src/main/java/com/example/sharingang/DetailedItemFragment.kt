@@ -3,7 +3,6 @@ package com.example.sharingang
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -56,7 +55,7 @@ class DetailedItemFragment : Fragment() {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_detailed_item, container, false)
-        getItem()
+        loadItem()
         observer.setupImageView(binding.detailedItemImage)
         args.item.imageUri?.let {
             binding.detailedItemImage.setImageURI(Uri.parse(it))
@@ -120,12 +119,11 @@ class DetailedItemFragment : Fragment() {
     private fun updateSold() {
         lifecycleScope.launch(Dispatchers.IO) {
             itemViewModel.sellItem(item)
-            getItem()
+            loadItem()
         }
     }
 
-    private fun getItem() {
-        Log.d("SELL_STATUS", "nice")
+    private fun loadItem() {
         lifecycleScope.launch(Dispatchers.IO) {
             item = itemRepository.get(args.item.id!!)
             lifecycleScope.launch(Dispatchers.Main) {
