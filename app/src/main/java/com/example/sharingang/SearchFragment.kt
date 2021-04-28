@@ -33,13 +33,13 @@ class SearchFragment : Fragment() {
 
         viewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
             {item -> SearchFragmentDirections.actionSearchFragmentToDetailedItemFragment(item)})
-
-        binding.clearSearchButton.setOnClickListener {clearSearch(it)}
+        clearSearch()
+        binding.clearSearchButton.setOnClickListener {clearSearch()}
 
         return binding.root
     }
 
-    private fun clearSearch(view: View){
+    private fun clearSearch(){
         viewModel.clearSearchResults()
     }
 

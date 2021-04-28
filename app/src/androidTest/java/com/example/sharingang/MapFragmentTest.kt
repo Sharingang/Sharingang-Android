@@ -4,7 +4,7 @@ import android.Manifest
 import android.app.Activity
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -41,21 +41,19 @@ class MapFragmentTest {
     fun itemsAddedAreDisplayedOnTheMap() {
         navigate_to(R.id.newEditFragment)
         onView(withId(R.id.itemTitle)).perform(
-            ViewActions.typeText(itemTitle),
-            ViewActions.closeSoftKeyboard()
+            typeText(itemTitle),
+            closeSoftKeyboard()
         )
         onView(withId(R.id.item_get_location)).perform(click())
         Thread.sleep(waitingTime)
         onView(withId(R.id.createItemButton)).perform(click())
         navigate_to(R.id.mapFragment)
         onView(withId(R.id.map_start_search)).perform(click())
-        onView(withId(R.id.searchText)).perform(
-            ViewActions.typeText(itemTitle),
-            ViewActions.closeSoftKeyboard()
+        onView(withId(R.id.search_on_map)).perform(
+            typeText(itemTitle),
+            closeSoftKeyboard()
         )
-        onView(withId(R.id.sflSearchButton)).perform(click())
-        navigate_up()
-        onView(withId(R.id.map_get_my_location)).perform(click())
+        onView(withId(R.id.map_start_search)).perform(click())
         Thread.sleep(waitingTime)
         var activity: Activity? = null
         activityRule.scenario.onActivity {
