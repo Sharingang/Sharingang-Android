@@ -79,14 +79,17 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     fun onRandomItem(item: MenuItem) {
         lifecycleScope.launch(Dispatchers.IO) {
-            val random = itemRepository.getAll().random()
-            lifecycleScope.launch(Dispatchers.Main) {
-                val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
-                drawerLayout.close()
-                getNavController().navigate(
-                    ItemsListFragmentDirections
-                        .actionItemsListFragmentToDetailedItemFragment(random)
-                )
+            val allItems = itemRepository.getAll()
+            if (allItems.isNotEmpty()) {
+                val random = allItems.random()
+                lifecycleScope.launch(Dispatchers.Main) {
+                    val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+                    drawerLayout.close()
+                    getNavController().navigate(
+                        ItemsListFragmentDirections
+                            .actionItemsListFragmentToDetailedItemFragment(random)
+                    )
+                }
             }
         }
     }

@@ -19,32 +19,43 @@ class ItemsListFragment : Fragment() {
 
     private lateinit var binding: FragmentItemsListBinding
     private val viewModel: ItemsViewModel by activityViewModels()
+
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_items_list, container, false)
         binding.viewModel = viewModel
 
         val adapter = viewModel.setupItemAdapter(currentUserProvider.getCurrentUserId())
         binding.itemList.adapter = adapter
-        viewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.ALL_ITEMS)
+        viewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.ORDERED_ITEMS)
 
         viewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
-                {item -> ItemsListFragmentDirections.actionItemsListFragmentToNewEditFragment(item)},
-                {item -> ItemsListFragmentDirections.actionItemsListFragmentToDetailedItemFragment(item)})
+            { item -> ItemsListFragmentDirections.actionItemsListFragmentToNewEditFragment(item) },
+            { item -> ItemsListFragmentDirections.actionItemsListFragmentToDetailedItemFragment(item) })
 
         binding.swiperefresh.setOnRefreshListener { viewModel.refresh() }
         viewModel.refreshing.observe(viewLifecycleOwner, {
             if (!it) {
                 binding.swiperefresh.isRefreshing = false
+                orderItems() // in the case an item is added, need to add redo the ordering
             }
         })
+        orderItems()
+        binding.startOrdering.setOnClickListener { orderItems() }
 
         return binding.root
+    }
+
+    private fun orderItems() {
+        viewModel.orderItems(
+            ItemsViewModel.ORDERING.values()[binding.orderCategorySpinner.selectedItemPosition],
+            binding.orderAscendingDescending.selectedItemPosition == 0
+        )
     }
 }
 
