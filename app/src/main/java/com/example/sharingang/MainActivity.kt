@@ -1,7 +1,6 @@
 package com.example.sharingang
 
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -80,10 +79,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     fun onRandomItem(item: MenuItem) {
         lifecycleScope.launch(Dispatchers.IO) {
-            itemRepository.refreshItems()
-            val random = itemRepository.items().value?.random()
-            Log.d("itemRepositoryItems", itemRepository.items().value.toString())
-            if (random != null) {
+            val random = itemRepository.getAll().random()
+            lifecycleScope.launch(Dispatchers.Main) {
+                val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+                drawerLayout.close()
                 getNavController().navigate(
                     ItemsListFragmentDirections
                         .actionItemsListFragmentToDetailedItemFragment(random)
