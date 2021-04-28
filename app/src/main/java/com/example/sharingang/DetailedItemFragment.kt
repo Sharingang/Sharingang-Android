@@ -152,8 +152,7 @@ class DetailedItemFragment : Fragment() {
         itemViewModel.rated.observe(viewLifecycleOwner, {
             val visibility = if (!it && args.item.userId != null
                 && args.item.sold && currentUserProvider.getCurrentUserId() != null
-            )
-                View.VISIBLE
+            ) View.VISIBLE
             else View.GONE
             binding.ratingVisibility = visibility
         })
