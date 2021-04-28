@@ -1,6 +1,7 @@
 package com.example.sharingang
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -66,12 +67,28 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                         val item = itemRepository.get(id)
                         if (item != null) {
                             runOnUiThread {
-                                getNavController().navigate(ItemsListFragmentDirections
-                                    .actionItemsListFragmentToDetailedItemFragment(item))
+                                getNavController().navigate(
+                                    ItemsListFragmentDirections
+                                        .actionItemsListFragmentToDetailedItemFragment(item)
+                                )
                             }
                         }
                     }
                 }
             }
+    }
+
+    fun onRandomItem(item: MenuItem) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val random = itemRepository.getAll().random()
+            lifecycleScope.launch(Dispatchers.Main) {
+                val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+                drawerLayout.close()
+                getNavController().navigate(
+                    ItemsListFragmentDirections
+                        .actionItemsListFragmentToDetailedItemFragment(random)
+                )
+            }
+        }
     }
 }
