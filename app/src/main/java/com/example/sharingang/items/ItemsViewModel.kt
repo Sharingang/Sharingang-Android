@@ -1,5 +1,6 @@
 package com.example.sharingang.items
 
+import android.view.View
 import androidx.lifecycle.*
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
@@ -63,13 +64,21 @@ class ItemsViewModel @Inject constructor(
         get() = itemRepository.items()
 
     /**
-     * Add a new item.
+     * Add or update an item.
      *
-     * @param item the item to be added
+     * Add if it's id is null otherwise update it.
+     *
+     * @param item the item to be added / set
+     * @param callback Will be called when finished with the item's id or null in case of error
      */
-    fun addItem(item: Item) {
+    fun setItem(item: Item, callback: ((String?) -> Unit)? = null) {
         viewModelScope.launch(Dispatchers.IO) {
-            itemRepository.add(item)
+            val itemId = itemRepository.set(item)
+            if (callback != null) {
+                viewModelScope.launch(Dispatchers.Main) {
+                    callback(itemId)
+                }
+            }
         }
     }
 
@@ -119,17 +128,6 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Replace the old item by a new one.
-     *
-     * @param updatedItem the updated item containing the ID of the existing one
-     */
-    fun updateItem(updatedItem: Item) {
-        viewModelScope.launch(Dispatchers.IO) {
-            itemRepository.update(updatedItem)
-        }
-    }
-
     private fun onEditItemClicked(item: Item) {
         _navigateToEditItem.value = item
     }
@@ -147,7 +145,7 @@ class ItemsViewModel @Inject constructor(
     }
 
     private suspend fun onSellItem(item: Item) {
-        itemRepository.update(item.copy(sold = !item.sold))
+        itemRepository.set(item.copy(sold = !item.sold))
     }
 
     fun setRated(item: Item?) {
@@ -181,7 +179,7 @@ class ItemsViewModel @Inject constructor(
 
     fun rateItem(item: Item) {
         viewModelScope.launch(Dispatchers.IO) {
-            itemRepository.update(item.copy(rated = true))
+            itemRepository.set(item.copy(rated = true))
             _rated.postValue(true)
         }
     }

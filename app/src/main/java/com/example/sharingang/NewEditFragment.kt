@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -30,6 +31,7 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -117,15 +119,23 @@ class NewEditFragment : Fragment() {
     private fun setupButtonActions() {
         listOf(binding.createItemButton, binding.editItemButton).forEach {
             it.setOnClickListener { view: View ->
+                it.isClickable = false
+                binding.isLoading = true
+
                 imageUri = observer.getImageUri()
+
                 val item = itemToAdd()
-                if (existingItem == null) {
-                    viewModel.addItem(item)
-                } else {
-                    viewModel.updateItem(item)
+                viewModel.setItem(item) { itemId ->
+                    binding.isLoading = false
+                    if (itemId != null) {
+                        Snackbar.make(binding.root, "Item saved successfully.", Snackbar.LENGTH_SHORT).show()
+                        observer.unregister()
+                        view.findNavController().navigate(R.id.action_newEditFragment_to_itemsListFragment)
+                    } else {
+                        it.isClickable = true
+                        Snackbar.make(binding.root, "Cannot save the item.", Snackbar.LENGTH_SHORT).show()
+                    }
                 }
-                observer.unregister()
-                view.findNavController().navigate(R.id.action_newEditFragment_to_itemsListFragment)
             }
         }
         binding.itemImage.setOnClickListener {

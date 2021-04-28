@@ -14,14 +14,15 @@ import javax.inject.Singleton
 class FirestoreItemStore @Inject constructor(firestore: FirebaseFirestore) :
     ItemStore, AbstractFirestoreStore<Item>("items", Item::class.java, firestore) {
 
-    override suspend fun add(item: Item): String? {
-        require(item.id == null)
-        return super.add(item)
+    override suspend fun set(item: Item): String? {
+        return if (item.id == null) {
+            super.add(item)
+        } else {
+            if (super.update(item, item.id)) {
+                item.id
+            } else {
+                null
+            }
+        }
     }
-
-    override suspend fun update(item: Item): Boolean {
-        requireNotNull(item.id)
-        return super.update(item, item.id)
-    }
-
 }

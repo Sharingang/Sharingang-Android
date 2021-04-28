@@ -34,8 +34,8 @@ class CachedItemRepository @Inject constructor(
         return ret
     }
 
-    override suspend fun add(item: Item): String? {
-        return thenRefresh { store.add(item) }
+    override suspend fun set(item: Item): String? {
+        return thenRefresh { store.set(item) }
     }
 
     override suspend fun get(id: String): Item? {
@@ -48,10 +48,6 @@ class CachedItemRepository @Inject constructor(
 
     override suspend fun userItems(userId: String): List<Item>? {
         return itemDao.getUserItem(userId)
-    }
-
-    override suspend fun update(item: Item): Boolean {
-        return thenRefresh { store.update(item) }
     }
 
     override suspend fun delete(id: String): Boolean {
