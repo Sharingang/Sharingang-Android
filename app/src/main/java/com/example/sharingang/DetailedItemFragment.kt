@@ -157,7 +157,6 @@ class DetailedItemFragment : Fragment() {
             else View.GONE
             binding.ratingVisibility = visibility
         })
-
         binding.ratingButton.setOnClickListener {
             val selectedOption: Int = binding.radioGroup1.checkedRadioButtonId
             if (selectedOption != -1) {
