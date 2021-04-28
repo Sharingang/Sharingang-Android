@@ -7,10 +7,12 @@ import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.sharingang.databinding.FragmentDetailedItemBinding
 import com.example.sharingang.items.Item
+import com.example.sharingang.items.ItemRepository
 import com.example.sharingang.items.ItemsViewModel
 import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.utils.ImageAccess
@@ -19,6 +21,8 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -27,10 +31,12 @@ class DetailedItemFragment : Fragment() {
     private val args: DetailedItemFragmentArgs by navArgs()
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
+    @Inject
+    lateinit var itemRepository: ItemRepository
     private val viewModel: UserProfileViewModel by viewModels()
     private val itemViewModel: ItemsViewModel by viewModels()
     private lateinit var binding: FragmentDetailedItemBinding
-    private var soldStatus: Boolean = false
+    private var item: Item? = null
 
     private lateinit var observer: ImageAccess
 
@@ -46,8 +52,8 @@ class DetailedItemFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detailed_item, container, false)
-        soldStatus = args.item.sold
-        binding.item = args.item
+        getItem()
+        //binding.item = args.item
         observer.setupImageView(binding.detailedItemImage)
         args.item.imageUri?.let {
             binding.detailedItemImage.setImageURI(Uri.parse(it))
@@ -87,8 +93,8 @@ class DetailedItemFragment : Fragment() {
             sell.isVisible = false
             resell.isVisible = false
         } else {
-            sell.isVisible = !soldStatus
-            resell.isVisible = soldStatus
+            sell.isVisible = !(item?.sold ?: args.item.sold)
+            resell.isVisible = item?.sold ?: args.item.sold
         }
     }
 
@@ -101,21 +107,32 @@ class DetailedItemFragment : Fragment() {
                 true
             }
             R.id.menuSell -> {
-                updateSold(true)
+                updateSold()
                 true
             }
             R.id.menuResell -> {
-                updateSold(false)
+                updateSold()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun updateSold(sold: Boolean) {
-        itemViewModel.sellItem(args.item)
-        soldStatus = sold
-        activity?.invalidateOptionsMenu()
+    private fun updateSold() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            itemViewModel.sellItem(item)
+            getItem()
+        }
+    }
+
+    private fun getItem() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            item = itemRepository.get(args.item.id!!)
+            lifecycleScope.launch(Dispatchers.Main) {
+                binding.item = item
+                activity?.invalidateOptionsMenu()
+            }
+        }
     }
 
     private fun initiateWishlistButton(){

@@ -146,10 +146,8 @@ class  ItemsViewModel @Inject constructor(
         _navigateToDetailItem.value = null
     }
 
-    private fun onSellItem(item: Item) {
-        viewModelScope.launch {
-            itemRepository.update(item.copy(sold = !item.sold))
-        }
+    private suspend fun onSellItem(item: Item) {
+        itemRepository.update(item.copy(sold = !item.sold))
     }
 
     fun setRated(item: Item?){
@@ -158,7 +156,7 @@ class  ItemsViewModel @Inject constructor(
         }
     }
 
-    fun sellItem(item: Item?) {
+    suspend fun sellItem(item: Item?) {
         if (item != null) {
             onSellItem(item)
         }
