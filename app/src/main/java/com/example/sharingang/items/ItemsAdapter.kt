@@ -25,7 +25,6 @@ class ItemsAdapter(private val clickListener: ItemListener, private val userId: 
             binding.itemListViewTitle.text = item.title
             binding.item = item
             binding.clickListener = clickListener
-            //binding.isVisible = item.userId?.equals(userId) ?: false
         }
 
         companion object {
@@ -50,11 +49,7 @@ class ItemsDiffCallback : DiffUtil.ItemCallback<Item>() {
 
 // Replace the description with its ID once the database is set
 class ItemListener(
-    //val onEditListener: (item: Item) -> Unit,
     val onViewListener: (item: Item) -> Unit,
-    //val onSellListener: (item: Item) -> Unit
 ) {
-    //fun onEdit(item: Item) = onEditListener(item)
     fun onView(item: Item) = onViewListener(item)
-    //fun onSell(item: Item) = onSellListener(item)
 }

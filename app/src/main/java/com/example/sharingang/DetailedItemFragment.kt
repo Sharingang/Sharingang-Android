@@ -3,6 +3,7 @@ package com.example.sharingang
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -29,8 +30,10 @@ import javax.inject.Inject
 class DetailedItemFragment : Fragment() {
 
     private val args: DetailedItemFragmentArgs by navArgs()
+
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
+
     @Inject
     lateinit var itemRepository: ItemRepository
     private val viewModel: UserProfileViewModel by viewModels()
@@ -51,9 +54,9 @@ class DetailedItemFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detailed_item, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_detailed_item, container, false)
         getItem()
-        //binding.item = args.item
         observer.setupImageView(binding.detailedItemImage)
         args.item.imageUri?.let {
             binding.detailedItemImage.setImageURI(Uri.parse(it))
@@ -93,8 +96,8 @@ class DetailedItemFragment : Fragment() {
             sell.isVisible = false
             resell.isVisible = false
         } else {
-            sell.isVisible = !(item?.sold ?: args.item.sold)
             resell.isVisible = item?.sold ?: args.item.sold
+            sell.isVisible = !resell.isVisible
         }
     }
 
@@ -106,11 +109,7 @@ class DetailedItemFragment : Fragment() {
                 )
                 true
             }
-            R.id.menuSell -> {
-                updateSold()
-                true
-            }
-            R.id.menuResell -> {
+            R.id.menuSell, R.id.menuResell -> {
                 updateSold()
                 true
             }
@@ -126,6 +125,7 @@ class DetailedItemFragment : Fragment() {
     }
 
     private fun getItem() {
+        Log.d("SELL_STATUS", "nice")
         lifecycleScope.launch(Dispatchers.IO) {
             item = itemRepository.get(args.item.id!!)
             lifecycleScope.launch(Dispatchers.Main) {
@@ -135,23 +135,24 @@ class DetailedItemFragment : Fragment() {
         }
     }
 
-    private fun initiateWishlistButton(){
-        if(currentUserProvider.getCurrentUserId() != null){
+    private fun initiateWishlistButton() {
+        if (currentUserProvider.getCurrentUserId() != null) {
             viewModel.wishlistContains.observe(viewLifecycleOwner, {
                 binding.addToWishlist.text = getButtonText(it)
             })
             binding.addToWishlist.setOnClickListener { updateWishlist(binding) }
             viewModel.wishlistContains(args.item)
-        }else{
+        } else {
             binding.addToWishlist.visibility = View.GONE
         }
     }
 
-    private fun initRating(){
+    private fun initRating() {
         itemViewModel.setRated(args.item)
         itemViewModel.rated.observe(viewLifecycleOwner, {
-            val visibility = if(!it && args.item.userId != null
-                && args.item.sold && currentUserProvider.getCurrentUserId() != null)
+            val visibility = if (!it && args.item.userId != null
+                && args.item.sold && currentUserProvider.getCurrentUserId() != null
+            )
                 View.VISIBLE
             else View.GONE
             binding.ratingVisibility = visibility
@@ -159,8 +160,8 @@ class DetailedItemFragment : Fragment() {
 
         binding.ratingButton.setOnClickListener {
             val selectedOption: Int = binding.radioGroup1.checkedRadioButtonId
-            if(selectedOption != -1){
-                val rating = when(selectedOption){
+            if (selectedOption != -1) {
+                val rating = when (selectedOption) {
                     binding.radioButton1.id -> 1
                     binding.radioButton2.id -> 2
                     binding.radioButton3.id -> 3
@@ -175,13 +176,12 @@ class DetailedItemFragment : Fragment() {
     }
 
 
-
     private fun getButtonText(contains: Boolean): String {
-        return if(contains) getString(R.string.remove_wishlist)
+        return if (contains) getString(R.string.remove_wishlist)
         else getString(R.string.add_wishlist)
     }
 
-    private fun updateWishlist(binding: FragmentDetailedItemBinding){
+    private fun updateWishlist(binding: FragmentDetailedItemBinding) {
         viewModel.modifyWishList(args.item)
     }
 
