@@ -54,8 +54,9 @@ class EditItemFragmentTest {
         onView(withId(R.id.createItemButton)).perform(click())
 
         onView(withText(item)).check(matches(isDisplayed()))
-        onView(withId(R.id.item_list_view_edit_btn)).check(matches(withText("Edit")))
-            .perform(click())
+        onView(withId(R.id.item_list_view_title)).perform(click())
+
+        onView(withId(R.id.menuEdit)).perform(click())
 
         onView(withId(R.id.editItemPrompt)).check(matches(withText("Edit Item")))
         onView(withId(R.id.category_spinner)).check(matches(withSpinnerText("Book")))
@@ -63,8 +64,10 @@ class EditItemFragmentTest {
         onView(withText("Games")).perform(click())
 
         onView(withId(R.id.editItemButton)).perform(click())
-        onView(withId(R.id.item_list_view_edit_btn)).check(matches(withText("Edit")))
-            .perform(click())
+        onView(withId(R.id.item_list_view_title)).perform(click())
+
+        onView(withId(R.id.menuEdit)).perform(click())
+
         onView(withId(R.id.category_spinner)).check(matches(withSpinnerText("Games")))
     }
 
@@ -90,9 +93,9 @@ class EditItemFragmentTest {
         onView(withText(item))
             .check(matches(isDisplayed()))
 
-        val buttonEdit = onView(withId(R.id.item_list_view_edit_btn))
-        buttonEdit.check(matches(withText("Edit")))
-        buttonEdit.perform(click())
+        onView(withId(R.id.item_list_view_title)).perform(click())
+
+        onView(withId(R.id.menuEdit)).perform(click())
 
         onView(withId(R.id.editItemPrompt))
             .check(matches(withText("Edit Item")))

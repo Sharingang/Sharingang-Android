@@ -34,4 +34,21 @@ interface UserStore {
      * @return whether the update succeeded
      */
     suspend fun update(user: User): Boolean
+
+    /**
+     * Report a user
+     *
+     * The reported user nor the reporter cannot be null
+     *
+     * @return whether the report succeeded
+     */
+    suspend fun report(reportedUser: User, reporterUser: User, description: String, reason: String): Boolean
+
+    /**
+     * Checks if a user has already been reported by a particular user, or
+     * if a user attempts to report themselves
+     *
+     * @return true if yes, false if no
+     */
+    suspend fun hasBeenReported(reporterId: String, reportedId: String): Boolean
 }

@@ -37,8 +37,10 @@
     <string name="wishlist_menu_title">Wish List</string>
     <string name="enter_address">Enter Address</string>
     <string name="item">Item</string>
-    <string name="upfNotLoggedInInfo">You need to be logged in to view User Profiles.</string>
+    <string name="userNotLoggedInInfo">You need to be logged in to view your User Profile.</string>
     <string name="text_email_unavailable">e-mail not available</string>
+    <string name="default_rating">No Ratings</string>
+    <string name="apply_rating">Rate</string>
     <string-array name="categories">
         <item>None</item>
         <item>Book</item>
@@ -47,4 +49,18 @@
         <item>Clothes</item>
         <item>Miscellaneous</item>
     </string-array>
+    <string name="report_user">Report User</string>
+    <string name="inappropriate_username">Inappropriate Username</string>
+    <string name="inappropriate_profile_picture">Inappropriate Profile Picture</string>
+    <string name="inappropriate_item">Inappropriate Item</string>
+    <string name="other">Other</string>
+    <string name="hint_report_description">Provide a description for the report (optional)</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="eng_inappropriate_username">Inappropriate Username</string>
+    <string name="eng_inappropriate_profile_picture">Inappropriate Profile Picture</string>
+    <string name="eng_inappropriate_item">Inappropriate Item</string>
+    <string name="eng_other">Other</string>
+    <string name="eng_reporting">Reporting</string>
+    <string name="i_feel_lucky">I Feel Lucky</string>
 </resources>

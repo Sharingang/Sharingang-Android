@@ -56,6 +56,9 @@
         <action
             android:id="@+id/action_detailedItemFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />
+        <action
+            android:id="@+id/action_detailedItemFragment_to_newEditFragment"
+            app:destination="@id/newEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -75,9 +78,6 @@
         <action
             android:id="@+id/action_mapFragment_to_detailedItemFragment"
             app:destination="@id/detailedItemFragment" />
-        <action
-            android:id="@+id/action_mapFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/userProfileFragment"
@@ -95,6 +95,10 @@
         <action
             android:id="@+id/action_userProfileFragment_to_newEditFragment"
             app:destination="@id/newEditFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_reportFragment"
+            app:destination="@id/reportFragment"
+            app:popUpTo="@id/itemsListFragment" />
 
     </fragment>
     <fragment
@@ -111,5 +115,24 @@
         <action
             android:id="@+id/action_wishlistViewFragment_to_newEditFragment"
             app:destination="@id/newEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reportFragment"
+        android:name="com.example.sharingang.ReportFragment"
+        android:label="Report User">
+        <argument
+            android:name="reporterId"
+            app:argType="string" />
+        <argument
+            android:name="reportedId"
+            app:argType="string" />
+        <argument
+            android:name="reportedName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_reportFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment"
+            app:popUpTo="@+id/reportFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

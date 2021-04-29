@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.sharingang.databinding.FragmentItemsListBinding
 import com.example.sharingang.items.ItemsViewModel
 import com.example.sharingang.users.CurrentUserProvider
@@ -31,10 +32,10 @@ class ItemsListFragment : Fragment() {
 
         val adapter = viewModel.setupItemAdapter(currentUserProvider.getCurrentUserId())
         binding.itemList.adapter = adapter
+        binding.itemList.layoutManager = GridLayoutManager(context, 2)
         viewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.ALL_ITEMS)
 
         viewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
-                {item -> ItemsListFragmentDirections.actionItemsListFragmentToNewEditFragment(item)},
                 {item -> ItemsListFragmentDirections.actionItemsListFragmentToDetailedItemFragment(item)})
 
         binding.swiperefresh.setOnRefreshListener { viewModel.refresh() }

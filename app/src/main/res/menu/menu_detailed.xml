@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menuEdit"
+        android:icon="@drawable/ic_baseline_edit_white_24"
+        android:title="@string/edit_item"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menuSell"
+        android:icon="@drawable/ic_baseline_attach_money_white_24"
+        android:title="@string/sell"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menuResell"
+        android:icon="@drawable/ic_baseline_money_off_white_24"
+        android:title="@string/unsell"
+        app:showAsAction="ifRoom"/>
+</menu>

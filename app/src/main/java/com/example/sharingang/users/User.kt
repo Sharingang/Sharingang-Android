@@ -9,6 +9,7 @@ import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.ServerTimestamp
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashSet
 import kotlin.collections.List
 
 /**
@@ -28,8 +29,10 @@ data class User(
     /** URLs of the images */
     val profilePicture: String? = null,
 
-    var wishlist: List<String> = ArrayList(),
+    val rating: Int = 0,
+    val numberOfRatings: Int = 0,
 
+    var wishlist: List<String> = ArrayList(),
     @ServerTimestamp
     val createdAt: Date? = null,
 

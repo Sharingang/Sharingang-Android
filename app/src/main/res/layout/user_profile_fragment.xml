@@ -20,7 +20,7 @@
             android:id="@+id/upf_topinfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/upfNotLoggedInInfo"
+            android:text="@string/userNotLoggedInInfo"
             android:textSize="14sp" />
 
         <ImageView
@@ -80,10 +80,22 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             tools:text="John Doe" />
 
+        <Button
+            android:id="@+id/btn_report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/report_user" />
+
         <TextView
             android:id="@+id/text_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/rating_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/default_rating"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/userItemList"

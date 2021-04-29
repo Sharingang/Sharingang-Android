@@ -14,4 +14,8 @@ class FirestoreCurrentUserProvider @Inject constructor(
     override fun getCurrentUserEmail(): String? {
         return auth.currentUser?.email
     }
+
+    override fun getCurrentUserName(): String? {
+        return auth.currentUser?.displayName
+    }
 }

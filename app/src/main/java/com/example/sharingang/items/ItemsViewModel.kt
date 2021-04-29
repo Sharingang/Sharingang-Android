@@ -51,6 +51,11 @@ class ItemsViewModel @Inject constructor(
     val wishlistItem: LiveData<List<Item>>
         get() = _wishlistItem
 
+    private val _rated: MutableLiveData<Boolean> = MutableLiveData(true)
+    val rated: LiveData<Boolean>
+        get() = _rated
+
+
     /**
      * The last item created
      */
@@ -141,17 +146,25 @@ class ItemsViewModel @Inject constructor(
         _navigateToDetailItem.value = null
     }
 
-    private fun onSellItem(item: Item) {
-        viewModelScope.launch {
-            itemRepository.update(item.copy(sold = !item.sold))
+    private suspend fun onSellItem(item: Item) {
+        itemRepository.update(item.copy(sold = !item.sold))
+    }
+
+    fun setRated(item: Item?) {
+        if (item != null) {
+            _rated.postValue(item.rated)
+        }
+    }
+
+    suspend fun sellItem(item: Item?) {
+        if (item != null) {
+            onSellItem(item)
         }
     }
 
     fun setupItemAdapter(userId: String?): ItemsAdapter {
-        val onEdit = { item: Item -> onEditItemClicked(item) }
         val onView = { item: Item -> onViewItem(item) }
-        val onSell = { item: Item -> onSellItem(item) }
-        return ItemsAdapter(ItemListener(onEdit, onView, onSell), userId)
+        return ItemsAdapter(ItemListener(onView), userId)
     }
 
     fun addObserver(LifeCycleOwner: LifecycleOwner, adapter: ItemsAdapter, type: OBSERVABLES) {
@@ -166,19 +179,16 @@ class ItemsViewModel @Inject constructor(
         })
     }
 
-    fun setupItemNavigation(
-        LifeCycleOwner: LifecycleOwner, navController: NavController,
-        actionEdit: (Item) -> NavDirections, actionDetail: (Item) -> NavDirections
-    ) {
-        navigateToEditItem.observe(LifeCycleOwner, { item ->
-            item?.let {
-                navController.navigate(
-                    actionEdit(item)
-                )
-                onEditItemNavigated()
-            }
-        })
+    fun rateItem(item: Item) {
+        viewModelScope.launch(Dispatchers.IO) {
+            itemRepository.update(item.copy(rated = true))
+            _rated.postValue(true)
+        }
+    }
 
+    fun setupItemNavigation(
+        LifeCycleOwner: LifecycleOwner, navController: NavController, actionDetail: (Item) -> NavDirections
+    ) {
         navigateToDetailItem.observe(LifeCycleOwner, { item ->
             item?.let {
                 navController.navigate(

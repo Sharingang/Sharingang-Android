@@ -1,5 +1,6 @@
 package com.example.sharingang
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemRepository
@@ -25,8 +26,12 @@ class UserProfileViewModel @Inject constructor(
         get() = _userId
 
     private val _wishlistContains : MutableLiveData<Boolean> = MutableLiveData(false)
-    val wishlistContains : LiveData<Boolean>
+    val wishlistContains: LiveData<Boolean>
         get() = _wishlistContains
+
+    private val _rating = MutableLiveData<Float>(0f)
+    val rating: LiveData<Float>
+        get() = _rating
 
     val user: LiveData<User?> =
         Transformations.switchMap(_userId) { id ->
@@ -56,6 +61,31 @@ class UserProfileViewModel @Inject constructor(
     fun setUser(userId: String?) {
         _userId.postValue(userId)
     }
+
+    fun refreshRating(userId: String?){
+        if(userId != null){
+            viewModelScope.launch(Dispatchers.IO) {
+                val userTemp = userRepository.get(userId)
+                if(userTemp != null){
+                    _rating.postValue(userTemp.rating.toFloat() / userTemp.numberOfRatings)
+                }
+            }
+        }
+    }
+
+    fun updateUserRating(userId: String?, rating: Int){
+        if(userId != null){
+            viewModelScope.launch(Dispatchers.IO) {
+                val userTemp = userRepository.get(userId)
+                if(userTemp != null){
+                    val newNumRatings = userTemp.numberOfRatings + 1
+                    val newSumRating = userTemp.rating + rating
+                    userRepository.update(userTemp.copy(rating = newSumRating, numberOfRatings = newNumRatings))
+                }
+            }
+        }
+    }
+
 
     fun wishlistContains(item: Item?){
         val userId = currentUserProvider.getCurrentUserId()
@@ -87,5 +117,7 @@ class UserProfileViewModel @Inject constructor(
             }
         }
     }
+
+
 }
 

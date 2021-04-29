@@ -24,5 +24,11 @@
         android:title="@string/account" />
     <item
         android:id="@+id/wishlistViewFragment"
-        android:title="@string/wishlist_menu_title"/>
+        android:icon="@android:drawable/btn_star_big_off"
+        android:title="@string/wishlist_menu_title" />
+    <item
+        android:id="@+id/nav_random_item"
+        android:icon="@drawable/baseline_casino_black_24dp"
+        android:onClick="onRandomItem"
+        android:title="@string/i_feel_lucky" />
 </menu>
