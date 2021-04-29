@@ -77,6 +77,7 @@ class UserProfileFragmentTest {
         val button = onView(withId(R.id.createItemButton))
         button.check(matches(withText("Create Item")))
         button.perform(click())
+        onView(isRoot()).perform(waitId(R.id.item_list_view_title))
 
         navigate_to(R.id.userProfileFragment)
 

@@ -58,6 +58,7 @@ class NewItemFragmentTest {
         val button = onView(withId(R.id.createItemButton))
         button.check(matches(withText("Create Item")))
         button.perform(click())
+        onView(isRoot()).perform(waitId(R.id.item_list_view_title))
 
         onView(withText(firstItem)).check(matches(isDisplayed()))
 
@@ -67,6 +68,7 @@ class NewItemFragmentTest {
             closeSoftKeyboard()
         )
         onView(withId(R.id.createItemButton)).perform(click())
+        onView(isRoot()).perform(waitId(R.id.item_list_view_title))
 
         onView(withText(firstItem)).check(matches(isDisplayed()))
         onView(withText(secondItem)).check(matches(isDisplayed()))

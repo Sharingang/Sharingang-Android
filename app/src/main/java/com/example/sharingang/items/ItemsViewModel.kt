@@ -1,6 +1,5 @@
 package com.example.sharingang.items
 
-import android.view.View
 import androidx.lifecycle.*
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections

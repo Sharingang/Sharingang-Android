@@ -37,6 +37,7 @@ class SellItemFragmentTest {
         val buttonCreate = onView(withId(R.id.createItemButton))
         buttonCreate.check(matches(withText("Create Item")))
         buttonCreate.perform(ViewActions.click())
+        onView(isRoot()).perform(waitId(R.id.item_list_view_title))
 
         onView(withId(R.id.item_list_view_title)).perform(ViewActions.click())
 

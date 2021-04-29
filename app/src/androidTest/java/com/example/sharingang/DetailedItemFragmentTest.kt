@@ -50,6 +50,7 @@ class DetailedItemFragmentTest {
         onView(withId(R.id.category_spinner)).perform(click())
         onView(withText(testCategory)).perform(click())
         onView(withId(R.id.createItemButton)).perform(click())
+        onView(isRoot()).perform(waitId(R.id.item_list_view_title))
 
         onView(withText(testTitle)).perform(click())
         onView(withId(R.id.itemCategory)).check(matches(withText(testCategory)))
@@ -69,6 +70,7 @@ class DetailedItemFragmentTest {
             closeSoftKeyboard()
         )
         onView(withId(R.id.createItemButton)).perform(click())
+        onView(isRoot()).perform(waitId(R.id.item_list_view_title))
         onView(withId(R.id.item_list_view_title)).perform(click())
 
         onView(withId(R.id.menuSell)).perform(click())
@@ -96,6 +98,7 @@ class DetailedItemFragmentTest {
         onView(withId(R.id.item_image)).check(matches(hasContentDescription()))
         val buttonCreate = onView(withId(R.id.createItemButton))
         buttonCreate.perform(click())
+        onView(isRoot()).perform(waitId(R.id.item_list_view_title))
 
         onView(withId(R.id.item_list_view_title)).perform(click())
 

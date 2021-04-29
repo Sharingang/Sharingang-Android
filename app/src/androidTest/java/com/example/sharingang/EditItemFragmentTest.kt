@@ -53,6 +53,8 @@ class EditItemFragmentTest {
 
         onView(withId(R.id.createItemButton)).perform(click())
 
+        onView(isRoot()).perform(waitId(R.id.item_list_view_title))
+
         onView(withText(item)).check(matches(isDisplayed()))
         onView(withId(R.id.item_list_view_title)).perform(click())
 
@@ -64,6 +66,9 @@ class EditItemFragmentTest {
         onView(withText("Games")).perform(click())
 
         onView(withId(R.id.editItemButton)).perform(click())
+
+        onView(isRoot()).perform(waitId(R.id.item_list_view_title))
+
         onView(withId(R.id.item_list_view_title)).perform(click())
 
         onView(withId(R.id.menuEdit)).perform(click())
@@ -90,6 +95,8 @@ class EditItemFragmentTest {
         buttonCreate.check(matches(withText("Create Item")))
         buttonCreate.perform(click())
 
+        onView(isRoot()).perform(waitId(R.id.item_list_view_title))
+
         onView(withText(item))
             .check(matches(isDisplayed()))
 
@@ -112,6 +119,7 @@ class EditItemFragmentTest {
         )
 
         onView(withId(R.id.editItemButton)).perform(click())
+        onView(isRoot()).perform(waitId(R.id.item_list_view_title))
 
         onView(withText(item + editedItem))
             .check(matches(isDisplayed()))
