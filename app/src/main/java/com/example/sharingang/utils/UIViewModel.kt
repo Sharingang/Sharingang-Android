@@ -13,14 +13,6 @@ class UIViewModel : ViewModel() {
     val orderByPosition: LiveData<Int>
         get() = _orderByPosition
 
-    private val _hasBeenOrderedOnce = MutableLiveData(false)
-
-    fun orderBy(): Boolean {
-        val returnValue = _hasBeenOrderedOnce.value!!
-        _hasBeenOrderedOnce.postValue(true)
-        return returnValue
-    }
-
     fun setAscendingDescendingPosition(position: Int) {
         _ascendingDescendingPosition.postValue(position)
     }

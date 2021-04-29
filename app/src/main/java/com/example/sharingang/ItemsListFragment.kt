@@ -21,12 +21,13 @@ class ItemsListFragment : Fragment() {
     private lateinit var binding: FragmentItemsListBinding
     private val viewModel: ItemsViewModel by activityViewModels()
     private val uiViewModel: UIViewModel by activityViewModels()
+
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_items_list, container, false)
         binding.viewModel = viewModel
@@ -36,7 +37,7 @@ class ItemsListFragment : Fragment() {
         viewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.ORDERED_ITEMS)
 
         viewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
-                {item -> ItemsListFragmentDirections.actionItemsListFragmentToDetailedItemFragment(item)})
+            { item -> ItemsListFragmentDirections.actionItemsListFragmentToDetailedItemFragment(item) })
 
         binding.swiperefresh.setOnRefreshListener { viewModel.refresh() }
         viewModel.refreshing.observe(viewLifecycleOwner, {
@@ -47,9 +48,7 @@ class ItemsListFragment : Fragment() {
         })
         binding.orderCategorySpinner.setSelection(uiViewModel.orderByPosition.value!!)
         binding.orderAscendingDescending.setSelection(uiViewModel.ascendingDescendingPosition.value!!)
-        if(uiViewModel.orderBy()){
-            orderItems()
-        }
+        orderItems()
         binding.startOrdering.setOnClickListener { orderItems() }
 
         return binding.root
