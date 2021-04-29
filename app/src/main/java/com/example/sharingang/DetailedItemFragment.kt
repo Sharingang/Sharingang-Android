@@ -15,6 +15,7 @@ import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemRepository
 import com.example.sharingang.items.ItemsViewModel
 import com.example.sharingang.users.CurrentUserProvider
+import com.example.sharingang.users.User
 import com.example.sharingang.utils.ImageAccess
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
@@ -70,18 +71,20 @@ class DetailedItemFragment : Fragment() {
         binding.shareButton.setOnClickListener { shareItem() }
 
         viewModel.setUser(args.item.userId)
-        viewModel.user.observe(viewLifecycleOwner, { user ->
-            binding.username = "Posted by ${user?.name}"
-            binding.itemPostedBy.visibility = if (user != null) View.VISIBLE else View.GONE
-            binding.itemPostedBy.setOnClickListener { view ->
-                view.findNavController().navigate(
-                    DetailedItemFragmentDirections.actionDetailedItemFragmentToUserProfileFragment(
-                        user?.id
-                    )
-                )
-            }
-        })
+        viewModel.user.observe(viewLifecycleOwner, this::onUserChange)
         return binding.root
+    }
+
+    private fun onUserChange(user: User?) {
+        binding.username = "Posted by ${user?.name}"
+        binding.itemPostedBy.visibility = if (user != null) View.VISIBLE else View.GONE
+        binding.itemPostedBy.setOnClickListener { view ->
+            view.findNavController().navigate(
+                DetailedItemFragmentDirections.actionDetailedItemFragmentToUserProfileFragment(
+                    user?.id
+                )
+            )
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
