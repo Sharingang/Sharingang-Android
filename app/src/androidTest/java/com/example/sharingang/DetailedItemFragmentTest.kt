@@ -57,7 +57,7 @@ class DetailedItemFragmentTest {
     }
 
     @Test
-    fun canRateAUser(){
+    fun canRateAUser() {
         val testTitle = "Book Item"
 
         navigate_to(R.id.userProfileFragment)
@@ -72,6 +72,7 @@ class DetailedItemFragmentTest {
         onView(withId(R.id.createItemButton)).perform(click())
         onView(withId(R.id.item_list_view_title)).perform(click())
 
+        tryOpenOptionsMenu()
         onView(withId(R.id.menuSell)).perform(click())
         pressBack()
 
@@ -122,6 +123,7 @@ class DetailedItemFragmentTest {
         // TODO wait for saving after PR #175
 
         onView(withText(testTitle)).perform(click())
+        tryOpenOptionsMenu()
         onView(withId(R.id.menuDelete)).perform(click())
         // TODO wait for delete after PR #175
         onView(withText(testTitle)).check(doesNotExist())
