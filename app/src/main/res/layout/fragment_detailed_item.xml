@@ -23,7 +23,9 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,8 +44,7 @@
                 android:id="@+id/addToWishlist"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/add_wishlist"
-                />
+                android:text="@string/add_wishlist" />
 
         </LinearLayout>
 
@@ -82,8 +83,8 @@
             android:id="@+id/itemPostedBy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
             android:text="@{username}"
+            android:textSize="18sp"
             tools:text="Posted by TestUser" />
 
         <LinearLayout
@@ -93,56 +94,59 @@
 
             <RadioGroup
                 android:id="@+id/radioGroup1"
-                android:visibility="@{ratingVisibility}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="@{ratingVisibility}">
 
                 <RadioButton
                     android:id="@+id/radioButton1"
-                    android:visibility="@{ratingVisibility}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="1"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp"
+                    android:visibility="@{ratingVisibility}" />
 
                 <RadioButton
                     android:id="@+id/radioButton2"
-                    android:visibility="@{ratingVisibility}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="2"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp"
+                    android:visibility="@{ratingVisibility}" />
+
                 <RadioButton
                     android:id="@+id/radioButton3"
-                    android:visibility="@{ratingVisibility}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="3"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp"
+                    android:visibility="@{ratingVisibility}" />
+
                 <RadioButton
                     android:id="@+id/radioButton4"
-                    android:visibility="@{ratingVisibility}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="4"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp"
+                    android:visibility="@{ratingVisibility}" />
+
                 <RadioButton
                     android:id="@+id/radioButton5"
-                    android:visibility="@{ratingVisibility}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="5"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp"
+                    android:visibility="@{ratingVisibility}" />
 
             </RadioGroup>
 
             <Button
                 android:id="@+id/ratingButton"
-                android:visibility="@{ratingVisibility}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/apply_rating"/>
+                android:text="@string/apply_rating"
+                android:visibility="@{ratingVisibility}" />
 
         </LinearLayout>
 
@@ -151,7 +155,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            android:layout_margin="16dp"
+            android:layout_marginTop="16dp"
             android:contentDescription="@string/share"
             app:srcCompat="?attr/actionModeShareDrawable" />
     </LinearLayout>

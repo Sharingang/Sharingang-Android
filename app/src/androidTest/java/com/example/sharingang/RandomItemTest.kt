@@ -3,6 +3,7 @@ package com.example.sharingang
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -37,6 +38,7 @@ class RandomItemTest {
         val button = Espresso.onView(withId(R.id.createItemButton))
         button.check(matches(withText("Create Item")))
         button.perform(click())
+        Espresso.onView(ViewMatchers.isRoot()).perform(waitId(R.id.item_list_view_title))
         navigate_to(R.id.nav_random_item)
         Espresso.onView(withId(R.id.itemTitle))
             .check(matches(withText("A")))

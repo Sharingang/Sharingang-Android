@@ -51,6 +51,7 @@ class DetailedItemFragmentTest {
         onView(withId(R.id.category_spinner)).perform(click())
         onView(withText(testCategory)).perform(click())
         onView(withId(R.id.createItemButton)).perform(click())
+        waitAfterSaveItem()
 
         onView(withText(testTitle)).perform(click())
         onView(withId(R.id.itemCategory)).check(matches(withText(testCategory)))
@@ -70,6 +71,7 @@ class DetailedItemFragmentTest {
             closeSoftKeyboard()
         )
         onView(withId(R.id.createItemButton)).perform(click())
+        waitAfterSaveItem()
         onView(withId(R.id.item_list_view_title)).perform(click())
 
         tryOpenOptionsMenu()
@@ -98,6 +100,7 @@ class DetailedItemFragmentTest {
         onView(withId(R.id.item_image)).check(matches(hasContentDescription()))
         val buttonCreate = onView(withId(R.id.createItemButton))
         buttonCreate.perform(click())
+        waitAfterSaveItem()
 
         onView(withId(R.id.item_list_view_title)).perform(click())
 
@@ -120,12 +123,12 @@ class DetailedItemFragmentTest {
             closeSoftKeyboard()
         )
         onView(withId(R.id.createItemButton)).perform(click())
-        // TODO wait for saving after PR #175
+        waitAfterSaveItem()
 
         onView(withText(testTitle)).perform(click())
         tryOpenOptionsMenu()
         onView(withId(R.id.menuDelete)).perform(click())
-        // TODO wait for delete after PR #175
+        waitAfterSaveItem()
         onView(withText(testTitle)).check(doesNotExist())
     }
 }

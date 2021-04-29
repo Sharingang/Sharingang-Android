@@ -39,7 +39,19 @@ class InMemoryItemRepository : ItemRepository {
     override suspend fun refreshItems() {
     }
 
-    override suspend fun add(item: Item): String {
+    override suspend fun set(item: Item): String? {
+        return if (item.id == null) {
+            add(item)
+        } else {
+            if (update(item)) {
+                item.id
+            } else {
+                null
+            }
+        }
+    }
+
+    private fun add(item: Item): String {
         require(item.id == null)
 
         val id = UUID.randomUUID().toString()
@@ -48,7 +60,7 @@ class InMemoryItemRepository : ItemRepository {
         return id
     }
 
-    override suspend fun update(item: Item): Boolean {
+    private fun update(item: Item): Boolean {
         requireNotNull(item.id)
 
         itemsMap[item.id] = item
