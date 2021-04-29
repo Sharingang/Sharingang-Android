@@ -47,6 +47,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
+                android:onClick="@{() -> clickListener.onView(item)}"
                 android:paddingBottom="12dp"
                 android:textColor="@{item.sold ? @android:color/holo_red_dark : @color/black}"
                 android:textSize="24sp"
