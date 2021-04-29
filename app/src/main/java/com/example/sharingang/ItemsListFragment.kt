@@ -15,8 +15,6 @@ import com.example.sharingang.users.CurrentUserProvider
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-const val COLUMNS = 2
-
 @AndroidEntryPoint
 class ItemsListFragment : Fragment() {
 
@@ -34,7 +32,7 @@ class ItemsListFragment : Fragment() {
 
         val adapter = viewModel.setupItemAdapter(currentUserProvider.getCurrentUserId())
         binding.itemList.adapter = adapter
-        binding.itemList.layoutManager = GridLayoutManager(context, COLUMNS)
+        binding.itemList.layoutManager = GridLayoutManager(context, 2)
         viewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.ALL_ITEMS)
 
         viewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
