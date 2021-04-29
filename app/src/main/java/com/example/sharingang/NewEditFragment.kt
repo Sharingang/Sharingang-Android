@@ -119,13 +119,16 @@ class NewEditFragment : Fragment() {
             it.setOnClickListener { view: View ->
                 imageUri = observer.getImageUri()
                 val item = itemToAdd()
+                observer.unregister()
                 if (existingItem == null) {
                     viewModel.addItem(item)
+                    view.findNavController()
+                        .navigate(NewEditFragmentDirections.actionNewEditFragmentToItemsListFragment())
                 } else {
                     viewModel.updateItem(item)
+                    view.findNavController()
+                        .navigate(NewEditFragmentDirections.actionNewEditFragmentToDetailedItemFragment(item))
                 }
-                observer.unregister()
-                view.findNavController().navigate(R.id.action_newEditFragment_to_itemsListFragment)
             }
         }
         binding.itemImage.setOnClickListener {
@@ -187,11 +190,11 @@ class NewEditFragment : Fragment() {
     private fun setupNewOrEditFragment() {
         val args = NewEditFragmentArgs.fromBundle(requireArguments())
         existingItem = args.item
-        listOf(binding.editItemPrompt,binding.editItemButton).forEach {
-            it.visibility = if(existingItem==null) View.GONE else View.VISIBLE
+        listOf(binding.editItemPrompt, binding.editItemButton).forEach {
+            it.visibility = if (existingItem == null) View.GONE else View.VISIBLE
         }
-        listOf(binding.newItemPrompt,binding.createItemButton).forEach{
-            it.visibility = if(existingItem==null) View.VISIBLE else View.GONE
+        listOf(binding.newItemPrompt, binding.createItemButton).forEach {
+            it.visibility = if (existingItem == null) View.VISIBLE else View.GONE
         }
     }
 

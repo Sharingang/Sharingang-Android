@@ -64,7 +64,6 @@ class EditItemFragmentTest {
         onView(withText("Games")).perform(click())
 
         onView(withId(R.id.editItemButton)).perform(click())
-        onView(withId(R.id.item_list_view_title)).perform(click())
 
         onView(withId(R.id.menuEdit)).perform(click())
 
@@ -112,6 +111,8 @@ class EditItemFragmentTest {
         )
 
         onView(withId(R.id.editItemButton)).perform(click())
+
+        pressBack()
 
         onView(withText(item + editedItem))
             .check(matches(isDisplayed()))
