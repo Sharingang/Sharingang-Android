@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -124,10 +125,7 @@ class NewEditFragment : Fragment() {
 
     private fun setupButtonActions() {
         listOf(binding.createItemButton, binding.editItemButton).forEach {
-            it.setOnClickListener { view: View ->
-                it.setOnClickListener {  }
-                buttonListener(view)
-            }
+            onSaveButtonClicked(it)
         }
         binding.itemImage.setOnClickListener {
             observer.openGallery()
@@ -137,30 +135,29 @@ class NewEditFragment : Fragment() {
         }
     }
 
-    private fun buttonListener(view: View){
-        imageUri = observer.getImageUri()
-        observer.unregister()
-        Snackbar.make(binding.root, "Saving...", Snackbar.LENGTH_SHORT).show()
-        lifecycleScope.launch(Dispatchers.IO) {
+    private fun onSaveButtonClicked(button: Button) {
+        button.setOnClickListener { view: View ->
+            button.isClickable = false
+            binding.isLoading = true
+
+            imageUri = observer.getImageUri()
+
             val item = itemToAdd()
-            if (existingItem == null) {
-                viewModel.addItem(item)
-            } else {
-                viewModel.updateItem(item)
-            }
-            lifecycleScope.launch(Dispatchers.Main) {
-                view.findNavController()
-                        .navigate(R.id.action_newEditFragment_to_itemsListFragment)
+            viewModel.setItem(item) { itemId ->
+                binding.isLoading = false
+                if (itemId != null) {
+                    Snackbar.make(binding.root, "Item saved successfully.", Snackbar.LENGTH_SHORT).show()
+                    observer.unregister()
+                    view.findNavController().navigate(R.id.action_newEditFragment_to_itemsListFragment)
+                } else {
+                    button.isClickable = true
+                    Snackbar.make(binding.root, "Cannot save the item.", Snackbar.LENGTH_SHORT).show()
+                }
             }
         }
     }
 
-
-    private suspend fun itemToAdd(): Item {
-        val uploadedImage = imageUri?.let {
-            imageStore.store(it)
-        }
-
+    private fun itemToAdd(): Item {
         return Item(
             id = existingItem?.id,
             title = binding.title ?: "",
@@ -226,8 +223,8 @@ class NewEditFragment : Fragment() {
             binding.categorySpinner.setSelection(it.category)
             binding.latitude = it.latitude.toString()
             binding.longitude = it.longitude.toString()
-            it.image?.let { url ->
-                Glide.with(requireContext()).load(url).into(binding.itemImage)
+            it.imageUri?.let { uri ->
+                binding.itemImage.setImageURI(Uri.parse(uri))
             }
             updateLocationWithCoordinates(it.latitude, it.longitude)
         }

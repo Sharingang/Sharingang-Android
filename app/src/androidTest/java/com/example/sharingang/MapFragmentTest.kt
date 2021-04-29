@@ -6,6 +6,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -47,6 +48,7 @@ class MapFragmentTest {
         onView(withId(R.id.item_get_location)).perform(click())
         Thread.sleep(waitingTime)
         onView(withId(R.id.createItemButton)).perform(click())
+        onView(ViewMatchers.isRoot()).perform(waitId(R.id.item_list_view_title))
         navigate_to(R.id.mapFragment)
         onView(withId(R.id.map_start_search)).perform(click())
         onView(withId(R.id.search_on_map)).perform(
