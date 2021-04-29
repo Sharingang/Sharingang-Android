@@ -146,10 +146,8 @@ class ItemsViewModel @Inject constructor(
         _navigateToDetailItem.value = null
     }
 
-    private fun onSellItem(item: Item) {
-        viewModelScope.launch {
-            itemRepository.update(item.copy(sold = !item.sold))
-        }
+    private suspend fun onSellItem(item: Item) {
+        itemRepository.update(item.copy(sold = !item.sold))
     }
 
     fun setRated(item: Item?) {
@@ -158,11 +156,15 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
+    suspend fun sellItem(item: Item?) {
+        if (item != null) {
+            onSellItem(item)
+        }
+    }
+
     fun setupItemAdapter(userId: String?): ItemsAdapter {
-        val onEdit = { item: Item -> onEditItemClicked(item) }
         val onView = { item: Item -> onViewItem(item) }
-        val onSell = { item: Item -> onSellItem(item) }
-        return ItemsAdapter(ItemListener(onEdit, onView, onSell), userId)
+        return ItemsAdapter(ItemListener(onView), userId)
     }
 
     fun addObserver(LifeCycleOwner: LifecycleOwner, adapter: ItemsAdapter, type: OBSERVABLES) {
@@ -185,18 +187,8 @@ class ItemsViewModel @Inject constructor(
     }
 
     fun setupItemNavigation(
-        LifeCycleOwner: LifecycleOwner, navController: NavController,
-        actionEdit: (Item) -> NavDirections, actionDetail: (Item) -> NavDirections
+        LifeCycleOwner: LifecycleOwner, navController: NavController, actionDetail: (Item) -> NavDirections
     ) {
-        navigateToEditItem.observe(LifeCycleOwner, { item ->
-            item?.let {
-                navController.navigate(
-                    actionEdit(item)
-                )
-                onEditItemNavigated()
-            }
-        })
-
         navigateToDetailItem.observe(LifeCycleOwner, { item ->
             item?.let {
                 navController.navigate(

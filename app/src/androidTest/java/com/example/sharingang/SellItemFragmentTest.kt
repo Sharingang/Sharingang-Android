@@ -2,8 +2,8 @@ package com.example.sharingang
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.assertion.ViewAssertions.*
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -28,20 +28,20 @@ class SellItemFragmentTest {
     @Test
     fun anItemCanBeEditedAndSeenOnItemsListFragment() {
         navigate_to(R.id.newEditFragment)
-        onView(ViewMatchers.withId(R.id.newItemPrompt))
-            .check(ViewAssertions.matches(ViewMatchers.withText("New Item")))
-        onView(ViewMatchers.withId(R.id.itemTitle)).perform(
+        onView(withId(R.id.newItemPrompt))
+            .check(matches(withText("New Item")))
+        onView(withId(R.id.itemTitle)).perform(
             ViewActions.typeText(itemTitle),
             ViewActions.closeSoftKeyboard()
         )
-        val buttonCreate = onView(ViewMatchers.withId(R.id.createItemButton))
-        buttonCreate.check(ViewAssertions.matches(ViewMatchers.withText("Create Item")))
+        val buttonCreate = onView(withId(R.id.createItemButton))
+        buttonCreate.check(matches(withText("Create Item")))
         buttonCreate.perform(ViewActions.click())
 
-        onView(ViewMatchers.withText("Sell")).perform(ViewActions.click())
-        // Wait for RecyclerView to remove old button
-        Thread.sleep(1000)
-        onView(ViewMatchers.withId(R.id.item_list_view_sell_button))
-            .check(ViewAssertions.matches(ViewMatchers.withText("Resell")))
+        onView(withId(R.id.item_list_view_title)).perform(ViewActions.click())
+
+        onView(withId(R.id.menuSell)).perform(ViewActions.click())
+
+        onView(withId(R.id.menuResell)).check(matches(isDisplayed()))
     }
 }
