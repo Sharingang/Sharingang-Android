@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.sharingang.databinding.FragmentItemsListBinding
 import com.example.sharingang.items.ItemsViewModel
 import com.example.sharingang.users.CurrentUserProvider
+import com.example.sharingang.utils.UIViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -19,13 +20,13 @@ class ItemsListFragment : Fragment() {
 
     private lateinit var binding: FragmentItemsListBinding
     private val viewModel: ItemsViewModel by activityViewModels()
-
+    private val uiViewModel: UIViewModel by activityViewModels()
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
+        savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_items_list, container, false)
         binding.viewModel = viewModel
@@ -44,13 +45,19 @@ class ItemsListFragment : Fragment() {
                 orderItems() // in the case an item is added, need to add redo the ordering
             }
         })
-        orderItems()
+        binding.orderCategorySpinner.setSelection(uiViewModel.orderByPosition.value!!)
+        binding.orderAscendingDescending.setSelection(uiViewModel.ascendingDescendingPosition.value!!)
+        if(uiViewModel.orderBy()){
+            orderItems()
+        }
         binding.startOrdering.setOnClickListener { orderItems() }
 
         return binding.root
     }
 
     private fun orderItems() {
+        uiViewModel.setOrderByPosition(binding.orderCategorySpinner.selectedItemPosition)
+        uiViewModel.setAscendingDescendingPosition(binding.orderAscendingDescending.selectedItemPosition)
         viewModel.orderItems(
             ItemsViewModel.ORDERING.values()[binding.orderCategorySpinner.selectedItemPosition],
             binding.orderAscendingDescending.selectedItemPosition == 0
