@@ -123,5 +123,6 @@ class SearchFragmentTest {
         onView(withText(category)).perform(click())
 
         onView(withId(R.id.createItemButton)).perform(click())
+        waitAfterSaveItem()
     }
 }
