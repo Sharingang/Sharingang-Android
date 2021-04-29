@@ -119,20 +119,6 @@ class NewEditFragment : Fragment() {
     private fun setupButtonActions() {
         listOf(binding.createItemButton, binding.editItemButton).forEach {
             onSaveButtonClicked(it)
-            it.setOnClickListener { view: View ->
-                imageUri = observer.getImageUri()
-                val item = itemToAdd()
-                observer.unregister()
-                if (existingItem == null) {
-                    viewModel.addItem(item)
-                    view.findNavController()
-                        .navigate(NewEditFragmentDirections.actionNewEditFragmentToItemsListFragment())
-                } else {
-                    viewModel.updateItem(item)
-                    view.findNavController()
-                        .navigate(NewEditFragmentDirections.actionNewEditFragmentToDetailedItemFragment(item))
-                }
-            }
         }
         binding.itemImage.setOnClickListener {
             observer.openGallery()
@@ -146,16 +132,20 @@ class NewEditFragment : Fragment() {
         button.setOnClickListener { view: View ->
             button.isClickable = false
             binding.isLoading = true
-
             imageUri = observer.getImageUri()
-
             val item = itemToAdd()
             viewModel.setItem(item) { itemId ->
                 binding.isLoading = false
                 if (itemId != null) {
                     Snackbar.make(binding.root, "Item saved successfully.", Snackbar.LENGTH_SHORT).show()
                     observer.unregister()
-                    view.findNavController().navigate(R.id.action_newEditFragment_to_itemsListFragment)
+                    if (existingItem == null) {
+                        view.findNavController()
+                            .navigate(NewEditFragmentDirections.actionNewEditFragmentToItemsListFragment())
+                    } else {
+                        view.findNavController()
+                            .navigate(NewEditFragmentDirections.actionNewEditFragmentToDetailedItemFragment(item))
+                    }
                 } else {
                     button.isClickable = true
                     Snackbar.make(binding.root, "Cannot save the item.", Snackbar.LENGTH_SHORT).show()
