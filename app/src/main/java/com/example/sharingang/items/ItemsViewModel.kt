@@ -1,8 +1,11 @@
 package com.example.sharingang.items
 
+import android.net.Uri
+import androidx.core.net.toUri
 import androidx.lifecycle.*
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
+import com.example.sharingang.ImageStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,7 +17,8 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class ItemsViewModel @Inject constructor(
-    private val itemRepository: ItemRepository
+    private val itemRepository: ItemRepository,
+    private val imageStore: ImageStore
 ) : ViewModel() {
 
     init {
@@ -72,7 +76,10 @@ class ItemsViewModel @Inject constructor(
      */
     fun setItem(item: Item, callback: ((String?) -> Unit)? = null) {
         viewModelScope.launch(Dispatchers.IO) {
-            val itemId = itemRepository.set(item)
+            val uploadUrl = item.image?.toUri()?.let {
+                imageStore.store(it)
+            }
+            val itemId = itemRepository.set(item.copy(image = uploadUrl.toString()))
             if (callback != null) {
                 viewModelScope.launch(Dispatchers.Main) {
                     callback(itemId)

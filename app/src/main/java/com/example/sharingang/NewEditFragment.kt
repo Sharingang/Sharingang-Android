@@ -162,7 +162,7 @@ class NewEditFragment : Fragment() {
             id = existingItem?.id,
             title = binding.title ?: "",
             description = binding.description ?: "",
-            image = uploadedImage?.toString() ?: existingItem?.image,
+            image = imageUri?.toString() ?: existingItem?.image,
             price = binding.price?.toDoubleOrNull() ?: 0.0,
             sold = existingItem?.sold ?: false,
             category = binding.categorySpinner.selectedItemPosition,
@@ -223,8 +223,8 @@ class NewEditFragment : Fragment() {
             binding.categorySpinner.setSelection(it.category)
             binding.latitude = it.latitude.toString()
             binding.longitude = it.longitude.toString()
-            it.imageUri?.let { uri ->
-                binding.itemImage.setImageURI(Uri.parse(uri))
+            it.image?.let { url ->
+                Glide.with(requireContext()).load(url).into(binding.itemImage)
             }
             updateLocationWithCoordinates(it.latitude, it.longitude)
         }
