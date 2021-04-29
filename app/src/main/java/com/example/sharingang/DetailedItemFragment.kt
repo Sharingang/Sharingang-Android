@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.FragmentDetailedItemBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.users.CurrentUserProvider
@@ -47,8 +48,8 @@ class DetailedItemFragment : Fragment() {
 
         binding.item = args.item
         observer.setupImageView(binding.detailedItemImage)
-        args.item.imageUri?.let {
-            binding.detailedItemImage.setImageURI(Uri.parse(it))
+        args.item.image?.let {
+            Glide.with(this).load(it).into(binding.detailedItemImage)
         }
 
         initiateWishlistButton(binding)

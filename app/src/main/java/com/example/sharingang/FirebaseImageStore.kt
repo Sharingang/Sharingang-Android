@@ -1,5 +1,7 @@
 package com.example.sharingang
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import com.example.sharingang.users.CurrentUserProvider
 import com.google.firebase.ktx.Firebase
@@ -26,4 +28,12 @@ class FirebaseImageStore @Inject constructor(
 
         return if (isSuccessful) ref.downloadUrl.await() else null
     }
+
+    override suspend fun retrieve(imageUrl: Uri): Bitmap? {
+        val ref = storage.getReferenceFromUrl(imageUrl.toString())
+        val maxDownloadSize : Long = 1024 * 1024
+        val imgBytes = ref.getBytes(maxDownloadSize).await()
+        return BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.size)
+    }
+
 }

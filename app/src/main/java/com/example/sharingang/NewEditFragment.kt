@@ -12,7 +12,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.FragmentNewEditItemBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsViewModel
@@ -30,7 +32,10 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -48,6 +53,9 @@ class NewEditFragment : Fragment() {
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
     private var userId: String? = null
+
+    @Inject
+    lateinit var imageStore: ImageStore
 
     private lateinit var fusedLocationCreate: FusedLocationProviderClient
     private lateinit var geocoder: Geocoder
@@ -118,14 +126,21 @@ class NewEditFragment : Fragment() {
         listOf(binding.createItemButton, binding.editItemButton).forEach {
             it.setOnClickListener { view: View ->
                 imageUri = observer.getImageUri()
-                val item = itemToAdd()
-                if (existingItem == null) {
-                    viewModel.addItem(item)
-                } else {
-                    viewModel.updateItem(item)
-                }
                 observer.unregister()
-                view.findNavController().navigate(R.id.action_newEditFragment_to_itemsListFragment)
+                it.setOnClickListener {  }
+                Snackbar.make(binding.root, "Saving...", Snackbar.LENGTH_SHORT).show()
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val item = itemToAdd()
+                    if (existingItem == null) {
+                        viewModel.addItem(item)
+                    } else {
+                        viewModel.updateItem(item)
+                    }
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        view.findNavController()
+                            .navigate(R.id.action_newEditFragment_to_itemsListFragment)
+                    }
+                }
             }
         }
         binding.itemImage.setOnClickListener {
@@ -136,13 +151,16 @@ class NewEditFragment : Fragment() {
         }
     }
 
-    private fun itemToAdd(): Item {
+    private suspend fun itemToAdd(): Item {
+        val uploadedImage = imageUri?.let {
+            imageStore.store(it)
+        }
+
         return Item(
             id = existingItem?.id,
             title = binding.title ?: "",
             description = binding.description ?: "",
-            //image = existingItem?.image ?: "",
-            imageUri = imageUri?.toString() ?: existingItem?.imageUri,
+            image = uploadedImage?.toString() ?: existingItem?.image,
             price = binding.price?.toDoubleOrNull() ?: 0.0,
             sold = existingItem?.sold ?: false,
             category = binding.categorySpinner.selectedItemPosition,
@@ -203,8 +221,8 @@ class NewEditFragment : Fragment() {
             binding.categorySpinner.setSelection(it.category)
             binding.latitude = it.latitude.toString()
             binding.longitude = it.longitude.toString()
-            it.imageUri?.let { uri ->
-                binding.itemImage.setImageURI(Uri.parse(uri))
+            it.image?.let { url ->
+                Glide.with(requireContext()).load(url).into(binding.itemImage)
             }
             updateLocationWithCoordinates(it.latitude, it.longitude)
         }
