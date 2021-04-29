@@ -5,5 +5,4 @@ import android.net.Uri
 
 interface ImageStore {
     suspend fun store(imageUri: Uri): Uri?
-    suspend fun retrieve(imageUrl: Uri): Bitmap?
 }
