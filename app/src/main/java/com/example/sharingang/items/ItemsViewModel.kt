@@ -76,8 +76,10 @@ class ItemsViewModel @Inject constructor(
      */
     fun setItem(item: Item, callback: ((String?) -> Unit)? = null) {
         viewModelScope.launch(Dispatchers.IO) {
-            val uploadUrl = item.image?.toUri()?.let {
-                imageStore.store(it)
+            val uploadUrl = item.image?.let {
+                if(!it.startsWith("https://")){
+                    imageStore.store(it.toUri())
+                }
             }
             val itemId = itemRepository.set(item.copy(image = uploadUrl.toString()))
             if (callback != null) {
