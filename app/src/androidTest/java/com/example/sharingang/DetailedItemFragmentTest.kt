@@ -74,8 +74,7 @@ class DetailedItemFragmentTest {
         waitAfterSaveItem()
         onView(withId(R.id.item_list_view_title)).perform(click())
 
-        tryOpenOptionsMenu()
-        onView(withId(R.id.menuSell)).perform(click())
+        onView(withMenuIdOrText(R.id.menuSell, R.string.sell)).perform(click())
         pressBack()
 
         onView(withText(testTitle)).perform(click())
@@ -126,8 +125,7 @@ class DetailedItemFragmentTest {
         waitAfterSaveItem()
 
         onView(withText(testTitle)).perform(click())
-        tryOpenOptionsMenu()
-        onView(withId(R.id.menuDelete)).perform(click())
+        onView(withMenuIdOrText(R.id.menuDelete, R.string.delete_item)).perform(click())
         waitAfterSaveItem()
         onView(withText(testTitle)).check(doesNotExist())
     }

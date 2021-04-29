@@ -57,8 +57,7 @@ class EditItemFragmentTest {
         onView(withText(item)).check(matches(isDisplayed()))
         onView(withId(R.id.item_list_view_title)).perform(click())
 
-        tryOpenOptionsMenu()
-        onView(withId(R.id.menuEdit)).perform(click())
+        onView(withMenuIdOrText(R.id.menuEdit, R.string.edit_item)).perform(click())
 
         onView(withId(R.id.editItemPrompt)).check(matches(withText("Edit Item")))
         onView(withId(R.id.category_spinner)).check(matches(withSpinnerText("Book")))
@@ -70,8 +69,7 @@ class EditItemFragmentTest {
 
         onView(withId(R.id.item_list_view_title)).perform(click())
 
-        tryOpenOptionsMenu()
-        onView(withId(R.id.menuEdit)).perform(click())
+        onView(withMenuIdOrText(R.id.menuEdit, R.string.edit_item)).perform(click())
 
         onView(withId(R.id.category_spinner)).check(matches(withSpinnerText("Games")))
     }
@@ -101,8 +99,7 @@ class EditItemFragmentTest {
 
         onView(withId(R.id.item_list_view_title)).perform(click())
 
-        tryOpenOptionsMenu()
-        onView(withId(R.id.menuEdit)).perform(click())
+        onView(withMenuIdOrText(R.id.menuEdit, R.string.edit_item)).perform(click())
 
         onView(withId(R.id.editItemPrompt))
             .check(matches(withText("Edit Item")))

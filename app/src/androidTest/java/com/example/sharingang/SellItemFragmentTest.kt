@@ -41,10 +41,8 @@ class SellItemFragmentTest {
 
         onView(withId(R.id.item_list_view_title)).perform(ViewActions.click())
 
-        tryOpenOptionsMenu()
-        onView(withId(R.id.menuSell)).perform(ViewActions.click())
+        onView(withMenuIdOrText(R.id.menuSell, R.string.sell)).perform(ViewActions.click())
 
-        tryOpenOptionsMenu()
-        onView(withId(R.id.menuResell)).check(matches(isDisplayed()))
+        onView(withMenuIdOrText(R.id.menuResell, R.string.unsell)).check(matches(isDisplayed()))
     }
 }

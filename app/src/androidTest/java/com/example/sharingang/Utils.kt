@@ -1,18 +1,23 @@
 package com.example.sharingang
 
 import android.view.View
+import androidx.annotation.IdRes
+import androidx.annotation.StringRes
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.matcher.ViewMatchers.isRoot
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
 import androidx.test.platform.app.InstrumentationRegistry
 import org.hamcrest.Matcher
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
+
 
 // Source: https://stackoverflow.com/a/22563297
 fun waitId(viewId: Int, millis: Long = TimeUnit.SECONDS.toMillis(10)): ViewAction {
@@ -53,11 +58,13 @@ fun waitAfterSaveItem() {
     Thread.sleep(1000)
 }
 
-fun tryOpenOptionsMenu() {
-    try {
-        Espresso.openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
-    } catch (e: Exception) {
-        // Don't have an overflow in the action bar
+fun withMenuIdOrText(@IdRes id: Int, @StringRes menuText: Int): Matcher<View?>? {
+    val matcher = withId(id)
+    return try {
+        onView(matcher).check(matches(isDisplayed()))
+        matcher
+    } catch (_: java.lang.Exception) {
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
+        withText(menuText)
     }
 }
-
