@@ -38,6 +38,7 @@ class ReportFragmentTest {
             closeSoftKeyboard()
         )
         onView(withId(R.id.createItemButton)).perform(click())
+        waitAfterSaveItem()
         FakeCurrentUserProvider.instance = 1
         onView(withId(R.id.item_list_view_title)).perform(click())
         onView(withId(R.id.itemPostedBy)).perform(click())
@@ -68,6 +69,7 @@ class ReportFragmentTest {
             closeSoftKeyboard()
         )
         onView(withId(R.id.createItemButton)).perform(click())
+        waitAfterSaveItem()
         FakeCurrentUserProvider.instance = 1
         onView(withId(R.id.item_list_view_title)).perform(click())
         onView(withId(R.id.itemPostedBy)).perform(click())
