@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <GridLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="#F3E5F5"
+        android:orientation="vertical"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/wishlistview"
@@ -17,6 +19,6 @@
             android:scrollbars="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-    </LinearLayout>
+    </GridLayout>
 
 </layout>
