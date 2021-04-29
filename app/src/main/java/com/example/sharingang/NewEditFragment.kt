@@ -125,22 +125,8 @@ class NewEditFragment : Fragment() {
     private fun setupButtonActions() {
         listOf(binding.createItemButton, binding.editItemButton).forEach {
             it.setOnClickListener { view: View ->
-                imageUri = observer.getImageUri()
-                observer.unregister()
                 it.setOnClickListener {  }
-                Snackbar.make(binding.root, "Saving...", Snackbar.LENGTH_SHORT).show()
-                lifecycleScope.launch(Dispatchers.IO) {
-                    val item = itemToAdd()
-                    if (existingItem == null) {
-                        viewModel.addItem(item)
-                    } else {
-                        viewModel.updateItem(item)
-                    }
-                    lifecycleScope.launch(Dispatchers.Main) {
-                        view.findNavController()
-                            .navigate(R.id.action_newEditFragment_to_itemsListFragment)
-                    }
-                }
+                buttonListener(view)
             }
         }
         binding.itemImage.setOnClickListener {
@@ -150,6 +136,25 @@ class NewEditFragment : Fragment() {
             observer.openCamera()
         }
     }
+
+    private fun buttonListener(view: View){
+        imageUri = observer.getImageUri()
+        observer.unregister()
+        Snackbar.make(binding.root, "Saving...", Snackbar.LENGTH_SHORT).show()
+        lifecycleScope.launch(Dispatchers.IO) {
+            val item = itemToAdd()
+            if (existingItem == null) {
+                viewModel.addItem(item)
+            } else {
+                viewModel.updateItem(item)
+            }
+            lifecycleScope.launch(Dispatchers.Main) {
+                view.findNavController()
+                        .navigate(R.id.action_newEditFragment_to_itemsListFragment)
+            }
+        }
+    }
+
 
     private suspend fun itemToAdd(): Item {
         val uploadedImage = imageUri?.let {
