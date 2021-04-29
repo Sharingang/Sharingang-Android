@@ -124,8 +124,9 @@ class DetailedItemFragment : Fragment() {
     }
 
     private fun loadItem() {
+        val itemId = args.item.id!!
         lifecycleScope.launch(Dispatchers.IO) {
-            item = itemRepository.get(args.item.id!!)
+            item = itemRepository.get(itemId)
             lifecycleScope.launch(Dispatchers.Main) {
                 binding.item = item
                 activity?.invalidateOptionsMenu()
