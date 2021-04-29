@@ -33,8 +33,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private fun setupToolbar(navController: NavController) {
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
         val appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
-        findViewById<Toolbar>(R.id.toolbar)
-            .setupWithNavController(navController, appBarConfiguration)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        toolbar.setupWithNavController(navController, appBarConfiguration)
     }
 
     private fun setupNavView(navController: NavController) {

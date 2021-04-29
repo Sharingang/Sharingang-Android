@@ -69,8 +69,10 @@ class DetailedItemFragmentTest {
             closeSoftKeyboard()
         )
         onView(withId(R.id.createItemButton)).perform(click())
-        onView(withText("Sell")).perform(click())
-        Thread.sleep(1000)
+        onView(withId(R.id.item_list_view_title)).perform(click())
+
+        onView(withId(R.id.menuSell)).perform(click())
+        pressBack()
 
         onView(withText(testTitle)).perform(click())
         onView(withId(R.id.radioButton1)).check(matches(isDisplayed()))

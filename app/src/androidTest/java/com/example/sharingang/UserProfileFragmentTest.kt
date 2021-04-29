@@ -71,8 +71,8 @@ class UserProfileFragmentTest {
         onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
 
         onView(withId(R.id.itemTitle)).perform(
-            ViewActions.typeText(fakeText),
-            ViewActions.closeSoftKeyboard()
+            typeText(fakeText),
+            closeSoftKeyboard()
         )
         val button = onView(withId(R.id.createItemButton))
         button.check(matches(withText("Create Item")))
