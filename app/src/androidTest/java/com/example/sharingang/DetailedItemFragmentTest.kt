@@ -4,6 +4,7 @@ import android.provider.MediaStore
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
@@ -109,5 +110,20 @@ class DetailedItemFragmentTest {
         backButton.perform(click())
     }
 
+    @Test
+    fun canDeleteAnItem() {
+        val testTitle = "To be deleted"
+        navigate_to(R.id.newEditFragment)
+        onView(withId(R.id.itemTitle)).perform(
+            typeText(testTitle),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.createItemButton)).perform(click())
+        // TODO wait for saving after PR #175
 
+        onView(withText(testTitle)).perform(click())
+        onView(withId(R.id.menuDelete)).perform(click())
+        // TODO wait for delete after PR #175
+        onView(withText(testTitle)).check(doesNotExist())
+    }
 }
