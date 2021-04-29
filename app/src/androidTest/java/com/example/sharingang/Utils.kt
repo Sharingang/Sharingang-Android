@@ -1,6 +1,7 @@
 package com.example.sharingang
 
 import android.view.View
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
@@ -44,4 +45,9 @@ fun waitId(viewId: Int, millis: Long = TimeUnit.SECONDS.toMillis(10)): ViewActio
                 .build()
         }
     }
+}
+
+fun waitAfterSaveItem() {
+    //Espresso.onView(isRoot()).perform(waitId(R.id.item_list_view_title))
+    Thread.sleep(1000)
 }
