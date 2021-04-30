@@ -54,8 +54,7 @@ fun waitId(viewId: Int, millis: Long = TimeUnit.SECONDS.toMillis(10)): ViewActio
 }
 
 fun waitAfterSaveItem() {
-    //Espresso.onView(isRoot()).perform(waitId(R.id.item_list_view_title))
-    Thread.sleep(1000)
+    Thread.sleep(2500)
 }
 
 fun withMenuIdOrText(@IdRes id: Int, @StringRes menuText: Int): Matcher<View?>? {
