@@ -136,16 +136,20 @@ class NewEditFragment : Fragment() {
         button.setOnClickListener { view: View ->
             button.isClickable = false
             binding.isLoading = true
-
             imageUri = observer.getImageUri()
-
             val item = itemToAdd()
             viewModel.setItem(item) { itemId ->
                 binding.isLoading = false
                 if (itemId != null) {
                     Snackbar.make(binding.root, "Item saved successfully.", Snackbar.LENGTH_SHORT).show()
                     observer.unregister()
-                    view.findNavController().navigate(R.id.action_newEditFragment_to_itemsListFragment)
+                    if (existingItem == null) {
+                        view.findNavController()
+                            .navigate(NewEditFragmentDirections.actionNewEditFragmentToItemsListFragment())
+                    } else {
+                        view.findNavController()
+                            .navigate(NewEditFragmentDirections.actionNewEditFragmentToDetailedItemFragment(item))
+                    }
                 } else {
                     button.isClickable = true
                     Snackbar.make(binding.root, "Cannot save the item.", Snackbar.LENGTH_SHORT).show()
@@ -204,11 +208,11 @@ class NewEditFragment : Fragment() {
     private fun setupNewOrEditFragment() {
         val args = NewEditFragmentArgs.fromBundle(requireArguments())
         existingItem = args.item
-        listOf(binding.editItemPrompt,binding.editItemButton).forEach {
-            it.visibility = if(existingItem==null) View.GONE else View.VISIBLE
+        listOf(binding.editItemPrompt, binding.editItemButton).forEach {
+            it.visibility = if (existingItem == null) View.GONE else View.VISIBLE
         }
-        listOf(binding.newItemPrompt,binding.createItemButton).forEach{
-            it.visibility = if(existingItem==null) View.VISIBLE else View.GONE
+        listOf(binding.newItemPrompt, binding.createItemButton).forEach {
+            it.visibility = if (existingItem == null) View.VISIBLE else View.GONE
         }
     }
 

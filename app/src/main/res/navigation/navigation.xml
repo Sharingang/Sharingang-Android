@@ -44,6 +44,11 @@
             android:defaultValue="@null"
             app:argType="com.example.sharingang.items.Item"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_newEditFragment_to_detailedItemFragment"
+            app:destination="@id/detailedItemFragment"
+            app:popUpTo="@id/detailedItemFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/detailedItemFragment"
@@ -54,7 +59,9 @@
             app:argType="com.example.sharingang.items.Item" />
         <action
             android:id="@+id/action_detailedItemFragment_to_userProfileFragment"
-            app:destination="@id/userProfileFragment" />
+            app:destination="@id/userProfileFragment"
+            app:popUpTo="@id/userProfileFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_detailedItemFragment_to_newEditFragment"
             app:destination="@id/newEditFragment" />
@@ -66,9 +73,6 @@
         <action
             android:id="@+id/action_searchFragment_to_detailedItemFragment"
             app:destination="@id/detailedItemFragment" />
-        <action
-            android:id="@+id/action_searchFragment_to_newEditFragment"
-            app:destination="@id/newEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapFragment"
@@ -90,10 +94,9 @@
             app:nullable="true" />
         <action
             android:id="@+id/action_userProfileFragment_to_detailedItemFragment"
-            app:destination="@id/detailedItemFragment" />
-        <action
-            android:id="@+id/action_userProfileFragment_to_newEditFragment"
-            app:destination="@id/newEditFragment" />
+            app:destination="@id/detailedItemFragment"
+            app:popUpTo="@id/detailedItemFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_userProfileFragment_to_reportFragment"
             app:destination="@id/reportFragment"
@@ -111,9 +114,6 @@
         <action
             android:id="@+id/action_wishlistViewFragment_to_detailedItemFragment"
             app:destination="@id/detailedItemFragment" />
-        <action
-            android:id="@+id/action_wishlistViewFragment_to_newEditFragment"
-            app:destination="@id/newEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/reportFragment"
