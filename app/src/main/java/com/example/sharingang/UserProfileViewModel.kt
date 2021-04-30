@@ -1,6 +1,5 @@
 package com.example.sharingang
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemRepository
@@ -29,7 +28,7 @@ class UserProfileViewModel @Inject constructor(
     val wishlistContains: LiveData<Boolean>
         get() = _wishlistContains
 
-    private val _rating = MutableLiveData<Float>(0f)
+    private val _rating = MutableLiveData(0f)
     val rating: LiveData<Float>
         get() = _rating
 

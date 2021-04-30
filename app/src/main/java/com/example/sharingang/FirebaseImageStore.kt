@@ -1,7 +1,5 @@
 package com.example.sharingang
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import com.example.sharingang.users.CurrentUserProvider
 import com.google.firebase.ktx.Firebase

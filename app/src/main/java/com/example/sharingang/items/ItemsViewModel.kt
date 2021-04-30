@@ -1,6 +1,5 @@
 package com.example.sharingang.items
 
-import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.*
 import androidx.navigation.NavController
@@ -79,6 +78,8 @@ class ItemsViewModel @Inject constructor(
             val uploadUrl = item.image?.let {
                 if(!it.startsWith("https://")){
                     imageStore.store(it.toUri())
+                }else{
+                    it
                 }
             }
             val itemId = itemRepository.set(item.copy(image = uploadUrl.toString()))

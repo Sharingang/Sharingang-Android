@@ -48,6 +48,9 @@ class UserProfileFragment : Fragment() {
     @Inject
     lateinit var userRepository: UserRepository
 
+    @Inject
+    lateinit var imageStore: ImageStore
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -204,15 +207,28 @@ class UserProfileFragment : Fragment() {
                 imageUri = imageAccess.getImageUri()
                 if (imageUri != Uri.EMPTY && imageUri != null) {
                     binding.imageView.setImageURI(imageUri)
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        userRepository.add(
-                            userRepository.get(currentUserId!!)!!
-                                .copy(profilePicture = imageUri.toString())
-                        )
-                    }
+                    changeImage(imageUri)
                 }
                 binding.applyholder.visibility = View.GONE
             }
+        }
+    }
+
+    private fun changeImage(imageUri: Uri?){
+        lifecycleScope.launch(Dispatchers.IO){
+            val imageUrl = imageUri?.let {
+                if(!it.toString().startsWith("https://")){
+                    imageStore.store(it).toString()
+                }else{
+                    it.toString()
+                }
+            }
+
+            userRepository.add(
+                userRepository.get(currentUserId!!)!!.copy(
+                    profilePicture = imageUrl
+                )
+            )
         }
     }
 

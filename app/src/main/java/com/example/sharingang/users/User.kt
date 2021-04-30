@@ -9,8 +9,6 @@ import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.ServerTimestamp
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
-import kotlin.collections.List
 
 /**
  * User contains the public information about a user.
