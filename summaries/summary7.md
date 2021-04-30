@@ -1,4 +1,4 @@
-# Week 6
+# Week 7
 
 ## Bastien
 This week I added buttons in the AppBar on the detailed view to sell, unsell and go to the edit fragment. 
