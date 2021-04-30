@@ -54,7 +54,7 @@ fun waitId(viewId: Int, millis: Long = TimeUnit.SECONDS.toMillis(10)): ViewActio
 }
 
 fun waitAfterSaveItem() {
-    Thread.sleep(2500)
+    Thread.sleep(3000)
 }
 
 fun withMenuIdOrText(@IdRes id: Int, @StringRes menuText: Int): Matcher<View?>? {

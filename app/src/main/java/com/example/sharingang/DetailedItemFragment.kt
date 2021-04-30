@@ -100,6 +100,7 @@ class DetailedItemFragment : Fragment() {
         val resell = menu.findItem(R.id.menuResell)
         if (!args.item.userId.equals(currentUserProvider.getCurrentUserId())) {
             menu.findItem(R.id.menuEdit).isVisible = false
+            menu.findItem(R.id.menuDelete).isVisible = false
             sell.isVisible = false
             resell.isVisible = false
         } else {
