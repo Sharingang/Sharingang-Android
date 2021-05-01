@@ -11,10 +11,13 @@
 
     </data>
 
-    <LinearLayout
+    <GridLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         android:orientation="vertical"
+        android:background="#F3E5F5"
         tools:context=".MainActivity">
 
         <LinearLayout
@@ -49,8 +52,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    </LinearLayout>
+    </GridLayout>
 </layout>

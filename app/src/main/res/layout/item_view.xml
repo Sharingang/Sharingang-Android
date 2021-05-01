@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -16,23 +17,44 @@
 
     </data>
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:elevation="10dp"
+        android:onClick="@{() -> clickListener.onView(item)}"
+        android:orientation="vertical"
+        app:cardCornerRadius="10dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true"
+        tools:ignore="UseCompoundDrawables">
 
-        <TextView
-            android:id="@+id/item_list_view_title"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:onClick="@{() -> clickListener.onView(item)}"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textColor="@{item.sold ? @android:color/holo_red_dark : @color/black}"
-            android:textSize="24sp"
-            tools:text="Test" />
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/item_image_preview"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:contentDescription="@string/item_image_description"
+                android:src="@drawable/ic_baseline_image_24" />
+
+            <TextView
+                android:id="@+id/item_list_view_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:onClick="@{() -> clickListener.onView(item)}"
+                android:paddingBottom="12dp"
+                android:textColor="@{item.sold ? @android:color/holo_red_dark : @color/black}"
+                android:textSize="24sp"
+                tools:text="Test" />
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
 </layout>

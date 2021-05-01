@@ -74,6 +74,7 @@ class WishlistViewTest {
                     closeSoftKeyboard()
             )
             onView(withId(R.id.createItemButton)).perform(click())
+            waitAfterSaveItem()
         }
     }
 }

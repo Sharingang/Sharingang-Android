@@ -15,6 +15,7 @@ import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemRepository
 import com.example.sharingang.items.ItemsViewModel
 import com.example.sharingang.users.CurrentUserProvider
+import com.example.sharingang.users.User
 import com.example.sharingang.utils.ImageAccess
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
@@ -55,7 +56,10 @@ class DetailedItemFragment : Fragment() {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_detailed_item, container, false)
-        loadItem()
+        val itemId = args.item.id!!
+        lifecycleScope.launch(Dispatchers.IO) {
+            loadItem(itemId)
+        }
         observer.setupImageView(binding.detailedItemImage)
         args.item.imageUri?.let {
             binding.detailedItemImage.setImageURI(Uri.parse(it))
@@ -67,18 +71,20 @@ class DetailedItemFragment : Fragment() {
         binding.shareButton.setOnClickListener { shareItem() }
 
         viewModel.setUser(args.item.userId)
-        viewModel.user.observe(viewLifecycleOwner, { user ->
-            binding.username = "Posted by ${user?.name}"
-            binding.itemPostedBy.visibility = if (user != null) View.VISIBLE else View.GONE
-            binding.itemPostedBy.setOnClickListener { view ->
-                view.findNavController().navigate(
-                    DetailedItemFragmentDirections.actionDetailedItemFragmentToUserProfileFragment(
-                        user?.id
-                    )
-                )
-            }
-        })
+        viewModel.user.observe(viewLifecycleOwner, this::onUserChange)
         return binding.root
+    }
+
+    private fun onUserChange(user: User?) {
+        binding.username = "Posted by ${user?.name}"
+        binding.itemPostedBy.visibility = if (user != null) View.VISIBLE else View.GONE
+        binding.itemPostedBy.setOnClickListener { view ->
+            view.findNavController().navigate(
+                DetailedItemFragmentDirections.actionDetailedItemFragmentToUserProfileFragment(
+                    user?.id
+                )
+            )
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -109,27 +115,25 @@ class DetailedItemFragment : Fragment() {
                 true
             }
             R.id.menuSell, R.id.menuResell -> {
-                updateSold()
+                updateSold(args.item.id!!)
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun updateSold() {
+    private fun updateSold(itemId: String) {
         lifecycleScope.launch(Dispatchers.IO) {
             itemViewModel.sellItem(item)
-            loadItem()
+            loadItem(itemId)
         }
     }
 
-    private fun loadItem() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            item = itemRepository.get(args.item.id!!)
-            lifecycleScope.launch(Dispatchers.Main) {
-                binding.item = item
-                activity?.invalidateOptionsMenu()
-            }
+    private suspend fun loadItem(itemId: String) {
+        item = itemRepository.get(itemId)
+        lifecycleScope.launch(Dispatchers.Main) {
+            binding.item = item
+            activity?.invalidateOptionsMenu()
         }
     }
 

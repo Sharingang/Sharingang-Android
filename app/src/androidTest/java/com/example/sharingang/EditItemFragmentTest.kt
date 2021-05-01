@@ -52,6 +52,7 @@ class EditItemFragmentTest {
         onView(withText("Book")).perform(click())
 
         onView(withId(R.id.createItemButton)).perform(click())
+        waitAfterSaveItem()
 
         onView(withText(item)).check(matches(isDisplayed()))
         onView(withId(R.id.item_list_view_title)).perform(click())
@@ -64,7 +65,7 @@ class EditItemFragmentTest {
         onView(withText("Games")).perform(click())
 
         onView(withId(R.id.editItemButton)).perform(click())
-        onView(withId(R.id.item_list_view_title)).perform(click())
+        waitAfterSaveItem()
 
         onView(withId(R.id.menuEdit)).perform(click())
 
@@ -89,6 +90,7 @@ class EditItemFragmentTest {
         val buttonCreate = onView(withId(R.id.createItemButton))
         buttonCreate.check(matches(withText("Create Item")))
         buttonCreate.perform(click())
+        waitAfterSaveItem()
 
         onView(withText(item))
             .check(matches(isDisplayed()))
@@ -112,6 +114,9 @@ class EditItemFragmentTest {
         )
 
         onView(withId(R.id.editItemButton)).perform(click())
+        waitAfterSaveItem()
+
+        pressBack()
 
         onView(withText(item + editedItem))
             .check(matches(isDisplayed()))

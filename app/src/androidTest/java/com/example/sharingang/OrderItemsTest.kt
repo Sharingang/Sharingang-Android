@@ -2,8 +2,7 @@ package com.example.sharingang
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
-import androidx.test.espresso.assertion.PositionAssertions.isCompletelyAbove
-import androidx.test.espresso.assertion.PositionAssertions.isPartiallyAbove
+import androidx.test.espresso.assertion.PositionAssertions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -86,8 +85,8 @@ class OrderItemsTest {
         onView(withText(orderByName)).perform(click())
         onView(withId(R.id.start_ordering)).perform(click())
         Thread.sleep(500)
-        onView(withText(second)).check(isCompletelyAbove(withText(third)))
-        onView(withText(third)).check(isCompletelyAbove(withText(first)))
+        onView(withText(second)).check(isCompletelyLeftOf(withText(third)))
+        onView(withText(second)).check(isCompletelyAbove(withText(first)))
 
         onView(withId(R.id.order_category_spinner)).perform(click())
         onView(withText(orderByCategory)).perform(click())
@@ -106,7 +105,7 @@ class OrderItemsTest {
         onView(withId(R.id.start_ordering)).perform(click())
 
         Thread.sleep(500)
-        onView(withText(third)).check(isCompletelyAbove(withText(first)))
+        onView(withText(third)).check(isCompletelyAbove(withText(second)))
         onView(withText(first)).check(isCompletelyAbove(withText(second)))
     }
 }
