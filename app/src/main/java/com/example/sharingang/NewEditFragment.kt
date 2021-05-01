@@ -52,9 +52,6 @@ class NewEditFragment : Fragment() {
     lateinit var currentUserProvider: CurrentUserProvider
     private var userId: String? = null
 
-    @Inject
-    lateinit var imageStore: ImageStore
-
     private lateinit var fusedLocationCreate: FusedLocationProviderClient
     private lateinit var geocoder: Geocoder
 
