@@ -52,10 +52,10 @@ class UserProfileFragment : Fragment() {
     private var imageUri: Uri? = null
 
     private enum class UserType {
+        LOGGED_OUT_SELF,
         LOGGED_OUT,
         VISITOR,
-        SELF,
-        LOGGED_OUT_SELF
+        SELF
     }
 
     @Inject
