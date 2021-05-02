@@ -2,6 +2,7 @@ package com.example.sharingang
 
 
 import android.Manifest
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.*
@@ -84,5 +85,31 @@ class UserProfileFragmentTest {
         val textView = onView(withId(R.id.nameText))
         textView.check(matches(withText(FakeCurrentUserProvider.fakeUser1.name)))
         onView(withText(fakeText)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun aUserCanLogout() {
+        FakeCurrentUserProvider.instance = 1
+        navigate_to(R.id.userProfileFragment)
+        Thread.sleep(2000)
+        onView(withId(R.id.btn_logout)).perform(click())
+        Thread.sleep(2000)
+        Espresso.pressBack()
+        navigate_to(R.id.newEditFragment)
+        onView(withId(R.id.itemTitle)).perform(
+            typeText("TestItem"),
+            closeSoftKeyboard()
+        )
+        Thread.sleep(2000)
+        onView(withId(R.id.createItemButton)).perform(click())
+        waitAfterSaveItem()
+        FakeCurrentUserProvider.instance = 2
+        onView(withId(R.id.item_list_view_title)).perform(click())
+        Thread.sleep(2000)
+        onView(withId(R.id.itemPostedBy)).perform(click())
+        Thread.sleep(2000)
+        onView(withId(R.id.btn_login)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.btn_logout)).check(matches(not(isDisplayed())))
+        Thread.sleep(2000)
     }
 }
