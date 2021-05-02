@@ -1,6 +1,7 @@
 package com.example.sharingang.users
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import javax.inject.Inject
 
 class FirestoreCurrentUserProvider @Inject constructor(
@@ -17,5 +18,9 @@ class FirestoreCurrentUserProvider @Inject constructor(
 
     override fun getCurrentUserName(): String? {
         return auth.currentUser?.displayName
+    }
+
+    override fun getCurrentUser(): FirebaseUser? {
+        return auth.currentUser
     }
 }

@@ -81,19 +81,11 @@ class AccountFragment : Fragment() {
     private fun update(accountStatus: AccountStatus, user: FirebaseUser?) {
         if (accountStatus == AccountStatus.LOGGED_IN) {
             addUserToDatabase(user!!)
-            binding.loginButton.visibility = View.GONE
-            binding.logoutButton.visibility = View.VISIBLE
-            binding.accountStatus.text = "Status: Logged in as \n${user.displayName}"
-        } else {
-            binding.loginButton.visibility = View.VISIBLE
-            binding.logoutButton.visibility = View.GONE
-            binding.accountStatus.text = getString(R.string.text_logged_out)
         }
     }
 
     private fun restoreLoginStatus() {
-        val loggedInUser = auth.currentUser
-        if (loggedInUser != null) update(AccountStatus.LOGGED_IN, loggedInUser)
+        if (auth.currentUser != null) update(AccountStatus.LOGGED_IN, auth.currentUser)
         else update(AccountStatus.LOGGED_OUT, null)
     }
 

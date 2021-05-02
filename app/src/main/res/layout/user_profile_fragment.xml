@@ -23,6 +23,13 @@
             android:text="@string/userNotLoggedInInfo"
             android:textSize="14sp" />
 
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/log_in"
+            app:icon="@drawable/common_google_signin_btn_icon_dark_focused" />
+
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="100dp"
@@ -79,6 +86,12 @@
             android:layout_marginBottom="16dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             tools:text="John Doe" />
+
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/log_out" />
 
         <Button
             android:id="@+id/btn_report"

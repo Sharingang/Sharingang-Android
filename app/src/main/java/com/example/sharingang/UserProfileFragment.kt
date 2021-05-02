@@ -1,6 +1,7 @@
 package com.example.sharingang
 
 
+import android.app.Activity
 import android.content.ContentValues.TAG
 import android.net.Uri
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -23,6 +25,10 @@ import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.User
 import com.example.sharingang.users.UserRepository
 import com.example.sharingang.utils.ImageAccess
+import com.firebase.ui.auth.AuthUI
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,6 +45,7 @@ class UserProfileFragment : Fragment() {
     private var currentUserId: String? = null
     private lateinit var imageAccess: ImageAccess
 
+    private var currentUser: FirebaseUser? = null
     private lateinit var userType: UserType
 
     // This is the user whose profile is shown (can be different from currentUserId)
@@ -53,11 +60,25 @@ class UserProfileFragment : Fragment() {
         LOGGED_OUT_SELF
     }
 
+    private enum class AccountStatus {
+        LOGGED_IN,
+        LOGGED_OUT
+    }
+
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
 
     @Inject
     lateinit var userRepository: UserRepository
+
+    private val resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                update(AccountStatus.LOGGED_IN, currentUserProvider.getCurrentUser())
+            } else {
+                update(AccountStatus.LOGGED_OUT, null)
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,6 +91,7 @@ class UserProfileFragment : Fragment() {
             null, "" -> currentUserId
             else -> args.userId
         }
+        currentUser = currentUserProvider.getCurrentUser()
         setUserType()
         userViewModel.setUser(shownUserProfileId)
         imageAccess = ImageAccess(requireActivity())
@@ -81,6 +103,8 @@ class UserProfileFragment : Fragment() {
         setupRecyclerView(shownUserProfileId)
         binding.viewModel = userViewModel
         loggedInUserEmail = currentUserProvider.getCurrentUserEmail()
+        setupButtons()
+        restoreLoginStatus()
         initSetup()
         setVisibilities()
         setupViews()
@@ -112,7 +136,9 @@ class UserProfileFragment : Fragment() {
             binding.ratingTextview,
             binding.applyholder,
             binding.btnReport,
-            binding.userItemList
+            binding.userItemList,
+            binding.btnLogout,
+            binding.btnLogin
         )
         for (view: View in fields) {
             view.visibility = View.GONE
@@ -133,8 +159,10 @@ class UserProfileFragment : Fragment() {
                 )
             UserType.SELF ->
                 listOf(binding.imageView, binding.nameText, binding.ratingTextview,
-                    binding.userItemList, binding.textEmail, binding.gallerycameraholder)
-            else -> listOf(binding.upfTopinfo)
+                    binding.userItemList, binding.textEmail, binding.gallerycameraholder,
+                    binding.btnLogout
+                )
+            else -> listOf(binding.upfTopinfo, binding.btnLogin)
         }
     }
 
@@ -249,7 +277,60 @@ class UserProfileFragment : Fragment() {
                 )
             }
         }
+    }
 
+    private fun signIn() {
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.GoogleBuilder().build()
+        )
+        val intent = AuthUI.getInstance()
+            .createSignInIntentBuilder()
+            .setAvailableProviders(providers)
+            .build()
+        resultLauncher.launch(intent)
+    }
+
+    private fun signOut() {
+        AuthUI.getInstance()
+            .signOut(requireContext())
+            .addOnCompleteListener {
+                update(AccountStatus.LOGGED_OUT, null)
+            }
+    }
+
+    private fun update(accountStatus: AccountStatus, user: FirebaseUser?) {
+        if (accountStatus == AccountStatus.LOGGED_IN) {
+            addUserToDatabase(user!!)
+        }
+    }
+
+    private fun restoreLoginStatus() {
+        if (currentUser != null) update(AccountStatus.LOGGED_IN, currentUser)
+        else update(AccountStatus.LOGGED_OUT, null)
+    }
+
+    private fun addUserToDatabase(user: FirebaseUser) {
+        val userToConnectId = user.uid
+        lifecycleScope.launch(Dispatchers.IO) {
+            if (userRepository.get(userToConnectId) == null) {
+                userRepository.add(
+                    User(
+                        id = userToConnectId,
+                        name = user.displayName!!,
+                        profilePicture = user.photoUrl?.toString()
+                    )
+                )
+            }
+        }
+    }
+
+    private fun setupButtons() {
+        binding.btnLogin.setOnClickListener {
+            signIn()
+        }
+        binding.btnLogout.setOnClickListener {
+            signOut()
+        }
     }
 }
 
