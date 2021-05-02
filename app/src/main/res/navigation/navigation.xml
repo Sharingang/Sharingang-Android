@@ -102,6 +102,11 @@
             android:id="@+id/action_userProfileFragment_to_reportFragment"
             app:destination="@id/reportFragment"
             app:popUpTo="@id/itemsListFragment" />
+        <action
+            android:id="@+id/actionuserProfileFragmentToItemsListFragment"
+            app:destination="@id/itemsListFragment"
+            app:popUpTo="@id/userProfileFragment"
+            app:popUpToInclusive="true" />
 
     </fragment>
     <fragment

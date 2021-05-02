@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
@@ -26,9 +27,7 @@ import com.example.sharingang.users.User
 import com.example.sharingang.users.UserRepository
 import com.example.sharingang.utils.ImageAccess
 import com.firebase.ui.auth.AuthUI
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -60,11 +59,6 @@ class UserProfileFragment : Fragment() {
         LOGGED_OUT_SELF
     }
 
-    private enum class AccountStatus {
-        LOGGED_IN,
-        LOGGED_OUT
-    }
-
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
 
@@ -74,9 +68,12 @@ class UserProfileFragment : Fragment() {
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                update(AccountStatus.LOGGED_IN, currentUserProvider.getCurrentUser())
-            } else {
-                update(AccountStatus.LOGGED_OUT, null)
+                currentUserId = currentUserProvider.getCurrentUserId()
+                currentUser = currentUserProvider.getCurrentUser()
+                view?.findNavController()?.navigate(
+                    UserProfileFragmentDirections.actionuserProfileFragmentToItemsListFragment()
+                )
+                addUserToDatabase(currentUser!!)
             }
         }
 
@@ -158,7 +155,8 @@ class UserProfileFragment : Fragment() {
                     binding.userItemList, binding.btnReport
                 )
             UserType.SELF ->
-                listOf(binding.imageView, binding.nameText, binding.ratingTextview,
+                listOf(
+                    binding.imageView, binding.nameText, binding.ratingTextview,
                     binding.userItemList, binding.textEmail, binding.gallerycameraholder,
                     binding.btnLogout
                 )
@@ -176,7 +174,7 @@ class UserProfileFragment : Fragment() {
         userViewModel.refreshRating(shownUserProfileId)
         userViewModel.rating.observe(viewLifecycleOwner, {
             var text = resources.getString(R.string.default_rating)
-            if(it > 0){
+            if (it > 0) {
                 text = String.format("%.2f", it)
             }
             binding.ratingTextview.text = text
@@ -294,19 +292,14 @@ class UserProfileFragment : Fragment() {
         AuthUI.getInstance()
             .signOut(requireContext())
             .addOnCompleteListener {
-                update(AccountStatus.LOGGED_OUT, null)
+                view?.findNavController()?.navigate(
+                    UserProfileFragmentDirections.actionuserProfileFragmentToItemsListFragment()
+                )
             }
     }
 
-    private fun update(accountStatus: AccountStatus, user: FirebaseUser?) {
-        if (accountStatus == AccountStatus.LOGGED_IN) {
-            addUserToDatabase(user!!)
-        }
-    }
-
     private fun restoreLoginStatus() {
-        if (currentUser != null) update(AccountStatus.LOGGED_IN, currentUser)
-        else update(AccountStatus.LOGGED_OUT, null)
+        if (currentUser != null) addUserToDatabase(currentUser!!)
     }
 
     private fun addUserToDatabase(user: FirebaseUser) {
@@ -332,6 +325,7 @@ class UserProfileFragment : Fragment() {
             signOut()
         }
     }
+
 }
 
 
