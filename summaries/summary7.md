@@ -40,7 +40,11 @@ but couldn’t finish it because of merging conflicts with the features implemen
 My time estimates were pretty accurate this week.
 
 ## Zacharie
-
+I worked on saving the images to Firebase with Samuel so that people could view images that others had posted.
+The implementation went well and works, I am however having issues with test coverage since I can't find a way to test 
+the camera with espresso.
+For next week, I'd like to find a solution to this testing problem and work on the next feature.
+My time estimates for the implementation were accurate, but not for the testing.
 
 ## Overall team
 We did 2 stand-up meetings, the first one on Tuesday and the second on Thursday.
