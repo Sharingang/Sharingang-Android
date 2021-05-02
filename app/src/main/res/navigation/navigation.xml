@@ -26,9 +26,6 @@
             android:id="@+id/action_itemsListFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />
         <action
-            android:id="@+id/action_itemsListFragment_to_accountFragment"
-            app:destination="@id/accountFragment" />
-        <action
             android:id="@+id/action_itemsListFragment_to_wishlistViewFragment"
             app:destination="@id/wishlistViewFragment" />
     </fragment>
@@ -109,10 +106,6 @@
             app:popUpToInclusive="false" />
 
     </fragment>
-    <fragment
-        android:id="@+id/accountFragment"
-        android:name="com.example.sharingang.AccountFragment"
-        android:label="Account" />
     <fragment
         android:id="@+id/wishlistViewFragment"
         android:name="com.example.sharingang.WishlistViewFragment"
