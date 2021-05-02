@@ -101,7 +101,6 @@ class UserProfileFragment : Fragment() {
         lifecycle.addObserver(imageAccess)
         binding.viewModel = userViewModel
         initialize_fields()
-
         return binding.root
     }
 
@@ -144,18 +143,13 @@ class UserProfileFragment : Fragment() {
     private fun getVisibleViews(): List<View> {
         return when(userType) {
             UserType.LOGGED_OUT -> listOf(
-                    binding.imageView, binding.nameText,
-                    binding.ratingTextview, binding.userItemList
-                )
+                    binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList)
             UserType.VISITOR -> listOf(
                     binding.imageView, binding.nameText, binding.ratingTextview,
-                    binding.userItemList, binding.btnReport
-                )
+                    binding.userItemList, binding.btnReport)
             UserType.SELF -> listOf(
-                    binding.imageView, binding.nameText, binding.ratingTextview,
-                    binding.userItemList, binding.textEmail, binding.gallerycameraholder,
-                    binding.btnLogout
-                )
+                    binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList,
+                binding.textEmail, binding.gallerycameraholder, binding.btnLogout)
             else -> listOf(binding.upfTopinfo, binding.btnLogin)
         }
     }
