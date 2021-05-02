@@ -69,7 +69,7 @@
         <item>Name</item>
         <item>Category</item>
     </string-array>
-    <string name="order_by">Order By</string>
+    <string name="order">Order</string>
     <string-array name="order_ascending_descending">
         <item>Ascending</item>
         <item>Descending</item>
