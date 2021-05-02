@@ -131,7 +131,6 @@ class UserProfileFragment : Fragment() {
         if(userType == UserType.LOGGED_OUT && shownUserProfileId == null) {
             userType = UserType.LOGGED_OUT_SELF
         }
-        Log.d(TAG, "UserType = ${userType}")
     }
 
     private fun initSetup() {
