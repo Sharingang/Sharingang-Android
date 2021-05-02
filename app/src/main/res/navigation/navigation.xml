@@ -106,7 +106,7 @@
             android:id="@+id/actionuserProfileFragmentToItemsListFragment"
             app:destination="@id/itemsListFragment"
             app:popUpTo="@id/userProfileFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
 
     </fragment>
     <fragment

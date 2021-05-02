@@ -70,10 +70,15 @@ class UserProfileFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 currentUserId = currentUserProvider.getCurrentUserId()
                 currentUser = currentUserProvider.getCurrentUser()
-                view?.findNavController()?.navigate(
-                    UserProfileFragmentDirections.actionuserProfileFragmentToItemsListFragment()
-                )
+                shownUserProfileId = currentUserId
+                initialize_fields()
                 addUserToDatabase(currentUser!!)
+                binding.nameText.text = currentUser!!.displayName
+                val userPictureUri = currentUser!!.photoUrl
+                if(userPictureUri != null) {
+                    Glide.with(this).load(userPictureUri).into(binding.imageView)
+                }
+                setEmailText()
             }
         }
 
@@ -94,11 +99,16 @@ class UserProfileFragment : Fragment() {
         imageAccess = ImageAccess(requireActivity())
         imageAccess.setupImageView(binding.imageView)
         lifecycle.addObserver(imageAccess)
-        userViewModel.user.observe(viewLifecycleOwner, { user ->
-            displayUserFields(user)
-        })
-        setupRecyclerView(shownUserProfileId)
         binding.viewModel = userViewModel
+        initialize_fields()
+
+        return binding.root
+    }
+
+    private fun initialize_fields() {
+        currentUserId = currentUserProvider.getCurrentUserId()
+        setUserType()
+        setupRecyclerView(shownUserProfileId)
         loggedInUserEmail = currentUserProvider.getCurrentUserEmail()
         setupButtons()
         restoreLoginStatus()
@@ -107,7 +117,9 @@ class UserProfileFragment : Fragment() {
         setupViews()
         setupReportButton()
         setupRatingView()
-        return binding.root
+        userViewModel.user.observe(viewLifecycleOwner, { user ->
+            displayUserFields(user)
+        })
     }
 
     private fun setUserType() {
@@ -123,23 +135,12 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun initSetup() {
-        val fields = listOf(
-            binding.upfTopinfo,
-            binding.imageView,
-            binding.gallerycameraholder,
-            binding.nameText,
-            binding.textEmail,
-            binding.applyholder,
-            binding.ratingTextview,
-            binding.applyholder,
-            binding.btnReport,
-            binding.userItemList,
-            binding.btnLogout,
+        listOf(
+            binding.upfTopinfo, binding.imageView, binding.gallerycameraholder,
+            binding.nameText, binding.textEmail, binding.applyholder, binding.ratingTextview,
+            binding.applyholder, binding.btnReport, binding.userItemList, binding.btnLogout,
             binding.btnLogin
-        )
-        for (view: View in fields) {
-            view.visibility = View.GONE
-        }
+        ).forEach { view -> view.visibility = View.GONE }
     }
 
     private fun getVisibleViews(): List<View> {
@@ -292,9 +293,10 @@ class UserProfileFragment : Fragment() {
         AuthUI.getInstance()
             .signOut(requireContext())
             .addOnCompleteListener {
-                view?.findNavController()?.navigate(
-                    UserProfileFragmentDirections.actionuserProfileFragmentToItemsListFragment()
-                )
+                initSetup()
+                userType = UserType.LOGGED_OUT_SELF
+                setupViews()
+                setVisibilities()
             }
     }
 
