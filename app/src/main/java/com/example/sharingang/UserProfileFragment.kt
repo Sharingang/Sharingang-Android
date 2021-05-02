@@ -1,8 +1,10 @@
 package com.example.sharingang
 
 
+import android.content.ContentValues.TAG
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,10 +39,19 @@ class UserProfileFragment : Fragment() {
     private var currentUserId: String? = null
     private lateinit var imageAccess: ImageAccess
 
+    private lateinit var userType: UserType
+
     // This is the user whose profile is shown (can be different from currentUserId)
     private var shownUserProfileId: String? = null
     private var loggedInUserEmail: String? = null
     private var imageUri: Uri? = null
+
+    private enum class UserType {
+        LOGGED_OUT,
+        VISITOR,
+        SELF,
+        LOGGED_OUT_SELF
+    }
 
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
@@ -59,6 +70,7 @@ class UserProfileFragment : Fragment() {
             null, "" -> currentUserId
             else -> args.userId
         }
+        setUserType()
         userViewModel.setUser(shownUserProfileId)
         imageAccess = ImageAccess(requireActivity())
         imageAccess.setupImageView(binding.imageView)
@@ -70,14 +82,28 @@ class UserProfileFragment : Fragment() {
         binding.viewModel = userViewModel
         loggedInUserEmail = currentUserProvider.getCurrentUserEmail()
         initSetup()
-        setupViewAndButtonsAction()
+        setVisibilities()
+        setupViews()
         setupReportButton()
         setupRatingView()
         return binding.root
     }
 
+    private fun setUserType() {
+        userType = when (currentUserId) {
+            null -> UserType.LOGGED_OUT
+            shownUserProfileId -> UserType.SELF
+            else -> UserType.VISITOR
+        }
+        if(userType == UserType.LOGGED_OUT && shownUserProfileId == null) {
+            userType = UserType.LOGGED_OUT_SELF
+        }
+        Log.d(TAG, "UserType = ${userType}")
+    }
+
     private fun initSetup() {
         val fields = listOf(
+            binding.upfTopinfo,
             binding.imageView,
             binding.gallerycameraholder,
             binding.nameText,
@@ -85,12 +111,38 @@ class UserProfileFragment : Fragment() {
             binding.applyholder,
             binding.ratingTextview,
             binding.applyholder,
-            binding.btnReport
+            binding.btnReport,
+            binding.userItemList
         )
         for (view: View in fields) {
             view.visibility = View.GONE
         }
     }
+
+    private fun getVisibleViews(): List<View> {
+        return when(userType) {
+            UserType.LOGGED_OUT ->
+                listOf(
+                    binding.imageView, binding.nameText,
+                    binding.ratingTextview, binding.userItemList
+                )
+            UserType.VISITOR ->
+                listOf(
+                    binding.imageView, binding.nameText, binding.ratingTextview,
+                    binding.userItemList, binding.btnReport
+                )
+            UserType.SELF ->
+                listOf(binding.imageView, binding.nameText, binding.ratingTextview,
+                    binding.userItemList, binding.textEmail, binding.gallerycameraholder)
+            else -> listOf(binding.upfTopinfo)
+        }
+    }
+
+    private fun setVisibilities() {
+        val visibleViews = getVisibleViews()
+        visibleViews.forEach { view -> view.visibility = View.VISIBLE }
+    }
+
 
     private fun setupRatingView(){
         userViewModel.refreshRating(shownUserProfileId)
@@ -101,13 +153,6 @@ class UserProfileFragment : Fragment() {
             }
             binding.ratingTextview.text = text
         })
-    }
-
-    private fun setupButtonsVisibility() {
-        val pictureButtonsRow = binding.gallerycameraholder
-        if (currentUserId != null && isAuthUserDisplayedUser()) {
-            pictureButtonsRow.visibility = View.VISIBLE
-        }
     }
 
     private fun setupRecyclerView(userId: String?) {
@@ -130,56 +175,25 @@ class UserProfileFragment : Fragment() {
 
     private fun setupButtonsAction() {
         val buttons = listOf(binding.btnApply, binding.btnOpenCamera, binding.btnOpenGallery)
-        for (button: Button in buttons) {
-            button.setOnClickListener {
-                getAction(button)
-            }
-        }
+        buttons.forEach { button -> button.setOnClickListener {setupPictureButton(button)} }
     }
 
     private fun setEmailText() {
         val emailText = binding.textEmail
-        if (currentUserId != null && isAuthUserDisplayedUser()) {
+        if (userType == UserType.SELF) {
             emailText.text = loggedInUserEmail
-            emailText.visibility = View.VISIBLE
         }
     }
 
-    private fun setupTopInfoVisibility() {
-        val topInfoText = binding.upfTopinfo
-        if (currentUserId != null || args.userId != null) {
-            topInfoText.visibility = View.GONE
-        }
-    }
-
-    private fun isAuthUserDisplayedUser(): Boolean {
-        val shownUserId = args.userId
-        return shownUserId == null || shownUserId == currentUserId
-    }
-
-
-    private fun setupImageAndNameVisibility() {
-        val profilePictureImageView = binding.imageView
-        val userDisplayName = binding.nameText
-        val mainFields = listOf(profilePictureImageView, userDisplayName)
-        for (view: View in mainFields) {
-            if (currentUserId != null || args.userId != null) {
-                view.visibility = View.VISIBLE
-            }
-        }
-    }
-
-    private fun setupRatingVisibility(){
-        if(currentUserId != null || args.userId != null){
-            binding.ratingTextview.visibility = View.VISIBLE
-        }
-    }
-    private fun setupViewAndButtonsAction() {
+    private fun setupViews() {
         setupButtonsAction()
-        setupButtonsVisibility()
-        setupTopInfoVisibility()
-        setupImageAndNameVisibility()
-        setupRatingVisibility()
+        setUpfTopInfoText()
+        setEmailText()
+    }
+
+    private fun setUpfTopInfoText() {
+        val topInfo = binding.upfTopinfo
+        topInfo.text = getString(R.string.userNotLoggedInInfo)
     }
 
     private fun displayUserFields(requestedUser: User?) {
@@ -193,7 +207,7 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    private fun getAction(button: Button) {
+    private fun setupPictureButton(button: Button) {
         when (button) {
             binding.btnOpenCamera, binding.btnOpenGallery -> {
                 binding.applyholder.visibility = View.VISIBLE
@@ -217,7 +231,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupReportButton() {
-        if(currentUserId != null && currentUserId != shownUserProfileId) {
+        if(userType == UserType.VISITOR) {
             lifecycleScope.launch(Dispatchers.IO) {
                 val hasBeenReported =
                     userRepository.hasBeenReported(currentUserId!!, shownUserProfileId!!)
