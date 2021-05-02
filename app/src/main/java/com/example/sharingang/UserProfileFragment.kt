@@ -2,17 +2,14 @@ package com.example.sharingang
 
 
 import android.app.Activity
-import android.content.ContentValues.TAG
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
@@ -22,6 +19,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.UserProfileFragmentBinding
 import com.example.sharingang.items.ItemsViewModel
+import com.example.sharingang.users.AuthHelper
 import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.User
 import com.example.sharingang.users.UserRepository
@@ -39,6 +37,7 @@ class UserProfileFragment : Fragment() {
     private val itemsViewModel: ItemsViewModel by viewModels()
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var binding: UserProfileFragmentBinding
+    private lateinit var authHelper: AuthHelper
 
     // This is the currently logged in user
     private var currentUserId: String? = null
@@ -72,7 +71,7 @@ class UserProfileFragment : Fragment() {
                 currentUser = currentUserProvider.getCurrentUser()
                 shownUserProfileId = currentUserId
                 initialize_fields()
-                addUserToDatabase(currentUser!!)
+                authHelper.addUserToDatabase(currentUser!!)
                 binding.nameText.text = currentUser!!.displayName
                 val userPictureUri = currentUser!!.photoUrl
                 if(userPictureUri != null) {
@@ -93,6 +92,7 @@ class UserProfileFragment : Fragment() {
             null, "" -> currentUserId
             else -> args.userId
         }
+        authHelper = AuthHelper(resultLauncher, lifecycleScope, currentUser, userRepository)
         currentUser = currentUserProvider.getCurrentUser()
         setUserType()
         userViewModel.setUser(shownUserProfileId)
@@ -111,7 +111,7 @@ class UserProfileFragment : Fragment() {
         setupRecyclerView(shownUserProfileId)
         loggedInUserEmail = currentUserProvider.getCurrentUserEmail()
         setupButtons()
-        restoreLoginStatus()
+        authHelper.restoreLoginStatus()
         initSetup()
         setVisibilities()
         setupViews()
@@ -134,28 +134,24 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun initSetup() {
-        listOf(
-            binding.upfTopinfo, binding.imageView, binding.gallerycameraholder,
-            binding.nameText, binding.textEmail, binding.applyholder, binding.ratingTextview,
-            binding.applyholder, binding.btnReport, binding.userItemList, binding.btnLogout,
+        listOf(binding.upfTopinfo, binding.imageView, binding.gallerycameraholder, binding.nameText,
+            binding.textEmail, binding.applyholder, binding.ratingTextview, binding.applyholder,
+            binding.btnReport, binding.userItemList, binding.btnLogout,
             binding.btnLogin
         ).forEach { view -> view.visibility = View.GONE }
     }
 
     private fun getVisibleViews(): List<View> {
         return when(userType) {
-            UserType.LOGGED_OUT ->
-                listOf(
+            UserType.LOGGED_OUT -> listOf(
                     binding.imageView, binding.nameText,
                     binding.ratingTextview, binding.userItemList
                 )
-            UserType.VISITOR ->
-                listOf(
+            UserType.VISITOR -> listOf(
                     binding.imageView, binding.nameText, binding.ratingTextview,
                     binding.userItemList, binding.btnReport
                 )
-            UserType.SELF ->
-                listOf(
+            UserType.SELF -> listOf(
                     binding.imageView, binding.nameText, binding.ratingTextview,
                     binding.userItemList, binding.textEmail, binding.gallerycameraholder,
                     binding.btnLogout
@@ -174,9 +170,7 @@ class UserProfileFragment : Fragment() {
         userViewModel.refreshRating(shownUserProfileId)
         userViewModel.rating.observe(viewLifecycleOwner, {
             var text = resources.getString(R.string.default_rating)
-            if (it > 0) {
-                text = String.format("%.2f", it)
-            }
+            if (it > 0) text = String.format("%.2f", it)
             binding.ratingTextview.text = text
         })
     }
@@ -185,12 +179,7 @@ class UserProfileFragment : Fragment() {
         val adapter = itemsViewModel.setupItemAdapter(currentUserId)
         binding.userItemList.adapter = adapter
         itemsViewModel.getUserItem(userId)
-        itemsViewModel.addObserver(
-            viewLifecycleOwner,
-            adapter,
-            ItemsViewModel.OBSERVABLES.USER_ITEMS
-        )
-
+        itemsViewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.USER_ITEMS)
         itemsViewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
             { item ->
                 UserProfileFragmentDirections.actionUserProfileFragmentToDetailedItemFragment(
@@ -277,17 +266,6 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    private fun signIn() {
-        val providers = arrayListOf(
-            AuthUI.IdpConfig.GoogleBuilder().build()
-        )
-        val intent = AuthUI.getInstance()
-            .createSignInIntentBuilder()
-            .setAvailableProviders(providers)
-            .build()
-        resultLauncher.launch(intent)
-    }
-
     private fun signOut() {
         AuthUI.getInstance()
             .signOut(requireContext())
@@ -299,32 +277,9 @@ class UserProfileFragment : Fragment() {
             }
     }
 
-    private fun restoreLoginStatus() {
-        if (currentUser != null) addUserToDatabase(currentUser!!)
-    }
-
-    private fun addUserToDatabase(user: FirebaseUser) {
-        val userToConnectId = user.uid
-        lifecycleScope.launch(Dispatchers.IO) {
-            if (userRepository.get(userToConnectId) == null) {
-                userRepository.add(
-                    User(
-                        id = userToConnectId,
-                        name = user.displayName!!,
-                        profilePicture = user.photoUrl?.toString()
-                    )
-                )
-            }
-        }
-    }
-
     private fun setupButtons() {
-        binding.btnLogin.setOnClickListener {
-            signIn()
-        }
-        binding.btnLogout.setOnClickListener {
-            signOut()
-        }
+        binding.btnLogin.setOnClickListener { authHelper.signIn() }
+        binding.btnLogout.setOnClickListener { signOut() }
     }
 
 }
