@@ -110,6 +110,16 @@ class UserProfileFragmentTest {
         Thread.sleep(2000)
         onView(withId(R.id.btn_login)).check(matches(not(isDisplayed())))
         onView(withId(R.id.btn_logout)).check(matches(not(isDisplayed())))
+        Espresso.pressBack()
+        Espresso.pressBack()
+        FakeCurrentUserProvider.instance = 0
+        Thread.sleep(3000)
+        onView(withId(R.id.item_list_view_title)).perform(click())
         Thread.sleep(2000)
+        onView(withId(R.id.itemPostedBy)).perform(click())
+        Thread.sleep(3000)
+        onView(withId(R.id.btn_logout)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.btn_login)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.btn_report)).check(matches(not(isDisplayed())))
     }
 }
