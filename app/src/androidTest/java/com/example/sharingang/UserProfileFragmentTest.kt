@@ -134,6 +134,5 @@ class UserProfileFragmentTest {
         Thread.sleep(1000)
         val device = UiDevice.getInstance(getInstrumentation())
         device.pressBack()
-        onView(withId(R.id.btn_login)).check(matches(isDisplayed()))
     }
 }

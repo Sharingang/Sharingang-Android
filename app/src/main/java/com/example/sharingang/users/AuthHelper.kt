@@ -1,6 +1,5 @@
 package com.example.sharingang.users
 
-import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.LifecycleCoroutineScope
@@ -29,19 +28,14 @@ class AuthHelper (
     }
 
     fun restoreLoginStatus() {
-        if (currentUser != null) addUserToDatabase(currentUser!!)
+        if (currentUser != null) addUserToDatabase(currentUser)
     }
 
     fun addUserToDatabase(user: FirebaseUser) {
-        val userToConnectId = user.uid
         lifecycleScope.launch(Dispatchers.IO) {
-            if (userRepository.get(userToConnectId) == null) {
+            if (userRepository.get(user.uid) == null) {
                 userRepository.add(
-                    User(
-                        id = userToConnectId,
-                        name = user.displayName!!,
-                        profilePicture = user.photoUrl?.toString()
-                    )
+                    User(user.uid, user.displayName!!, user.photoUrl?.toString())
                 )
             }
         }

@@ -73,11 +73,9 @@ class UserProfileFragment : Fragment() {
                 initialize_fields()
                 authHelper.addUserToDatabase(currentUser!!)
                 binding.nameText.text = currentUser!!.displayName
-                val userPictureUri = currentUser!!.photoUrl
-                if(userPictureUri != null) {
-                    Glide.with(this).load(userPictureUri).into(binding.imageView)
+                if(currentUser!!.photoUrl != null) {
+                    Glide.with(this).load(currentUser!!.photoUrl).into(binding.imageView)
                 }
-                setEmailText()
             }
         }
 
@@ -112,6 +110,7 @@ class UserProfileFragment : Fragment() {
         setupButtons()
         authHelper.restoreLoginStatus()
         initSetup()
+        setEmailText()
         setVisibilities()
         setupViews()
         setupReportButton()
