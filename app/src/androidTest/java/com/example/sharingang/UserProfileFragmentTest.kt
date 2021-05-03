@@ -122,4 +122,19 @@ class UserProfileFragmentTest {
         onView(withId(R.id.btn_login)).check(matches(not(isDisplayed())))
         onView(withId(R.id.btn_report)).check(matches(not(isDisplayed())))
     }
+
+    @Test
+    fun aUserCanCancelLogin() {
+        FakeCurrentUserProvider.instance = 1
+        navigate_to(R.id.userProfileFragment)
+        Thread.sleep(2000)
+        onView(withId(R.id.btn_logout)).perform(click())
+        Thread.sleep(2000)
+        onView(withId(R.id.btn_login)).perform(click())
+        Thread.sleep(1000)
+        val device = UiDevice.getInstance(getInstrumentation())
+        device.pressBack()
+        device.pressBack()
+        onView(withId(R.id.btn_login)).check(matches(isDisplayed()))
+    }
 }
