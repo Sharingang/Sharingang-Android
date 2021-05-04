@@ -3,7 +3,6 @@ package com.example.sharingang
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.PerformException
@@ -54,7 +53,7 @@ fun waitId(viewId: Int, millis: Long = TimeUnit.SECONDS.toMillis(10)): ViewActio
 }
 
 fun waitAfterSaveItem() {
-    Thread.sleep(3000)
+    Thread.sleep(1000)
 }
 
 fun withMenuIdOrText(@IdRes id: Int, @StringRes menuText: Int): Matcher<View?>? {
