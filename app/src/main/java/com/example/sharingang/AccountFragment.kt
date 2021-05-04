@@ -83,7 +83,7 @@ class AccountFragment : Fragment() {
             addUserToDatabase(user!!)
             binding.loginButton.visibility = View.GONE
             binding.logoutButton.visibility = View.VISIBLE
-            binding.accountStatus.text = "Status: Logged in as \n${user.displayName}"
+            binding.accountStatus.text = getString(R.string.text_logged_in, user.displayName)
         } else {
             binding.loginButton.visibility = View.VISIBLE
             binding.logoutButton.visibility = View.GONE

@@ -21,6 +21,7 @@
     <string name="search">Search</string>
     <string name="logged_out">Status: Logged Out</string>
     <string name="log_out">Log Out</string>
+    <string name="text_logged_in">Status: Logged in as \n%1$s</string>
     <string name="text_logged_out">Status: Logged Out</string>
     <string name="log_in">Log In</string>
     <string name="clear_search_button">Clear search</string>
