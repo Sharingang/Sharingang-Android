@@ -122,12 +122,9 @@ class UserProfileFragment : Fragment() {
 
     private fun setUserType() {
         userType = when (currentUserId) {
-            null -> UserType.LOGGED_OUT
+            null -> if(shownUserProfileId == null) UserType.LOGGED_OUT_SELF else UserType.LOGGED_OUT
             shownUserProfileId -> UserType.SELF
             else -> UserType.VISITOR
-        }
-        if(userType == UserType.LOGGED_OUT && shownUserProfileId == null) {
-            userType = UserType.LOGGED_OUT_SELF
         }
     }
 

@@ -23,6 +23,7 @@ class AuthHelper (
         val intent = AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
+            .setIsSmartLockEnabled(false)
             .build()
         resultLauncher.launch(intent)
     }
