@@ -12,10 +12,7 @@ import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
-import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.UiSelector
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers
@@ -126,9 +123,9 @@ class DetailedItemFragmentTest {
         )
         onView(withId(R.id.createItemButton)).perform(click())
         waitAfterSaveItem()
-        val device = UiDevice.getInstance(getInstrumentation())
+
         onView(withText(testTitle)).perform(click())
-        device.findObject(UiSelector().clickable(true).instance(2)).click()
+        onView(withMenuIdOrText(R.id.menuDelete, R.string.delete_item)).perform(click())
         waitAfterSaveItem()
         onView(withText(testTitle)).check(doesNotExist())
     }
