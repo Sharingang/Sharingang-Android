@@ -32,7 +32,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
-                android:paddingEnd="16dp"
+                android:layout_marginEnd="16dp"
                 android:text="@string/logged_out" />
 
             <Button
