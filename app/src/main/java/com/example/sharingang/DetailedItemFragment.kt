@@ -132,7 +132,8 @@ class DetailedItemFragment : Fragment() {
     private fun deleteItem(itemId: String) {
         lifecycleScope.launch(Dispatchers.IO) {
             if (itemRepository.delete(itemId)) {
-                Snackbar.make(binding.root, "Item deleted successfully.", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "Item deleted successfully.", Snackbar.LENGTH_SHORT)
+                    .show()
                 lifecycleScope.launch(Dispatchers.Main) {
                     findNavController().popBackStack()
                 }

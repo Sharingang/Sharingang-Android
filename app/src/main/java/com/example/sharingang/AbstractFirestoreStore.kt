@@ -4,7 +4,7 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
-abstract class AbstractFirestoreStore<T: Any>(
+abstract class AbstractFirestoreStore<T : Any>(
     private val collectionName: String,
     private val typeClass: Class<T>,
     private val firestore: FirebaseFirestore

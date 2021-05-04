@@ -19,6 +19,7 @@ class WishlistViewTest {
 
     private val firstItem = "Test Item"
     private val secondItem = "Hello the world"
+
     @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
 
@@ -28,7 +29,7 @@ class WishlistViewTest {
 
 
     @Test
-    fun canAddAndRemoveItemToWishlist(){
+    fun canAddAndRemoveItemToWishlist() {
         addItemsToDb(firstItem)
         addItemToWishList(firstItem)
 
@@ -43,7 +44,7 @@ class WishlistViewTest {
     }
 
     @Test
-    fun canViewWishListItems(){
+    fun canViewWishListItems() {
         addItemsToDb(firstItem, secondItem)
         addItemToWishList(firstItem, secondItem)
 
@@ -56,8 +57,8 @@ class WishlistViewTest {
         onView(withText(secondItem)).check(matches(isDisplayed()))
     }
 
-    private fun addItemToWishList(vararg itemNames: String){
-        for(itemName in itemNames){
+    private fun addItemToWishList(vararg itemNames: String) {
+        for (itemName in itemNames) {
             onView(withText(itemName)).perform(click())
             onView(withId(R.id.addToWishlist)).perform(click())
             onView(withId(R.id.addToWishlist)).check(matches(withText(R.string.remove_wishlist)))
@@ -66,12 +67,12 @@ class WishlistViewTest {
     }
 
 
-    private fun addItemsToDb(vararg itemNames: String){
-        for(itemName in itemNames){
+    private fun addItemsToDb(vararg itemNames: String) {
+        for (itemName in itemNames) {
             navigate_to(R.id.newEditFragment)
             onView(withId(R.id.itemTitle)).perform(
-                    typeText(itemName),
-                    closeSoftKeyboard()
+                typeText(itemName),
+                closeSoftKeyboard()
             )
             onView(withId(R.id.createItemButton)).perform(click())
             waitAfterSaveItem()

@@ -92,11 +92,11 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    private fun setupRatingView(){
+    private fun setupRatingView() {
         userViewModel.refreshRating(shownUserProfileId)
         userViewModel.rating.observe(viewLifecycleOwner, {
             var text = resources.getString(R.string.default_rating)
-            if(it > 0){
+            if (it > 0) {
                 text = String.format("%.2f", it)
             }
             binding.ratingTextview.text = text
@@ -169,11 +169,12 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    private fun setupRatingVisibility(){
-        if(currentUserId != null || args.userId != null){
+    private fun setupRatingVisibility() {
+        if (currentUserId != null || args.userId != null) {
             binding.ratingTextview.visibility = View.VISIBLE
         }
     }
+
     private fun setupViewAndButtonsAction() {
         setupButtonsAction()
         setupButtonsVisibility()
@@ -217,7 +218,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupReportButton() {
-        if(currentUserId != null && currentUserId != shownUserProfileId) {
+        if (currentUserId != null && currentUserId != shownUserProfileId) {
             lifecycleScope.launch(Dispatchers.IO) {
                 val hasBeenReported =
                     userRepository.hasBeenReported(currentUserId!!, shownUserProfileId!!)

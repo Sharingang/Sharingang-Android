@@ -125,7 +125,7 @@ class NewItemFragmentTest {
     }
 
     @Test
-    fun addressSearchCanBeCanceled(){
+    fun addressSearchCanBeCanceled() {
         navigate_to(R.id.newEditFragment)
         onView(withId(R.id.autocomplete_fragment)).perform(click())
         val device = UiDevice.getInstance((InstrumentationRegistry.getInstrumentation()))

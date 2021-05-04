@@ -20,6 +20,7 @@ class ItemsListFragment : Fragment() {
 
     private lateinit var binding: FragmentItemsListBinding
     private val viewModel: ItemsViewModel by activityViewModels()
+
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
 
@@ -36,7 +37,7 @@ class ItemsListFragment : Fragment() {
         viewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.ALL_ITEMS)
 
         viewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
-                {item -> ItemsListFragmentDirections.actionItemsListFragmentToDetailedItemFragment(item)})
+            { item -> ItemsListFragmentDirections.actionItemsListFragmentToDetailedItemFragment(item) })
 
         binding.swiperefresh.setOnRefreshListener { viewModel.refresh() }
         viewModel.refreshing.observe(viewLifecycleOwner, {

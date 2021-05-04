@@ -3,7 +3,6 @@ package com.example.sharingang
 
 import android.Manifest
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -40,8 +39,13 @@ class UserProfileFragmentTest {
         val textView = onView(withId(R.id.nameText))
         textView.check(matches(withText(FakeCurrentUserProvider.fakeUser1.name)))
         onView(withId(R.id.text_email)).check(matches(withText("test-user@example.com")))
-        onView(withId(R.id.upf_topinfo)).check(matches(withText(
-            "You need to be logged in to view your User Profile.")))
+        onView(withId(R.id.upf_topinfo)).check(
+            matches(
+                withText(
+                    "You need to be logged in to view your User Profile."
+                )
+            )
+        )
     }
 
     @Test

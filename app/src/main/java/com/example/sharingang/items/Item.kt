@@ -30,7 +30,7 @@ data class Item(
     val image: String = "",
 
     /** Provisory, will be changed later when we actually
-        upload image to the server and cache it locally */
+    upload image to the server and cache it locally */
     var imageUri: String? = null,
 
     val price: Double = 0.0,

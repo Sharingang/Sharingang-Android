@@ -184,7 +184,9 @@ class ItemsViewModel @Inject constructor(
     }
 
     fun setupItemNavigation(
-        LifeCycleOwner: LifecycleOwner, navController: NavController, actionDetail: (Item) -> NavDirections
+        LifeCycleOwner: LifecycleOwner,
+        navController: NavController,
+        actionDetail: (Item) -> NavDirections
     ) {
         navigateToDetailItem.observe(LifeCycleOwner, { item ->
             item?.let {

@@ -27,7 +27,7 @@ class FakeCurrentUserProvider @Inject constructor(
     }
 
     override fun getCurrentUserName(): String? {
-        return if(instance == 1) fakeUser1.name else fakeUser2.name
+        return if (instance == 1) fakeUser1.name else fakeUser2.name
     }
 
     companion object {
