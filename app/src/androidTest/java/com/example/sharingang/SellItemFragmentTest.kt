@@ -2,7 +2,7 @@ package com.example.sharingang
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.assertion.ViewAssertions.*
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -41,8 +41,8 @@ class SellItemFragmentTest {
 
         onView(withId(R.id.item_list_view_title)).perform(ViewActions.click())
 
-        onView(withId(R.id.menuSell)).perform(ViewActions.click())
+        onView(withMenuIdOrText(R.id.menuSell, R.string.sell)).perform(ViewActions.click())
 
-        onView(withId(R.id.menuResell)).check(matches(isDisplayed()))
+        onView(withMenuIdOrText(R.id.menuResell, R.string.unsell)).check(matches(isDisplayed()))
     }
 }

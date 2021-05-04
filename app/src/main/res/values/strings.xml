@@ -6,6 +6,7 @@
     <string name="go_to_map">Go to Map</string>
     <string name="edit">Edit</string>
     <string name="edit_item">Edit Item</string>
+    <string name="delete_item">Delete Item</string>
     <string name="title">Title</string>
     <string name="default_price">Price (default: 0.0)</string>
     <string name="price">Price</string>
