@@ -64,6 +64,10 @@ class UserProfileFragment : Fragment() {
     @Inject
     lateinit var userRepository: UserRepository
 
+    /*
+     * Launcher for the Login activity. Instead of using onActivityResult and startActivityForResult
+     * in a duo, we use this resultLauncher as it is a newer and more compact solution.
+     */
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -74,6 +78,7 @@ class UserProfileFragment : Fragment() {
                 authHelper.addUserToDatabase(currentUser!!)
                 binding.nameText.text = currentUser!!.displayName
                 if(currentUser!!.photoUrl != null) {
+                    // Use the Glide image loader library to load the user's picture into the imageView
                     Glide.with(this).load(currentUser!!.photoUrl).into(binding.imageView)
                 }
             }
