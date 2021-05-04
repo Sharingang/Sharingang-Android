@@ -26,6 +26,9 @@ class AccountFragment : Fragment() {
     lateinit var auth: FirebaseAuth
 
     @Inject
+    lateinit var authUI: AuthUI
+
+    @Inject
     lateinit var userRepository: UserRepository
 
     private lateinit var binding: FragmentAccountBinding
@@ -63,15 +66,16 @@ class AccountFragment : Fragment() {
         val providers = arrayListOf(
             AuthUI.IdpConfig.GoogleBuilder().build()
         )
-        val intent = AuthUI.getInstance()
+        val intent = authUI
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
+            .setIsSmartLockEnabled(false)
             .build()
         resultLauncher.launch(intent)
     }
 
     private fun signOut() {
-        AuthUI.getInstance()
+        authUI
             .signOut(requireContext())
             .addOnCompleteListener {
                 update(AccountStatus.LOGGED_OUT, null)
