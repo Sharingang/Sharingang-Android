@@ -10,7 +10,7 @@ import kotlin.math.sqrt
 /**
  * This is the force (in multiples of Earth's gravity) necessary to trigger a shake.
  */
-private const val SHAKE_THRESHOLD_GRAVITY = 1.2F
+private const val SHAKE_THRESHOLD_GRAVITY = 2.2F
 
 /**
  * This controls how long we have to wait between shakes
