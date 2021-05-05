@@ -74,8 +74,8 @@ class UserProfileFragment : Fragment() {
                 currentUserId = currentUserProvider.getCurrentUserId()
                 currentUser = currentUserProvider.getCurrentUser()
                 shownUserProfileId = currentUserId
-                initialize_fields()
                 authHelper.addUserToDatabase(currentUser!!)
+                initialize_fields()
                 binding.nameText.text = currentUser!!.displayName
                 if(currentUser!!.photoUrl != null) {
                     // Use the Glide image loader library to load the user's picture into the imageView
