@@ -39,10 +39,6 @@ class FakeCurrentUserProvider @Inject constructor(
         }
     }
 
-    override fun getCurrentUser(): FirebaseUser? {
-        return null
-    }
-
     companion object {
         val fakeUser1 = User(
             id = "fakeUserID1",
