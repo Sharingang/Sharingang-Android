@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <item
         android:id="@+id/menuEdit"
         android:icon="@drawable/ic_baseline_edit_white_24"
         android:title="@string/edit_item"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menuDelete"
+        android:icon="@drawable/ic_baseline_delete_24"
+        android:title="@string/delete_item"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menuSell"
@@ -18,5 +24,6 @@
         android:id="@+id/menuResell"
         android:icon="@drawable/ic_baseline_money_off_white_24"
         android:title="@string/unsell"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom"
+        tools:visible="false"/>
 </menu>

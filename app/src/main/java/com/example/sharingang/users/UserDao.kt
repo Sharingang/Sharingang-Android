@@ -1,10 +1,7 @@
 package com.example.sharingang.users
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface UserDao {
@@ -16,4 +13,13 @@ interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(users: List<User>)
+
+    @Query("DELETE FROM user")
+    fun clear()
+
+    @Transaction
+    fun replace(users: List<User>) {
+        clear()
+        insert(users)
+    }
 }

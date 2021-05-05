@@ -19,7 +19,7 @@ class CachedItemRepository @Inject constructor(
         // This is necessary, since you want to avoid doing this work on the main thread
         withContext(Dispatchers.IO) {
             val newItems = store.getAll()
-            itemDao.insert(newItems)
+            itemDao.replace(newItems)
             newItems
         }
 
