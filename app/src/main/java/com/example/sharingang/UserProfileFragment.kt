@@ -95,7 +95,7 @@ class UserProfileFragment : Fragment() {
             null, "" -> currentUserId
             else -> args.userId
         }
-        authHelper = AuthHelper(resultLauncher, lifecycleScope, currentUser, userRepository)
+        authHelper = AuthHelper(requireContext(), resultLauncher, lifecycleScope, currentUser, userRepository)
         currentUser = currentUserProvider.getCurrentUser()
         setUserType()
         userViewModel.setUser(shownUserProfileId)
@@ -261,20 +261,14 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    private fun signOut() {
-        AuthUI.getInstance()
-            .signOut(requireContext())
-            .addOnCompleteListener {
-                initSetup()
-                userType = UserType.LOGGED_OUT_SELF
-                setupViews()
-                setVisibilities()
-            }
-    }
-
     private fun setupButtons() {
         binding.btnLogin.setOnClickListener { authHelper.signIn() }
-        binding.btnLogout.setOnClickListener { signOut() }
+        binding.btnLogout.setOnClickListener {
+            authHelper.signOut()
+            initSetup()
+            userType = UserType.LOGGED_OUT_SELF
+            setupViews()
+            setVisibilities()}
     }
 
 }

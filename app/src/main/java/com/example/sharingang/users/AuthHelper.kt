@@ -1,5 +1,6 @@
 package com.example.sharingang.users
 
+import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.LifecycleCoroutineScope
@@ -9,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class AuthHelper (
+    private val context: Context,
     private val resultLauncher: ActivityResultLauncher<Intent>,
     private val lifecycleScope: LifecycleCoroutineScope,
     private val currentUser: FirebaseUser?,
@@ -26,6 +28,10 @@ class AuthHelper (
             .setIsSmartLockEnabled(false)
             .build()
         resultLauncher.launch(intent)
+    }
+
+    fun signOut() {
+        AuthUI.getInstance().signOut(context)
     }
 
     fun restoreLoginStatus() {
