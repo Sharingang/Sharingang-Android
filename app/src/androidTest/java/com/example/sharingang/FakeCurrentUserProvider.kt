@@ -26,7 +26,7 @@ class FakeCurrentUserProvider @Inject constructor(
         return "test-user@example.com"
     }
 
-    override fun getCurrentUserName(): String? {
+    override fun getCurrentUserName(): String {
         return if (instance == 1) fakeUser1.name else fakeUser2.name
     }
 

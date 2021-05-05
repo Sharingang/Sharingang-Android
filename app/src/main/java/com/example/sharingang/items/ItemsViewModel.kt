@@ -1,6 +1,10 @@
 package com.example.sharingang.items
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,10 +30,6 @@ class ItemsViewModel @Inject constructor(
     enum class OBSERVABLES {
         ALL_ITEMS, SEARCH_RESULTS, USER_ITEMS, WISHLIST
     }
-
-    private val _navigateToEditItem = MutableLiveData<Item?>()
-    val navigateToEditItem: LiveData<Item?>
-        get() = _navigateToEditItem
 
     private val _navigateToDetailItem = MutableLiveData<Item?>()
     val navigateToDetailItem: LiveData<Item?>
@@ -125,14 +125,6 @@ class ItemsViewModel @Inject constructor(
             }
             _searchResults.postValue(results)
         }
-    }
-
-    private fun onEditItemClicked(item: Item) {
-        _navigateToEditItem.value = item
-    }
-
-    private fun onEditItemNavigated() {
-        _navigateToEditItem.value = null
     }
 
     private fun onViewItem(item: Item) {

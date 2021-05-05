@@ -9,7 +9,7 @@ abstract class AbstractFirestoreStore<T : Any>(
     private val typeClass: Class<T>,
     private val firestore: FirebaseFirestore
 ) {
-    private val TAG = "AbstractFirestoreStore[$collectionName]"
+    private val tag = "AbstractFirestoreStore[$collectionName]"
 
     open suspend fun get(id: String): T? {
         val document = firestore.collection(collectionName)
@@ -18,7 +18,7 @@ abstract class AbstractFirestoreStore<T : Any>(
             .await()
 
         if (document == null) {
-            Log.d(TAG, "No $collectionName with ID = $id")
+            Log.d(tag, "No $collectionName with ID = $id")
         }
         return document?.toObject(typeClass)
     }
@@ -36,10 +36,10 @@ abstract class AbstractFirestoreStore<T : Any>(
             val document = firestore.collection(collectionName)
                 .add(element)
                 .await()
-            Log.d(TAG, "$collectionName added with ID: ${document.id}")
+            Log.d(tag, "$collectionName added with ID: ${document.id}")
             document.id
         } catch (e: Exception) {
-            Log.e(TAG, "Error adding new user to Firebase", e)
+            Log.e(tag, "Error adding new user to Firebase", e)
             null
         }
     }
@@ -49,10 +49,10 @@ abstract class AbstractFirestoreStore<T : Any>(
             firestore.collection(collectionName).document(id)
                 .set(element)
                 .await()
-            Log.d(TAG, "Updated $collectionName with ID: $id")
+            Log.d(tag, "Updated $collectionName with ID: $id")
             true
         } catch (e: Exception) {
-            Log.e(TAG, "Error updating $collectionName with ID: $id", e)
+            Log.e(tag, "Error updating $collectionName with ID: $id", e)
             false
         }
     }
@@ -62,10 +62,10 @@ abstract class AbstractFirestoreStore<T : Any>(
             firestore.collection(collectionName).document(id)
                 .delete()
                 .await()
-            Log.d(TAG, "Deleted item with ID: $id")
+            Log.d(tag, "Deleted item with ID: $id")
             true
         } catch (e: Exception) {
-            Log.e(TAG, "Error deleting item with ID: $id", e)
+            Log.e(tag, "Error deleting item with ID: $id", e)
             false
         }
     }
