@@ -4,6 +4,7 @@ import android.provider.MediaStore
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
@@ -57,7 +58,7 @@ class DetailedItemFragmentTest {
     }
 
     @Test
-    fun canRateAUser(){
+    fun canRateAUser() {
         val testTitle = "Book Item"
 
         navigate_to(R.id.userProfileFragment)
@@ -73,7 +74,7 @@ class DetailedItemFragmentTest {
         waitAfterSaveItem()
         onView(withText(testTitle)).perform(click())
 
-        onView(withId(R.id.menuSell)).perform(click())
+        onView(withMenuIdOrText(R.id.menuSell, R.string.sell)).perform(click())
         pressBack()
         Thread.sleep(1000)
         onView(withText(testTitle)).perform(click())
@@ -112,5 +113,20 @@ class DetailedItemFragmentTest {
         backButton.perform(click())
     }
 
+    @Test
+    fun canDeleteAnItem() {
+        val testTitle = "To be deleted"
+        navigate_to(R.id.newEditFragment)
+        onView(withId(R.id.itemTitle)).perform(
+            typeText(testTitle),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.createItemButton)).perform(click())
+        waitAfterSaveItem()
 
+        onView(withText(testTitle)).perform(click())
+        onView(withMenuIdOrText(R.id.menuDelete, R.string.delete_item)).perform(click())
+        waitAfterSaveItem()
+        onView(withText(testTitle)).check(doesNotExist())
+    }
 }
