@@ -123,14 +123,4 @@ class NewItemFragmentTest {
         Thread.sleep(3000)
         onView(withId(R.id.postal_address)).check(matches(withText(containsString("Taj"))))
     }
-
-    @Test
-    fun addressSearchCanBeCanceled(){
-        navigate_to(R.id.newEditFragment)
-        onView(withId(R.id.autocomplete_fragment)).perform(click())
-        val device = UiDevice.getInstance((InstrumentationRegistry.getInstrumentation()))
-        device.pressBack()
-        device.pressBack()
-        onView(withId(R.id.postal_address)).check(matches(withText("")))
-    }
 }
