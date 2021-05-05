@@ -158,14 +158,6 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
-    private fun onEditItemClicked(item: Item) {
-        _navigateToEditItem.value = item
-    }
-
-    private fun onEditItemNavigated() {
-        _navigateToEditItem.value = null
-    }
-
     private fun onViewItem(item: Item) {
         _navigateToDetailItem.value = item
     }

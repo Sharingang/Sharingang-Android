@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.sharingang.databinding.FragmentItemsListBinding
 import com.example.sharingang.items.ItemsViewModel
 import com.example.sharingang.users.CurrentUserProvider
-import com.example.sharingang.utils.UIViewModel
+import com.example.sharingang.utils.OrderingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -21,7 +21,7 @@ class ItemsListFragment : Fragment() {
 
     private lateinit var binding: FragmentItemsListBinding
     private val viewModel: ItemsViewModel by activityViewModels()
-    private val uiViewModel: UIViewModel by activityViewModels()
+    private val orderingViewModel: OrderingViewModel by activityViewModels()
 
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
@@ -48,8 +48,8 @@ class ItemsListFragment : Fragment() {
                 orderItems() // in the case an item is added, need to add redo the ordering
             }
         })
-        binding.orderCategorySpinner.setSelection(uiViewModel.orderByPosition.value!!)
-        binding.orderAscendingDescending.setSelection(uiViewModel.ascendingDescendingPosition.value!!)
+        binding.orderCategorySpinner.setSelection(orderingViewModel.orderByPosition.value!!)
+        binding.orderAscendingDescending.setSelection(orderingViewModel.ascendingDescendingPosition.value!!)
         orderItems()
         binding.startOrdering.setOnClickListener { orderItems() }
 
@@ -57,8 +57,8 @@ class ItemsListFragment : Fragment() {
     }
 
     private fun orderItems() {
-        uiViewModel.setOrderByPosition(binding.orderCategorySpinner.selectedItemPosition)
-        uiViewModel.setAscendingDescendingPosition(binding.orderAscendingDescending.selectedItemPosition)
+        orderingViewModel.setOrderByPosition(binding.orderCategorySpinner.selectedItemPosition)
+        orderingViewModel.setAscendingDescendingPosition(binding.orderAscendingDescending.selectedItemPosition)
         viewModel.orderItems(
             ItemsViewModel.ORDERING.values()[binding.orderCategorySpinner.selectedItemPosition],
             binding.orderAscendingDescending.selectedItemPosition == 0
