@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.room.Room
 import com.example.sharingang.items.*
 import com.example.sharingang.users.*
+import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
@@ -71,13 +72,16 @@ object FakeRepositoryModule {
     @Provides
     fun provideFirebaseAuth(): FirebaseAuth {
         val auth = FirebaseAuth.getInstance()
-        if (BuildConfig.DEBUG) {
-            Log.d("RepositoryModule", "Using FirebaseAuth emulator.")
-            auth.useEmulator("10.0.2.2", 9099)
-        } else {
-            Log.d("RepositoryModule", "Using production FirebaseAuth.")
-        }
+        auth.useEmulator("10.0.2.2", 9099)
         return auth
+    }
+
+    @Singleton
+    @Provides
+    fun provideFirebaseAuthUI(): AuthUI {
+        val authUI = AuthUI.getInstance()
+        authUI.useEmulator("10.0.2.2", 9099)
+        return authUI
     }
 }
 

@@ -161,7 +161,7 @@ class DetailedItemFragment : Fragment() {
             viewModel.wishlistContains.observe(viewLifecycleOwner, {
                 binding.addToWishlist.text = getButtonText(it)
             })
-            binding.addToWishlist.setOnClickListener { updateWishlist(binding) }
+            binding.addToWishlist.setOnClickListener { updateWishlist() }
             viewModel.wishlistContains(args.item)
         } else {
             binding.addToWishlist.visibility = View.GONE
@@ -200,7 +200,7 @@ class DetailedItemFragment : Fragment() {
         else getString(R.string.add_wishlist)
     }
 
-    private fun updateWishlist(binding: FragmentDetailedItemBinding) {
+    private fun updateWishlist() {
         viewModel.modifyWishList(args.item)
     }
 
