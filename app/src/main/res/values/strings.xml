@@ -20,11 +20,8 @@
     <string name="longitude">Longitude</string>
     <string name="get_location">Get Location</string>
     <string name="user_profile">User Profile</string>
-    <string name="account">Account</string>
     <string name="search">Search</string>
-    <string name="logged_out">Status: Logged Out</string>
     <string name="log_out">Log Out</string>
-    <string name="text_logged_out">Status: Logged Out</string>
     <string name="log_in">Log In</string>
     <string name="clear_search_button">Clear search</string>
     <string name="share">Share</string>

@@ -1,6 +1,7 @@
 package com.example.sharingang.users
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import javax.inject.Inject
 
 class FirestoreCurrentUserProvider @Inject constructor(

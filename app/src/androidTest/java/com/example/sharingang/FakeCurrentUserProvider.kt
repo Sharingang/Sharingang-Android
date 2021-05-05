@@ -3,6 +3,7 @@ package com.example.sharingang
 import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.User
 import com.example.sharingang.users.UserRepository
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -19,15 +20,23 @@ class FakeCurrentUserProvider @Inject constructor(
     }
 
     override fun getCurrentUserId(): String? {
-        return if (instance == 1) fakeUser1.id else fakeUser2.id
+        return when (instance) {
+            1 -> fakeUser1.id
+            2 -> fakeUser2.id
+            else -> null
+        }
     }
 
     override fun getCurrentUserEmail(): String {
-        return "test-user@example.com"
+        return if(instance != 0) "test-user@example.com" else ""
     }
 
-    override fun getCurrentUserName(): String? {
-        return if(instance == 1) fakeUser1.name else fakeUser2.name
+    override fun getCurrentUserName(): String {
+        return when (instance) {
+            1 -> fakeUser1.name
+            2 -> fakeUser2.name
+            else -> ""
+        }
     }
 
     companion object {

@@ -3,6 +3,7 @@ package com.example.sharingang
 import android.provider.MediaStore
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -35,6 +36,9 @@ class DetailedItemFragmentTest {
     val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(
         android.Manifest.permission.READ_EXTERNAL_STORAGE
     )
+
+    val firstItem = "Test Item"
+    val secondItem = "Hello the world"
 
     @get:Rule(order = 3)
     var mActivityTestRule = IntentsTestRule(MainActivity::class.java)
@@ -111,6 +115,57 @@ class DetailedItemFragmentTest {
         val backButton =
             onView(Matchers.allOf(withContentDescription("Navigate up"), isDisplayed()))
         backButton.perform(click())
+    }
+
+    @Test
+    fun canAddAndRemoveItemToWishlist(){
+        addItemsToDb(firstItem)
+        addItemToWishList(firstItem)
+
+        navigate_to(R.id.wishlistViewFragment)
+        onView(withText(firstItem)).check(matches(isDisplayed()))
+        onView(isRoot()).perform(ViewActions.pressBack())
+
+        onView(withText(firstItem)).perform(click())
+        onView(withId(R.id.addToWishlist)).check(matches(withText(R.string.remove_wishlist)))
+        onView(withId(R.id.addToWishlist)).perform(click())
+        onView(withId(R.id.addToWishlist)).check(matches(withText(R.string.add_wishlist)))
+    }
+
+    @Test
+    fun canViewWishListItems(){
+        addItemsToDb(firstItem, secondItem)
+        addItemToWishList(firstItem, secondItem)
+
+        navigate_to(R.id.wishlistViewFragment)
+        onView(withText(firstItem)).perform(click())
+        onView(withId(R.id.addToWishlist)).check(matches(withText(R.string.remove_wishlist)))
+        onView(withId(R.id.addToWishlist)).perform(click())
+        onView(isRoot()).perform(ViewActions.pressBack())
+        Thread.sleep(1000)
+        onView(withText(secondItem)).check(matches(isDisplayed()))
+    }
+
+    private fun addItemToWishList(vararg itemNames: String){
+        for(itemName in itemNames){
+            onView(withText(itemName)).perform(click())
+            onView(withId(R.id.addToWishlist)).perform(click())
+            onView(withId(R.id.addToWishlist)).check(matches(withText(R.string.remove_wishlist)))
+            onView(isRoot()).perform(ViewActions.pressBack())
+        }
+    }
+
+
+    private fun addItemsToDb(vararg itemNames: String){
+        for(itemName in itemNames){
+            navigate_to(R.id.newEditFragment)
+            onView(withId(R.id.itemTitle)).perform(
+                typeText(itemName),
+                closeSoftKeyboard()
+            )
+            onView(withId(R.id.createItemButton)).perform(click())
+            waitAfterSaveItem()
+        }
     }
 
     @Test
