@@ -58,4 +58,6 @@
     <string name="eng_other">Other</string>
     <string name="eng_reporting">Reporting</string>
     <string name="i_feel_lucky">I Feel Lucky</string>
+    <string name="item_save_success">Item saved successfully.</string>
+    <string name="item_save_failure">Cannot save the item.</string>
 </resources>
