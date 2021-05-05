@@ -4,7 +4,6 @@ import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -116,13 +115,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         lifecycleScope.launch(Dispatchers.IO) {
             val allItems = itemRepository.getAll()
             if (allItems.isNotEmpty()) {
-                val random = allItems.random()
+
+                val random = itemRepository.getAll().random()
                 lifecycleScope.launch(Dispatchers.Main) {
                     val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
                     drawerLayout.close()
                     getNavController().navigate(
                         ItemsListFragmentDirections
-                            .actionItemsListFragmentToDetailedItemFragment(random)
+                            .actionGlobalDetailedItemFragment(random)
                     )
                 }
             }
