@@ -14,7 +14,7 @@ class AuthHelper (
     private val resultLauncher: ActivityResultLauncher<Intent>,
     private val lifecycleScope: LifecycleCoroutineScope,
     private val currentUser: FirebaseUser?,
-    val userRepository: UserRepository
+    private val userRepository: UserRepository
 
     ) {
 
@@ -32,10 +32,6 @@ class AuthHelper (
 
     fun signOut() {
         AuthUI.getInstance().signOut(context)
-    }
-
-    fun restoreLoginStatus() {
-        if (currentUser != null) addUserToDatabase(currentUser)
     }
 
     fun addUserToDatabase(user: FirebaseUser) {

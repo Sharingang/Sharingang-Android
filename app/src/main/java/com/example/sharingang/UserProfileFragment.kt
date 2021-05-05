@@ -75,7 +75,7 @@ class UserProfileFragment : Fragment() {
                 currentUser = currentUserProvider.getCurrentUser()
                 shownUserProfileId = currentUserId
                 authHelper.addUserToDatabase(currentUser!!)
-                initialize_fields()
+                initializeFields()
                 binding.nameText.text = currentUser!!.displayName
                 if(currentUser!!.photoUrl != null) {
                     // Use the Glide image loader library to load the user's picture into the imageView
@@ -103,17 +103,16 @@ class UserProfileFragment : Fragment() {
         imageAccess.setupImageView(binding.imageView)
         lifecycle.addObserver(imageAccess)
         binding.viewModel = userViewModel
-        initialize_fields()
+        initializeFields()
         return binding.root
     }
 
-    private fun initialize_fields() {
+    private fun initializeFields() {
         currentUserId = currentUserProvider.getCurrentUserId()
         setUserType()
         setupRecyclerView(shownUserProfileId)
         loggedInUserEmail = currentUserProvider.getCurrentUserEmail()
         setupAuthenticationButtons()
-        authHelper.restoreLoginStatus()
         initSetup()
         setEmailText()
         setVisibilities()
