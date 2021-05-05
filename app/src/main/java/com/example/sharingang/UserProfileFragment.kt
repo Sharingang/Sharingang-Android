@@ -112,7 +112,7 @@ class UserProfileFragment : Fragment() {
         setUserType()
         setupRecyclerView(shownUserProfileId)
         loggedInUserEmail = currentUserProvider.getCurrentUserEmail()
-        setupButtons()
+        setupAuthenticationButtons()
         authHelper.restoreLoginStatus()
         initSetup()
         setEmailText()
@@ -261,7 +261,7 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    private fun setupButtons() {
+    private fun setupAuthenticationButtons() {
         binding.btnLogin.setOnClickListener { authHelper.signIn() }
         binding.btnLogout.setOnClickListener {
             authHelper.signOut()
