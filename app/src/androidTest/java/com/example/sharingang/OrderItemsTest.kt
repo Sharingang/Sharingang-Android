@@ -2,9 +2,10 @@ package com.example.sharingang
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
-import androidx.test.espresso.assertion.PositionAssertions.*
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.assertion.PositionAssertions.isCompletelyAbove
+import androidx.test.espresso.assertion.PositionAssertions.isCompletelyLeftOf
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -37,50 +38,27 @@ class OrderItemsTest {
     private val orderByPrice = "Price"
     private val orderByCategory = "Category"
 
-    @Test
-    fun itemsCanBeOrderedInDifferentWays() {
+    private fun addItem(title: String, price: String, category: String) {
         // first item
         navigate_to(R.id.newEditFragment)
         onView(withId(R.id.itemTitle)).perform(
-            typeText(first),
+            typeText(title),
             closeSoftKeyboard()
         )
         onView(withId(R.id.category_spinner)).perform(click())
-        onView(withText(book)).perform(click())
+        onView(withText(category)).perform(click())
         onView(withId(R.id.itemPrice)).perform(
-            typeText(firstPrice.toString()),
+            typeText(price),
             closeSoftKeyboard()
         )
         onView(withId(R.id.createItemButton)).perform(click())
+    }
 
-        // second item
-        navigate_to(R.id.newEditFragment)
-        onView(withId(R.id.itemTitle)).perform(
-            typeText(second),
-            closeSoftKeyboard()
-        )
-        onView(withId(R.id.category_spinner)).perform(click())
-        onView(withText(electronics)).perform(click())
-        onView(withId(R.id.itemPrice)).perform(
-            typeText(secondPrice.toString()),
-            closeSoftKeyboard()
-        )
-        onView(withId(R.id.createItemButton)).perform(click())
-
-        // third item
-        navigate_to(R.id.newEditFragment)
-        onView(withId(R.id.itemTitle)).perform(
-            typeText(third),
-            closeSoftKeyboard()
-        )
-        onView(withId(R.id.category_spinner)).perform(click())
-        onView(withText(book)).perform(click())
-        onView(withId(R.id.itemPrice)).perform(
-            typeText(thirdPrice.toString()),
-            closeSoftKeyboard()
-        )
-        onView(withId(R.id.createItemButton)).perform(click())
-
+    @Test
+    fun itemsCanBeOrderedInDifferentWays() {
+        addItem(first,firstPrice.toString(),book)
+        addItem(second,secondPrice.toString(),electronics)
+        addItem(third,thirdPrice.toString(),book)
         onView(withId(R.id.order_category_spinner)).perform(click())
         onView(withText(orderByName)).perform(click())
         onView(withId(R.id.start_ordering)).perform(click())
