@@ -1,6 +1,10 @@
 package com.example.sharingang
 
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -23,6 +27,10 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
     @Inject
     lateinit var itemRepository: ItemRepository
+
+    lateinit var shakeListener: ShakeListener
+    lateinit var sensorManager: SensorManager
+    lateinit var accelerometer: Sensor
 
     private fun getNavController(): NavController {
         val navHostFragment =
@@ -48,12 +56,33 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         setupNavView(navController)
     }
 
+    private fun setupShakeListener() {
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        shakeListener = ShakeListener()
+        shakeListener.onShakeHandler = {
+            selectRandomItem()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setupNavigation(getNavController())
 
+        setupShakeListener()
+
         handleDeepLink()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sensorManager.registerListener(shakeListener, accelerometer, SensorManager.SENSOR_DELAY_UI)
+    }
+
+    override fun onPause() {
+        sensorManager.unregisterListener(shakeListener)
+        super.onPause()
     }
 
     private fun handleDeepLink() {
@@ -78,7 +107,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
     }
 
+    // We need the parameter for the callback
     fun onRandomItem(item: MenuItem) {
+        selectRandomItem()
+    }
+
+    private fun selectRandomItem() {
         lifecycleScope.launch(Dispatchers.IO) {
             val allItems = itemRepository.getAll()
             if (allItems.isNotEmpty()) {
