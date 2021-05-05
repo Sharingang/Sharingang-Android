@@ -14,7 +14,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class ItemsViewModel @Inject constructor(
-    private val itemRepository: ItemRepository
+    private val itemRepository: ItemRepository,
 ) : ViewModel() {
 
     init {
@@ -24,7 +24,11 @@ class ItemsViewModel @Inject constructor(
     }
 
     enum class OBSERVABLES {
-        ALL_ITEMS, SEARCH_RESULTS, USER_ITEMS, WISHLIST
+        ALL_ITEMS, SEARCH_RESULTS, USER_ITEMS, WISHLIST, ORDERED_ITEMS
+    }
+
+    enum class ORDERING {
+        DATE, PRICE, NAME, CATEGORY
     }
 
     private val _navigateToEditItem = MutableLiveData<Item?>()
@@ -42,6 +46,10 @@ class ItemsViewModel @Inject constructor(
     private val _searchResults = MutableLiveData<List<Item>>(listOf())
     val searchResults: LiveData<List<Item>>
         get() = _searchResults
+
+    private val _orderedItems = MutableLiveData<List<Item>>(listOf())
+    val orderedItemsResult: LiveData<List<Item>>
+        get() = _orderedItems
 
     private val _userItems = MutableLiveData<List<Item>>()
     val userItems: LiveData<List<Item>>
@@ -127,12 +135,27 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
-    private fun onEditItemClicked(item: Item) {
-        _navigateToEditItem.value = item
-    }
-
-    private fun onEditItemNavigated() {
-        _navigateToEditItem.value = null
+    /**
+     * Order items in the database
+     *
+     * @param orderBy ORDERING
+     * @param isAscending either ascending or descending order
+     */
+    fun orderItems(orderBy: ORDERING, isAscending: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            var results = itemRepository.getAll().sortedWith(compareBy {
+                when (orderBy) {
+                    ORDERING.DATE -> it.createdAt
+                    ORDERING.PRICE -> it.price
+                    ORDERING.NAME -> it.title
+                    ORDERING.CATEGORY -> it.category
+                }
+            })
+            if (!isAscending) {
+                results = results.asReversed()
+            }
+            _orderedItems.postValue(results)
+        }
     }
 
     private fun onViewItem(item: Item) {
@@ -170,6 +193,7 @@ class ItemsViewModel @Inject constructor(
             OBSERVABLES.SEARCH_RESULTS -> searchResults
             OBSERVABLES.USER_ITEMS -> userItems
             OBSERVABLES.WISHLIST -> wishlistItem
+            OBSERVABLES.ORDERED_ITEMS -> orderedItemsResult
         }
         observable.observe(LifeCycleOwner, {
             adapter.submitList(it)
@@ -184,7 +208,9 @@ class ItemsViewModel @Inject constructor(
     }
 
     fun setupItemNavigation(
-        LifeCycleOwner: LifecycleOwner, navController: NavController, actionDetail: (Item) -> NavDirections
+        LifeCycleOwner: LifecycleOwner,
+        navController: NavController,
+        actionDetail: (Item) -> NavDirections,
     ) {
         navigateToDetailItem.observe(LifeCycleOwner, { item ->
             item?.let {

@@ -72,11 +72,11 @@ class DetailedItemFragmentTest {
         )
         onView(withId(R.id.createItemButton)).perform(click())
         waitAfterSaveItem()
-        onView(withId(R.id.item_list_view_title)).perform(click())
+        onView(withText(testTitle)).perform(click())
 
         onView(withMenuIdOrText(R.id.menuSell, R.string.sell)).perform(click())
         pressBack()
-
+        Thread.sleep(1000)
         onView(withText(testTitle)).perform(click())
         onView(withId(R.id.radioButton1)).check(matches(isDisplayed()))
         onView(withId(R.id.ratingButton)).check(matches(isDisplayed()))

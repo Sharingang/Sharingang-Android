@@ -64,4 +64,15 @@
     <string name="eng_other">Other</string>
     <string name="eng_reporting">Reporting</string>
     <string name="i_feel_lucky">I Feel Lucky</string>
+    <string-array name="order_categories">
+        <item>Date</item>
+        <item>Price</item>
+        <item>Name</item>
+        <item>Category</item>
+    </string-array>
+    <string name="order">Order</string>
+    <string-array name="order_ascending_descending">
+        <item>Ascending</item>
+        <item>Descending</item>
+    </string-array>
 </resources>
