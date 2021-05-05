@@ -24,7 +24,7 @@ import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.User
 import com.example.sharingang.users.UserRepository
 import com.example.sharingang.utils.ImageAccess
-import com.firebase.ui.auth.AuthUI
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -64,25 +64,8 @@ class UserProfileFragment : Fragment() {
     @Inject
     lateinit var userRepository: UserRepository
 
-    /*
-     * Launcher for the Login activity. Instead of using onActivityResult and startActivityForResult
-     * in a duo, we use this resultLauncher as it is a newer and more compact solution.
-     */
-    private val resultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                currentUserId = currentUserProvider.getCurrentUserId()
-                currentUser = currentUserProvider.getCurrentUser()
-                shownUserProfileId = currentUserId
-                authHelper.addUserToDatabase(currentUser!!)
-                initializeFields()
-                binding.nameText.text = currentUser!!.displayName
-                if(currentUser!!.photoUrl != null) {
-                    // Use the Glide image loader library to load the user's picture into the imageView
-                    Glide.with(this).load(currentUser!!.photoUrl).into(binding.imageView)
-                }
-            }
-        }
+    @Inject
+    lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -95,8 +78,10 @@ class UserProfileFragment : Fragment() {
             null, "" -> currentUserId
             else -> args.userId
         }
-        authHelper = AuthHelper(requireContext(), resultLauncher, lifecycleScope, currentUser, userRepository)
-        currentUser = currentUserProvider.getCurrentUser()
+        authHelper = AuthHelper(
+            requireContext(), auth, lifecycleScope, userRepository, this, currentUserProvider
+        ) { user: FirebaseUser, userId: String -> execAfterSignIn(user, userId) }
+        currentUser = auth.currentUser
         setUserType()
         userViewModel.setUser(shownUserProfileId)
         imageAccess = ImageAccess(requireActivity())
@@ -110,8 +95,11 @@ class UserProfileFragment : Fragment() {
     private fun initializeFields() {
         currentUserId = currentUserProvider.getCurrentUserId()
         setUserType()
-        setupRecyclerView(shownUserProfileId)
         loggedInUserEmail = currentUserProvider.getCurrentUserEmail()
+        userViewModel.user.observe(viewLifecycleOwner, { user ->
+            displayUserFields(user)
+        })
+        setupRecyclerView(shownUserProfileId)
         setupAuthenticationButtons()
         initSetup()
         setEmailText()
@@ -119,9 +107,6 @@ class UserProfileFragment : Fragment() {
         setupViews()
         setupReportButton()
         setupRatingView()
-        userViewModel.user.observe(viewLifecycleOwner, { user ->
-            displayUserFields(user)
-        })
     }
 
     private fun setUserType() {
@@ -260,8 +245,22 @@ class UserProfileFragment : Fragment() {
         }
     }
 
+    private fun execAfterSignIn(loggedInUser: FirebaseUser, loggedInUserId: String) {
+        currentUser = loggedInUser
+        currentUserId = loggedInUserId
+        shownUserProfileId = loggedInUserId
+        initializeFields()
+        binding.nameText.text = currentUser!!.displayName
+        if(currentUser!!.photoUrl != null) {
+            // Use the Glide image loader library to load the user's picture into the imageView
+            Glide.with(this).load(currentUser!!.photoUrl).into(binding.imageView)
+        }
+    }
+
     private fun setupAuthenticationButtons() {
-        binding.btnLogin.setOnClickListener { authHelper.signIn() }
+        binding.btnLogin.setOnClickListener {
+            authHelper.signIn()
+        }
         binding.btnLogout.setOnClickListener {
             authHelper.signOut()
             initSetup()

@@ -19,8 +19,4 @@ class FirestoreCurrentUserProvider @Inject constructor(
     override fun getCurrentUserName(): String? {
         return auth.currentUser?.displayName
     }
-
-    override fun getCurrentUser(): FirebaseUser? {
-        return auth.currentUser
-    }
 }
