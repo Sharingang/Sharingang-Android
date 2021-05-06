@@ -130,9 +130,12 @@ class NewItemFragmentTest {
     fun addressSearchCanBeCanceled() {
         navigate_to(R.id.newEditFragment)
         onView(withId(R.id.autocomplete_fragment)).perform(click())
+        Thread.sleep(500)
         val device = UiDevice.getInstance((InstrumentationRegistry.getInstrumentation()))
         device.pressBack()
+        Thread.sleep(500)
         device.pressBack()
+        Thread.sleep(500)
         onView(withId(R.id.postal_address)).check(matches(withText("")))
     }
 }
