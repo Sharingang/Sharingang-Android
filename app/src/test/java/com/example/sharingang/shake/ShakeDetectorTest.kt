@@ -8,6 +8,7 @@ class ShakeDetectorTest {
         val detector = ShakeDetector()
         assert(!detector.detect(0F, 0F, 0F, 0))
         assert(!detector.detect(0F, 0F, 0F, 10000))
+        assert(!detector.detect(0.1F, 0.1F, 0.1F, 20000))
     }
 
     @Test
