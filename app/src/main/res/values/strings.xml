@@ -17,9 +17,7 @@
     <string name="unsell">Resell</string>
     <string name="get_location">Get Location</string>
     <string name="user_profile">User Profile</string>
-    <string name="account">Account</string>
     <string name="search">Search</string>
-    <string name="logged_out">Status: Logged Out</string>
     <string name="log_out">Log Out</string>
     <string name="text_logged_in">Status: Logged in as \n%1$s</string>
     <string name="text_logged_out">Status: Logged Out</string>
@@ -62,4 +60,15 @@
     <string name="item_save_failure">Cannot save the item.</string>
     <string name="item_deleted_success">Item deleted successfully.</string>
     <string name="posted_by">Posted by %1$s</string>
+    <string-array name="order_categories">
+        <item>Date</item>
+        <item>Price</item>
+        <item>Name</item>
+        <item>Category</item>
+    </string-array>
+    <string name="order">Order</string>
+    <string-array name="order_ascending_descending">
+        <item>Ascending</item>
+        <item>Descending</item>
+    </string-array>
 </resources>

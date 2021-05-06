@@ -19,10 +19,6 @@
         android:icon="@drawable/baseline_add_box_black_24dp"
         android:title="@string/new_item" />
     <item
-        android:id="@+id/accountFragment"
-        android:icon="@drawable/baseline_person_black_24dp"
-        android:title="@string/account" />
-    <item
         android:id="@+id/wishlistViewFragment"
         android:icon="@android:drawable/btn_star_big_off"
         android:title="@string/wishlist_menu_title" />
