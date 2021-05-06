@@ -4,6 +4,7 @@ package com.example.sharingang
 import android.Manifest
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -42,6 +43,27 @@ class UserProfileFragmentTest {
         onView(withId(R.id.text_email)).check(matches(withText("test-user@example.com")))
         onView(withId(R.id.upf_topinfo)).check(matches(withText(
             "You need to be logged in to view your User Profile.")))
+    }
+
+    @Test
+    fun soldItemsListWorksCorrect(){
+        val firstItemName = "Test Item"
+        val seconItemName = "Sold Item"
+        addSingleItemToDB(firstItemName)
+        addSingleItemToDB(seconItemName)
+        navigate_to(R.id.userProfileFragment)
+        onView(withText(firstItemName)).check(matches(isDisplayed()))
+        onView(withText(seconItemName)).check(matches(isDisplayed()))
+        Thread.sleep(500)
+        onView(withText(firstItemName)).perform(click())
+        onView(withId(R.id.menuSell)).perform(click())
+        pressBack()
+        Thread.sleep(500)
+        onView(withText(seconItemName)).check(matches(isDisplayed()))
+        onView(withId(R.id.sold_list)).perform(click())
+        Thread.sleep(100)
+        onView(withText(firstItemName)).check(matches(isDisplayed()))
+
     }
 
     @Test
@@ -122,5 +144,16 @@ class UserProfileFragmentTest {
         onView(withId(R.id.btn_login)).perform(click())
         val device = UiDevice.getInstance(getInstrumentation())
         device.pressBack()
+    }
+
+    private fun addSingleItemToDB(name: String) {
+        navigate_to(R.id.newEditFragment)
+        onView(withId(R.id.itemTitle)).perform(
+            typeText(name),
+            closeSoftKeyboard()
+        )
+
+        onView(withId(R.id.createItemButton)).perform(click())
+        waitAfterSaveItem()
     }
 }

@@ -1,7 +1,11 @@
 package com.example.sharingang
 
 import android.view.View
+import androidx.annotation.IdRes
+import androidx.annotation.StringRes
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction

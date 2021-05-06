@@ -146,6 +146,7 @@ class DetailedItemFragment : Fragment() {
             itemViewModel.sellItem(item)
             loadItem(itemId)
         }
+        initRating()
     }
 
     private suspend fun loadItem(itemId: String) {

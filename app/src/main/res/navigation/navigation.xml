@@ -2,6 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
     app:startDestination="@id/itemsListFragment">
 
     <fragment
@@ -103,6 +104,9 @@
             app:destination="@id/itemsListFragment"
             app:popUpTo="@id/userProfileFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_soldItemList"
+            app:destination="@id/soldItemList" />
 
     </fragment>
     <fragment
@@ -135,4 +139,13 @@
     <action
         android:id="@+id/action_global_detailedItemFragment"
         app:destination="@id/detailedItemFragment" />
+    <fragment
+        android:id="@+id/soldItemList"
+        android:name="com.example.sharingang.SoldItemList"
+        android:label="fragment_sold_item_list"
+        tools:layout="@layout/fragment_sold_item_list" >
+        <action
+            android:id="@+id/action_soldItemList_to_detailedItemFragment"
+            app:destination="@id/detailedItemFragment" />
+    </fragment>
 </navigation>

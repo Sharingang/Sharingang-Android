@@ -4,9 +4,7 @@ package com.example.sharingang
 import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -70,6 +68,13 @@ class UserProfileFragment : Fragment() {
     @Inject
     lateinit var auth: FirebaseAuth
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -93,6 +98,30 @@ class UserProfileFragment : Fragment() {
         binding.viewModel = userViewModel
         initializeFields()
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.user_menu, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        if(currentUserProvider.getCurrentUserId() == null){
+            menu.findItem(R.id.sold_list).isVisible = false
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId){
+            R.id.sold_list -> {
+                view?.findNavController()?.navigate(
+                    UserProfileFragmentDirections.actionUserProfileFragmentToSoldItemList()
+                )
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun initializeFields() {
