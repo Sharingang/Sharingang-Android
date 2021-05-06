@@ -14,6 +14,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.sharingang.items.ItemRepository
+import com.example.sharingang.shake.ShakeListener
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
@@ -58,8 +59,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private fun setupShakeListener() {
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        shakeListener = ShakeListener()
-        shakeListener.onShakeHandler = {
+        shakeListener = ShakeListener {
             selectRandomItem()
         }
     }
