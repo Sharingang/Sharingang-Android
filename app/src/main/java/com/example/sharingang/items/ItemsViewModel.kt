@@ -118,8 +118,8 @@ class ItemsViewModel @Inject constructor(
                 val matchCategory = categoryID == 0 || item.category == categoryID
 
                 // If we have a search term, it should match
-                val matchName = searchName.isEmpty() || item.title.toLowerCase(Locale.getDefault())
-                    .contains(searchName.toLowerCase(Locale.getDefault()))
+                val matchName = searchName.isEmpty() || item.title.lowercase()
+                    .contains(searchName.lowercase())
 
                 matchCategory && matchName && !item.sold
             }
