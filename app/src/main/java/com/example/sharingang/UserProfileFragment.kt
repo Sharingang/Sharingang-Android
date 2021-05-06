@@ -33,44 +33,34 @@ class UserProfileFragment : Fragment() {
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var binding: UserProfileFragmentBinding
     private lateinit var authHelper: AuthHelper
-
     // This is the currently logged in user
     private var currentUserId: String? = null
     private lateinit var imageAccess: ImageAccess
-
     private var currentUser: FirebaseUser? = null
     private lateinit var userType: UserType
-
     // This is the user whose profile is shown (can be different from currentUserId)
     private var shownUserProfileId: String? = null
     private var loggedInUserEmail: String? = null
     private var imageUri: Uri? = null
-
     private enum class UserType {
         LOGGED_OUT_SELF,
         LOGGED_OUT,
         VISITOR,
         SELF
     }
-
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
-
     @Inject
     lateinit var userRepository: UserRepository
-
     @Inject
     lateinit var imageStore: ImageStore
-
     @Inject
     lateinit var auth: FirebaseAuth
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,7 +68,6 @@ class UserProfileFragment : Fragment() {
     ): View {
         binding = UserProfileFragmentBinding.inflate(inflater, container, false)
         currentUserId = currentUserProvider.getCurrentUserId()
-        // If no userId is provided, we get the user that is currently logged in.
         shownUserProfileId = when (args.userId) {
             null, "" -> currentUserId
             else -> args.userId
@@ -154,25 +143,20 @@ class UserProfileFragment : Fragment() {
         ).forEach { view -> view.visibility = View.GONE }
     }
 
-    private fun getVisibleViews(): List<View> {
-        return when(userType) {
+    private fun setVisibilities() {
+        val visibleViews = when(userType) {
             UserType.LOGGED_OUT -> listOf(
-                    binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList)
+                binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList)
             UserType.VISITOR -> listOf(
-                    binding.imageView, binding.nameText, binding.ratingTextview,
-                    binding.userItemList, binding.btnReport)
+                binding.imageView, binding.nameText, binding.ratingTextview,
+                binding.userItemList, binding.btnReport)
             UserType.SELF -> listOf(
-                    binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList,
+                binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList,
                 binding.textEmail, binding.gallerycameraholder, binding.btnLogout)
             else -> listOf(binding.upfTopinfo, binding.btnLogin)
         }
-    }
-
-    private fun setVisibilities() {
-        val visibleViews = getVisibleViews()
         visibleViews.forEach { view -> view.visibility = View.VISIBLE }
     }
-
 
     private fun setupRatingView(){
         userViewModel.refreshRating(shownUserProfileId)
@@ -196,11 +180,6 @@ class UserProfileFragment : Fragment() {
             })
     }
 
-    private fun setupButtonsAction() {
-        val buttons = listOf(binding.btnApply, binding.btnOpenCamera, binding.btnOpenGallery)
-        buttons.forEach { button -> button.setOnClickListener {setupPictureButton(button)} }
-    }
-
     private fun setEmailText() {
         val emailText = binding.textEmail
         if (userType == UserType.SELF) {
@@ -209,15 +188,13 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupViews() {
-        setupButtonsAction()
-        setUpfTopInfoText()
+        val buttons = listOf(binding.btnApply, binding.btnOpenCamera, binding.btnOpenGallery)
+        val topInfo = binding.upfTopinfo
+        buttons.forEach { button -> button.setOnClickListener {setupPictureButton(button)} }
+        topInfo.text = getString(R.string.userNotLoggedInInfo)
         setEmailText()
     }
 
-    private fun setUpfTopInfoText() {
-        val topInfo = binding.upfTopinfo
-        topInfo.text = getString(R.string.userNotLoggedInInfo)
-    }
 
     private fun displayUserFields(requestedUser: User?) {
         if (requestedUser != null) {
@@ -257,7 +234,6 @@ class UserProfileFragment : Fragment() {
                     it.toString()
                 }
             }
-
             userRepository.add(
                 userRepository.get(currentUserId!!)!!.copy(
                     profilePicture = imageUrl
@@ -294,7 +270,6 @@ class UserProfileFragment : Fragment() {
         initializeFields()
         binding.nameText.text = currentUser!!.displayName
         if(currentUser!!.photoUrl != null) {
-            // Use the Glide image loader library to load the user's picture into the imageView
             Glide.with(this).load(currentUser!!.photoUrl).into(binding.imageView)
         }
     }
