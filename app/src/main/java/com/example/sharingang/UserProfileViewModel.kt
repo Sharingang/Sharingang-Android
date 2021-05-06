@@ -29,6 +29,10 @@ class UserProfileViewModel @Inject constructor(
     val wishlistContains: LiveData<Boolean>
         get() = _wishlistContains
 
+    private val _subscriptionsContains : MutableLiveData<Boolean> = MutableLiveData(false)
+    val subscriptionsContains : LiveData<Boolean>
+        get() = _subscriptionsContains
+
     private val _rating = MutableLiveData<Float>(0f)
     val rating: LiveData<Float>
         get() = _rating
@@ -92,13 +96,12 @@ class UserProfileViewModel @Inject constructor(
      * @param category the String of the category
      * @return whether the set contains this category already
      */
-    suspend fun subscriptionContains(category: String): Boolean {
-        val userId = currentUserProvider.getCurrentUserId()
-        if (userId != null) {
-            val user = userRepository.get(userId)!!
-            return user.subscriptions.contains(category)
+    fun subscriptionContains(userId: String, category: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val user = userRepository.get(userId)
+            if (user != null)
+                _subscriptionsContains.postValue(user.subscriptions.contains(category))
         }
-        return false
     }
 
     /**
@@ -106,13 +109,17 @@ class UserProfileViewModel @Inject constructor(
      * user's list of subscriptions
      * @param category the category to add or remove
      */
-    suspend fun subscriptionSet(category: String) {
-        val userId = currentUserProvider.getCurrentUserId()
-        if (userId != null) {
-            val user = userRepository.get(userId)!!
-            when (user.subscriptions.contains(category)) {
-                true -> user.subscriptions.remove(category)
-                else -> user.subscriptions.add(category)
+    fun subscriptionSet(userId: String, category: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val user = userRepository.get(userId)
+            if (user != null) {
+                val subs = ArrayList(user.subscriptions)
+                when (user.subscriptions.contains(category)) {
+                    true -> subs.remove(category)
+                    false -> subs.add(category)
+                }
+                user.subscriptions = subs
+                userRepository.update(user)
             }
         }
     }
