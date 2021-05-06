@@ -11,17 +11,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.sharingang.databinding.FragmentSearchBinding
 import com.example.sharingang.items.ItemsViewModel
-import com.example.sharingang.users.CurrentUserProvider
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
 
     private val viewModel: ItemsViewModel by activityViewModels()
-
-    @Inject
-    lateinit var currentUserProvider: CurrentUserProvider
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,7 +24,7 @@ class SearchFragment : Fragment() {
     ): View {
         val binding: FragmentSearchBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
-        val adapter = viewModel.setupItemAdapter(currentUserProvider.getCurrentUserId())
+        val adapter = viewModel.setupItemAdapter()
         binding.itemSearchList.adapter = adapter
         binding.itemSearchList.layoutManager = GridLayoutManager(context, 2)
         viewModel.addObserver(

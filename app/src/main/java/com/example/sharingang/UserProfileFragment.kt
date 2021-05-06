@@ -1,6 +1,5 @@
 package com.example.sharingang
 
-
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -110,7 +109,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupRecyclerView(userId: String?) {
-        val adapter = itemsViewModel.setupItemAdapter(currentUserId)
+        val adapter = itemsViewModel.setupItemAdapter()
         binding.userItemList.adapter = adapter
         itemsViewModel.getUserItem(userId)
         itemsViewModel.addObserver(
