@@ -1,7 +1,6 @@
 package com.example.sharingang
 
 import android.content.Context
-import android.util.Log
 import androidx.room.Room
 import com.example.sharingang.items.*
 import com.example.sharingang.users.*
