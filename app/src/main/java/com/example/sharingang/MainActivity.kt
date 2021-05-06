@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             val allItems = itemRepository.getAll()
             if (allItems.isNotEmpty()) {
 
-                val random = itemRepository.getAll().random()
+                val random = allItems.random()
                 lifecycleScope.launch(Dispatchers.Main) {
                     val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
                     drawerLayout.close()
