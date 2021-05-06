@@ -182,9 +182,9 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
-    fun setupItemAdapter(userId: String?): ItemsAdapter {
+    fun setupItemAdapter(): ItemsAdapter {
         val onView = { item: Item -> onViewItem(item) }
-        return ItemsAdapter(ItemListener(onView), userId)
+        return ItemsAdapter(ItemListener(onView))
     }
 
     fun addObserver(LifeCycleOwner: LifecycleOwner, adapter: ItemsAdapter, type: OBSERVABLES) {

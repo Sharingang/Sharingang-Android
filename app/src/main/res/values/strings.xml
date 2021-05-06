@@ -68,8 +68,12 @@
         <item>Category</item>
     </string-array>
     <string name="order">Order</string>
+    <string name="subscribe">Subscribe</string>
+    <string name="unsubscribe">Unsubscribe</string>
     <string-array name="order_ascending_descending">
         <item>Ascending</item>
         <item>Descending</item>
     </string-array>
+    <string name="new_item_notification_message">A new item in %1$s has been posted!</string>
+    <string name="new_item_notification_channel_id">new_item_channel</string>
 </resources>

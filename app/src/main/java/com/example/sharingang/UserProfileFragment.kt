@@ -155,7 +155,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupRecyclerView(userId: String?) {
-        val adapter = itemsViewModel.setupItemAdapter(currentUserId)
+        val adapter = itemsViewModel.setupItemAdapter()
         binding.userItemList.adapter = adapter
         itemsViewModel.getUserItem(userId)
         itemsViewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.USER_ITEMS)

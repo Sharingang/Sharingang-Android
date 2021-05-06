@@ -86,6 +86,36 @@ class UserProfileViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Check whether the connected user is subscribed
+     * to this category's notifications
+     * @param category the String of the category
+     * @return whether the set contains this category already
+     */
+    suspend fun subscriptionContains(category: String): Boolean {
+        val userId = currentUserProvider.getCurrentUserId()
+        if (userId != null) {
+            val user = userRepository.get(userId)!!
+            return user.subscriptions.contains(category)
+        }
+        return false
+    }
+
+    /**
+     * Add or remove a category to the connected
+     * user's list of subscriptions
+     * @param category the category to add or remove
+     */
+    suspend fun subscriptionSet(category: String) {
+        val userId = currentUserProvider.getCurrentUserId()
+        if (userId != null) {
+            val user = userRepository.get(userId)!!
+            when (user.subscriptions.contains(category)) {
+                true -> user.subscriptions.remove(category)
+                else -> user.subscriptions.add(category)
+            }
+        }
+    }
 
     fun wishlistContains(item: Item?){
         val userId = currentUserProvider.getCurrentUserId()

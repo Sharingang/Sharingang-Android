@@ -33,6 +33,8 @@ data class User(
     val numberOfRatings: Int = 0,
 
     var wishlist: List<String> = ArrayList(),
+    val subscriptions: HashSet<String> = HashSet(),
+
     @ServerTimestamp
     val createdAt: Date? = null,
 

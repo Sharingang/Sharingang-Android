@@ -25,7 +25,7 @@ class SearchFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         val binding : FragmentSearchBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
-        val adapter = viewModel.setupItemAdapter(currentUserProvider.getCurrentUserId())
+        val adapter = viewModel.setupItemAdapter()
         binding.itemSearchList.adapter = adapter
         binding.itemSearchList.layoutManager = GridLayoutManager(context, 2)
         viewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.SEARCH_RESULTS)

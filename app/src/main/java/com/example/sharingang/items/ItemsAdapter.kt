@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sharingang.databinding.ItemViewBinding
 
-class ItemsAdapter(private val clickListener: ItemListener, private val userId: String?) :
+class ItemsAdapter(private val clickListener: ItemListener) :
     ListAdapter<Item, ItemsAdapter.ItemViewHolder>(ItemsDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -15,13 +15,13 @@ class ItemsAdapter(private val clickListener: ItemListener, private val userId: 
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(getItem(position)!!, clickListener, userId)
+        holder.bind(getItem(position)!!, clickListener)
     }
 
     class ItemViewHolder private constructor(private val binding: ItemViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Item, clickListener: ItemListener, userId: String?) {
+        fun bind(item: Item, clickListener: ItemListener) {
             binding.itemListViewTitle.text = item.title
             binding.item = item
             binding.clickListener = clickListener
