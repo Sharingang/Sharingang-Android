@@ -82,5 +82,11 @@ object FakeRepositoryModule {
         authUI.useEmulator("10.0.2.2", 9099)
         return authUI
     }
+
+    @Singleton
+    @Provides
+    fun provideImageStore(imageStore: PlaceholderImageStore): ImageStore {
+        return imageStore
+    }
 }
 

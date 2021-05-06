@@ -27,11 +27,7 @@ data class Item(
     val description: String = "",
 
     /** URL for an image*/
-    val image: String = "",
-
-    /** Provisory, will be changed later when we actually
-    upload image to the server and cache it locally */
-    var imageUri: String? = null,
+    val image: String? = null,
 
     val price: Double = 0.0,
 
