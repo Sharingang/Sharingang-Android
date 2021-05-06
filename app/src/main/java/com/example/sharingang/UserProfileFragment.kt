@@ -33,27 +33,34 @@ class UserProfileFragment : Fragment() {
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var binding: UserProfileFragmentBinding
     private lateinit var authHelper: AuthHelper
+
     // This is the currently logged in user
     private var currentUserId: String? = null
     private lateinit var imageAccess: ImageAccess
     private var currentUser: FirebaseUser? = null
     private lateinit var userType: UserType
+
     // This is the user whose profile is shown (can be different from currentUserId)
     private var shownUserProfileId: String? = null
     private var loggedInUserEmail: String? = null
     private var imageUri: Uri? = null
+
     private enum class UserType {
         LOGGED_OUT_SELF,
         LOGGED_OUT,
         VISITOR,
         SELF
     }
+
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
+
     @Inject
     lateinit var userRepository: UserRepository
+
     @Inject
     lateinit var imageStore: ImageStore
+
     @Inject
     lateinit var auth: FirebaseAuth
 
@@ -93,13 +100,12 @@ class UserProfileFragment : Fragment() {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        if(currentUserProvider.getCurrentUserId() == null){
-            menu.findItem(R.id.sold_list).isVisible = false
-        }
+        if (currentUserProvider.getCurrentUserId() == null) menu.findItem(R.id.sold_list).isVisible =
+            false
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId){
+        return when (item.itemId) {
             R.id.sold_list -> {
                 view?.findNavController()?.navigate(
                     UserProfileFragmentDirections.actionUserProfileFragmentToSoldItemList()
@@ -129,14 +135,15 @@ class UserProfileFragment : Fragment() {
 
     private fun setUserType() {
         userType = when (currentUserId) {
-            null -> if(shownUserProfileId == null) UserType.LOGGED_OUT_SELF else UserType.LOGGED_OUT
+            null -> if (shownUserProfileId == null) UserType.LOGGED_OUT_SELF else UserType.LOGGED_OUT
             shownUserProfileId -> UserType.SELF
             else -> UserType.VISITOR
         }
     }
 
     private fun initSetup() {
-        listOf(binding.upfTopinfo, binding.imageView, binding.gallerycameraholder, binding.nameText,
+        listOf(
+            binding.upfTopinfo, binding.imageView, binding.gallerycameraholder, binding.nameText,
             binding.textEmail, binding.applyholder, binding.ratingTextview, binding.applyholder,
             binding.btnReport, binding.userItemList, binding.btnLogout,
             binding.btnLogin
@@ -144,21 +151,24 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setVisibilities() {
-        val visibleViews = when(userType) {
+        val visibleViews = when (userType) {
             UserType.LOGGED_OUT -> listOf(
-                binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList)
+                binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList
+            )
             UserType.VISITOR -> listOf(
                 binding.imageView, binding.nameText, binding.ratingTextview,
-                binding.userItemList, binding.btnReport)
+                binding.userItemList, binding.btnReport
+            )
             UserType.SELF -> listOf(
                 binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList,
-                binding.textEmail, binding.gallerycameraholder, binding.btnLogout)
+                binding.textEmail, binding.gallerycameraholder, binding.btnLogout
+            )
             else -> listOf(binding.upfTopinfo, binding.btnLogin)
         }
         visibleViews.forEach { view -> view.visibility = View.VISIBLE }
     }
 
-    private fun setupRatingView(){
+    private fun setupRatingView() {
         userViewModel.refreshRating(shownUserProfileId)
         userViewModel.rating.observe(viewLifecycleOwner, {
             var text = resources.getString(R.string.default_rating)
@@ -171,7 +181,11 @@ class UserProfileFragment : Fragment() {
         val adapter = itemsViewModel.setupItemAdapter(currentUserId)
         binding.userItemList.adapter = adapter
         itemsViewModel.getUserItem(userId)
-        itemsViewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.USER_ITEMS)
+        itemsViewModel.addObserver(
+            viewLifecycleOwner,
+            adapter,
+            ItemsViewModel.OBSERVABLES.USER_ITEMS
+        )
         itemsViewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
             { item ->
                 UserProfileFragmentDirections.actionUserProfileFragmentToDetailedItemFragment(
@@ -182,15 +196,13 @@ class UserProfileFragment : Fragment() {
 
     private fun setEmailText() {
         val emailText = binding.textEmail
-        if (userType == UserType.SELF) {
-            emailText.text = loggedInUserEmail
-        }
+        if (userType == UserType.SELF) emailText.text = loggedInUserEmail
     }
 
     private fun setupViews() {
         val buttons = listOf(binding.btnApply, binding.btnOpenCamera, binding.btnOpenGallery)
         val topInfo = binding.upfTopinfo
-        buttons.forEach { button -> button.setOnClickListener {setupPictureButton(button)} }
+        buttons.forEach { button -> button.setOnClickListener { setupPictureButton(button) } }
         topInfo.text = getString(R.string.userNotLoggedInInfo)
         setEmailText()
     }
@@ -225,14 +237,11 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    private fun changeImage(imageUri: Uri?){
-        lifecycleScope.launch(Dispatchers.IO){
+    private fun changeImage(imageUri: Uri?) {
+        lifecycleScope.launch(Dispatchers.IO) {
             val imageUrl = imageUri?.let {
-                if(!it.toString().startsWith("https://")){
-                    imageStore.store(it).toString()
-                }else{
-                    it.toString()
-                }
+                if (!it.toString().startsWith("https://")) imageStore.store(it).toString()
+                else it.toString()
             }
             userRepository.add(
                 userRepository.get(currentUserId!!)!!.copy(
@@ -243,7 +252,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupReportButton() {
-        if(userType == UserType.VISITOR) {
+        if (userType == UserType.VISITOR) {
             lifecycleScope.launch(Dispatchers.IO) {
                 val hasBeenReported =
                     userRepository.hasBeenReported(currentUserId!!, shownUserProfileId!!)
@@ -269,9 +278,8 @@ class UserProfileFragment : Fragment() {
         shownUserProfileId = loggedInUserId
         initializeFields()
         binding.nameText.text = currentUser!!.displayName
-        if(currentUser!!.photoUrl != null) {
-            Glide.with(this).load(currentUser!!.photoUrl).into(binding.imageView)
-        }
+        if (currentUser!!.photoUrl != null) Glide.with(this).load(currentUser!!.photoUrl)
+            .into(binding.imageView)
     }
 
     private fun setupAuthenticationButtons() {
@@ -283,6 +291,7 @@ class UserProfileFragment : Fragment() {
             initSetup()
             userType = UserType.LOGGED_OUT_SELF
             setupViews()
-            setVisibilities()}
+            setVisibilities()
+        }
     }
 }
