@@ -3,7 +3,9 @@ package com.example.sharingang
 import android.provider.MediaStore
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
@@ -35,6 +37,9 @@ class DetailedItemFragmentTest {
         android.Manifest.permission.READ_EXTERNAL_STORAGE
     )
 
+    val firstItem = "Test Item"
+    val secondItem = "Hello the world"
+
     @get:Rule(order = 3)
     var mActivityTestRule = IntentsTestRule(MainActivity::class.java)
 
@@ -57,7 +62,7 @@ class DetailedItemFragmentTest {
     }
 
     @Test
-    fun canRateAUser(){
+    fun canRateAUser() {
         val testTitle = "Book Item"
 
         navigate_to(R.id.userProfileFragment)
@@ -71,11 +76,11 @@ class DetailedItemFragmentTest {
         )
         onView(withId(R.id.createItemButton)).perform(click())
         waitAfterSaveItem()
-        onView(withId(R.id.item_list_view_title)).perform(click())
+        onView(withText(testTitle)).perform(click())
 
-        onView(withId(R.id.menuSell)).perform(click())
+        onView(withMenuIdOrText(R.id.menuSell, R.string.sell)).perform(click())
         pressBack()
-
+        Thread.sleep(1000)
         onView(withText(testTitle)).perform(click())
         onView(withId(R.id.radioButton1)).check(matches(isDisplayed()))
         onView(withId(R.id.ratingButton)).check(matches(isDisplayed()))
@@ -112,5 +117,71 @@ class DetailedItemFragmentTest {
         backButton.perform(click())
     }
 
+    @Test
+    fun canAddAndRemoveItemToWishlist(){
+        addItemsToDb(firstItem)
+        addItemToWishList(firstItem)
 
+        navigate_to(R.id.wishlistViewFragment)
+        onView(withText(firstItem)).check(matches(isDisplayed()))
+        onView(isRoot()).perform(ViewActions.pressBack())
+
+        onView(withText(firstItem)).perform(click())
+        onView(withId(R.id.addToWishlist)).check(matches(withText(R.string.remove_wishlist)))
+        onView(withId(R.id.addToWishlist)).perform(click())
+        onView(withId(R.id.addToWishlist)).check(matches(withText(R.string.add_wishlist)))
+    }
+
+    @Test
+    fun canViewWishListItems(){
+        addItemsToDb(firstItem, secondItem)
+        addItemToWishList(firstItem, secondItem)
+
+        navigate_to(R.id.wishlistViewFragment)
+        onView(withText(firstItem)).perform(click())
+        onView(withId(R.id.addToWishlist)).check(matches(withText(R.string.remove_wishlist)))
+        onView(withId(R.id.addToWishlist)).perform(click())
+        onView(isRoot()).perform(ViewActions.pressBack())
+        Thread.sleep(1000)
+        onView(withText(secondItem)).check(matches(isDisplayed()))
+    }
+
+    private fun addItemToWishList(vararg itemNames: String){
+        for(itemName in itemNames){
+            onView(withText(itemName)).perform(click())
+            onView(withId(R.id.addToWishlist)).perform(click())
+            onView(withId(R.id.addToWishlist)).check(matches(withText(R.string.remove_wishlist)))
+            onView(isRoot()).perform(ViewActions.pressBack())
+        }
+    }
+
+
+    private fun addItemsToDb(vararg itemNames: String){
+        for(itemName in itemNames){
+            navigate_to(R.id.newEditFragment)
+            onView(withId(R.id.itemTitle)).perform(
+                typeText(itemName),
+                closeSoftKeyboard()
+            )
+            onView(withId(R.id.createItemButton)).perform(click())
+            waitAfterSaveItem()
+        }
+    }
+
+    @Test
+    fun canDeleteAnItem() {
+        val testTitle = "To be deleted"
+        navigate_to(R.id.newEditFragment)
+        onView(withId(R.id.itemTitle)).perform(
+            typeText(testTitle),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.createItemButton)).perform(click())
+        waitAfterSaveItem()
+
+        onView(withText(testTitle)).perform(click())
+        onView(withMenuIdOrText(R.id.menuDelete, R.string.delete_item)).perform(click())
+        waitAfterSaveItem()
+        onView(withText(testTitle)).check(doesNotExist())
+    }
 }

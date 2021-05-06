@@ -47,7 +47,7 @@ class MapFragmentTest {
         onView(withId(R.id.item_get_location)).perform(click())
         Thread.sleep(waitingTime)
         onView(withId(R.id.createItemButton)).perform(click())
-        onView(ViewMatchers.isRoot()).perform(waitId(R.id.item_list_view_title))
+        waitAfterSaveItem()
         navigate_to(R.id.mapFragment)
         onView(withId(R.id.map_start_search)).perform(click())
         onView(withId(R.id.search_on_map)).perform(

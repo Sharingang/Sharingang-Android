@@ -18,7 +18,7 @@ class CachedUserRepository @Inject constructor(
         // This is necessary, since you want to avoid doing this work on the main thread
         withContext(Dispatchers.IO) {
             val newUsers = store.getAll()
-            userDao.insert(newUsers)
+            userDao.replace(newUsers)
             newUsers
         }
 

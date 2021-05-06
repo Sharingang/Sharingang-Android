@@ -6,6 +6,7 @@
     <string name="go_to_map">Go to Map</string>
     <string name="edit">Edit</string>
     <string name="edit_item">Edit Item</string>
+    <string name="delete_item">Delete Item</string>
     <string name="title">Title</string>
     <string name="default_price">Price (default: 0.0)</string>
     <string name="display_price">$ %.2f</string>
@@ -16,11 +17,8 @@
     <string name="unsell">Resell</string>
     <string name="get_location">Get Location</string>
     <string name="user_profile">User Profile</string>
-    <string name="account">Account</string>
     <string name="search">Search</string>
-    <string name="logged_out">Status: Logged Out</string>
     <string name="log_out">Log Out</string>
-    <string name="text_logged_out">Status: Logged Out</string>
     <string name="log_in">Log In</string>
     <string name="clear_search_button">Clear search</string>
     <string name="share">Share</string>
@@ -56,4 +54,15 @@
     <string name="eng_other">Other</string>
     <string name="eng_reporting">Reporting</string>
     <string name="i_feel_lucky">I Feel Lucky</string>
+    <string-array name="order_categories">
+        <item>Date</item>
+        <item>Price</item>
+        <item>Name</item>
+        <item>Category</item>
+    </string-array>
+    <string name="order">Order</string>
+    <string-array name="order_ascending_descending">
+        <item>Ascending</item>
+        <item>Descending</item>
+    </string-array>
 </resources>

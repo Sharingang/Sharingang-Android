@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.FragmentDetailedItemBinding
@@ -18,6 +19,7 @@ import com.example.sharingang.items.ItemsViewModel
 import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.User
 import com.example.sharingang.utils.ImageAccess
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.dynamiclinks.ktx.androidParameters
 import com.google.firebase.dynamiclinks.ktx.dynamicLink
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
@@ -99,6 +101,7 @@ class DetailedItemFragment : Fragment() {
         val resell = menu.findItem(R.id.menuResell)
         if (!args.item.userId.equals(currentUserProvider.getCurrentUserId())) {
             menu.findItem(R.id.menuEdit).isVisible = false
+            menu.findItem(R.id.menuDelete).isVisible = false
             sell.isVisible = false
             resell.isVisible = false
         } else {
@@ -115,11 +118,26 @@ class DetailedItemFragment : Fragment() {
                 )
                 true
             }
+            R.id.menuDelete -> {
+                deleteItem(args.item.id!!)
+                true
+            }
             R.id.menuSell, R.id.menuResell -> {
                 updateSold(args.item.id!!)
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun deleteItem(itemId: String) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            if (itemRepository.delete(itemId)) {
+                Snackbar.make(binding.root, "Item deleted successfully.", Snackbar.LENGTH_SHORT).show()
+                lifecycleScope.launch(Dispatchers.Main) {
+                    findNavController().popBackStack()
+                }
+            }
         }
     }
 
