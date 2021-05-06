@@ -31,7 +31,8 @@ class EditItemFragmentTest {
 
     @get:Rule(order = 2)
     val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(
-        android.Manifest.permission.READ_EXTERNAL_STORAGE
+        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+        android.Manifest.permission.CAMERA
     )
 
     private val item = "Test"
