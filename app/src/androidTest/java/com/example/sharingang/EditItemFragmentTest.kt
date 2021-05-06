@@ -5,9 +5,9 @@ import android.provider.MediaStore
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
-import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -33,9 +33,6 @@ class EditItemFragmentTest {
     val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(
         android.Manifest.permission.READ_EXTERNAL_STORAGE
     )
-
-    @get:Rule(order = 3)
-    var mActivityTestRule = IntentsTestRule(MainActivity::class.java)
 
     private val item = "Test"
     private val editedItem = "Edited"
@@ -75,8 +72,10 @@ class EditItemFragmentTest {
 
     @Test
     fun anItemCanBeEditedAndSeenOnItemsListFragment() {
-        savePickedImage(mActivityTestRule.activity)
-        val imgGalleryResult = createImageGallerySetResultStub(mActivityTestRule.activity)
+        val activity = getActivity(activityRule)
+        savePickedImage(activity)
+        val imgGalleryResult = createImageGallerySetResultStub(activity)
+        Intents.init()
         intending(hasAction(Intent.ACTION_GET_CONTENT)).respondWith(imgGalleryResult)
         intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgGalleryResult)
 
@@ -120,12 +119,15 @@ class EditItemFragmentTest {
 
         onView(withText(item + editedItem))
             .check(matches(isDisplayed()))
+        Intents.release()
     }
 
     @Test
     fun aPictureCanBeTakenAndDisplayed() {
-        savePickedImage(mActivityTestRule.activity)
-        val imgGalleryResult = createImageGallerySetResultStub(mActivityTestRule.activity)
+        val activity = getActivity(activityRule)
+        savePickedImage(activity)
+        val imgGalleryResult = createImageGallerySetResultStub(activity)
+        Intents.init()
         intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgGalleryResult)
 
         navigate_to(R.id.newEditFragment)
@@ -133,5 +135,6 @@ class EditItemFragmentTest {
 
         onView(withId(R.id.item_take_picture)).perform(click())
         onView(withId(R.id.item_image)).check(matches(hasContentDescription()))
+        Intents.release()
     }
 }

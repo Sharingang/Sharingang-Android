@@ -1,5 +1,6 @@
 package com.example.sharingang
 
+import android.app.Activity
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
@@ -12,6 +13,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import org.hamcrest.Matcher
 import java.util.concurrent.TimeUnit
@@ -65,4 +67,12 @@ fun withMenuIdOrText(@IdRes id: Int, @StringRes menuText: Int): Matcher<View?>? 
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
         withText(menuText)
     }
+}
+
+fun <A : Activity> getActivity(activityRule: ActivityScenarioRule<A>): A {
+    var activity: A? = null
+    activityRule.scenario.onActivity {
+        activity = it
+    }
+    return activity!!
 }

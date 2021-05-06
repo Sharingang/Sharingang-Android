@@ -8,7 +8,6 @@ import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
-import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -39,9 +38,6 @@ class NewItemFragmentTest {
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.CAMERA
     )
-
-    @get:Rule(order = 3)
-    var mActivityTestRule = IntentsTestRule(MainActivity::class.java)
 
     private val firstItem = "First Item"
     private val secondItem = "Second Item"
@@ -76,8 +72,10 @@ class NewItemFragmentTest {
 
     @Test
     fun anImageCanBeChosenFromGallery() {
-        savePickedImage(mActivityTestRule.activity)
-        val imgGalleryResult = createImageGallerySetResultStub(mActivityTestRule.activity)
+        val activity = getActivity(activityRule)
+        savePickedImage(activity)
+        val imgGalleryResult = createImageGallerySetResultStub(activity)
+        Intents.init()
         Intents.intending(IntentMatchers.hasAction(Intent.ACTION_GET_CONTENT))
             .respondWith(imgGalleryResult)
 
@@ -86,12 +84,15 @@ class NewItemFragmentTest {
 
         onView(withId(R.id.item_image)).perform(click())
         onView(withId(R.id.item_image)).check(matches(hasContentDescription()))
+        Intents.release()
     }
 
     @Test
     fun aPictureCanBeTakenAndDisplayed() {
-        savePickedImage(mActivityTestRule.activity)
-        val imgGalleryResult = createImageGallerySetResultStub(mActivityTestRule.activity)
+        val activity = getActivity(activityRule)
+        savePickedImage(activity)
+        val imgGalleryResult = createImageGallerySetResultStub(activity)
+        Intents.init()
         Intents.intending(IntentMatchers.hasAction(MediaStore.ACTION_IMAGE_CAPTURE))
             .respondWith(imgGalleryResult)
 
@@ -100,6 +101,7 @@ class NewItemFragmentTest {
 
         onView(withId(R.id.item_take_picture)).perform(click())
         onView(withId(R.id.item_image)).check(matches(hasContentDescription()))
+        Intents.release()
     }
 
     @Test
