@@ -78,7 +78,7 @@ class DetailedItemFragment : Fragment() {
     }
 
     private fun onUserChange(user: User?) {
-        binding.username = "Posted by ${user?.name}"
+        binding.username = getString(R.string.posted_by, user?.name)
         binding.itemPostedBy.visibility = if (user != null) View.VISIBLE else View.GONE
         binding.itemPostedBy.setOnClickListener { view ->
             view.findNavController().navigate(
@@ -132,7 +132,7 @@ class DetailedItemFragment : Fragment() {
     private fun deleteItem(itemId: String) {
         lifecycleScope.launch(Dispatchers.IO) {
             if (itemRepository.delete(itemId)) {
-                Snackbar.make(binding.root, "Item deleted successfully.", Snackbar.LENGTH_SHORT)
+                Snackbar.make(binding.root, getString(R.string.item_deleted_success), Snackbar.LENGTH_SHORT)
                     .show()
                 lifecycleScope.launch(Dispatchers.Main) {
                     findNavController().popBackStack()
