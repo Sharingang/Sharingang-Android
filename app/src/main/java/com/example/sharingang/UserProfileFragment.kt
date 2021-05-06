@@ -1,6 +1,5 @@
 package com.example.sharingang
 
-
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,6 +20,7 @@ import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.User
 import com.example.sharingang.users.UserRepository
 import com.example.sharingang.utils.ImageAccess
+import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,6 +64,9 @@ class UserProfileFragment : Fragment() {
     @Inject
     lateinit var auth: FirebaseAuth
 
+    @Inject
+    lateinit var authUI: AuthUI
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -76,7 +79,7 @@ class UserProfileFragment : Fragment() {
             else -> args.userId
         }
         authHelper = AuthHelper(
-            requireContext(), auth, lifecycleScope, userRepository, this, currentUserProvider
+            requireContext(), auth, authUI, lifecycleScope, userRepository, this, currentUserProvider
         ) { user: FirebaseUser, userId: String -> execAfterSignIn(user, userId) }
         currentUser = auth.currentUser
         setUserType()

@@ -37,8 +37,8 @@ class DetailedItemFragmentTest {
         android.Manifest.permission.CAMERA
     )
 
-    val firstItem = "Test Item"
-    val secondItem = "Hello the world"
+    private val firstItem = "Test Item"
+    private val secondItem = "Hello the world"
 
     @Test
     fun canSeeCategoryInDetailedItemFragment() {
