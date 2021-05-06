@@ -2,10 +2,14 @@ package com.example.sharingang
 
 
 import android.Manifest
+import android.content.Intent
+import android.provider.MediaStore
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
@@ -51,19 +55,6 @@ class UserProfileFragmentTest {
         onView(withId(R.id.btn_open_gallery)).check(matches(withText("Open Gallery")))
         onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
     }
-
-
-    @Test
-    fun applyButtonIsDisplayedUponClickOnOpenGallery() {
-        val device: UiDevice = UiDevice.getInstance(getInstrumentation())
-        navigate_to(R.id.userProfileFragment)
-        onView(withId(R.id.btn_open_gallery)).perform(click())
-        device.pressBack()
-        onView(withId(R.id.btnApply)).check(matches(isDisplayed()))
-        onView(withId(R.id.btnApply)).perform(click())
-        onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
-    }
-
 
     @Test
     fun aUserCanSeeTheirItems() {
@@ -122,5 +113,41 @@ class UserProfileFragmentTest {
         onView(withId(R.id.btn_login)).perform(click())
         val device = UiDevice.getInstance(getInstrumentation())
         device.pressBack()
+    }
+
+    @Test
+    fun canUpdateProfilePictureFromGallery() {
+        val activity = getActivity(activityRule)
+        savePickedImage(activity)
+        val imgGalleryResult = createImageGallerySetResultStub(activity)
+        Intents.init()
+        Intents.intending(IntentMatchers.hasAction(Intent.ACTION_GET_CONTENT))
+            .respondWith(imgGalleryResult)
+
+        navigate_to(R.id.userProfileFragment)
+        onView(withId(R.id.btn_open_gallery)).perform(click())
+        onView(withId(R.id.btnApply)).check(matches(isDisplayed()))
+        onView(withId(R.id.btnApply)).perform(click())
+        onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
+
+        Intents.release()
+    }
+
+    @Test
+    fun canUpdateProfilePictureWithCamera() {
+        val activity = getActivity(activityRule)
+        savePickedImage(activity)
+        val imgGalleryResult = createImageGallerySetResultStub(activity)
+        Intents.init()
+        Intents.intending(IntentMatchers.hasAction(MediaStore.ACTION_IMAGE_CAPTURE))
+            .respondWith(imgGalleryResult)
+
+        navigate_to(R.id.userProfileFragment)
+        onView(withId(R.id.btn_open_camera)).perform(click())
+        onView(withId(R.id.btnApply)).check(matches(isDisplayed()))
+        onView(withId(R.id.btnApply)).perform(click())
+        onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
+
+        Intents.release()
     }
 }
