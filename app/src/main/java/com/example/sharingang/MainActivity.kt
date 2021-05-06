@@ -28,9 +28,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     @Inject
     lateinit var itemRepository: ItemRepository
 
-    lateinit var shakeListener: ShakeListener
-    lateinit var sensorManager: SensorManager
-    lateinit var accelerometer: Sensor
+    private lateinit var shakeListener: ShakeListener
+    private lateinit var sensorManager: SensorManager
+    private lateinit var accelerometer: Sensor
 
     private fun getNavController(): NavController {
         val navHostFragment =
