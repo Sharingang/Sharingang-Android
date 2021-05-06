@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.provider.MediaStore
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
@@ -130,12 +131,14 @@ class NewItemFragmentTest {
     fun addressSearchCanBeCanceled() {
         navigate_to(R.id.newEditFragment)
         onView(withId(R.id.autocomplete_fragment)).perform(click())
-        Thread.sleep(500)
         val device = UiDevice.getInstance((InstrumentationRegistry.getInstrumentation()))
         device.pressBack()
-        Thread.sleep(500)
-        device.pressBack()
-        Thread.sleep(500)
+        // On Cirrus we only have to press back once because the soft keyboard is disabled
+        try {
+            onView(withId(R.id.postal_address)).check(matches(withText("")))
+        } catch (_: NoMatchingViewException) {
+            device.pressBack()
+        }
         onView(withId(R.id.postal_address)).check(matches(withText("")))
     }
 }
