@@ -1,14 +1,11 @@
 package com.example.sharingang
 
-
-import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -63,6 +60,9 @@ class UserProfileFragment : Fragment() {
 
     @Inject
     lateinit var userRepository: UserRepository
+
+    @Inject
+    lateinit var imageStore: ImageStore
 
     @Inject
     lateinit var auth: FirebaseAuth
@@ -212,15 +212,28 @@ class UserProfileFragment : Fragment() {
                 imageUri = imageAccess.getImageUri()
                 if (imageUri != Uri.EMPTY && imageUri != null) {
                     binding.imageView.setImageURI(imageUri)
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        userRepository.add(
-                            userRepository.get(currentUserId!!)!!
-                                .copy(profilePicture = imageUri.toString())
-                        )
-                    }
+                    changeImage(imageUri)
                 }
                 binding.applyholder.visibility = View.GONE
             }
+        }
+    }
+
+    private fun changeImage(imageUri: Uri?){
+        lifecycleScope.launch(Dispatchers.IO){
+            val imageUrl = imageUri?.let {
+                if(!it.toString().startsWith("https://")){
+                    imageStore.store(it).toString()
+                }else{
+                    it.toString()
+                }
+            }
+
+            userRepository.add(
+                userRepository.get(currentUserId!!)!!.copy(
+                    profilePicture = imageUrl
+                )
+            )
         }
     }
 
@@ -268,7 +281,4 @@ class UserProfileFragment : Fragment() {
             setupViews()
             setVisibilities()}
     }
-
 }
-
-

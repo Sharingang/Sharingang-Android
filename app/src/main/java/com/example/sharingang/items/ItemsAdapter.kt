@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.ItemViewBinding
 
 class ItemsAdapter(private val clickListener: ItemListener, private val userId: String?) :
@@ -24,6 +25,7 @@ class ItemsAdapter(private val clickListener: ItemListener, private val userId: 
         fun bind(item: Item, clickListener: ItemListener, userId: String?) {
             binding.itemListViewTitle.text = item.title
             binding.item = item
+            Glide.with(binding.itemImagePreview).load(item.image).into(binding.itemImagePreview)
             binding.clickListener = clickListener
         }
 

@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.example.sharingang.items.*
 import com.example.sharingang.users.*
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.firestoreSettings
@@ -91,7 +92,7 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideFirebaseAuth(): FirebaseAuth {
-        val auth = FirebaseAuth.getInstance()
+        val auth = Firebase.auth
         if (BuildConfig.DEBUG) {
             Log.d("RepositoryModule", "Using FirebaseAuth emulator.")
             auth.useEmulator("10.0.2.2", 9099)
@@ -105,5 +106,11 @@ object RepositoryModule {
     @Provides
     fun provideCurrentUserProvider(currentUserProvider: FirestoreCurrentUserProvider): CurrentUserProvider {
         return currentUserProvider
+    }
+
+    @Singleton
+    @Provides
+    fun provideImageStore(imageStore: FirebaseImageStore): ImageStore {
+        return imageStore
     }
 }

@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
+import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.FragmentNewEditItemBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemsViewModel
@@ -159,8 +160,7 @@ class NewEditFragment : Fragment() {
             id = existingItem?.id,
             title = binding.title ?: "",
             description = binding.description ?: "",
-            //image = existingItem?.image ?: "",
-            imageUri = imageUri?.toString() ?: existingItem?.imageUri,
+            image = imageUri?.toString() ?: existingItem?.image,
             price = binding.price?.toDoubleOrNull() ?: 0.0,
             sold = existingItem?.sold ?: false,
             category = binding.categorySpinner.selectedItemPosition,
@@ -221,8 +221,8 @@ class NewEditFragment : Fragment() {
             binding.categorySpinner.setSelection(it.category)
             binding.latitude = it.latitude.toString()
             binding.longitude = it.longitude.toString()
-            it.imageUri?.let { uri ->
-                binding.itemImage.setImageURI(Uri.parse(uri))
+            it.image?.let { url ->
+                Glide.with(requireContext()).load(url).into(binding.itemImage)
             }
             updateLocationWithCoordinates(it.latitude, it.longitude)
         }

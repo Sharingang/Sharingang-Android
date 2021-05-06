@@ -79,5 +79,11 @@ object FakeRepositoryModule {
         }
         return auth
     }
+
+    @Singleton
+    @Provides
+    fun provideImageStore(imageStore: PlaceholderImageStore): ImageStore {
+        return imageStore
+    }
 }
 
