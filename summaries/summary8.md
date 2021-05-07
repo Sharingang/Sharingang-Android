@@ -28,6 +28,8 @@ This week, I merged AccountFragment into UserProfileFragment, as AccountFragment
 ## Sebastian
 I implemented a way to sort the items on the main page by different ways: category, price, date and name. I also started adding a feature on the user profile, where people can add item requests, but I’m not done yet.
 
+## Overall Team
+We did 2 standup meetings, one on Tuesday, and the second on Thursday. I think reviews were varied, though a lot of work ended up happening late on Thursday night. Overall, I think we did a good job communicating, and one stepped on eachother's toes
 The former took me longer than expected, because at first I didn’t know how to test it.
 
 Overall, I was quite productive this week I think.
