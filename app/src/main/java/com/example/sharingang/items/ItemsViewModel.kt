@@ -31,7 +31,7 @@ class ItemsViewModel @Inject constructor(
     }
 
     enum class OBSERVABLES {
-        ALL_ITEMS, SEARCH_RESULTS, USER_ITEMS, WISHLIST, ORDERED_ITEMS
+        ALL_ITEMS, SEARCH_RESULTS, USER_ITEMS, WISHLIST, ORDERED_ITEMS, SOLD_ITEMS
     }
 
     enum class ORDERING {
@@ -57,6 +57,10 @@ class ItemsViewModel @Inject constructor(
     private val _userItems = MutableLiveData<List<Item>>()
     val userItems: LiveData<List<Item>>
         get() = _userItems
+
+    private val _userSoldItems = MutableLiveData<List<Item>>()
+    val userSoldItems: LiveData<List<Item>>
+        get() = _userSoldItems
 
     private val _wishlistItem: MutableLiveData<List<Item>> = MutableLiveData(ArrayList())
     val wishlistItem: LiveData<List<Item>>
@@ -107,7 +111,23 @@ class ItemsViewModel @Inject constructor(
     fun getUserItem(userId: String?) {
         if (userId != null) {
             viewModelScope.launch(Dispatchers.IO) {
-                _userItems.postValue(itemRepository.userItems(userId))
+                _userItems.postValue(
+                    itemRepository.userItems(userId)?.filter { item ->
+                        !item.sold
+                    }
+                )
+            }
+        }
+    }
+
+    fun getUserSoldItems(userId: String?){
+        if(userId != null){
+            viewModelScope.launch(Dispatchers.IO) {
+                _userSoldItems.postValue(
+                    itemRepository.userItems(userId)?.filter { item ->
+                        item.sold
+                    }
+                )
             }
         }
     }
@@ -204,6 +224,7 @@ class ItemsViewModel @Inject constructor(
             OBSERVABLES.USER_ITEMS -> userItems
             OBSERVABLES.WISHLIST -> wishlistItem
             OBSERVABLES.ORDERED_ITEMS -> orderedItemsResult
+            OBSERVABLES.SOLD_ITEMS -> userSoldItems
         }
         observable.observe(LifeCycleOwner, {
             adapter.submitList(it)

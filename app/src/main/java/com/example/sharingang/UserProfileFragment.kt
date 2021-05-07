@@ -2,9 +2,7 @@ package com.example.sharingang
 
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -39,7 +37,6 @@ class UserProfileFragment : Fragment() {
     // This is the currently logged in user
     private var currentUserId: String? = null
     private lateinit var imageAccess: ImageAccess
-
     private var currentUser: FirebaseUser? = null
     private lateinit var userType: UserType
 
@@ -70,13 +67,17 @@ class UserProfileFragment : Fragment() {
     @Inject
     lateinit var authUI: AuthUI
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = UserProfileFragmentBinding.inflate(inflater, container, false)
         currentUserId = currentUserProvider.getCurrentUserId()
-        // If no userId is provided, we get the user that is currently logged in.
         shownUserProfileId = when (args.userId) {
             null, "" -> currentUserId
             else -> args.userId
@@ -93,6 +94,29 @@ class UserProfileFragment : Fragment() {
         binding.viewModel = userViewModel
         initializeFields()
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.user_menu, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        if (currentUserProvider.getCurrentUserId() == null) menu.findItem(R.id.sold_list).isVisible =
+            false
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.sold_list -> {
+                view?.findNavController()?.navigate(
+                    UserProfileFragmentDirections.actionUserProfileFragmentToSoldItemList()
+                )
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun initializeFields() {
@@ -129,8 +153,8 @@ class UserProfileFragment : Fragment() {
         ).forEach { view -> view.visibility = View.GONE }
     }
 
-    private fun getVisibleViews(): List<View> {
-        return when (userType) {
+    private fun setVisibilities() {
+        val visibleViews = when (userType) {
             UserType.LOGGED_OUT -> listOf(
                 binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList
             )
@@ -144,13 +168,8 @@ class UserProfileFragment : Fragment() {
             )
             else -> listOf(binding.upfTopinfo, binding.btnLogin)
         }
-    }
-
-    private fun setVisibilities() {
-        val visibleViews = getVisibleViews()
         visibleViews.forEach { view -> view.visibility = View.VISIBLE }
     }
-
 
     private fun setupRatingView() {
         userViewModel.refreshRating(shownUserProfileId)
@@ -185,21 +204,17 @@ class UserProfileFragment : Fragment() {
 
     private fun setEmailText() {
         val emailText = binding.textEmail
-        if (userType == UserType.SELF) {
-            emailText.text = loggedInUserEmail
-        }
+        if (userType == UserType.SELF) emailText.text = loggedInUserEmail
     }
 
     private fun setupViews() {
-        setupButtonsAction()
-        setUpfTopInfoText()
+        val buttons = listOf(binding.btnApply, binding.btnOpenCamera, binding.btnOpenGallery)
+        val topInfo = binding.upfTopinfo
+        buttons.forEach { button -> button.setOnClickListener { setupPictureButton(button) } }
+        topInfo.text = getString(R.string.userNotLoggedInInfo)
         setEmailText()
     }
 
-    private fun setUpfTopInfoText() {
-        val topInfo = binding.upfTopinfo
-        topInfo.text = getString(R.string.userNotLoggedInInfo)
-    }
 
     private fun displayUserFields(requestedUser: User?) {
         if (requestedUser != null) {
@@ -230,14 +245,11 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    private fun changeImage(imageUri: Uri?){
-        lifecycleScope.launch(Dispatchers.IO){
+    private fun changeImage(imageUri: Uri?) {
+        lifecycleScope.launch(Dispatchers.IO) {
             val imageUrl = imageUri?.let {
-                if(!it.toString().startsWith("https://")){
-                    imageStore.store(it).toString()
-                }else{
-                    it.toString()
-                }
+                if (!it.toString().startsWith("https://")) imageStore.store(it).toString()
+                else it.toString()
             }
 
             userRepository.add(
@@ -275,10 +287,8 @@ class UserProfileFragment : Fragment() {
         shownUserProfileId = loggedInUserId
         initializeFields()
         binding.nameText.text = currentUser!!.displayName
-        if (currentUser!!.photoUrl != null) {
-            // Use the Glide image loader library to load the user's picture into the imageView
-            Glide.with(this).load(currentUser!!.photoUrl).into(binding.imageView)
-        }
+        if (currentUser!!.photoUrl != null) Glide.with(this).load(currentUser!!.photoUrl)
+            .into(binding.imageView)
     }
 
     private fun setupAuthenticationButtons() {

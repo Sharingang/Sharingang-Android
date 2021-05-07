@@ -6,6 +6,7 @@ import android.content.Intent
 import android.provider.MediaStore
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
@@ -51,6 +52,23 @@ class UserProfileFragmentTest {
                 )
             )
         )
+    }
+
+    @Test
+    fun soldItemsListWorksCorrect(){
+        val firstItemName = "Test Item"
+        addSingleItemToDB(firstItemName)
+        navigate_to(R.id.userProfileFragment)
+        onView(withText(firstItemName)).check(matches(isDisplayed()))
+        Thread.sleep(2000)
+        onView(withText(firstItemName)).perform(click())
+        onView(withMenuIdOrText(R.id.menuSell, R.string.sell)).perform(click())
+        pressBack()
+        Thread.sleep(2000)
+        onView(withId(R.id.sold_list)).perform(click())
+        Thread.sleep(1000)
+        onView(withText(firstItemName)).check(matches(isDisplayed()))
+
     }
 
     @Test
@@ -154,5 +172,16 @@ class UserProfileFragmentTest {
         onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
 
         Intents.release()
+    }
+
+    private fun addSingleItemToDB(name: String) {
+        navigate_to(R.id.newEditFragment)
+        onView(withId(R.id.itemTitle)).perform(
+            typeText(name),
+            closeSoftKeyboard()
+        )
+
+        onView(withId(R.id.createItemButton)).perform(click())
+        waitAfterSaveItem()
     }
 }
