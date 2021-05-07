@@ -22,20 +22,13 @@ fun NotificationManager.sendNotification(messageBody: String, applicationContext
     notify(NOTIFICATION_ID, builder.build())
 }
 
-private fun buildNotification(
-    applicationContext: Context,
-    contentPendingIntent: PendingIntent
-): NotificationCompat.Builder {
+private fun buildNotification(applicationContext: Context, contentPendingIntent: PendingIntent): NotificationCompat.Builder {
     return NotificationCompat.Builder(
         applicationContext,
         applicationContext.getString(R.string.new_item_notification_channel_id)
     ).setSmallIcon(R.drawable.ic_launcher_foreground)
         .setContentTitle(
-            applicationContext.getString(
-                R.string.new_item_notification_message,
-                "test"
-            )
-        )
+            applicationContext.getString(R.string.new_item_notification_message, "test"))
         .setContentIntent(contentPendingIntent)
         .setPriority(NotificationCompat.PRIORITY_LOW)
         .setAutoCancel(true)
