@@ -57,7 +57,7 @@ class UserProfileFragmentTest {
         onView(withText(firstItemName)).check(matches(isDisplayed()))
         Thread.sleep(2000)
         onView(withText(firstItemName)).perform(click())
-        onView(withId(R.id.menuSell)).perform(click())
+        onView(withMenuIdOrText(R.id.menuSell, R.string.sell)).perform(click())
         pressBack()
         Thread.sleep(2000)
         onView(withId(R.id.sold_list)).perform(click())
