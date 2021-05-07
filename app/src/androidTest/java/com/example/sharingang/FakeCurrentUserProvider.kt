@@ -3,7 +3,6 @@ package com.example.sharingang
 import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.User
 import com.example.sharingang.users.UserRepository
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -28,7 +27,7 @@ class FakeCurrentUserProvider @Inject constructor(
     }
 
     override fun getCurrentUserEmail(): String {
-        return if(instance != 0) "test-user@example.com" else ""
+        return if (instance != 0) "test-user@example.com" else ""
     }
 
     override fun getCurrentUserName(): String {

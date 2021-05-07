@@ -20,10 +20,10 @@ private const val TAG = "FirestoreUserStore"
 class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFirestore) :
     UserStore, AbstractFirestoreStore<User>("users", User::class.java, firestore) {
 
-    override suspend fun add(user: User): String? {
-        requireNotNull(user.id)
-        return if (super.update(user, user.id)) {
-            user.id
+    override suspend fun add(element: User): String? {
+        requireNotNull(element.id)
+        return if (super.update(element, element.id)) {
+            element.id
         } else {
             null
         }

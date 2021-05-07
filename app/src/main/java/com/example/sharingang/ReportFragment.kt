@@ -24,6 +24,7 @@ class ReportFragment : Fragment() {
     private lateinit var reporterId: String
     private lateinit var reportedId: String
     private lateinit var reportedUsername: String
+
     @Inject
     lateinit var userRepository: UserRepository
 

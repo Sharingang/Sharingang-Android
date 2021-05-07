@@ -2,7 +2,6 @@ package com.example.sharingang.items
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.sharingang.users.User
 
 @Dao
 interface ItemDao {

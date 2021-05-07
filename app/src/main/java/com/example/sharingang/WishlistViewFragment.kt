@@ -36,7 +36,7 @@ class WishlistViewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentWishlistViewBinding.inflate(inflater, container, false)
-        val adapter = viewModel.setupItemAdapter(currentUserProvider.getCurrentUserId())
+        val adapter = viewModel.setupItemAdapter()
         binding.wishlistview.adapter = adapter
         binding.wishlistview.layoutManager = GridLayoutManager(context, 2)
         viewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.WISHLIST)

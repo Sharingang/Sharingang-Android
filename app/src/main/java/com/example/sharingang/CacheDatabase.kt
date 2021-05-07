@@ -8,7 +8,7 @@ import com.example.sharingang.items.ItemDao
 import com.example.sharingang.users.User
 import com.example.sharingang.users.UserDao
 
-@Database(entities = [Item::class, User::class], version = 1)
+@Database(entities = [Item::class, User::class], version = 1, exportSchema = false)
 @TypeConverters(DateConverter::class, ListConverter::class)
 abstract class CacheDatabase : RoomDatabase() {
     abstract val itemDao: ItemDao

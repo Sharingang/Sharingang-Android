@@ -54,13 +54,17 @@
     <string name="eng_other">Other</string>
     <string name="eng_reporting">Reporting</string>
     <string name="i_feel_lucky">I Feel Lucky</string>
+    <string name="item_save_success">Item saved successfully.</string>
+    <string name="item_save_failure">Cannot save the item.</string>
+    <string name="item_deleted_success">Item deleted successfully.</string>
+    <string name="posted_by">Posted by %1$s</string>
     <string-array name="order_categories">
         <item>Date</item>
         <item>Price</item>
         <item>Name</item>
         <item>Category</item>
     </string-array>
-    <string name="order">Order</string>
+    <string name="sort">Sort</string>
     <string-array name="order_ascending_descending">
         <item>Ascending</item>
         <item>Descending</item>

@@ -7,7 +7,6 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -19,6 +18,7 @@ import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.User
 import com.example.sharingang.users.UserRepository
 import com.example.sharingang.utils.ImageAccess
+import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,6 +64,9 @@ class UserProfileFragment : Fragment() {
     @Inject
     lateinit var auth: FirebaseAuth
 
+    @Inject
+    lateinit var authUI: AuthUI
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -80,7 +83,7 @@ class UserProfileFragment : Fragment() {
             else -> args.userId
         }
         authHelper = AuthHelper(
-            requireContext(), auth, lifecycleScope, userRepository, this, currentUserProvider
+            requireContext(), auth, authUI, lifecycleScope, userRepository, this, currentUserProvider
         ) { user: FirebaseUser, userId: String -> execAfterSignIn(user, userId) }
         currentUser = auth.currentUser
         setUserType()
@@ -178,7 +181,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupRecyclerView(userId: String?) {
-        val adapter = itemsViewModel.setupItemAdapter(currentUserId)
+        val adapter = itemsViewModel.setupItemAdapter()
         binding.userItemList.adapter = adapter
         itemsViewModel.getUserItem(userId)
         itemsViewModel.addObserver(
@@ -192,6 +195,11 @@ class UserProfileFragment : Fragment() {
                     item
                 )
             })
+    }
+
+    private fun setupButtonsAction() {
+        val buttons = listOf(binding.btnApply, binding.btnOpenCamera, binding.btnOpenGallery)
+        buttons.forEach { button -> button.setOnClickListener { setupPictureButton(button) } }
     }
 
     private fun setEmailText() {
@@ -243,6 +251,7 @@ class UserProfileFragment : Fragment() {
                 if (!it.toString().startsWith("https://")) imageStore.store(it).toString()
                 else it.toString()
             }
+
             userRepository.add(
                 userRepository.get(currentUserId!!)!!.copy(
                     profilePicture = imageUrl

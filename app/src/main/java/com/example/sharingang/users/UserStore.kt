@@ -14,7 +14,7 @@ interface UserStore {
      *
      * @return id of the user if successfully added otherwise null
      */
-    suspend fun add(user: User): String?
+    suspend fun add(element: User): String?
 
     /**
      * Returns the user with corresponding id or null if it doesn't exist
@@ -42,7 +42,12 @@ interface UserStore {
      *
      * @return whether the report succeeded
      */
-    suspend fun report(reportedUser: User, reporterUser: User, description: String, reason: String): Boolean
+    suspend fun report(
+        reportedUser: User,
+        reporterUser: User,
+        description: String,
+        reason: String
+    ): Boolean
 
     /**
      * Checks if a user has already been reported by a particular user, or
