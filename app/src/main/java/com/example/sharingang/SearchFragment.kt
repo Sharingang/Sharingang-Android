@@ -36,10 +36,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
         val adapter = viewModel.setupItemAdapter()
-        val userId = currentUserProvider.getCurrentUserId()
-        if (userId != null) {
-            isSubscribed(userId)
-        }
+        setupToolbar()
         binding.itemSearchList.adapter = adapter
         binding.itemSearchList.layoutManager = GridLayoutManager(context, 2)
         viewModel.addObserver(
@@ -53,16 +50,10 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 binding.searchCategorySpinner.selectedItemPosition
             )
         }
-        binding.searchCategorySpinner.onItemSelectedListener = this
-        userViewModel.subscriptionsContains.observe(viewLifecycleOwner, {
-            contained = it
-            activity?.invalidateOptionsMenu()
-        })
         viewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
             { item -> SearchFragmentDirections.actionSearchFragmentToDetailedItemFragment(item) })
         clearSearch()
         binding.clearSearchButton.setOnClickListener { clearSearch() }
-
         return binding.root
     }
 
@@ -123,6 +114,18 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
         // Nothing
+    }
+
+    private fun setupToolbar() {
+        val userId = currentUserProvider.getCurrentUserId()
+        if (userId != null) {
+            isSubscribed(userId)
+        }
+        binding.searchCategorySpinner.onItemSelectedListener = this
+        userViewModel.subscriptionsContains.observe(viewLifecycleOwner, {
+            contained = it
+            activity?.invalidateOptionsMenu()
+        })
     }
 
 }
