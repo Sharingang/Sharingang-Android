@@ -18,7 +18,7 @@ class MessageFragment : Fragment() {
 
     private lateinit var currentUser: FirebaseUser
     private lateinit var partnerId: String
-    private lateinit var partnerProfilePicture: String
+    private lateinit var partnerProfilePic: String
     private lateinit var binding: FragmentMessageBinding
     private val args: MessageFragmentArgs by navArgs()
 
