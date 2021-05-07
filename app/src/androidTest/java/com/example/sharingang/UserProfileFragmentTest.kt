@@ -55,13 +55,13 @@ class UserProfileFragmentTest {
         addSingleItemToDB(firstItemName)
         navigate_to(R.id.userProfileFragment)
         onView(withText(firstItemName)).check(matches(isDisplayed()))
-        Thread.sleep(500)
+        Thread.sleep(2000)
         onView(withText(firstItemName)).perform(click())
         onView(withId(R.id.menuSell)).perform(click())
         pressBack()
-        Thread.sleep(500)
+        Thread.sleep(2000)
         onView(withId(R.id.sold_list)).perform(click())
-        Thread.sleep(100)
+        Thread.sleep(1000)
         onView(withText(firstItemName)).check(matches(isDisplayed()))
 
     }
