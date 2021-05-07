@@ -99,8 +99,10 @@ class UserProfileViewModel @Inject constructor(
     fun subscriptionContains(userId: String, category: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val user = userRepository.get(userId)
-            if (user != null)
+            if (user != null) {
+                Log.d("SUBSCRIBE", category)
                 _subscriptionsContains.postValue(user.subscriptions.contains(category))
+            }
         }
     }
 
@@ -115,8 +117,14 @@ class UserProfileViewModel @Inject constructor(
             if (user != null) {
                 val subs = ArrayList(user.subscriptions)
                 when (user.subscriptions.contains(category)) {
-                    true -> subs.remove(category)
-                    false -> subs.add(category)
+                    true -> {
+                        subs.remove(category)
+                        _subscriptionsContains.postValue(false)
+                    }
+                    false -> {
+                        subs.add(category)
+                        _subscriptionsContains.postValue(true)
+                    }
                 }
                 user.subscriptions = subs
                 userRepository.update(user)

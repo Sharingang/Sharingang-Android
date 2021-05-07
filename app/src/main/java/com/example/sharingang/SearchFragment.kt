@@ -6,15 +6,12 @@ import android.widget.AdapterView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.sharingang.databinding.FragmentSearchBinding
 import com.example.sharingang.items.ItemsViewModel
 import com.example.sharingang.users.CurrentUserProvider
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -41,9 +38,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val adapter = viewModel.setupItemAdapter()
         val userId = currentUserProvider.getCurrentUserId()
         if (userId != null) {
-            lifecycleScope.launch(Dispatchers.IO) {
-                isSubscribed(userId)
-            }
+            isSubscribed(userId)
         }
         binding.itemSearchList.adapter = adapter
         binding.itemSearchList.layoutManager = GridLayoutManager(context, 2)
@@ -58,8 +53,11 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 binding.searchCategorySpinner.selectedItemPosition
             )
         }
-        binding.searchCategorySpinner
-        userViewModel.subscriptionsContains.observe(viewLifecycleOwner, { contained = it })
+        binding.searchCategorySpinner.onItemSelectedListener = this
+        userViewModel.subscriptionsContains.observe(viewLifecycleOwner, {
+            contained = it
+            activity?.invalidateOptionsMenu()
+        })
         viewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
             { item -> SearchFragmentDirections.actionSearchFragmentToDetailedItemFragment(item) })
         clearSearch()
@@ -104,30 +102,22 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun isSubscribed(userId: String) {
-        lifecycleScope.launch(Dispatchers.Main) {
-            userViewModel.subscriptionContains(
-                userId,
-                binding.searchCategorySpinner.selectedItem.toString()
-            )
-            activity?.invalidateOptionsMenu()
-        }
+        userViewModel.subscriptionContains(
+            userId,
+            binding.searchCategorySpinner.selectedItem.toString()
+        )
     }
 
     private fun updateSubscriptions() {
         val category = binding.searchCategorySpinner.selectedItem.toString()
         val userId = currentUserProvider.getCurrentUserId()!!
-        lifecycleScope.launch(Dispatchers.IO) {
-            userViewModel.subscriptionSet(userId, category)
-            isSubscribed(userId)
-        }
+        userViewModel.subscriptionSet(userId, category)
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val userId = currentUserProvider.getCurrentUserId()
         if (userId != null) {
-            lifecycleScope.launch(Dispatchers.IO) {
-                isSubscribed(userId)
-            }
+            isSubscribed(userId)
         }
     }
 
