@@ -5,11 +5,9 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/users_list"
+            android:id="@+id/chat_usersList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </androidx.recyclerview.widget.RecyclerView>
+            android:layout_height="match_parent"/>
 
     </FrameLayout>
 </layout>
