@@ -52,18 +52,14 @@ class UserProfileFragmentTest {
     @Test
     fun soldItemsListWorksCorrect(){
         val firstItemName = "Test Item"
-        val seconItemName = "Sold Item"
         addSingleItemToDB(firstItemName)
-        addSingleItemToDB(seconItemName)
         navigate_to(R.id.userProfileFragment)
         onView(withText(firstItemName)).check(matches(isDisplayed()))
-        onView(withText(seconItemName)).check(matches(isDisplayed()))
         Thread.sleep(500)
         onView(withText(firstItemName)).perform(click())
         onView(withId(R.id.menuSell)).perform(click())
         pressBack()
         Thread.sleep(500)
-        onView(withText(seconItemName)).check(matches(isDisplayed()))
         onView(withId(R.id.sold_list)).perform(click())
         Thread.sleep(100)
         onView(withText(firstItemName)).check(matches(isDisplayed()))
