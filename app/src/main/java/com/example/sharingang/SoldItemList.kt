@@ -40,7 +40,7 @@ class SoldItemList : Fragment() {
     }
 
     private fun setupRecyclerview(){
-        val adapter = viewModel.setupItemAdapter(currentUserProvider.getCurrentUserId())
+        val adapter = viewModel.setupItemAdapter()
         binding.soldList.adapter = adapter
         viewModel.getUserSoldItems(currentUserProvider.getCurrentUserId())
         viewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.SOLD_ITEMS)
