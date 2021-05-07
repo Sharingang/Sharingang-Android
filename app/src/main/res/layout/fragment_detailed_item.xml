@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
 
         <variable
             name="ratingVisibility"
@@ -14,6 +14,7 @@
         <variable
             name="item"
             type="com.example.sharingang.items.Item" />
+
         <variable
             name="username"
             type="String" />
@@ -105,7 +106,8 @@
                     android:layout_height="wrap_content"
                     android:text="1"
                     android:textSize="13sp"
-                    android:visibility="@{ratingVisibility}" />
+                    android:visibility="@{ratingVisibility}"
+                    tools:ignore="HardcodedText" />
 
                 <RadioButton
                     android:id="@+id/radioButton2"
@@ -113,7 +115,8 @@
                     android:layout_height="wrap_content"
                     android:text="2"
                     android:textSize="13sp"
-                    android:visibility="@{ratingVisibility}" />
+                    android:visibility="@{ratingVisibility}"
+                    tools:ignore="HardcodedText" />
 
                 <RadioButton
                     android:id="@+id/radioButton3"
@@ -121,7 +124,8 @@
                     android:layout_height="wrap_content"
                     android:text="3"
                     android:textSize="13sp"
-                    android:visibility="@{ratingVisibility}" />
+                    android:visibility="@{ratingVisibility}"
+                    tools:ignore="HardcodedText" />
 
                 <RadioButton
                     android:id="@+id/radioButton4"
@@ -129,7 +133,8 @@
                     android:layout_height="wrap_content"
                     android:text="4"
                     android:textSize="13sp"
-                    android:visibility="@{ratingVisibility}" />
+                    android:visibility="@{ratingVisibility}"
+                    tools:ignore="HardcodedText" />
 
                 <RadioButton
                     android:id="@+id/radioButton5"
@@ -137,7 +142,8 @@
                     android:layout_height="wrap_content"
                     android:text="5"
                     android:textSize="13sp"
-                    android:visibility="@{ratingVisibility}" />
+                    android:visibility="@{ratingVisibility}"
+                    tools:ignore="HardcodedText" />
 
             </RadioGroup>
 

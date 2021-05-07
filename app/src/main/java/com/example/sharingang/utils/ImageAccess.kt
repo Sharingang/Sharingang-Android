@@ -145,7 +145,7 @@ class ImageAccess(
     }
 
     private fun createImageFile(activity: Activity): File {
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Date())
         val storageDir: File? = getExternalFilesDirs(activity, Environment.DIRECTORY_PICTURES)[0]
         return File.createTempFile(
             "JPEG_${timeStamp}_",

@@ -10,7 +10,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.sharingang.databinding.FragmentSearchBinding
 import com.example.sharingang.items.ItemsViewModel
-import com.example.sharingang.users.CurrentUserProvider
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

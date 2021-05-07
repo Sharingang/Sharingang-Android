@@ -33,8 +33,8 @@ class CachedUserRepository @Inject constructor(
         return ret
     }
 
-    override suspend fun add(user: User): String? {
-        return thenRefresh { store.add(user) }
+    override suspend fun add(element: User): String? {
+        return thenRefresh { store.add(element) }
     }
 
     override suspend fun get(id: String): User? {

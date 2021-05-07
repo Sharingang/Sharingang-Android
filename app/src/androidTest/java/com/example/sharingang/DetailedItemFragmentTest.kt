@@ -9,7 +9,6 @@ import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
-import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -34,14 +33,12 @@ class DetailedItemFragmentTest {
 
     @get:Rule(order = 2)
     val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(
-        android.Manifest.permission.READ_EXTERNAL_STORAGE
+        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+        android.Manifest.permission.CAMERA
     )
 
-    val firstItem = "Test Item"
-    val secondItem = "Hello the world"
-
-    @get:Rule(order = 3)
-    var mActivityTestRule = IntentsTestRule(MainActivity::class.java)
+    private val firstItem = "Test Item"
+    private val secondItem = "Hello the world"
 
     @Test
     fun canSeeCategoryInDetailedItemFragment() {
@@ -94,8 +91,10 @@ class DetailedItemFragmentTest {
 
     @Test
     fun weCanSeeTheImageWePickedForAnItem() {
-        savePickedImage(mActivityTestRule.activity)
-        val imgGalleryResult = createImageGallerySetResultStub(mActivityTestRule.activity)
+        val activity = getActivity(activityRule)
+        savePickedImage(activity)
+        val imgGalleryResult = createImageGallerySetResultStub(activity)
+        Intents.init()
         Intents.intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgGalleryResult)
 
         navigate_to(R.id.newEditFragment)
@@ -115,6 +114,7 @@ class DetailedItemFragmentTest {
         val backButton =
             onView(Matchers.allOf(withContentDescription("Navigate up"), isDisplayed()))
         backButton.perform(click())
+        Intents.release()
     }
 
     @Test

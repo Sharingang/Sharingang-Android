@@ -1,5 +1,8 @@
 package com.example.sharingang
 
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +14,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.sharingang.items.ItemRepository
+import com.example.sharingang.shake.ShakeListener
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
@@ -23,6 +27,10 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
     @Inject
     lateinit var itemRepository: ItemRepository
+
+    private lateinit var shakeListener: ShakeListener
+    private lateinit var sensorManager: SensorManager
+    private lateinit var accelerometer: Sensor
 
     private fun getNavController(): NavController {
         val navHostFragment =
@@ -48,12 +56,32 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         setupNavView(navController)
     }
 
+    private fun setupShakeListener() {
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        shakeListener = ShakeListener {
+            selectRandomItem()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setupNavigation(getNavController())
 
+        setupShakeListener()
+
         handleDeepLink()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sensorManager.registerListener(shakeListener, accelerometer, SensorManager.SENSOR_DELAY_UI)
+    }
+
+    override fun onPause() {
+        sensorManager.unregisterListener(shakeListener)
+        super.onPause()
     }
 
     private fun handleDeepLink() {
@@ -78,17 +106,23 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
     }
 
+    // We need the parameter for the callback
     fun onRandomItem(item: MenuItem) {
+        selectRandomItem()
+    }
+
+    private fun selectRandomItem() {
         lifecycleScope.launch(Dispatchers.IO) {
             val allItems = itemRepository.getAll()
             if (allItems.isNotEmpty()) {
+
                 val random = allItems.random()
                 lifecycleScope.launch(Dispatchers.Main) {
                     val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
                     drawerLayout.close()
                     getNavController().navigate(
                         ItemsListFragmentDirections
-                            .actionItemsListFragmentToDetailedItemFragment(random)
+                            .actionGlobalDetailedItemFragment(random)
                     )
                 }
             }

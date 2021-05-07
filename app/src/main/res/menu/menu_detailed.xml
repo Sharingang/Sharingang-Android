@@ -18,12 +18,12 @@
         android:id="@+id/menuSell"
         android:icon="@drawable/ic_baseline_attach_money_white_24"
         android:title="@string/sell"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menuResell"
         android:icon="@drawable/ic_baseline_money_off_white_24"
         android:title="@string/unsell"
         app:showAsAction="ifRoom"
-        tools:visible="false"/>
+        tools:visible="false" />
 </menu>
