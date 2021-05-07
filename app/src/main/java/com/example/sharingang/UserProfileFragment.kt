@@ -9,7 +9,6 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -21,6 +20,7 @@ import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.User
 import com.example.sharingang.users.UserRepository
 import com.example.sharingang.utils.ImageAccess
+import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.AndroidEntryPoint
@@ -67,6 +67,9 @@ class UserProfileFragment : Fragment() {
     @Inject
     lateinit var auth: FirebaseAuth
 
+    @Inject
+    lateinit var authUI: AuthUI
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -79,7 +82,7 @@ class UserProfileFragment : Fragment() {
             else -> args.userId
         }
         authHelper = AuthHelper(
-            requireContext(), auth, lifecycleScope, userRepository, this, currentUserProvider
+            requireContext(), auth, authUI, lifecycleScope, userRepository, this, currentUserProvider
         ) { user: FirebaseUser, userId: String -> execAfterSignIn(user, userId) }
         currentUser = auth.currentUser
         setUserType()
@@ -111,14 +114,15 @@ class UserProfileFragment : Fragment() {
 
     private fun setUserType() {
         userType = when (currentUserId) {
-            null -> if(shownUserProfileId == null) UserType.LOGGED_OUT_SELF else UserType.LOGGED_OUT
+            null -> if (shownUserProfileId == null) UserType.LOGGED_OUT_SELF else UserType.LOGGED_OUT
             shownUserProfileId -> UserType.SELF
             else -> UserType.VISITOR
         }
     }
 
     private fun initSetup() {
-        listOf(binding.upfTopinfo, binding.imageView, binding.gallerycameraholder, binding.nameText,
+        listOf(
+            binding.upfTopinfo, binding.imageView, binding.gallerycameraholder, binding.nameText,
             binding.textEmail, binding.applyholder, binding.ratingTextview, binding.applyholder,
             binding.btnReport, binding.userItemList, binding.btnLogout,
             binding.btnLogin
@@ -126,15 +130,18 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun getVisibleViews(): List<View> {
-        return when(userType) {
+        return when (userType) {
             UserType.LOGGED_OUT -> listOf(
-                    binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList)
+                binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList
+            )
             UserType.VISITOR -> listOf(
-                    binding.imageView, binding.nameText, binding.ratingTextview,
-                    binding.userItemList, binding.btnReport)
+                binding.imageView, binding.nameText, binding.ratingTextview,
+                binding.userItemList, binding.btnReport
+            )
             UserType.SELF -> listOf(
-                    binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList,
-                binding.textEmail, binding.gallerycameraholder, binding.btnLogout)
+                binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList,
+                binding.textEmail, binding.gallerycameraholder, binding.btnLogout
+            )
             else -> listOf(binding.upfTopinfo, binding.btnLogin)
         }
     }
@@ -145,7 +152,7 @@ class UserProfileFragment : Fragment() {
     }
 
 
-    private fun setupRatingView(){
+    private fun setupRatingView() {
         userViewModel.refreshRating(shownUserProfileId)
         userViewModel.rating.observe(viewLifecycleOwner, {
             var text = resources.getString(R.string.default_rating)
@@ -155,10 +162,14 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupRecyclerView(userId: String?) {
-        val adapter = itemsViewModel.setupItemAdapter(currentUserId)
+        val adapter = itemsViewModel.setupItemAdapter()
         binding.userItemList.adapter = adapter
         itemsViewModel.getUserItem(userId)
-        itemsViewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.USER_ITEMS)
+        itemsViewModel.addObserver(
+            viewLifecycleOwner,
+            adapter,
+            ItemsViewModel.OBSERVABLES.USER_ITEMS
+        )
         itemsViewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
             { item ->
                 UserProfileFragmentDirections.actionUserProfileFragmentToDetailedItemFragment(
@@ -169,7 +180,7 @@ class UserProfileFragment : Fragment() {
 
     private fun setupButtonsAction() {
         val buttons = listOf(binding.btnApply, binding.btnOpenCamera, binding.btnOpenGallery)
-        buttons.forEach { button -> button.setOnClickListener {setupPictureButton(button)} }
+        buttons.forEach { button -> button.setOnClickListener { setupPictureButton(button) } }
     }
 
     private fun setEmailText() {
@@ -238,7 +249,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupReportButton() {
-        if(userType == UserType.VISITOR) {
+        if (userType == UserType.VISITOR) {
             lifecycleScope.launch(Dispatchers.IO) {
                 val hasBeenReported =
                     userRepository.hasBeenReported(currentUserId!!, shownUserProfileId!!)
@@ -264,7 +275,7 @@ class UserProfileFragment : Fragment() {
         shownUserProfileId = loggedInUserId
         initializeFields()
         binding.nameText.text = currentUser!!.displayName
-        if(currentUser!!.photoUrl != null) {
+        if (currentUser!!.photoUrl != null) {
             // Use the Glide image loader library to load the user's picture into the imageView
             Glide.with(this).load(currentUser!!.photoUrl).into(binding.imageView)
         }
@@ -279,6 +290,7 @@ class UserProfileFragment : Fragment() {
             initSetup()
             userType = UserType.LOGGED_OUT_SELF
             setupViews()
-            setVisibilities()}
+            setVisibilities()
+        }
     }
 }

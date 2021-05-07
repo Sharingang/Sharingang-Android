@@ -22,7 +22,7 @@
                 android:hint="@string/search"
                 android:inputType="text"
                 android:maxLines="1"
-                android:autofillHints=""/>
+                android:autofillHints="" />
 
             <Spinner
                 android:id="@+id/map_category_spinner"

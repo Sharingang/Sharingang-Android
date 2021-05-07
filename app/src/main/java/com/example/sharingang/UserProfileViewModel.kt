@@ -24,7 +24,7 @@ class UserProfileViewModel @Inject constructor(
     val userId: LiveData<String?>
         get() = _userId
 
-    private val _wishlistContains : MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _wishlistContains: MutableLiveData<Boolean> = MutableLiveData(false)
     val wishlistContains: LiveData<Boolean>
         get() = _wishlistContains
 
@@ -41,14 +41,14 @@ class UserProfileViewModel @Inject constructor(
             }
         }
 
-    fun refreshListUI(viewModel: ItemsViewModel){
+    fun refreshListUI(viewModel: ItemsViewModel) {
         val userId = currentUserProvider.getCurrentUserId()
-        viewModelScope.launch(Dispatchers.IO){
-            if(userId != null){
+        viewModelScope.launch(Dispatchers.IO) {
+            if (userId != null) {
                 val itemList = ArrayList<Item>()
-                for(str in userRepository.get(userId)!!.wishlist){
+                for (str in userRepository.get(userId)!!.wishlist) {
                     val item = itemRepository.get(str)
-                    if(item != null){
+                    if (item != null) {
                         itemList.add(item)
                     }
                 }
@@ -61,52 +61,57 @@ class UserProfileViewModel @Inject constructor(
         _userId.postValue(userId)
     }
 
-    fun refreshRating(userId: String?){
-        if(userId != null){
+    fun refreshRating(userId: String?) {
+        if (userId != null) {
             viewModelScope.launch(Dispatchers.IO) {
                 val userTemp = userRepository.get(userId)
-                if(userTemp != null){
+                if (userTemp != null) {
                     _rating.postValue(userTemp.rating.toFloat() / userTemp.numberOfRatings)
                 }
             }
         }
     }
 
-    fun updateUserRating(userId: String?, rating: Int){
-        if(userId != null){
+    fun updateUserRating(userId: String?, rating: Int) {
+        if (userId != null) {
             viewModelScope.launch(Dispatchers.IO) {
                 val userTemp = userRepository.get(userId)
-                if(userTemp != null){
+                if (userTemp != null) {
                     val newNumRatings = userTemp.numberOfRatings + 1
                     val newSumRating = userTemp.rating + rating
-                    userRepository.update(userTemp.copy(rating = newSumRating, numberOfRatings = newNumRatings))
+                    userRepository.update(
+                        userTemp.copy(
+                            rating = newSumRating,
+                            numberOfRatings = newNumRatings
+                        )
+                    )
                 }
             }
         }
     }
 
 
-    fun wishlistContains(item: Item?){
+    fun wishlistContains(item: Item?) {
         val userId = currentUserProvider.getCurrentUserId()
-        if(item != null && userId != null){
+        if (item != null && userId != null) {
             viewModelScope.launch(Dispatchers.IO) {
                 _wishlistContains.postValue(userRepository.get(userId)!!.wishlist.contains(item.id!!))
             }
-        }else{
+        } else {
             _wishlistContains.postValue(false)
         }
     }
 
     fun modifyWishList(item: Item?) {
         val userId = currentUserProvider.getCurrentUserId()
-        if(item != null && userId != null){
+        if (item != null && userId != null) {
             viewModelScope.launch(Dispatchers.IO) {
-                val user : User? = userRepository.get(userId)
+                val user: User? = userRepository.get(userId)
 
                 val currentList = ArrayList(user!!.wishlist)
                 val add = user.wishlist.contains(item.id!!)
                 _wishlistContains.postValue(!add)
-                if(!add){
+                if (!add) {
                     currentList.add(item.id)
                 } else {
                     currentList.remove(item.id)

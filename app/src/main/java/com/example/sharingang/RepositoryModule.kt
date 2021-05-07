@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.room.Room
 import com.example.sharingang.items.*
 import com.example.sharingang.users.*
+import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,6 +25,11 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
+
+    private val useEmulator: Boolean
+        get() {
+            return BuildConfig.DEBUG
+        }
 
     @Singleton
     @Provides
@@ -71,7 +77,7 @@ object RepositoryModule {
     @Provides
     fun provideFirebaseFirestore(): FirebaseFirestore {
         val firestore = Firebase.firestore
-        if (BuildConfig.DEBUG) {
+        if (useEmulator) {
             Log.d("RepositoryModule", "Using Firestore emulator.")
             // 10.0.2.2 is the special IP address to connect to the 'localhost' of
             // the host computer from an Android emulator.
@@ -93,13 +99,26 @@ object RepositoryModule {
     @Provides
     fun provideFirebaseAuth(): FirebaseAuth {
         val auth = Firebase.auth
-        if (BuildConfig.DEBUG) {
+        if (useEmulator) {
             Log.d("RepositoryModule", "Using FirebaseAuth emulator.")
             auth.useEmulator("10.0.2.2", 9099)
         } else {
             Log.d("RepositoryModule", "Using production FirebaseAuth.")
         }
         return auth
+    }
+
+    @Singleton
+    @Provides
+    fun provideFirebaseAuthUI(): AuthUI {
+        val authUI = AuthUI.getInstance()
+        if (useEmulator) {
+            Log.d("RepositoryModule", "Using FirebaseAuth emulator.")
+            authUI.useEmulator("10.0.2.2", 9099)
+        } else {
+            Log.d("RepositoryModule", "Using production FirebaseAuth.")
+        }
+        return authUI
     }
 
     @Singleton

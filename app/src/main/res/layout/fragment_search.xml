@@ -7,41 +7,51 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
         tools:context=".SearchFragment">
-
-        <EditText
-            android:id="@+id/searchText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/search_hint" />
-
-        <Spinner
-            android:id="@+id/searchCategorySpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:entries="@array/categories" />
-
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
-            <Button
-                android:id="@+id/sflSearchButton"
+            <EditText
+                android:id="@+id/searchText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/search_hint"
+                android:importantForAutofill="no"
+                android:inputType="text" />
+
+            <Spinner
+                android:id="@+id/searchCategorySpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/search_go_button" />
+                android:entries="@array/categories" />
 
-            <Button
-                android:id="@+id/clearSearchButton"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                style="?android:attr/buttonBarStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/clear_search_button" />
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/sflSearchButton"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/search_go_button" />
+
+                <Button
+                    android:id="@+id/clearSearchButton"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/clear_search_button" />
+            </LinearLayout>
         </LinearLayout>
+
 
         <GridLayout
             android:layout_width="match_parent"

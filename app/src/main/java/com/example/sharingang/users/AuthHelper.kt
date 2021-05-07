@@ -13,15 +13,16 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AuthHelper (
+class AuthHelper(
     private val context: Context,
     private val auth: FirebaseAuth,
+    private val authUI: AuthUI,
     private val lifecycleScope: LifecycleCoroutineScope,
     private val userRepository: UserRepository,
     fragment: Fragment,
     private val currentUserProvider: CurrentUserProvider,
     private val execUponSignInSuccess: (FirebaseUser, String) -> Unit
-    ) {
+) {
 
     private lateinit var currentUser: FirebaseUser
     private lateinit var currentUserId: String
@@ -41,7 +42,7 @@ class AuthHelper (
         val providers = arrayListOf(
             AuthUI.IdpConfig.GoogleBuilder().build()
         )
-        val intent = AuthUI.getInstance()
+        val intent = authUI
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
             .setIsSmartLockEnabled(false)
@@ -50,7 +51,7 @@ class AuthHelper (
     }
 
     fun signOut() {
-        AuthUI.getInstance().signOut(context)
+        authUI.signOut(context)
     }
 
     private fun addUserToDatabase(user: FirebaseUser) {

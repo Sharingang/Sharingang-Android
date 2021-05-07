@@ -1,7 +1,11 @@
 package com.example.sharingang.items
 
 import androidx.core.net.toUri
-import androidx.lifecycle.*
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import com.example.sharingang.ImageStore
@@ -33,10 +37,6 @@ class ItemsViewModel @Inject constructor(
     enum class ORDERING {
         DATE, PRICE, NAME, CATEGORY
     }
-
-    private val _navigateToEditItem = MutableLiveData<Item?>()
-    val navigateToEditItem: LiveData<Item?>
-        get() = _navigateToEditItem
 
     private val _navigateToDetailItem = MutableLiveData<Item?>()
     val navigateToDetailItem: LiveData<Item?>
@@ -84,9 +84,9 @@ class ItemsViewModel @Inject constructor(
     fun setItem(item: Item, callback: ((String?) -> Unit)? = null) {
         viewModelScope.launch(Dispatchers.IO) {
             val uploadUrl = item.image?.let {
-                if(!it.startsWith("https://")){
+                if (!it.startsWith("https://")) {
                     imageStore.store(it.toUri())
-                }else{
+                } else {
                     it
                 }
             }
@@ -136,8 +136,8 @@ class ItemsViewModel @Inject constructor(
                 val matchCategory = categoryID == 0 || item.category == categoryID
 
                 // If we have a search term, it should match
-                val matchName = searchName.isEmpty() || item.title.toLowerCase(Locale.getDefault())
-                    .contains(searchName.toLowerCase(Locale.getDefault()))
+                val matchName = searchName.isEmpty() || item.title.lowercase()
+                    .contains(searchName.lowercase())
 
                 matchCategory && matchName && !item.sold
             }
@@ -192,9 +192,9 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
-    fun setupItemAdapter(userId: String?): ItemsAdapter {
+    fun setupItemAdapter(): ItemsAdapter {
         val onView = { item: Item -> onViewItem(item) }
-        return ItemsAdapter(ItemListener(onView), userId)
+        return ItemsAdapter(ItemListener(onView))
     }
 
     fun addObserver(LifeCycleOwner: LifecycleOwner, adapter: ItemsAdapter, type: OBSERVABLES) {
@@ -220,7 +220,7 @@ class ItemsViewModel @Inject constructor(
     fun setupItemNavigation(
         LifeCycleOwner: LifecycleOwner,
         navController: NavController,
-        actionDetail: (Item) -> NavDirections,
+        actionDetail: (Item) -> NavDirections
     ) {
         navigateToDetailItem.observe(LifeCycleOwner, { item ->
             item?.let {

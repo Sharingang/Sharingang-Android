@@ -68,9 +68,9 @@ class InMemoryUserRepositoryTest {
 
     private fun generateSampleUser(index: Int = 0): User {
         return User(
-                id = UUID.randomUUID().toString(),
-                name = "Name $index",
-                profilePicture = "https://example.com/image.jpg"
+            id = UUID.randomUUID().toString(),
+            name = "Name $index",
+            profilePicture = "https://example.com/image.jpg"
         )
     }
 }

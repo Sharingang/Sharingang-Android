@@ -26,14 +26,14 @@ class InMemoryUserRepository : UserRepository {
     override suspend fun refreshUsers() {
     }
 
-    override suspend fun add(user: User): String? {
-        requireNotNull(user.id)
-        if (usersMap.containsKey(user.id)) {
+    override suspend fun add(element: User): String? {
+        requireNotNull(element.id)
+        if (usersMap.containsKey(element.id)) {
             return null
         }
 
-        usersMap[user.id] = user
-        return user.id
+        usersMap[element.id] = element
+        return element.id
     }
 
     override suspend fun update(user: User): Boolean {
