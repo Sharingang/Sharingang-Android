@@ -70,12 +70,13 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         super.onPrepareOptionsMenu(menu)
         val subscribe = menu.findItem(R.id.menuSubscribe)
         val unsubscribe = menu.findItem(R.id.menuUnsubscribe)
-        unsubscribe.isVisible = false
-        subscribe.isVisible = false
         val userId = currentUserProvider.getCurrentUserId()
         if (userId != null) {
             unsubscribe.isVisible = contained
             subscribe.isVisible = !contained
+        } else {
+            unsubscribe.isVisible = false
+            subscribe.isVisible = false
         }
     }
 
