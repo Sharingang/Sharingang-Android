@@ -169,5 +169,11 @@
         <argument
             android:name="partnerId"
             app:argType="string" />
+        <argument
+            android:name="partnerUsername"
+            app:argType="string" />
+        <argument
+            android:name="partnerProfilePictureUrl"
+            app:argType="string" />
     </fragment>
 </navigation>
