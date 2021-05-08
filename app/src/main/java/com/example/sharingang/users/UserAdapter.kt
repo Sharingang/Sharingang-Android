@@ -12,12 +12,16 @@ import com.bumptech.glide.Glide
 import com.example.sharingang.R
 
 
-class UserAdapter(private val context: Context, private val users: List<User>) :
+class UserAdapter(private val context: Context, private var users: MutableList<User>) :
     RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
+    init {
+        users = mutableListOf<User>()
+    }
+
     class ViewHolder(userEntryView: View) : RecyclerView.ViewHolder(userEntryView) {
-        var username: TextView = userEntryView.findViewById(R.id.chat_partner_username)
-        var imageView: ImageView = userEntryView.findViewById(R.id.profilePicture)
+        var username: TextView = userEntryView.findViewById(R.id.user_entry_username)
+        var imageView: ImageView = userEntryView.findViewById(R.id.user_entry_profilepicture)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,8 +36,15 @@ class UserAdapter(private val context: Context, private val users: List<User>) :
     }
 
     override fun getItemCount(): Int {
-        Log.e("NUMUSERS", "NumUsers = ${users.size}")
+        Log.e("xxx", "NumUsers = ${users.size}")
         return users.size
+    }
+
+    fun submitList(newData: List<User>) {
+        users.clear()
+        users.addAll(newData)
+        Log.e("xxx", "new size is ${newData.size}")
+        notifyDataSetChanged()
     }
 
 }
