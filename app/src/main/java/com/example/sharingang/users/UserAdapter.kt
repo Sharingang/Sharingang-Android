@@ -1,7 +1,6 @@
 package com.example.sharingang.users
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,14 +35,12 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
     }
 
     override fun getItemCount(): Int {
-        Log.e("xxx", "NumUsers = ${users.size}")
         return users.size
     }
 
     fun submitList(newData: List<User>) {
         users.clear()
         users.addAll(newData)
-        Log.e("xxx", "new size is ${newData.size}")
         notifyDataSetChanged()
     }
 
