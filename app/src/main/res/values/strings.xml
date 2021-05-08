@@ -75,4 +75,5 @@
     <string name="logged_out_user_info_chat">You need to be logged in to chat.</string>
     <string name="send">Send</string>
     <string name="messageHint">Your message…</string>
+    <string name="chat">Chat</string>
 </resources>

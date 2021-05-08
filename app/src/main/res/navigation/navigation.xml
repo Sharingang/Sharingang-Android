@@ -165,7 +165,7 @@
     <fragment
         android:id="@+id/messageFragment"
         android:name="com.example.sharingang.MessageFragment"
-        android:label="MessageFragment" >
+        android:label="@string/chat">
         <argument
             android:name="partnerId"
             app:argType="string" />

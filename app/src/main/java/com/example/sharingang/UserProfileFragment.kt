@@ -125,6 +125,7 @@ class UserProfileFragment : Fragment() {
         loggedInUserEmail = currentUserProvider.getCurrentUserEmail()
         userViewModel.user.observe(viewLifecycleOwner, { user ->
             displayUserFields(user)
+            imageUri = Uri.parse(user!!.profilePicture)
         })
         setupRecyclerView(shownUserProfileId)
         setupAuthenticationButtons()
@@ -134,6 +135,7 @@ class UserProfileFragment : Fragment() {
         setupViews()
         setupReportButton()
         setupRatingView()
+        setupChatButton()
     }
 
     private fun setUserType() {
@@ -149,7 +151,7 @@ class UserProfileFragment : Fragment() {
             binding.upfTopinfo, binding.imageView, binding.gallerycameraholder, binding.nameText,
             binding.textEmail, binding.applyholder, binding.ratingTextview, binding.applyholder,
             binding.btnReport, binding.userItemList, binding.btnLogout,
-            binding.btnLogin
+            binding.btnLogin, binding.btnChat
         ).forEach { view -> view.visibility = View.GONE }
     }
 
@@ -160,7 +162,7 @@ class UserProfileFragment : Fragment() {
             )
             UserType.VISITOR -> listOf(
                 binding.imageView, binding.nameText, binding.ratingTextview,
-                binding.userItemList, binding.btnReport
+                binding.userItemList, binding.btnReport, binding.btnChat
             )
             UserType.SELF -> listOf(
                 binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList,
@@ -195,11 +197,6 @@ class UserProfileFragment : Fragment() {
                     item
                 )
             })
-    }
-
-    private fun setupButtonsAction() {
-        val buttons = listOf(binding.btnApply, binding.btnOpenCamera, binding.btnOpenGallery)
-        buttons.forEach { button -> button.setOnClickListener { setupPictureButton(button) } }
     }
 
     private fun setEmailText() {
@@ -301,6 +298,15 @@ class UserProfileFragment : Fragment() {
             userType = UserType.LOGGED_OUT_SELF
             setupViews()
             setVisibilities()
+        }
+    }
+
+    private fun setupChatButton() {
+        binding.btnChat.setOnClickListener() {
+            view?.findNavController()?.navigate(UserProfileFragmentDirections
+                .actionUserProfileFragmentToMessageFragment(
+                    shownUserProfileId!!, binding.nameText.text.toString(), imageUri.toString()
+                ))
         }
     }
 }
