@@ -15,7 +15,7 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
     RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
     init {
-        users = mutableListOf<User>()
+        users = mutableListOf()
     }
 
     class ViewHolder(userEntryView: View) : RecyclerView.ViewHolder(userEntryView) {

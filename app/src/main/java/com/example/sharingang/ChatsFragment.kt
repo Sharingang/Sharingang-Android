@@ -43,8 +43,8 @@ class ChatsFragment : Fragment() {
         binding = FragmentChatsBinding.inflate(inflater, container, false)
         if(currentUser != null) {
             binding.chatUsersList.layoutManager = LinearLayoutManager(requireContext())
-            usersLiveData.observe(viewLifecycleOwner, {
-                (binding.chatUsersList.adapter as UserAdapter).submitList(it)
+            usersLiveData.observe(viewLifecycleOwner, { newList ->
+                (binding.chatUsersList.adapter as UserAdapter).submitList(newList)
             })
         }
         setupUI()
@@ -59,7 +59,8 @@ class ChatsFragment : Fragment() {
             binding.chatUsersList.adapter = userAdapter
             lifecycleScope.launch(Dispatchers.IO) {
                 val chatPartners = firebaseFirestore.collection("users")
-                    .document(currentUser!!.uid).collection("messagePartners").get().await()
+                    .document(currentUser!!.uid).collection("messagePartners").
+                    get().await()
                 listUsers.clear()
                 for (document in chatPartners.documents) {
                     listUsers.add(userRepository.get(document.id)!!)
