@@ -1,6 +1,7 @@
 package com.example.sharingang
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -41,7 +42,8 @@ class MessageFragment : Fragment() {
     }
 
     private fun setupFields() {
+        binding.chatPartnerUsername.text = "Chatting with ${partnerUsername}"
         Glide.with(requireActivity()).load(partnerProfilePic).into(binding.chatPartnerPic)
-        binding.chatPartnerUsername.text = partnerUsername
+        Log.e("xxx", "name = $partnerUsername")
     }
 }
