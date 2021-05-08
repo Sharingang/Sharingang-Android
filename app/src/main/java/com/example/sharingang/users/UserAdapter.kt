@@ -1,6 +1,7 @@
 package com.example.sharingang.users
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,7 @@ class UserAdapter(private val context: Context, private val users: List<User>) :
     }
 
     override fun getItemCount(): Int {
+        Log.e("NUMUSERS", "NumUsers = ${users.size}")
         return users.size
     }
 

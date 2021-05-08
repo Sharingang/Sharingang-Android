@@ -79,6 +79,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage-ktx'
     implementation 'com.google.firebase:firebase-dynamic-links-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-database:19.7.0'
 
     // authentication
     implementation 'com.firebaseui:firebase-ui-auth:7.1.1'
