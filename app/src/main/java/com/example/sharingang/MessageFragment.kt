@@ -90,6 +90,8 @@ class MessageFragment : Fragment() {
     private fun sendMessage(from: String, to: String, message: String) {
         val data = hashMapOf<String, Any>(
             "message" to message,
+            "from" to from,
+            "to" to to
         )
         val lastTimeChat = hashMapOf<String, Any>(
             "lastTime" to Date()
@@ -119,8 +121,14 @@ class MessageFragment : Fragment() {
             listMessages.clear()
             for (document in messages.documents) {
                 val message = document.getString("message")
+                val from = document.getString("from")
                 if (message != null) {
+                    MessageAdapter.sourceType =
+                        if(from == currentUser.uid)
+                            MessageAdapter.Companion.MessageSource.CURRENT
+                        else MessageAdapter.Companion.MessageSource.OTHER
                     listMessages.add(message)
+                    messagesLiveData.postValue(listMessages)
                 }
             }
             messagesLiveData.postValue(listMessages)

@@ -15,13 +15,27 @@ class MessageAdapter(private val context: Context, private var messages: Mutable
         messages = mutableListOf()
     }
 
+    companion object {
+        enum class MessageSource {
+            CURRENT,
+            OTHER
+        }
+        lateinit var sourceType: MessageSource
+    }
+
     class ViewHolder(messageEntryView: View) : RecyclerView.ViewHolder(messageEntryView) {
         var text: TextView = messageEntryView.findViewById(R.id.messageText)
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view: View = LayoutInflater.from(context).inflate(R.layout.message_entry_left, parent, false)
+        val view: View =
+            if(sourceType == MessageSource.OTHER)
+                LayoutInflater.from(context)
+                    .inflate(R.layout.message_entry_left, parent, false)
+            else
+                LayoutInflater.from(context)
+                    .inflate(R.layout.message_entry_right, parent, false)
         return ViewHolder(view)
     }
 
