@@ -16,6 +16,8 @@ import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -114,20 +116,26 @@ class MessageFragment : Fragment() {
                 .document(partnerId).collection(getString(R.string.messages))
                 .get().await()
             listChats.clear()
-            for (document in messages.documents) {
-                val message = document.getString(getString(R.string.message))
-                val from = document.getString(getString(R.string.from))
-                val to = document.getString(getString(R.string.to))
-                if (message != null) {
-                    listChats.add(Chat(from, to, message))
-                    messagesLiveData.postValue(listChats)
-                }
-            }
+            addMessagesToChatList(messages.documents)
             messagesLiveData.postValue(listChats)
             lifecycleScope.launch(Dispatchers.Main) {
                 if (listChats.isNotEmpty()) {
                     binding.history.scrollToPosition(listChats.size - 1)
                 }
+            }
+        }
+    }
+
+    private fun addMessagesToChatList(documents: MutableList<DocumentSnapshot>) {
+        for (document in documents) {
+            val message = document.getString(getString(R.string.message))
+            if (message != null) {
+                listChats.add(
+                    Chat(
+                        document.getString(getString(R.string.from)),
+                        document.getString(getString(R.string.to)),
+                        message))
+                messagesLiveData.postValue(listChats)
             }
         }
     }
