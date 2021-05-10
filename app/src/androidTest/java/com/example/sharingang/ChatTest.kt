@@ -68,7 +68,7 @@ class ChatTest {
         Espresso.pressBack()
         FakeCurrentUserProvider.instance = 1
         navigate_to(R.id.chatsFragment)
-        onView(withId(R.id.chatPartnerUsername)).perform(click())
+        onView(withText("Test User")).perform(click())
         onView(withText(message)).check(matches(isDisplayed()))
     }
 

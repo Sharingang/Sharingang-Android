@@ -63,12 +63,9 @@ class ChatsFragment : Fragment() {
             binding.chatUsersList.adapter = userAdapter
             lifecycleScope.launch(Dispatchers.IO) {
                 val chatPartners = firebaseFirestore.collection(getString(R.string.users))
-                    .document(currentUserId!!).collection(getString(R.string.messagePartners))
-                    .get().await()
+                    .document(currentUserId!!).collection(getString(R.string.messagePartners)).get().await()
                 listUsers.clear()
-                for (document in chatPartners.documents) {
-                    listUsers.add(userRepository.get(document.id)!!)
-                }
+                chatPartners.documents.forEach { listUsers.add(userRepository.get(it.id)!!) }
                 usersLiveData.postValue(listUsers)
             }
         } else {
