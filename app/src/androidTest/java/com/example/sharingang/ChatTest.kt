@@ -63,8 +63,6 @@ class ChatTest {
         )
         onView(withId(R.id.btnSend)).perform(click())
         Thread.sleep(3000)
-        onView(withText(message)).check(matches(isDisplayed()))
-        Thread.sleep(1000)
         Espresso.pressBack()
         Espresso.pressBack()
         Espresso.pressBack()
