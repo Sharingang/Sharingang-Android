@@ -67,17 +67,21 @@ class MessageFragment : Fragment() {
 
     private fun sendMessage(from: String, to: String, message: String) {
         val data = hashMapOf<String, Any>(
-            "from" to from,
-            "to" to to,
             "message" to message,
-            "date" to Date()
+        )
+        val lastTimeChat = hashMapOf<String, Any>(
+            "lastTime" to Date()
         )
         firebaseFirestore.collection("users").document(from)
             .collection("chats").document(to).collection("messages")
-            .add(data)
+            .document(Date().toString()).set(data)
         firebaseFirestore.collection("users").document(to)
             .collection("chats").document(from).collection("messages")
-            .add(data)
+            .document(Date().toString()).set(data)
         binding.messageEditText.text.clear()
+        firebaseFirestore.collection("users").document(from)
+            .collection("messagePartners").document(to).set(lastTimeChat)
+        firebaseFirestore.collection("users").document(to)
+            .collection("messagePartners").document(from).set(lastTimeChat)
     }
 }
