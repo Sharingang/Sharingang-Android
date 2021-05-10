@@ -11,6 +11,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.CoreMatchers.not
 import org.junit.Rule
 import org.junit.Test
+import kotlin.streams.asSequence
 
 @HiltAndroidTest
 class ChatTest {
@@ -55,13 +56,14 @@ class ChatTest {
         Thread.sleep(2000)
         onView(withId(R.id.chatPartnerUsername)).check(matches(withText(FakeCurrentUserProvider.fakeUser1.name)))
         Thread.sleep(2000)
+        val message = getRandomString(15)
         onView(withId(R.id.messageEditText)).perform(
-            typeText("Hello"),
+            typeText(message),
             closeSoftKeyboard()
         )
         onView(withId(R.id.btnSend)).perform(click())
         Thread.sleep(3000)
-        onView(withText("Hello")).check(matches(isDisplayed()))
+        onView(withText(message)).check(matches(isDisplayed()))
         Thread.sleep(1000)
         Espresso.pressBack()
         Espresso.pressBack()
@@ -69,7 +71,14 @@ class ChatTest {
         FakeCurrentUserProvider.instance = 1
         navigate_to(R.id.chatsFragment)
         onView(withId(R.id.chatPartnerUsername)).perform(click())
-        onView(withText("Hello")).check(matches(isDisplayed()))
+        onView(withText(message)).check(matches(isDisplayed()))
+    }
+
+    private fun getRandomString(length: Int) : String {
+        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+        return (1..length)
+            .map { allowedChars.random() }
+            .joinToString("")
     }
 
 
