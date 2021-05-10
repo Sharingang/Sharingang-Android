@@ -1,5 +1,6 @@
 package com.example.sharingang
 
+import android.graphics.Rect
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.sharingang.databinding.FragmentChatsBinding
 import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.User
@@ -43,6 +45,7 @@ class ChatsFragment : Fragment() {
         currentUserId = currentUserProvider.getCurrentUserId()
         binding = FragmentChatsBinding.inflate(inflater, container, false)
         if (currentUserId != null) {
+            setRecyclerViewDecoration()
             binding.chatUsersList.layoutManager = LinearLayoutManager(requireContext())
             usersLiveData.observe(viewLifecycleOwner, { newList ->
                 (binding.chatUsersList.adapter as UserAdapter).submitList(newList)
@@ -72,5 +75,21 @@ class ChatsFragment : Fragment() {
             binding.chatUsersList.visibility = View.GONE
             binding.loggedOutInfo.visibility = View.VISIBLE
         }
+    }
+
+    private fun setRecyclerViewDecoration() {
+        binding.chatUsersList.addItemDecoration(object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(
+                outRect: Rect,
+                view: View,
+                parent: RecyclerView,
+                state: RecyclerView.State,
+            ) {
+                super.getItemOffsets(outRect, view, parent, state)
+                if (parent.getChildAdapterPosition(view) > 0) {
+                    outRect.top = 10
+                }
+            }
+        })
     }
 }
