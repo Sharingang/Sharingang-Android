@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.FragmentMessageBinding
+import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -26,7 +27,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MessageFragment : Fragment() {
 
-    private lateinit var currentUser: FirebaseUser
+    private lateinit var currentUserId: String
     private lateinit var partnerId: String
     private lateinit var partnerProfilePic: String
     private lateinit var partnerUsername: String
@@ -37,10 +38,9 @@ class MessageFragment : Fragment() {
     private lateinit var listChats: MutableList<Chat>
 
     @Inject
-    lateinit var auth: FirebaseAuth
+    lateinit var currentUserProvider: CurrentUserProvider
 
-    @Inject
-    lateinit var firebaseFirestore: FirebaseFirestore
+    private var firebaseFirestore = FirebaseFirestore.getInstance()
 
     @Inject
     lateinit var userRepository: UserRepository
@@ -58,7 +58,7 @@ class MessageFragment : Fragment() {
         partnerId = args.partnerId
         partnerUsername = args.partnerUsername
         partnerProfilePic = args.partnerProfilePictureUrl
-        currentUser = auth.currentUser!!
+        currentUserId = currentUserProvider.getCurrentUserId()!!
         setupFields()
         setupSendButton()
         setupUI()
@@ -77,7 +77,7 @@ class MessageFragment : Fragment() {
         }
         binding.btnSend.setOnClickListener {
             val message: String = binding.messageEditText.text.toString()
-            sendMessage(currentUser.uid, partnerId, message)
+            sendMessage(currentUserId, partnerId, message)
             setupUI()
         }
     }
@@ -106,11 +106,11 @@ class MessageFragment : Fragment() {
 
     private fun setupUI() {
         listChats = mutableListOf()
-        messageAdapter = MessageAdapter(requireContext(), listChats, currentUser.uid)
+        messageAdapter = MessageAdapter(requireContext(), listChats, currentUserId)
         binding.history.adapter = messageAdapter
         lifecycleScope.launch(Dispatchers.IO) {
             val messages = firebaseFirestore.collection(getString(R.string.users))
-                .document(currentUser.uid).collection(getString(R.string.chats))
+                .document(currentUserId).collection(getString(R.string.chats))
                 .document(partnerId).collection(getString(R.string.messages))
                 .get().await()
             listChats.clear()

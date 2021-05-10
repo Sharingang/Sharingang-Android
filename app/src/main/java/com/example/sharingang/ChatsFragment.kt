@@ -9,11 +9,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sharingang.databinding.FragmentChatsBinding
+import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.User
 import com.example.sharingang.users.UserAdapter
 import com.example.sharingang.users.UserRepository
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -25,14 +24,13 @@ import javax.inject.Inject
 class ChatsFragment : Fragment() {
 
     private lateinit var binding: FragmentChatsBinding
-    private var currentUser: FirebaseUser? = null
+    private var currentUserId: String? = null
     private lateinit var userAdapter: UserAdapter
 
     @Inject
-    lateinit var auth: FirebaseAuth
+    lateinit var currentUserProvider: CurrentUserProvider
 
-    @Inject
-    lateinit var firebaseFirestore: FirebaseFirestore
+    private var firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     @Inject
     lateinit var userRepository: UserRepository
@@ -42,9 +40,9 @@ class ChatsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        currentUser = auth.currentUser
+        currentUserId = currentUserProvider.getCurrentUserId()
         binding = FragmentChatsBinding.inflate(inflater, container, false)
-        if (currentUser != null) {
+        if (currentUserId != null) {
             binding.chatUsersList.layoutManager = LinearLayoutManager(requireContext())
             usersLiveData.observe(viewLifecycleOwner, { newList ->
                 (binding.chatUsersList.adapter as UserAdapter).submitList(newList)
@@ -55,14 +53,14 @@ class ChatsFragment : Fragment() {
     }
 
     private fun setupUI() {
-        if (currentUser != null) {
+        if (currentUserId != null) {
             binding.loggedOutInfo.visibility = View.GONE
             val listUsers = mutableListOf<User>()
             userAdapter = UserAdapter(requireContext(), listUsers)
             binding.chatUsersList.adapter = userAdapter
             lifecycleScope.launch(Dispatchers.IO) {
                 val chatPartners = firebaseFirestore.collection(getString(R.string.users))
-                    .document(currentUser!!.uid).collection(getString(R.string.messagePartners))
+                    .document(currentUserId!!).collection(getString(R.string.messagePartners))
                     .get().await()
                 listUsers.clear()
                 for (document in chatPartners.documents) {
