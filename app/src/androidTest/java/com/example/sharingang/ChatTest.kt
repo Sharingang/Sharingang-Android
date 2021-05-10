@@ -51,24 +51,24 @@ class ChatTest {
         FakeCurrentUserProvider.instance = 2
         onView(withId(R.id.item_list_view_title)).perform(click())
         onView(withId(R.id.itemPostedBy)).perform(click())
-        Thread.sleep(2000)
         onView(withId(R.id.btnChat)).perform(click())
         Thread.sleep(2000)
         onView(withId(R.id.chatPartnerUsername)).check(matches(withText(FakeCurrentUserProvider.fakeUser1.name)))
-        Thread.sleep(2000)
         val message = getRandomString(15)
         onView(withId(R.id.messageEditText)).perform(
             typeText(message),
             closeSoftKeyboard()
         )
         onView(withId(R.id.btnSend)).perform(click())
-        Thread.sleep(3000)
+        Thread.sleep(4000)
         Espresso.pressBack()
         Espresso.pressBack()
         Espresso.pressBack()
         FakeCurrentUserProvider.instance = 1
         navigate_to(R.id.chatsFragment)
-        onView(withText("Test User")).perform(click())
+        Thread.sleep(2000)
+        onView(withText("Test User 2")).perform(click())
+        Thread.sleep(2000)
         onView(withText(message)).check(matches(isDisplayed()))
     }
 

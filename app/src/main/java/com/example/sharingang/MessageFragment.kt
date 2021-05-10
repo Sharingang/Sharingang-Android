@@ -14,8 +14,6 @@ import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.FragmentMessageBinding
 import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.UserRepository
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -46,6 +44,12 @@ class MessageFragment : Fragment() {
 
     @Inject
     lateinit var userRepository: UserRepository
+
+    private class LinkedPair<A>(private val fst: A, private val snd: A) {
+        fun otherOf(x: A): A? {
+            return if(x == fst) snd else if(x == snd) fst else null
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -84,6 +88,11 @@ class MessageFragment : Fragment() {
         }
     }
 
+    private fun getUserDocument(userId: String): DocumentReference {
+        val usersCollection = firebaseFirestore.collection(getString(R.string.users))
+        return usersCollection.document(userId)
+    }
+
     private fun sendMessage(from: String, to: String, message: String) {
         val data = hashMapOf<String, Any>(
             getString(R.string.message) to message,
@@ -93,17 +102,15 @@ class MessageFragment : Fragment() {
         val lastTimeChat = hashMapOf<String, Any>(
             getString(R.string.last_message) to Date()
         )
-        firebaseFirestore.collection(getString(R.string.users)).document(from)
-            .collection(getString(R.string.chats)).document(to)
-            .collection(getString(R.string.messages)).document(Date().toString()).set(data)
-        firebaseFirestore.collection(getString(R.string.users)).document(to)
-            .collection(getString(R.string.chats)).document(from)
-            .collection(getString(R.string.messages)).document(Date().toString()).set(data)
+        val fromToPair = LinkedPair<String>(from, to)
+        listOf(from, to).forEach {
+            val userDocument = getUserDocument(it)
+            userDocument.collection(getString(R.string.chats)).document(fromToPair.otherOf(it)!!)
+                .collection(getString(R.string.messages)).document(Date().toString()).set(data)
+            userDocument.collection(getString(R.string.messagePartners))
+                .document(fromToPair.otherOf(it)!!).set(lastTimeChat)
+        }
         binding.messageEditText.text.clear()
-        firebaseFirestore.collection(getString(R.string.users)).document(from)
-            .collection(getString(R.string.messagePartners)).document(to).set(lastTimeChat)
-        firebaseFirestore.collection(getString(R.string.users)).document(to)
-            .collection(getString(R.string.messagePartners)).document(from).set(lastTimeChat)
     }
 
     private fun setupUI() {
