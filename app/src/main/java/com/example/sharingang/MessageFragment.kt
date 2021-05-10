@@ -37,8 +37,8 @@ class MessageFragment : Fragment() {
     private lateinit var binding: FragmentMessageBinding
     private lateinit var messageAdapter: MessageAdapter
     private val args: MessageFragmentArgs by navArgs()
-    private val messagesLiveData: MutableLiveData<List<String>> = MutableLiveData(listOf())
-    private lateinit var listMessages: MutableList<String>
+    private val messagesLiveData: MutableLiveData<List<Chat>> = MutableLiveData(listOf())
+    private lateinit var listChats: MutableList<Chat>
 
     @Inject
     lateinit var auth: FirebaseAuth
@@ -110,30 +110,27 @@ class MessageFragment : Fragment() {
     }
 
     private fun setupUI() {
-        listMessages = mutableListOf()
-        messageAdapter = MessageAdapter(requireContext(), listMessages)
+        listChats = mutableListOf()
+        messageAdapter = MessageAdapter(requireContext(), listChats, currentUser.uid)
         binding.history.adapter = messageAdapter
         lifecycleScope.launch(Dispatchers.IO) {
             val messages = firebaseFirestore.collection("users")
                 .document(currentUser.uid).collection("chats")
                 .document(partnerId).collection("messages")
                 .get().await()
-            listMessages.clear()
+            listChats.clear()
             for (document in messages.documents) {
                 val message = document.getString("message")
                 val from = document.getString("from")
+                val to = document.getString("to")
                 if (message != null) {
-                    MessageAdapter.sourceType =
-                        if(from == currentUser.uid)
-                            MessageAdapter.Companion.MessageSource.CURRENT
-                        else MessageAdapter.Companion.MessageSource.OTHER
-                    listMessages.add(message)
-                    messagesLiveData.postValue(listMessages)
+                    listChats.add(Chat(from, to, message))
+                    messagesLiveData.postValue(listChats)
                 }
             }
-            messagesLiveData.postValue(listMessages)
+            messagesLiveData.postValue(listChats)
             lifecycleScope.launch(Dispatchers.Main) {
-                binding.history.scrollToPosition(listMessages.size - 1)
+                binding.history.scrollToPosition(listChats.size - 1)
 
             }
         }

@@ -8,19 +8,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 
-class MessageAdapter(private val context: Context, private var messages: MutableList<String>) :
+class MessageAdapter(private val context: Context, private var chats: MutableList<Chat>,
+                     private val currentUserId: String) :
     RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
     init {
-        messages = mutableListOf()
+        chats = mutableListOf()
     }
 
     companion object {
-        enum class MessageSource {
-            CURRENT,
-            OTHER
-        }
-        lateinit var sourceType: MessageSource
+        val MSG_TYPE_SEND = 0
+        val MSG_TYPE_RECEIVE = 1
     }
 
     class ViewHolder(messageEntryView: View) : RecyclerView.ViewHolder(messageEntryView) {
@@ -30,7 +28,7 @@ class MessageAdapter(private val context: Context, private var messages: Mutable
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View =
-            if(sourceType == MessageSource.OTHER)
+            if(viewType == MSG_TYPE_RECEIVE)
                 LayoutInflater.from(context)
                     .inflate(R.layout.message_entry_left, parent, false)
             else
@@ -40,17 +38,25 @@ class MessageAdapter(private val context: Context, private var messages: Mutable
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val message: String = messages[position]
+        val message: String = chats[position].message
         holder.text.text = message
     }
 
     override fun getItemCount(): Int {
-        return messages.size
+        return chats.size
     }
 
-    fun submitList(newData: List<String>) {
-        messages.clear()
-        messages.addAll(newData)
+    override fun getItemViewType(position: Int): Int {
+        return (
+                if(chats[position].from == currentUserId) MSG_TYPE_SEND
+                else MSG_TYPE_RECEIVE
+                )
+
+    }
+
+    fun submitList(newData: List<Chat>) {
+        chats.clear()
+        chats.addAll(newData)
         notifyDataSetChanged()
     }
 
