@@ -1,14 +1,11 @@
 package com.example.sharingang
 
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
@@ -25,7 +22,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
-
 
 @AndroidEntryPoint
 class MessageFragment : Fragment() {
@@ -72,7 +68,6 @@ class MessageFragment : Fragment() {
     private fun setupFields() {
         Glide.with(this).load(partnerProfilePic).into(binding.chatPartnerPic)
         binding.chatPartnerUsername.text = partnerUsername
-        Log.e("xxx", "name = $partnerUsername")
     }
 
     private fun setupSendButton() {
@@ -89,24 +84,24 @@ class MessageFragment : Fragment() {
 
     private fun sendMessage(from: String, to: String, message: String) {
         val data = hashMapOf<String, Any>(
-            "message" to message,
-            "from" to from,
-            "to" to to
+            getString(R.string.message) to message,
+            getString(R.string.from) to from,
+            getString(R.string.to) to to
         )
         val lastTimeChat = hashMapOf<String, Any>(
-            "lastTime" to Date()
+            getString(R.string.last_message) to Date()
         )
-        firebaseFirestore.collection("users").document(from)
-            .collection("chats").document(to).collection("messages")
-            .document(Date().toString()).set(data)
-        firebaseFirestore.collection("users").document(to)
-            .collection("chats").document(from).collection("messages")
-            .document(Date().toString()).set(data)
+        firebaseFirestore.collection(getString(R.string.users)).document(from)
+            .collection(getString(R.string.chats)).document(to)
+            .collection(getString(R.string.messages)).document(Date().toString()).set(data)
+        firebaseFirestore.collection(getString(R.string.users)).document(to)
+            .collection(getString(R.string.chats)).document(from)
+            .collection(getString(R.string.messages)).document(Date().toString()).set(data)
         binding.messageEditText.text.clear()
-        firebaseFirestore.collection("users").document(from)
-            .collection("messagePartners").document(to).set(lastTimeChat)
-        firebaseFirestore.collection("users").document(to)
-            .collection("messagePartners").document(from).set(lastTimeChat)
+        firebaseFirestore.collection(getString(R.string.users)).document(from)
+            .collection(getString(R.string.messagePartners)).document(to).set(lastTimeChat)
+        firebaseFirestore.collection(getString(R.string.users)).document(to)
+            .collection(getString(R.string.messagePartners)).document(from).set(lastTimeChat)
     }
 
     private fun setupUI() {
@@ -114,15 +109,15 @@ class MessageFragment : Fragment() {
         messageAdapter = MessageAdapter(requireContext(), listChats, currentUser.uid)
         binding.history.adapter = messageAdapter
         lifecycleScope.launch(Dispatchers.IO) {
-            val messages = firebaseFirestore.collection("users")
-                .document(currentUser.uid).collection("chats")
-                .document(partnerId).collection("messages")
+            val messages = firebaseFirestore.collection(getString(R.string.users))
+                .document(currentUser.uid).collection(getString(R.string.chats))
+                .document(partnerId).collection(getString(R.string.messages))
                 .get().await()
             listChats.clear()
             for (document in messages.documents) {
-                val message = document.getString("message")
-                val from = document.getString("from")
-                val to = document.getString("to")
+                val message = document.getString(getString(R.string.message))
+                val from = document.getString(getString(R.string.from))
+                val to = document.getString(getString(R.string.to))
                 if (message != null) {
                     listChats.add(Chat(from, to, message))
                     messagesLiveData.postValue(listChats)
@@ -130,8 +125,9 @@ class MessageFragment : Fragment() {
             }
             messagesLiveData.postValue(listChats)
             lifecycleScope.launch(Dispatchers.Main) {
-                binding.history.scrollToPosition(listChats.size - 1)
-
+                if (listChats.isNotEmpty()) {
+                    binding.history.scrollToPosition(listChats.size - 1)
+                }
             }
         }
     }

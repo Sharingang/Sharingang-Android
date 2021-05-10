@@ -27,21 +27,24 @@ class ChatsFragment : Fragment() {
     private lateinit var binding: FragmentChatsBinding
     private var currentUser: FirebaseUser? = null
     private lateinit var userAdapter: UserAdapter
+
     @Inject
     lateinit var auth: FirebaseAuth
+
     @Inject
     lateinit var firebaseFirestore: FirebaseFirestore
+
     @Inject
     lateinit var userRepository: UserRepository
     private val usersLiveData: MutableLiveData<List<User>> = MutableLiveData(listOf())
 
-    override fun onCreateView (
+    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         currentUser = auth.currentUser
         binding = FragmentChatsBinding.inflate(inflater, container, false)
-        if(currentUser != null) {
+        if (currentUser != null) {
             binding.chatUsersList.layoutManager = LinearLayoutManager(requireContext())
             usersLiveData.observe(viewLifecycleOwner, { newList ->
                 (binding.chatUsersList.adapter as UserAdapter).submitList(newList)
@@ -52,23 +55,22 @@ class ChatsFragment : Fragment() {
     }
 
     private fun setupUI() {
-        if(currentUser != null) {
+        if (currentUser != null) {
             binding.loggedOutInfo.visibility = View.GONE
             val listUsers = mutableListOf<User>()
             userAdapter = UserAdapter(requireContext(), listUsers)
             binding.chatUsersList.adapter = userAdapter
             lifecycleScope.launch(Dispatchers.IO) {
-                val chatPartners = firebaseFirestore.collection("users")
-                    .document(currentUser!!.uid).collection("messagePartners").
-                    get().await()
+                val chatPartners = firebaseFirestore.collection(getString(R.string.users))
+                    .document(currentUser!!.uid).collection(getString(R.string.messagePartners))
+                    .get().await()
                 listUsers.clear()
                 for (document in chatPartners.documents) {
                     listUsers.add(userRepository.get(document.id)!!)
                 }
                 usersLiveData.postValue(listUsers)
             }
-        }
-        else {
+        } else {
             binding.chatUsersList.visibility = View.GONE
             binding.loggedOutInfo.visibility = View.VISIBLE
         }

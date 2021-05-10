@@ -8,8 +8,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 
-class MessageAdapter(private val context: Context, private var chats: MutableList<Chat>,
-                     private val currentUserId: String) :
+class MessageAdapter(
+    private val context: Context, private var chats: MutableList<Chat>,
+    private val currentUserId: String
+) :
     RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
     init {
@@ -17,8 +19,8 @@ class MessageAdapter(private val context: Context, private var chats: MutableLis
     }
 
     companion object {
-        val MSG_TYPE_SEND = 0
-        val MSG_TYPE_RECEIVE = 1
+        const val MSG_TYPE_SEND = 0
+        const val MSG_TYPE_RECEIVE = 1
     }
 
     class ViewHolder(messageEntryView: View) : RecyclerView.ViewHolder(messageEntryView) {
@@ -28,7 +30,7 @@ class MessageAdapter(private val context: Context, private var chats: MutableLis
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View =
-            if(viewType == MSG_TYPE_RECEIVE)
+            if (viewType == MSG_TYPE_RECEIVE)
                 LayoutInflater.from(context)
                     .inflate(R.layout.message_entry_left, parent, false)
             else
@@ -48,7 +50,7 @@ class MessageAdapter(private val context: Context, private var chats: MutableLis
 
     override fun getItemViewType(position: Int): Int {
         return (
-                if(chats[position].from == currentUserId) MSG_TYPE_SEND
+                if (chats[position].from == currentUserId) MSG_TYPE_SEND
                 else MSG_TYPE_RECEIVE
                 )
 
