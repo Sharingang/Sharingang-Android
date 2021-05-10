@@ -125,7 +125,9 @@ class UserProfileFragment : Fragment() {
         loggedInUserEmail = currentUserProvider.getCurrentUserEmail()
         userViewModel.user.observe(viewLifecycleOwner, { user ->
             displayUserFields(user)
-            imageUri = Uri.parse(user!!.profilePicture)
+            if(user!!.profilePicture != null) {
+                imageUri = Uri.parse(user.profilePicture)
+            }
         })
         setupRecyclerView(shownUserProfileId)
         setupAuthenticationButtons()

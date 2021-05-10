@@ -12,6 +12,7 @@ import com.example.sharingang.databinding.FragmentMessageBinding
 import com.example.sharingang.databinding.UserProfileFragmentBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -28,6 +29,9 @@ class MessageFragment : Fragment() {
     @Inject
     lateinit var auth: FirebaseAuth
 
+    @Inject
+    lateinit var firebaseFirestore: FirebaseFirestore
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,8 +46,8 @@ class MessageFragment : Fragment() {
     }
 
     private fun setupFields() {
-        binding.chatPartnerUsername.text = "Chatting with ${partnerUsername}"
-        Glide.with(requireActivity()).load(partnerProfilePic).into(binding.chatPartnerPic)
+        Glide.with(this).load(partnerProfilePic).into(binding.chatPartnerPic)
+        binding.chatPartnerUsername.text = partnerUsername
         Log.e("xxx", "name = $partnerUsername")
     }
 }

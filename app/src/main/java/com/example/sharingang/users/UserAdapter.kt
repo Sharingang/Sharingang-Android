@@ -21,8 +21,8 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
     }
 
     class ViewHolder(userEntryView: View) : RecyclerView.ViewHolder(userEntryView) {
-        var username: TextView = userEntryView.findViewById(R.id.user_entry_username)
-        var imageView: ImageView = userEntryView.findViewById(R.id.user_entry_profilepicture)
+        var username: TextView = userEntryView.findViewById(R.id.chatPartnerUsername)
+        var imageView: ImageView = userEntryView.findViewById(R.id.chatPartnerPic)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

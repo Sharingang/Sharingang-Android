@@ -6,7 +6,7 @@
 
 
     <ImageView
-        android:id="@+id/user_entry_profilepicture"
+        android:id="@+id/chatPartnerPic"
         android:layout_width="72dp"
         android:layout_height="72dp"
         android:layout_marginStart="16dp"
@@ -17,12 +17,12 @@
         app:srcCompat="@mipmap/ic_launcher" />
 
     <TextView
-        android:id="@+id/user_entry_username"
+        android:id="@+id/chatPartnerUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="32dp"
         android:text="@string/username"
-        app:layout_constraintStart_toEndOf="@+id/user_entry_profilepicture"
+        app:layout_constraintStart_toEndOf="@+id/chatPartnerPic"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
