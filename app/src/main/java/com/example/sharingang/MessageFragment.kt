@@ -38,6 +38,7 @@ class MessageFragment : Fragment() {
     private lateinit var messageAdapter: MessageAdapter
     private val args: MessageFragmentArgs by navArgs()
     private val messagesLiveData: MutableLiveData<List<String>> = MutableLiveData(listOf())
+    private lateinit var listMessages: MutableList<String>
 
     @Inject
     lateinit var auth: FirebaseAuth
@@ -54,6 +55,7 @@ class MessageFragment : Fragment() {
     ): View {
         binding = FragmentMessageBinding.inflate(inflater, container, false)
         binding.history.layoutManager = LinearLayoutManager(requireContext())
+        (binding.history.layoutManager as LinearLayoutManager).stackFromEnd = true
         messagesLiveData.observe(viewLifecycleOwner, { newList ->
             (binding.history.adapter as MessageAdapter).submitList(newList)
         })
@@ -106,7 +108,7 @@ class MessageFragment : Fragment() {
     }
 
     private fun setupUI() {
-        val listMessages = mutableListOf<String>()
+        listMessages = mutableListOf()
         messageAdapter = MessageAdapter(requireContext(), listMessages)
         binding.history.adapter = messageAdapter
         lifecycleScope.launch(Dispatchers.IO) {
@@ -117,11 +119,15 @@ class MessageFragment : Fragment() {
             listMessages.clear()
             for (document in messages.documents) {
                 val message = document.getString("message")
-                if(message != null) {
+                if (message != null) {
                     listMessages.add(message)
                 }
             }
             messagesLiveData.postValue(listMessages)
+            lifecycleScope.launch(Dispatchers.Main) {
+                binding.history.scrollToPosition(listMessages.size - 1)
+
+            }
         }
     }
 }
