@@ -21,7 +21,7 @@ class MessageAdapter(private val context: Context, private var messages: Mutable
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view: View = LayoutInflater.from(context).inflate(R.layout.user_entry, parent, false)
+        val view: View = LayoutInflater.from(context).inflate(R.layout.message_entry_left, parent, false)
         return ViewHolder(view)
     }
 
