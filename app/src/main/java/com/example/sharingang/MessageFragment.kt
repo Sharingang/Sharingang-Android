@@ -1,21 +1,20 @@
 package com.example.sharingang
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.FragmentMessageBinding
-import com.example.sharingang.databinding.UserProfileFragmentBinding
-import com.example.sharingang.users.User
-import com.example.sharingang.users.UserAdapter
 import com.example.sharingang.users.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -26,6 +25,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class MessageFragment : Fragment() {
@@ -81,6 +81,7 @@ class MessageFragment : Fragment() {
         binding.btnSend.setOnClickListener {
             val message: String = binding.messageEditText.text.toString()
             sendMessage(currentUser.uid, partnerId, message)
+            setupUI()
         }
     }
 
