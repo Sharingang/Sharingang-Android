@@ -32,7 +32,7 @@ class UserProfileViewModel @Inject constructor(
     val subscriptionsContains : LiveData<Boolean>
         get() = _subscriptionsContains
 
-    private val _rating = MutableLiveData<Float>(0f)
+    private val _rating = MutableLiveData(0f)
     val rating: LiveData<Float>
         get() = _rating
 

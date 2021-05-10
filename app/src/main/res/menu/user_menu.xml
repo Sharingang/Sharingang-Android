@@ -4,7 +4,12 @@
 
     <item
         android:id="@+id/sold_list"
-        android:title="Sold"
+        android:title="@string/sold"
         android:icon="@drawable/ic_baseline_money_off_white_24"
         app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/subscription_list"
+        android:title="@string/see_subscriptions"
+        app:showAsAction="never" />
 </menu>
