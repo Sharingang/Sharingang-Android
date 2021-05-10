@@ -12,9 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.sharingang.databinding.FragmentItemsListBinding
 import com.example.sharingang.items.ItemsViewModel
 import com.example.sharingang.utils.OrderingViewModel
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class ItemsListFragment : Fragment() {
 
     private lateinit var binding: FragmentItemsListBinding

@@ -31,6 +31,8 @@ data class User(
     val numberOfRatings: Int = 0,
 
     var wishlist: List<String> = ArrayList(),
+    var subscriptions: List<String> = ArrayList(),
+
     @ServerTimestamp
     val createdAt: Date? = null,
 
