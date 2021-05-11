@@ -105,6 +105,15 @@ class SearchFragmentTest {
         }
     }
 
+    @Test
+    fun canSubUnsubToCategory() {
+        navigate_to(R.id.searchFragment)
+        onView(withId(R.id.menuSubscribe)).perform(click())
+        onView(withId(R.id.menuUnsubscribe)).check(matches(isDisplayed()))
+        onView(withId(R.id.menuUnsubscribe)).perform(click())
+        onView(withId(R.id.menuSubscribe)).check(matches(isDisplayed()))
+    }
+
     private fun addItemsToInventory() {
         addSingleItemToDB(firstTitle, bookCategory)
         addSingleItemToDB(secondTitle, bookCategory)
