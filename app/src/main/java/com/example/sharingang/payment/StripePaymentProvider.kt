@@ -16,6 +16,11 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+/**
+ * Payment provider implementation using Stripe
+ *
+ * When a payment is requested, a popup will ask the user to enter their payment details.
+ */
 class StripePaymentProvider @Inject constructor(
     private val firebaseFunctions: FirebaseFunctions
 ) : PaymentProvider {
@@ -60,6 +65,10 @@ class StripePaymentProvider @Inject constructor(
         }
     }
 
+    /**
+     * Calls a Firebase cloud function to create a payment intent and return the information required
+     * by the Stripe PaymentSheet
+     */
     private suspend fun fetchPaymentIntentData(
         itemId: String,
         context: Context
@@ -78,33 +87,19 @@ class StripePaymentProvider @Inject constructor(
             }.await()
     }
 
+    /**
+     * Callback for the end of the payment
+     */
     private fun onPaymentSheetResult(paymentResult: PaymentSheetResult) {
-        when (paymentResult) {
-            is PaymentSheetResult.Canceled -> {
-                Toast.makeText(
-                    context,
-                    "Payment Canceled",
-                    Toast.LENGTH_LONG
-                ).show()
-                continuation?.resume(false)
-            }
+        val message = when (paymentResult) {
+            is PaymentSheetResult.Canceled -> "Payment Canceled"
             is PaymentSheetResult.Failed -> {
-                Toast.makeText(
-                    context,
-                    "Payment Failed",
-                    Toast.LENGTH_LONG
-                ).show()
                 Log.e("StripePaymentProvider", "Payment error", paymentResult.error)
-                continuation?.resume(false)
+                "Payment Failed"
             }
-            is PaymentSheetResult.Completed -> {
-                Toast.makeText(
-                    context,
-                    "Payment Complete",
-                    Toast.LENGTH_LONG
-                ).show()
-                continuation?.resume(true)
-            }
+            is PaymentSheetResult.Completed -> "Payment Complete"
         }
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        continuation?.resume(paymentResult is PaymentSheetResult.Completed)
     }
 }
