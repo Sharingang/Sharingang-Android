@@ -2,6 +2,7 @@ package com.example.sharingang
 
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -42,6 +43,8 @@ class ChatsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        //firebaseFirestore.clearPersistence()
+        Log.e("xxx", firebaseFirestore.toString())
         currentUserId = currentUserProvider.getCurrentUserId()
         binding = FragmentChatsBinding.inflate(inflater, container, false)
         if (currentUserId != null) {
@@ -57,16 +60,22 @@ class ChatsFragment : Fragment() {
 
     private fun setupUI() {
         if (currentUserId != null) {
+            Log.e("xxx", "currentuid = $currentUserId")
             binding.loggedOutInfo.visibility = View.GONE
             val listUsers = mutableListOf<User>()
             userAdapter = UserAdapter(requireContext(), listUsers)
             binding.chatUsersList.adapter = userAdapter
             lifecycleScope.launch(Dispatchers.IO) {
+                userRepository.refreshUsers()
                 val chatPartners = firebaseFirestore.collection(getString(R.string.users))
                     .document(currentUserId!!).collection(getString(R.string.messagePartners)).get().await()
                 listUsers.clear()
-                chatPartners.documents.forEach { listUsers.add(userRepository.get(it.id)!!) }
+                chatPartners.documents.forEach {
+                    val user = userRepository.get(it.id)
+                    listUsers.add(user!!)
+                }
                 usersLiveData.postValue(listUsers)
+
             }
         } else {
             binding.chatUsersList.visibility = View.GONE
