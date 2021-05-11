@@ -111,10 +111,6 @@ class MessageFragment : Fragment() {
             userDocument.collection(getString(R.string.messagePartners))
                 .document(fromToPair.otherOf(it)!!).set(lastTimeChat)
         }
-        val lastTimeChatDocument = getUserDocument(currentUserId)
-            .collection(getString(R.string.messagePartners)).document(to)
-        addOnChangeListener(lastTimeChatDocument)
-
         binding.messageEditText.text.clear()
     }
 
