@@ -21,8 +21,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
-import kotlin.time.milliseconds
-
 
 @AndroidEntryPoint
 class MessageFragment : Fragment() {
@@ -103,7 +101,7 @@ class MessageFragment : Fragment() {
         val lastTimeChat = hashMapOf<String, Any>(
             getString(R.string.last_message) to "${Date()} (${System.currentTimeMillis()})"
         )
-        val fromToPair = LinkedPair<String>(from, to)
+        val fromToPair = LinkedPair(from, to)
         listOf(from, to).forEach {
             val userDocument = getUserDocument(it)
             userDocument.collection(getString(R.string.chats)).document(fromToPair.otherOf(it)!!)
@@ -119,6 +117,7 @@ class MessageFragment : Fragment() {
         messageAdapter = MessageAdapter(requireContext(), listChats, currentUserId)
         binding.history.adapter = messageAdapter
         lifecycleScope.launch(Dispatchers.IO) {
+            userRepository.refreshUsers()
             getAndDisplayMessages()
         }
     }
