@@ -42,7 +42,13 @@ exports.checkout = functions.https.onCall(async (data, context) => {
     const paymentIntent = await stripe.paymentIntents.create({
         amount: price,
         currency: "chf",
-        customer: customer.id
+        customer: customer.id,
+        description: item.title,
+        metadata: {
+            itemId: data.itemId,
+            buyerUserId: user.uid,
+            sellerUserId: item.userId
+        }
     });
 
     console.log("Created payment intent", { email: user.email, customerId: customer.id, itemId: data.itemId, price: price });
