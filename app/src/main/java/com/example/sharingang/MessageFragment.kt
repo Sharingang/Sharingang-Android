@@ -14,15 +14,15 @@ import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.FragmentMessageBinding
 import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.UserRepository
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.*
+import com.google.firebase.firestore.EventListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class MessageFragment : Fragment() {
@@ -68,6 +68,7 @@ class MessageFragment : Fragment() {
         setupFields()
         setupSendButton()
         setupUI()
+        setupMessageRefresh()
         return binding.root
     }
 
@@ -110,6 +111,10 @@ class MessageFragment : Fragment() {
             userDocument.collection(getString(R.string.messagePartners))
                 .document(fromToPair.otherOf(it)!!).set(lastTimeChat)
         }
+        val lastTimeChatDocument = getUserDocument(currentUserId)
+            .collection(getString(R.string.messagePartners)).document(to)
+        addOnChangeListener(lastTimeChatDocument)
+
         binding.messageEditText.text.clear()
     }
 
@@ -118,18 +123,7 @@ class MessageFragment : Fragment() {
         messageAdapter = MessageAdapter(requireContext(), listChats, currentUserId)
         binding.history.adapter = messageAdapter
         lifecycleScope.launch(Dispatchers.IO) {
-            val messages = firebaseFirestore.collection(getString(R.string.users))
-                .document(currentUserId).collection(getString(R.string.chats))
-                .document(partnerId).collection(getString(R.string.messages))
-                .get().await()
-            listChats.clear()
-            addMessagesToChatList(messages.documents)
-            messagesLiveData.postValue(listChats)
-            lifecycleScope.launch(Dispatchers.Main) {
-                if (listChats.isNotEmpty()) {
-                    binding.history.scrollToPosition(listChats.size - 1)
-                }
-            }
+            getAndDisplayMessages()
         }
     }
 
@@ -143,6 +137,37 @@ class MessageFragment : Fragment() {
                         document.getString(getString(R.string.to)),
                         message))
                 messagesLiveData.postValue(listChats)
+            }
+        }
+    }
+
+    private fun setupMessageRefresh() {
+        val lastTimeChatDocument = getUserDocument(currentUserId)
+            .collection(getString(R.string.messagePartners)).document(partnerId)
+        addOnChangeListener(lastTimeChatDocument)
+    }
+
+    private fun addOnChangeListener(ref: DocumentReference) {
+        ref.addSnapshotListener { _, e ->
+            if (e == null) {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    getAndDisplayMessages()
+                }
+            }
+        }
+    }
+
+    private suspend fun getAndDisplayMessages() {
+        val messages = firebaseFirestore.collection(getString(R.string.users))
+            .document(currentUserId).collection(getString(R.string.chats))
+            .document(partnerId).collection(getString(R.string.messages))
+            .get().await()
+        listChats.clear()
+        addMessagesToChatList(messages.documents)
+        messagesLiveData.postValue(listChats)
+        lifecycleScope.launch(Dispatchers.Main) {
+            if (listChats.isNotEmpty()) {
+                binding.history.scrollToPosition(listChats.size - 1)
             }
         }
     }
