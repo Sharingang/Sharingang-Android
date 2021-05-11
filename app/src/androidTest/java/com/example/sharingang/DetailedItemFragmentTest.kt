@@ -187,8 +187,8 @@ class DetailedItemFragmentTest {
 
     @Test
     fun canBuyAnItem() {
-        // User 1 creates an item
-        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
+        // User 2 creates an item
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_2
         val testTitle = "For sale"
         navigate_to(R.id.newEditFragment)
         onView(withId(R.id.itemTitle)).perform(
@@ -202,8 +202,8 @@ class DetailedItemFragmentTest {
         onView(withId(R.id.createItemButton)).perform(click())
         waitAfterSaveItem()
 
-        // User 2 clicks on the item
-        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_2
+        // User 1 clicks on the item
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
         onView(withText(testTitle)).perform(click())
 
         // If the payment is rejected, the button is still visible
