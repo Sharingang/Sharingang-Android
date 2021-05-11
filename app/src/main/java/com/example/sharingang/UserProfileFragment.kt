@@ -79,13 +79,7 @@ class UserProfileFragment : Fragment() {
             else -> args.userId
         }
         authHelper = AuthHelper(
-            requireContext(),
-            auth,
-            authUI,
-            lifecycleScope,
-            userRepository,
-            this,
-            currentUserProvider
+            requireContext(), auth, authUI, lifecycleScope, userRepository,this, currentUserProvider
         ) { user: FirebaseUser, userId: String -> execAfterSignIn(user, userId) }
         currentUser = auth.currentUser
         setUserType()
