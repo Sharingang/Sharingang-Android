@@ -15,13 +15,13 @@ import com.example.sharingang.databinding.FragmentMessageBinding
 import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.UserRepository
 import com.google.firebase.firestore.*
-import com.google.firebase.firestore.EventListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
+import kotlin.time.milliseconds
 
 
 @AndroidEntryPoint
@@ -101,7 +101,7 @@ class MessageFragment : Fragment() {
             getString(R.string.to) to to
         )
         val lastTimeChat = hashMapOf<String, Any>(
-            getString(R.string.last_message) to Date()
+            getString(R.string.last_message) to "${Date()} (${System.currentTimeMillis()})"
         )
         val fromToPair = LinkedPair<String>(from, to)
         listOf(from, to).forEach {
@@ -150,19 +150,17 @@ class MessageFragment : Fragment() {
     private fun addOnChangeListener(ref: DocumentReference) {
         ref.addSnapshotListener { _, e ->
             if (e == null) {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    getAndDisplayMessages()
-                }
+                setupUI()
             }
         }
     }
 
     private suspend fun getAndDisplayMessages() {
+        listChats.clear()
         val messages = firebaseFirestore.collection(getString(R.string.users))
             .document(currentUserId).collection(getString(R.string.chats))
             .document(partnerId).collection(getString(R.string.messages))
             .get().await()
-        listChats.clear()
         addMessagesToChatList(messages.documents)
         messagesLiveData.postValue(listChats)
         lifecycleScope.launch(Dispatchers.Main) {
