@@ -15,22 +15,8 @@ exports.checkout = functions.https.onCall(async (data, context) => {
     }
 
     const itemPromise = db.collection('items').doc(data.itemId).get();
-
     const user = await auth.getUser(context.auth.uid)
-
-    const customers = (await stripe.customers.list({ email: user.email })).data;
-    var customer;
-    if (customers.length > 0) {
-        customer = customers[0];
-    } else {
-        customer = await stripe.customers.create({
-            name: user.displayName,
-            email: user.email,
-            metadata: {
-                userId: user.uid
-            }
-        });
-    }
+    const customer = await getOrCreateCustomer(user)
 
     // Create an ephemeral key for the Customer; this allows the app to display saved payment methods and save new ones
     const ephemeralKeyPromise = stripe.ephemeralKeys.create(
@@ -39,6 +25,32 @@ exports.checkout = functions.https.onCall(async (data, context) => {
     );
 
     const item = (await itemPromise).data();
+    const paymentIntent = await createPaymentIntent(customer, user, item, data.itemId);
+
+    return {
+        publishableKey: publishable_key,
+        paymentIntent: paymentIntent.client_secret,
+        customer: customer.id,
+        ephemeralKey: (await ephemeralKeyPromise).secret
+    };
+});
+
+async function getOrCreateCustomer(user) {
+    const customers = (await stripe.customers.list({ email: user.email })).data;
+    if (customers.length > 0) {
+        return customers[0];
+    } else {
+        return await stripe.customers.create({
+            name: user.displayName,
+            email: user.email,
+            metadata: {
+                userId: user.uid
+            }
+        });
+    }
+}
+
+async function createPaymentIntent(customer, user, item, itemId) {
     // Stripe expects price in cents
     const price = Math.round(item.price * 100);
 
@@ -48,22 +60,16 @@ exports.checkout = functions.https.onCall(async (data, context) => {
         customer: customer.id,
         description: item.title,
         metadata: {
-            itemId: data.itemId,
+            itemId: itemId,
             buyerUserId: user.uid,
             sellerUserId: item.userId
         }
     });
 
-    console.log("Created payment intent", { email: user.email, customerId: customer.id, itemId: data.itemId, price: price });
+    console.log("Created payment intent", { email: user.email, customerId: customer.id, itemId: itemId, price: price });
 
-    // Send the object keys to the client
-    return {
-        publishableKey: publishable_key,
-        paymentIntent: paymentIntent.client_secret,
-        customer: customer.id,
-        ephemeralKey: (await ephemeralKeyPromise).secret
-    }
-});
+    return paymentIntent;
+}
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
