@@ -18,24 +18,16 @@ class FakeCurrentUserProvider @Inject constructor(
         }
     }
 
-    override fun getCurrentUserId(): String? {
-        return when (instance) {
-            1 -> fakeUser1.id
-            2 -> fakeUser2.id
-            else -> null
-        }
-    }
+    override fun getCurrentUserId(): String? = instance.user?.id
 
     override fun getCurrentUserEmail(): String {
-        return if (instance != 0) "test-user@example.com" else ""
+        return if (instance != Instance.LOGGED_OUT) "test-user@example.com" else ""
     }
 
-    override fun getCurrentUserName(): String {
-        return when (instance) {
-            1 -> fakeUser1.name
-            2 -> fakeUser2.name
-            else -> ""
-        }
+    override fun getCurrentUserName(): String = instance.user?.name ?: ""
+
+    enum class Instance(val user: User?) {
+        LOGGED_OUT(null), FAKE_USER_1(fakeUser1), FAKE_USER_2(fakeUser2)
     }
 
     companion object {
@@ -50,6 +42,6 @@ class FakeCurrentUserProvider @Inject constructor(
             name = "Test User 2",
             profilePicture = "https://picsum.photos/200"
         )
-        var instance = 1
+        var instance = Instance.FAKE_USER_1
     }
 }

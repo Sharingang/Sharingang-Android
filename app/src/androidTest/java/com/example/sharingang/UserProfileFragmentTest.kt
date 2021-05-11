@@ -102,7 +102,7 @@ class UserProfileFragmentTest {
 
     @Test
     fun aUserCanLogout() {
-        FakeCurrentUserProvider.instance = 1
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
         navigate_to(R.id.userProfileFragment)
         onView(withId(R.id.btn_logout)).perform(click())
         pressBack()
@@ -113,14 +113,14 @@ class UserProfileFragmentTest {
         )
         onView(withId(R.id.createItemButton)).perform(click())
         waitAfterSaveItem()
-        FakeCurrentUserProvider.instance = 2
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_2
         onView(withId(R.id.item_list_view_title)).perform(click())
         onView(withId(R.id.itemPostedBy)).perform(click())
         onView(withId(R.id.btn_login)).check(matches(not(isDisplayed())))
         onView(withId(R.id.btn_logout)).check(matches(not(isDisplayed())))
         pressBack()
         pressBack()
-        FakeCurrentUserProvider.instance = 0
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.LOGGED_OUT
         onView(withId(R.id.item_list_view_title)).perform(click())
         onView(withId(R.id.itemPostedBy)).perform(click())
         onView(withId(R.id.btn_logout)).check(matches(not(isDisplayed())))
@@ -130,7 +130,7 @@ class UserProfileFragmentTest {
 
     @Test
     fun aUserCanCancelLogin() {
-        FakeCurrentUserProvider.instance = 1
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
         navigate_to(R.id.userProfileFragment)
         onView(withId(R.id.btn_logout)).perform(click())
         onView(withId(R.id.btn_login)).perform(click())
