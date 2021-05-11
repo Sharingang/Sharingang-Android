@@ -83,7 +83,6 @@ class MessageFragment : Fragment() {
         binding.btnSend.setOnClickListener {
             val message: String = binding.messageEditText.text.toString()
             sendMessage(currentUserId, partnerId, message)
-            setupUI()
         }
     }
 
