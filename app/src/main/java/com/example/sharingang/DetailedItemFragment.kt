@@ -74,15 +74,22 @@ class DetailedItemFragment : Fragment() {
             Glide.with(this).load(it).into(binding.detailedItemImage)
         }
 
-        initiateWishlistButton()
-        initRating()
+        initWishlistButton()
+        initRating(args.item)
+        initBuy()
 
         binding.shareButton.setOnClickListener { shareItem() }
-        binding.buyButton.setOnClickListener { buyItem() }
 
         viewModel.setUser(args.item.userId)
         viewModel.user.observe(viewLifecycleOwner, this::onUserChange)
         return binding.root
+    }
+
+    private fun initBuy() {
+        val currentUserId = currentUserProvider.getCurrentUserId()
+        val availableForSale = !args.item.sold && currentUserId != null && args.item.userId != currentUserId
+        binding.buyButton.visibility = if (availableForSale) View.VISIBLE else View.GONE
+        binding.buyButton.setOnClickListener { buyItem() }
     }
 
     private fun onUserChange(user: User?) {
@@ -164,7 +171,7 @@ class DetailedItemFragment : Fragment() {
         }
     }
 
-    private fun initiateWishlistButton() {
+    private fun initWishlistButton() {
         if (currentUserProvider.getCurrentUserId() != null) {
             viewModel.wishlistContains.observe(viewLifecycleOwner, {
                 binding.addToWishlist.text = getButtonText(it)
@@ -176,11 +183,11 @@ class DetailedItemFragment : Fragment() {
         }
     }
 
-    private fun initRating() {
-        itemViewModel.setRated(args.item)
+    private fun initRating(item: Item) {
+        itemViewModel.setRated(item)
         itemViewModel.rated.observe(viewLifecycleOwner, {
-            val visibility = if (!it && args.item.userId != null
-                && args.item.sold && currentUserProvider.getCurrentUserId() != null
+            val visibility = if (!it && item.userId != null
+                && item.sold && currentUserProvider.getCurrentUserId() != null
             ) View.VISIBLE
             else View.GONE
             binding.ratingVisibility = visibility
@@ -196,8 +203,8 @@ class DetailedItemFragment : Fragment() {
                     binding.radioButton5.id -> 5
                     else -> 0
                 }
-                viewModel.updateUserRating(args.item.userId, rating)
-                itemViewModel.rateItem(args.item)
+                viewModel.updateUserRating(item.userId, rating)
+                itemViewModel.rateItem(item)
             }
         }
     }
@@ -216,7 +223,9 @@ class DetailedItemFragment : Fragment() {
         lifecycleScope.launch {
             val status = paymentProvider.requestPayment(args.item)
             if (status) {
-                updateSold(args.item.id!!)
+                itemViewModel.sellItem(args.item)
+                binding.buyButton.visibility = View.GONE
+                initRating(args.item.copy(sold = true))
             }
         }
     }

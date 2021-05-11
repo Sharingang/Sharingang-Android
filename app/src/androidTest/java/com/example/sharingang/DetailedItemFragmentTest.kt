@@ -195,6 +195,10 @@ class DetailedItemFragmentTest {
             typeText(testTitle),
             closeSoftKeyboard()
         )
+        onView(withId(R.id.itemPrice)).perform(
+            typeText("42"),
+            closeSoftKeyboard()
+        )
         onView(withId(R.id.createItemButton)).perform(click())
         waitAfterSaveItem()
 
@@ -212,6 +216,7 @@ class DetailedItemFragmentTest {
         FakePaymentProvider.paymentStatus = FakePaymentProvider.Status.ALWAYS_ACCEPT
         onView(withId(R.id.buyButton)).perform(click())
         Thread.sleep(1000)
-        onView(withId(R.id.buyButton)).check(doesNotExist())
+        // Display rating form after purchase
+        onView(withId(R.id.ratingButton)).check(matches(isDisplayed()))
     }
 }
