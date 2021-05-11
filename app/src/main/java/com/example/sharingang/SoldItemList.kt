@@ -22,7 +22,6 @@ class SoldItemList : Fragment() {
 
     private lateinit var binding: FragmentSoldItemListBinding
     private val viewModel: ItemsViewModel by activityViewModels()
-    private val orderingViewModel: OrderingViewModel by activityViewModels()
 
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider

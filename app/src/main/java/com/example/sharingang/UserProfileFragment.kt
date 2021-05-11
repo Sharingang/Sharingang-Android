@@ -33,37 +33,27 @@ class UserProfileFragment : Fragment() {
     private val args: UserProfileFragmentArgs by navArgs()
     private lateinit var binding: UserProfileFragmentBinding
     private lateinit var authHelper: AuthHelper
-
-    // This is the currently logged in user
     private var currentUserId: String? = null
     private lateinit var imageAccess: ImageAccess
     private var currentUser: FirebaseUser? = null
     private lateinit var userType: UserType
-
-    // This is the user whose profile is shown (can be different from currentUserId)
     private var shownUserProfileId: String? = null
     private var loggedInUserEmail: String? = null
     private var imageUri: Uri? = null
-
     private enum class UserType {
         LOGGED_OUT_SELF,
         LOGGED_OUT,
         VISITOR,
         SELF
     }
-
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
-
     @Inject
     lateinit var userRepository: UserRepository
-
     @Inject
     lateinit var imageStore: ImageStore
-
     @Inject
     lateinit var auth: FirebaseAuth
-
     @Inject
     lateinit var authUI: AuthUI
 
@@ -103,8 +93,10 @@ class UserProfileFragment : Fragment() {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        if (currentUserProvider.getCurrentUserId() == null) menu.findItem(R.id.sold_list).isVisible =
-            false
+        if (currentUserProvider.getCurrentUserId() == null) {
+            menu.findItem(R.id.sold_list).isVisible = false
+            menu.findItem(R.id.subscription_list).isVisible = false
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -112,6 +104,12 @@ class UserProfileFragment : Fragment() {
             R.id.sold_list -> {
                 view?.findNavController()?.navigate(
                     UserProfileFragmentDirections.actionUserProfileFragmentToSoldItemList()
+                )
+                true
+            }
+            R.id.subscription_list -> {
+                view?.findNavController()?.navigate(
+                    UserProfileFragmentDirections.actionUserProfileFragmentToSubscriptionFragment()
                 )
                 true
             }
@@ -197,11 +195,6 @@ class UserProfileFragment : Fragment() {
             })
     }
 
-    private fun setupButtonsAction() {
-        val buttons = listOf(binding.btnApply, binding.btnOpenCamera, binding.btnOpenGallery)
-        buttons.forEach { button -> button.setOnClickListener { setupPictureButton(button) } }
-    }
-
     private fun setEmailText() {
         val emailText = binding.textEmail
         if (userType == UserType.SELF) emailText.text = loggedInUserEmail
@@ -214,7 +207,6 @@ class UserProfileFragment : Fragment() {
         topInfo.text = getString(R.string.userNotLoggedInInfo)
         setEmailText()
     }
-
 
     private fun displayUserFields(requestedUser: User?) {
         if (requestedUser != null) {
@@ -251,7 +243,6 @@ class UserProfileFragment : Fragment() {
                 if (!it.toString().startsWith("https://")) imageStore.store(it).toString()
                 else it.toString()
             }
-
             userRepository.add(
                 userRepository.get(currentUserId!!)!!.copy(
                     profilePicture = imageUrl

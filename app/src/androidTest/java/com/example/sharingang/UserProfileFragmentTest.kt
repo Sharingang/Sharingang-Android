@@ -105,7 +105,7 @@ class UserProfileFragmentTest {
         FakeCurrentUserProvider.instance = 1
         navigate_to(R.id.userProfileFragment)
         onView(withId(R.id.btn_logout)).perform(click())
-        Espresso.pressBack()
+        pressBack()
         navigate_to(R.id.newEditFragment)
         onView(withId(R.id.itemTitle)).perform(
             typeText("TestItem"),
@@ -118,8 +118,8 @@ class UserProfileFragmentTest {
         onView(withId(R.id.itemPostedBy)).perform(click())
         onView(withId(R.id.btn_login)).check(matches(not(isDisplayed())))
         onView(withId(R.id.btn_logout)).check(matches(not(isDisplayed())))
-        Espresso.pressBack()
-        Espresso.pressBack()
+        pressBack()
+        pressBack()
         FakeCurrentUserProvider.instance = 0
         onView(withId(R.id.item_list_view_title)).perform(click())
         onView(withId(R.id.itemPostedBy)).perform(click())
