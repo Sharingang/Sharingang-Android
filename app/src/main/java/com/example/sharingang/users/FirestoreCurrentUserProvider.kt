@@ -3,6 +3,9 @@ package com.example.sharingang.users
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
+/**
+ * Class used to retrieve the current signed in user.
+ */
 class FirestoreCurrentUserProvider @Inject constructor(
     private val auth: FirebaseAuth
 ) : CurrentUserProvider {

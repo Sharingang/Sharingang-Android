@@ -5,6 +5,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+/**
+ * Class to implement user repository in cache.
+ */
 class CachedUserRepository @Inject constructor(
     private val userDao: UserDao,
     private val store: UserStore

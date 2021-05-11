@@ -8,6 +8,9 @@ import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
 
+/**
+ * Class used to store images on Firebase.
+ */
 class FirebaseImageStore @Inject constructor(
     private val currentUserProvider: CurrentUserProvider
 ) : ImageStore {

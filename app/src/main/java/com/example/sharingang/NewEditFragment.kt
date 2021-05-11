@@ -36,6 +36,9 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+/**
+ * Fragment to edit and create items.
+ */
 @AndroidEntryPoint
 class NewEditFragment : Fragment() {
 
@@ -138,16 +141,29 @@ class NewEditFragment : Fragment() {
             viewModel.setItem(item) { itemId ->
                 binding.isLoading = false
                 if (itemId != null) {
-                    Snackbar.make(binding.root, getString(R.string.item_save_success), Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(
+                        binding.root,
+                        getString(R.string.item_save_success),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                     observer.unregister()
                     if (existingItem == null) {
-                        view.findNavController().navigate(NewEditFragmentDirections.actionNewEditFragmentToItemsListFragment())
+                        view.findNavController()
+                            .navigate(NewEditFragmentDirections.actionNewEditFragmentToItemsListFragment())
                     } else {
-                        view.findNavController().navigate(NewEditFragmentDirections.actionNewEditFragmentToDetailedItemFragment(item))
+                        view.findNavController().navigate(
+                            NewEditFragmentDirections.actionNewEditFragmentToDetailedItemFragment(
+                                item
+                            )
+                        )
                     }
                 } else {
                     button.isClickable = true
-                    Snackbar.make(binding.root, getString(R.string.item_save_failure), Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(
+                        binding.root,
+                        getString(R.string.item_save_failure),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
             }
         }

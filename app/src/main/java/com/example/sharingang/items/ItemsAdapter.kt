@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.ItemViewBinding
 
+/**
+ * Adapter to display items in a recycler view.
+ */
 class ItemsAdapter(private val clickListener: ItemListener) :
     ListAdapter<Item, ItemsAdapter.ItemViewHolder>(ItemsDiffCallback()) {
 
@@ -19,6 +22,9 @@ class ItemsAdapter(private val clickListener: ItemListener) :
         holder.bind(getItem(position)!!, clickListener)
     }
 
+    /**
+     * Recycler view to represent a single item.
+     */
     class ItemViewHolder private constructor(private val binding: ItemViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
 

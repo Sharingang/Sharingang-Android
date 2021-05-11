@@ -30,10 +30,16 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Enum class representing all lists of the viewModel that can be observed.
+     */
     enum class OBSERVABLES {
         ALL_ITEMS, SEARCH_RESULTS, USER_ITEMS, WISHLIST, ORDERED_ITEMS, SOLD_ITEMS
     }
 
+    /**
+     * Enum class representing all the ways to order a list of items.
+     */
     enum class ORDERING {
         DATE, PRICE, NAME, CATEGORY
     }
@@ -120,8 +126,13 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
-    fun getUserSoldItems(userId: String?){
-        if(userId != null){
+    /**
+     * Get all items sold by a user.
+     *
+     * @param[userId] the id of the user.
+     */
+    fun getUserSoldItems(userId: String?) {
+        if (userId != null) {
             viewModelScope.launch(Dispatchers.IO) {
                 _userSoldItems.postValue(
                     itemRepository.userItems(userId)?.filter { item ->
@@ -132,10 +143,17 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Clear the results of the search.
+     */
     fun clearSearchResults() {
         _searchResults.value = listOf()
     }
 
+    /**
+     * Set the value of the wishlist.
+     * @param[list] List of items to set as wishlist.
+     */
     fun setWishList(list: List<Item>) {
         viewModelScope.launch {
             _wishlistItem.postValue(list)
@@ -200,23 +218,40 @@ class ItemsViewModel @Inject constructor(
         itemRepository.set(item.copy(sold = !item.sold))
     }
 
+    /**
+     * Set value of _rated based on if the item was rated.
+     * @param[item] Item who's rating is to be used.
+     */
     fun setRated(item: Item?) {
         if (item != null) {
             _rated.postValue(item.rated)
         }
     }
 
+    /**
+     * Sell an item.
+     * @param[item] item to be sold.
+     */
     suspend fun sellItem(item: Item?) {
         if (item != null) {
             onSellItem(item)
         }
     }
 
+    /**
+     * Setup the item adapter for a recycle view.
+     */
     fun setupItemAdapter(): ItemsAdapter {
         val onView = { item: Item -> onViewItem(item) }
         return ItemsAdapter(ItemListener(onView))
     }
 
+    /**
+     * Add an observer to one of the observable lists of the view model.
+     * @param[LifeCycleOwner]
+     * @param[adapter] Adapter to be used to display items.
+     * @param[type] The enum describing the list to be observed.
+     */
     fun addObserver(LifeCycleOwner: LifecycleOwner, adapter: ItemsAdapter, type: OBSERVABLES) {
         val observable: LiveData<List<Item>> = when (type) {
             OBSERVABLES.ALL_ITEMS -> items
@@ -231,6 +266,11 @@ class ItemsViewModel @Inject constructor(
         })
     }
 
+    /**
+     * Updates rating of item in database.
+     * Also updates _rated livedata.
+     * @param[item] Item that was rated.
+     */
     fun rateItem(item: Item) {
         viewModelScope.launch(Dispatchers.IO) {
             itemRepository.set(item.copy(rated = true))
@@ -238,6 +278,13 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Sets up the navigation when clicking on items in a recycler view.
+     *
+     * @param[LifeCycleOwner]
+     * @param[navController] Navigation controller used.
+     * @param[actionDetail] The action to take on item click.
+     */
     fun setupItemNavigation(
         LifeCycleOwner: LifecycleOwner,
         navController: NavController,
@@ -253,6 +300,9 @@ class ItemsViewModel @Inject constructor(
         })
     }
 
+    /**
+     * Update list of items, reads from database.
+     */
     fun refresh() {
         _refreshing.value = true
         viewModelScope.launch {

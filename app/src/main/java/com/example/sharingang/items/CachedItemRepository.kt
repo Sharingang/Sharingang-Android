@@ -6,6 +6,9 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
+/**
+ * Class to implement an ItemRepository in cache.
+ */
 class CachedItemRepository @Inject constructor(
     private val itemDao: ItemDao,
     private val store: ItemStore

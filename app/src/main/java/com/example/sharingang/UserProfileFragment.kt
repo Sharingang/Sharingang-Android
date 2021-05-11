@@ -40,20 +40,26 @@ class UserProfileFragment : Fragment() {
     private var shownUserProfileId: String? = null
     private var loggedInUserEmail: String? = null
     private var imageUri: Uri? = null
+
     private enum class UserType {
         LOGGED_OUT_SELF,
         LOGGED_OUT,
         VISITOR,
         SELF
     }
+
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
+
     @Inject
     lateinit var userRepository: UserRepository
+
     @Inject
     lateinit var imageStore: ImageStore
+
     @Inject
     lateinit var auth: FirebaseAuth
+
     @Inject
     lateinit var authUI: AuthUI
 
@@ -73,7 +79,13 @@ class UserProfileFragment : Fragment() {
             else -> args.userId
         }
         authHelper = AuthHelper(
-            requireContext(), auth, authUI, lifecycleScope, userRepository, this, currentUserProvider
+            requireContext(),
+            auth,
+            authUI,
+            lifecycleScope,
+            userRepository,
+            this,
+            currentUserProvider
         ) { user: FirebaseUser, userId: String -> execAfterSignIn(user, userId) }
         currentUser = auth.currentUser
         setUserType()

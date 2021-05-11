@@ -26,7 +26,8 @@ class SubscriptionFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_subscription, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_subscription, container, false)
 
         val userId = currentUserProvider.getCurrentUserId()
         userViewmodel.setUser(userId)

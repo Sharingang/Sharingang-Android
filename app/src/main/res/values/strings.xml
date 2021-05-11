@@ -34,14 +34,6 @@
     <string name="userNotLoggedInInfo">You need to be logged in to view your User Profile.</string>
     <string name="default_rating">No Ratings</string>
     <string name="apply_rating">Rate</string>
-    <string-array name="categories">
-        <item>None</item>
-        <item>Book</item>
-        <item>Electronics</item>
-        <item>Games</item>
-        <item>Clothes</item>
-        <item>Miscellaneous</item>
-    </string-array>
     <string name="report_user">Report User</string>
     <string name="inappropriate_username">Inappropriate Username</string>
     <string name="inappropriate_profile_picture">Inappropriate Profile Picture</string>
@@ -58,23 +50,35 @@
     <string name="item_save_failure">Cannot save the item.</string>
     <string name="item_deleted_success">Item deleted successfully.</string>
     <string name="posted_by">Posted by %1$s</string>
-    <string-array name="order_categories">
-        <item>Date</item>
-        <item>Price</item>
-        <item>Name</item>
-        <item>Category</item>
-    </string-array>
     <string name="sort">Sort</string>
     <string name="subscribe">Subscribe</string>
     <string name="unsubscribe">Unsubscribe</string>
-    <string-array name="order_ascending_descending">
-        <item>Ascending</item>
-        <item>Descending</item>
-    </string-array>
     <string name="new_item_notification_message">A new item in %1$s has been posted!</string>
     <string name="new_item_notification_channel_id">new_item_channel</string>
     <string name="not_subscribed">You are not subscribed to any category yet!</string>
     <string name="see_subscriptions">See subscriptions</string>
     <string name="sold">Sold</string>
     <string name="subscribed_to">You are subscribed to these categories:\u0020</string>
+    <string name="sold_list_title">Sold Item List</string>
+
+    <string-array name="categories">
+        <item>None</item>
+        <item>Book</item>
+        <item>Electronics</item>
+        <item>Games</item>
+        <item>Clothes</item>
+        <item>Miscellaneous</item>
+    </string-array>
+
+    <string-array name="order_categories">
+        <item>Date</item>
+        <item>Price</item>
+        <item>Name</item>
+        <item>Category</item>
+    </string-array>
+
+    <string-array name="order_ascending_descending">
+        <item>Ascending</item>
+        <item>Descending</item>
+    </string-array>
 </resources>

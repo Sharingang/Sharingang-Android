@@ -28,8 +28,8 @@ class UserProfileViewModel @Inject constructor(
     val wishlistContains: LiveData<Boolean>
         get() = _wishlistContains
 
-    private val _subscriptionsContains : MutableLiveData<Boolean> = MutableLiveData(false)
-    val subscriptionsContains : LiveData<Boolean>
+    private val _subscriptionsContains: MutableLiveData<Boolean> = MutableLiveData(false)
+    val subscriptionsContains: LiveData<Boolean>
         get() = _subscriptionsContains
 
     private val _rating = MutableLiveData(0f)

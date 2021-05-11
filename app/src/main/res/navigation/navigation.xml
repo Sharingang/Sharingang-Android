@@ -145,7 +145,7 @@
     <fragment
         android:id="@+id/soldItemList"
         android:name="com.example.sharingang.SoldItemList"
-        android:label="fragment_sold_item_list"
+        android:label="@string/sold_list_title"
         tools:layout="@layout/fragment_sold_item_list" >
         <action
             android:id="@+id/action_soldItemList_to_detailedItemFragment"
