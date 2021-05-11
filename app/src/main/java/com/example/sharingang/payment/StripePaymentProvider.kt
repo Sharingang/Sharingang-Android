@@ -76,12 +76,13 @@ class StripePaymentProvider @Inject constructor(
         return firebaseFunctions.getHttpsCallable("checkout").call(mapOf("itemId" to itemId))
             .continueWith { task ->
                 if (task.isSuccessful) {
+                    // When successful, we are guaranteed that it returns a Map<String, String>
                     @Suppress("UNCHECKED_CAST")
                     task.result?.data as? Map<String, String>
                 } else {
                     Toast.makeText(context, "Cannot initialize payment", Toast.LENGTH_SHORT)
                         .show()
-                    Log.e("PaymentFragment", "Cannot initialize payment", task.exception)
+                    Log.e("StripePaymentProvider", "Cannot initialize payment", task.exception)
                     null
                 }
             }.await()

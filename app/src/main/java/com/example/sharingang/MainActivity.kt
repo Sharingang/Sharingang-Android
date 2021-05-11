@@ -3,6 +3,7 @@ package com.example.sharingang
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -88,26 +89,29 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         Firebase.dynamicLinks
             .getDynamicLink(intent)
             .addOnSuccessListener(this) { pendingDynamicLinkData ->
-                val deepLink = pendingDynamicLinkData?.link
-                val id = deepLink?.getQueryParameter("id")
-                if (deepLink?.path == "/item" && id != null) {
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        val item = itemRepository.get(id)
-                        if (item != null) {
-                            runOnUiThread {
-                                getNavController().navigate(
-                                    ItemsListFragmentDirections
-                                        .actionItemsListFragmentToDetailedItemFragment(item)
-                                )
-                            }
-                        }
-                    }
-                }
+                pendingDynamicLinkData?.link?.let { openDeepLink(it) }
             }
     }
 
+    fun openDeepLink(deepLink: Uri) {
+        val id = deepLink.getQueryParameter("id")
+        if (deepLink.path == "/item" && id != null) {
+            lifecycleScope.launch(Dispatchers.IO) {
+                val item = itemRepository.get(id)
+                if (item != null) {
+                    runOnUiThread {
+                        getNavController().navigate(
+                            ItemsListFragmentDirections
+                                .actionItemsListFragmentToDetailedItemFragment(item)
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     // We need the parameter for the callback
-    fun onRandomItem(item: MenuItem) {
+    fun onRandomItem(@Suppress("UNUSED_PARAMETER") item: MenuItem) {
         selectRandomItem()
     }
 
