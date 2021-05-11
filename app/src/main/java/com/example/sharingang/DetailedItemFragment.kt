@@ -16,6 +16,7 @@ import com.example.sharingang.databinding.FragmentDetailedItemBinding
 import com.example.sharingang.items.Item
 import com.example.sharingang.items.ItemRepository
 import com.example.sharingang.items.ItemsViewModel
+import com.example.sharingang.payment.PaymentProvider
 import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.User
 import com.example.sharingang.utils.ImageAccess
@@ -39,6 +40,10 @@ class DetailedItemFragment : Fragment() {
 
     @Inject
     lateinit var itemRepository: ItemRepository
+
+    @Inject
+    lateinit var paymentProvider: PaymentProvider
+
     private val viewModel: UserProfileViewModel by viewModels()
     private val itemViewModel: ItemsViewModel by viewModels()
     private lateinit var binding: FragmentDetailedItemBinding
@@ -51,6 +56,7 @@ class DetailedItemFragment : Fragment() {
         setHasOptionsMenu(true)
         observer = ImageAccess(requireActivity())
         lifecycle.addObserver(observer)
+        paymentProvider.initialize(this, requireContext())
     }
 
     override fun onCreateView(
@@ -72,6 +78,7 @@ class DetailedItemFragment : Fragment() {
         initRating()
 
         binding.shareButton.setOnClickListener { shareItem() }
+        binding.buyButton.setOnClickListener { buyItem() }
 
         viewModel.setUser(args.item.userId)
         viewModel.user.observe(viewLifecycleOwner, this::onUserChange)
@@ -203,6 +210,15 @@ class DetailedItemFragment : Fragment() {
 
     private fun updateWishlist() {
         viewModel.modifyWishList(args.item)
+    }
+
+    private fun buyItem() {
+        lifecycleScope.launch {
+            val status = paymentProvider.requestPayment(args.item)
+            if (status) {
+                updateSold(args.item.id!!)
+            }
+        }
     }
 
     private fun shareItem() {

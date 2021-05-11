@@ -25,7 +25,10 @@ exports.checkout = functions.https.onCall(async (data, context) => {
     } else {
         customer = await stripe.customers.create({
             name: user.displayName,
-            email: user.email
+            email: user.email,
+            metadata: {
+                userId: user.uid
+            }
         });
     }
 

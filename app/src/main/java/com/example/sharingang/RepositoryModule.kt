@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.Log
 import androidx.room.Room
 import com.example.sharingang.items.*
+import com.example.sharingang.payment.PaymentProvider
+import com.example.sharingang.payment.StripePaymentProvider
 import com.example.sharingang.users.*
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
@@ -146,5 +148,10 @@ object RepositoryModule {
     @Provides
     fun provideImageStore(imageStore: FirebaseImageStore): ImageStore {
         return imageStore
+    }
+
+    @Provides
+    fun providePaymentProvider(stripePaymentProvider: StripePaymentProvider): PaymentProvider {
+        return stripePaymentProvider
     }
 }
