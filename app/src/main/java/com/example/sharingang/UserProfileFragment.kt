@@ -205,10 +205,10 @@ class UserProfileFragment : Fragment() {
         binding.userItemList.adapter = adapter
         listOf(binding.offersButton, binding.requestsButton).forEach {
             it.setOnClickListener {
-                itemsViewModel.getUserOffersAndRequests(userId, binding.requestsButton.isChecked)
+                itemsViewModel.getUserItemsRequests(userId, binding.requestsButton.isChecked)
             }
         }
-        itemsViewModel.getUserOffersAndRequests(userId, binding.requestsButton.isChecked)
+        itemsViewModel.getUserItemsRequests(userId, binding.requestsButton.isChecked)
         itemsViewModel.addObserver(
             viewLifecycleOwner,
             adapter,
