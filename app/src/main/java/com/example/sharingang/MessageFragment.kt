@@ -74,6 +74,7 @@ class MessageFragment : Fragment() {
         messagesLiveData.observe(viewLifecycleOwner, { newList ->
             (binding.history.adapter as MessageAdapter).submitList(newList)
         })
+        listChats = mutableListOf()
         partnerId = args.partnerId
         partnerUsername = args.partnerUsername
         partnerProfilePic = args.partnerProfilePictureUrl
@@ -127,6 +128,7 @@ class MessageFragment : Fragment() {
      * @param message the message to send
      */
     private fun sendMessage(from: String, to: String, message: String) {
+        listChats.clear()
         val data = hashMapOf<String, Any>(
             getString(R.string.message) to message,
             getString(R.string.from) to from,
@@ -150,10 +152,10 @@ class MessageFragment : Fragment() {
      * Sets up the UI of the fragment
      */
     private fun setupUI() {
-        listChats = mutableListOf()
+        listChats.clear()
         messageAdapter = MessageAdapter(requireContext(), listChats, currentUserId)
         binding.history.adapter = messageAdapter
-        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.Main) {
             userRepository.refreshUsers()
             getAndDisplayMessages()
         }
@@ -196,7 +198,9 @@ class MessageFragment : Fragment() {
     private fun addOnChangeListener(ref: DocumentReference) {
         ref.addSnapshotListener { _, e ->
             if (e == null) {
-                setupUI()
+                lifecycleScope.launch(Dispatchers.Main) {
+                    getAndDisplayMessages()
+                }
             }
         }
     }
