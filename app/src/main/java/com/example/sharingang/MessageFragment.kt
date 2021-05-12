@@ -132,7 +132,7 @@ class MessageFragment : Fragment() {
             getString(R.string.from) to from,
             getString(R.string.to) to to
         )
-        val lastTimeChat = hashMapOf<String, Any>(
+        val lastTimeChat = hashMapOf (
             getString(R.string.last_message) to "${Date()} (${System.currentTimeMillis()})"
         )
         val fromToPair = LinkedPair(from, to)
@@ -165,6 +165,7 @@ class MessageFragment : Fragment() {
      * @param documents the list of documents we are fetching the messages from
      */
     private fun addMessagesToChatList(documents: MutableList<DocumentSnapshot>) {
+        listChats.clear()
         for (document in documents) {
             val message = document.getString(getString(R.string.message))
             if (message != null) {
@@ -210,7 +211,6 @@ class MessageFragment : Fragment() {
             .document(partnerId).collection(getString(R.string.messages))
             .get().await()
         addMessagesToChatList(messages.documents)
-        messagesLiveData.postValue(listChats)
         lifecycleScope.launch(Dispatchers.Main) {
             if (listChats.isNotEmpty()) {
                 binding.history.scrollToPosition(listChats.size - 1)
