@@ -60,7 +60,7 @@ class MessageFragment : Fragment() {
          * @return The pair's partner (null if x is not part of the pain)
          */
         fun otherOf(x: A): A? {
-            return if(x == fst) snd else if(x == snd) fst else null
+            return if (x == fst) snd else if (x == snd) fst else null
         }
     }
 
@@ -134,7 +134,7 @@ class MessageFragment : Fragment() {
             getString(R.string.from) to from,
             getString(R.string.to) to to
         )
-        val lastTimeChat = hashMapOf (
+        val lastTimeChat = hashMapOf(
             getString(R.string.last_message) to "${Date()} (${System.currentTimeMillis()})"
         )
         val fromToPair = LinkedPair(from, to)
@@ -175,7 +175,9 @@ class MessageFragment : Fragment() {
                     Chat(
                         document.getString(getString(R.string.from)),
                         document.getString(getString(R.string.to)),
-                        message))
+                        message
+                    )
+                )
                 messagesLiveData.postValue(listChats)
             }
         }

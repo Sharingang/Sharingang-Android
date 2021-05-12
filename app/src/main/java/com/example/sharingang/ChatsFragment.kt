@@ -71,7 +71,8 @@ class ChatsFragment : Fragment() {
             lifecycleScope.launch(Dispatchers.IO) {
                 userRepository.refreshUsers()
                 val chatPartners = firebaseFirestore.collection(getString(R.string.users))
-                    .document(currentUserId!!).collection(getString(R.string.messagePartners)).get().await()
+                    .document(currentUserId!!).collection(getString(R.string.messagePartners)).get()
+                    .await()
                 listUsers.clear()
                 chatPartners.documents.forEach {
                     val user = userRepository.get(it.id)
@@ -87,7 +88,7 @@ class ChatsFragment : Fragment() {
     }
 
     /**
-     * Decorates the displayed list of users with a marginbetween elements.
+     * Decorates the displayed list of users with a margin between elements.
      *
      * @param margin the margin between items
      */
