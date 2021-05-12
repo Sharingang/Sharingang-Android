@@ -1,5 +1,7 @@
 # Sharingang
 [![Build Status](https://api.cirrus-ci.com/github/Sharingang/Sharingang-Android.svg)](https://cirrus-ci.com/github/Sharingang/Sharingang-Android)
+[![Maintainability](https://api.codeclimate.com/v1/badges/774b529741401b3b13f1/maintainability)](https://codeclimate.com/github/Sharingang/Sharingang-Android/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/774b529741401b3b13f1/test_coverage)](https://codeclimate.com/github/Sharingang/Sharingang-Android/test_coverage)
 
 ## Using Firebase
 - Download the `google-services.json` file from the [Firebase console](https://console.firebase.google.com/u/0/project/sharingang-app/settings/general/android:com.example.sharingang) and place it under in the `app/` folder
