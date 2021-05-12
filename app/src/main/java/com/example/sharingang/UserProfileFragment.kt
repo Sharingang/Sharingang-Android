@@ -87,7 +87,6 @@ class UserProfileFragment : Fragment() {
             this,
             currentUserProvider
         ) { user: FirebaseUser, userId: String -> execAfterSignIn(user, userId) }
-        currentUser = auth.currentUser
         setUserType()
         userViewModel.setUser(shownUserProfileId)
         imageAccess = ImageAccess(requireActivity())
@@ -151,6 +150,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setUserType() {
+        currentUser = auth.currentUser
         userType = when (currentUserId) {
             null -> if (shownUserProfileId == null) UserType.LOGGED_OUT_SELF else UserType.LOGGED_OUT
             shownUserProfileId -> UserType.SELF
