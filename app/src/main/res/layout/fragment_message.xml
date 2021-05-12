@@ -66,8 +66,9 @@
 
                 <EditText
                     android:id="@+id/messageEditText"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:autofillHints="true"
                     android:ems="10"
                     android:hint="@string/messageHint"
@@ -75,9 +76,10 @@
 
                 <ImageButton
                     android:id="@+id/btnSend"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="51dp"
                     android:layout_margin="2dp"
+                    android:layout_weight="5"
                     android:contentDescription="@string/profilePicture"
                     app:srcCompat="@android:drawable/ic_menu_send" />
             </LinearLayout>

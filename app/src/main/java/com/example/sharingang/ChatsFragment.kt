@@ -2,7 +2,6 @@ package com.example.sharingang
 
 import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -43,12 +42,10 @@ class ChatsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //firebaseFirestore.clearPersistence()
-        Log.e("xxx", firebaseFirestore.toString())
         currentUserId = currentUserProvider.getCurrentUserId()
         binding = FragmentChatsBinding.inflate(inflater, container, false)
         if (currentUserId != null) {
-            setRecyclerViewDecoration()
+            setRecyclerViewDecoration(margin = 10)
             binding.chatUsersList.layoutManager = LinearLayoutManager(requireContext())
             usersLiveData.observe(viewLifecycleOwner, { newList ->
                 (binding.chatUsersList.adapter as UserAdapter).submitList(newList)
@@ -60,7 +57,6 @@ class ChatsFragment : Fragment() {
 
     private fun setupUI() {
         if (currentUserId != null) {
-            Log.e("xxx", "currentuid = $currentUserId")
             binding.loggedOutInfo.visibility = View.GONE
             val listUsers = mutableListOf<User>()
             userAdapter = UserAdapter(requireContext(), listUsers)
@@ -83,7 +79,7 @@ class ChatsFragment : Fragment() {
         }
     }
 
-    private fun setRecyclerViewDecoration() {
+    private fun setRecyclerViewDecoration(margin: Int) {
         binding.chatUsersList.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(
                 outRect: Rect,
@@ -93,7 +89,7 @@ class ChatsFragment : Fragment() {
             ) {
                 super.getItemOffsets(outRect, view, parent, state)
                 if (parent.getChildAdapterPosition(view) > 0) {
-                    outRect.top = 10
+                    outRect.top = margin
                 }
             }
         })
