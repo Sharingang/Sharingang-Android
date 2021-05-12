@@ -111,6 +111,9 @@
             android:id="@+id/action_userProfileFragment_to_soldItemList"
             app:destination="@id/soldItemList" />
         <action
+            android:id="@+id/action_userProfileFragment_to_subscriptionFragment"
+            app:destination="@id/subscriptionFragment" />
+        <action
             android:id="@+id/action_userProfileFragment_to_messageFragment"
             app:destination="@id/messageFragment" />
 
@@ -176,4 +179,8 @@
             android:name="partnerProfilePictureUrl"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/subscriptionFragment"
+        android:name="com.example.sharingang.SubscriptionFragment"
+        android:label="Subscriptions" />
 </navigation>
