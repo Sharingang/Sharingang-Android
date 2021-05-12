@@ -4,6 +4,8 @@
 ## Using Firebase
 - Download the `google-services.json` file from the [Firebase console](https://console.firebase.google.com/u/0/project/sharingang-app/settings/general/android:com.example.sharingang) and place it under in the `app/` folder
 - Install [Firebase CLI](https://firebase.google.com/docs/cli?hl=en)
+- Copy the `.runtimeconfig.json` file in the `functions` directory
+- Run `npm install` in the `functions` directory
 
 When running the app, you will have to run the Firebase emulator. For that, go to the root directory of the project and run:
 `firebase emulators:start`. This will launch both the Firestore (for items) and the Auth (for authentication) emulator.

@@ -220,12 +220,15 @@ class DetailedItemFragment : Fragment() {
     }
 
     private fun buyItem() {
+        binding.buyButton.isEnabled = false
         lifecycleScope.launch {
             val status = paymentProvider.requestPayment(args.item)
             if (status) {
                 itemViewModel.sellItem(args.item)
                 binding.buyButton.visibility = View.GONE
                 initRating(args.item.copy(sold = true))
+            } else {
+                binding.buyButton.isEnabled = true
             }
         }
     }
