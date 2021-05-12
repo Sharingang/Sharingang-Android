@@ -110,12 +110,12 @@ class ItemsViewModel @Inject constructor(
      * @param userId the id of the user
      * @param isRequest whether we should show the requests or the offers
      */
-    fun getUserItemsRequests(userId: String?, isRequest: Boolean) {
+    fun getUserOffersAndRequests(userId: String?, isRequest: Boolean) {
         if (userId != null) {
             viewModelScope.launch(Dispatchers.IO) {
                 _userItemsAndRequests.postValue(
                     itemRepository.userItems(userId)?.filter { item ->
-                        if (isRequest) !item.sold && item.request else !item.sold && !item.request
+                        !item.sold && if (isRequest) item.request else !item.request
                     }
                 )
             }

@@ -208,7 +208,7 @@ class UserProfileFragment : Fragment() {
                 itemsViewModel.getUserItemsRequests(userId, binding.requestsButton.isChecked)
             }
         }
-        itemsViewModel.getUserItemsRequests(userId, binding.requestsButton.isChecked)
+        itemsViewModel.getUserOffersAndRequests(userId, binding.requestsButton.isChecked)
         itemsViewModel.addObserver(
             viewLifecycleOwner,
             adapter,
