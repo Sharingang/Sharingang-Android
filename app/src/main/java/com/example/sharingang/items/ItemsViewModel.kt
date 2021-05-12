@@ -31,7 +31,7 @@ class ItemsViewModel @Inject constructor(
     }
 
     enum class OBSERVABLES {
-        ALL_ITEMS, SEARCH_RESULTS, USER_ITEMS, WISHLIST, ORDERED_ITEMS, SOLD_ITEMS
+        ALL_ITEMS, SEARCH_RESULTS, USER_ITEMS_AND_REQUESTS, WISHLIST, ORDERED_ITEMS, SOLD_ITEMS
     }
 
     enum class ORDERING {
@@ -54,9 +54,9 @@ class ItemsViewModel @Inject constructor(
     val orderedItemsResult: LiveData<List<Item>>
         get() = _orderedItems
 
-    private val _userItems = MutableLiveData<List<Item>>()
-    val userItems: LiveData<List<Item>>
-        get() = _userItems
+    private val _userItemsAndRequests = MutableLiveData<List<Item>>()
+    val userItemsAndRequests: LiveData<List<Item>>
+        get() = _userItemsAndRequests
 
     private val _userSoldItems = MutableLiveData<List<Item>>()
     val userSoldItems: LiveData<List<Item>>
@@ -108,20 +108,20 @@ class ItemsViewModel @Inject constructor(
      *
      * @param userId the id of the user
      */
-    fun getUserItem(userId: String?) {
+    fun getUserOffersAndRequests(userId: String?, isRequest: Boolean) {
         if (userId != null) {
             viewModelScope.launch(Dispatchers.IO) {
-                _userItems.postValue(
+                _userItemsAndRequests.postValue(
                     itemRepository.userItems(userId)?.filter { item ->
-                        !item.sold
+                        if (isRequest) !item.sold && item.request else !item.sold && !item.request
                     }
                 )
             }
         }
     }
 
-    fun getUserSoldItems(userId: String?){
-        if(userId != null){
+    fun getUserSoldItems(userId: String?) {
+        if (userId != null) {
             viewModelScope.launch(Dispatchers.IO) {
                 _userSoldItems.postValue(
                     itemRepository.userItems(userId)?.filter { item ->
@@ -221,7 +221,7 @@ class ItemsViewModel @Inject constructor(
         val observable: LiveData<List<Item>> = when (type) {
             OBSERVABLES.ALL_ITEMS -> items
             OBSERVABLES.SEARCH_RESULTS -> searchResults
-            OBSERVABLES.USER_ITEMS -> userItems
+            OBSERVABLES.USER_ITEMS_AND_REQUESTS -> userItemsAndRequests
             OBSERVABLES.WISHLIST -> wishlistItem
             OBSERVABLES.ORDERED_ITEMS -> orderedItemsResult
             OBSERVABLES.SOLD_ITEMS -> userSoldItems

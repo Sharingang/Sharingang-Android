@@ -40,20 +40,26 @@ class UserProfileFragment : Fragment() {
     private var shownUserProfileId: String? = null
     private var loggedInUserEmail: String? = null
     private var imageUri: Uri? = null
+
     private enum class UserType {
         LOGGED_OUT_SELF,
         LOGGED_OUT,
         VISITOR,
         SELF
     }
+
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
+
     @Inject
     lateinit var userRepository: UserRepository
+
     @Inject
     lateinit var imageStore: ImageStore
+
     @Inject
     lateinit var auth: FirebaseAuth
+
     @Inject
     lateinit var authUI: AuthUI
 
@@ -73,7 +79,13 @@ class UserProfileFragment : Fragment() {
             else -> args.userId
         }
         authHelper = AuthHelper(
-            requireContext(), auth, authUI, lifecycleScope, userRepository, this, currentUserProvider
+            requireContext(),
+            auth,
+            authUI,
+            lifecycleScope,
+            userRepository,
+            this,
+            currentUserProvider
         ) { user: FirebaseUser, userId: String -> execAfterSignIn(user, userId) }
         currentUser = auth.currentUser
         setUserType()
@@ -144,9 +156,17 @@ class UserProfileFragment : Fragment() {
 
     private fun initSetup() {
         listOf(
-            binding.upfTopinfo, binding.imageView, binding.gallerycameraholder, binding.nameText,
-            binding.textEmail, binding.applyholder, binding.ratingTextview, binding.applyholder,
-            binding.btnReport, binding.userItemList, binding.btnLogout,
+            binding.upfTopinfo,
+            binding.imageView,
+            binding.gallerycameraholder,
+            binding.nameText,
+            binding.textEmail,
+            binding.applyholder,
+            binding.ratingTextview,
+            binding.offersRequestsGroup,
+            binding.btnReport,
+            binding.userItemList,
+            binding.btnLogout,
             binding.btnLogin
         ).forEach { view -> view.visibility = View.GONE }
     }
@@ -154,15 +174,22 @@ class UserProfileFragment : Fragment() {
     private fun setVisibilities() {
         val visibleViews = when (userType) {
             UserType.LOGGED_OUT -> listOf(
-                binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList
+                binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList,
+                binding.offersRequestsGroup
             )
             UserType.VISITOR -> listOf(
                 binding.imageView, binding.nameText, binding.ratingTextview,
-                binding.userItemList, binding.btnReport
+                binding.userItemList, binding.btnReport, binding.offersRequestsGroup
             )
             UserType.SELF -> listOf(
-                binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList,
-                binding.textEmail, binding.gallerycameraholder, binding.btnLogout
+                binding.imageView,
+                binding.nameText,
+                binding.ratingTextview,
+                binding.userItemList,
+                binding.textEmail,
+                binding.gallerycameraholder,
+                binding.btnLogout,
+                binding.offersRequestsGroup
             )
             else -> listOf(binding.upfTopinfo, binding.btnLogin)
         }
@@ -181,11 +208,16 @@ class UserProfileFragment : Fragment() {
     private fun setupRecyclerView(userId: String?) {
         val adapter = itemsViewModel.setupItemAdapter()
         binding.userItemList.adapter = adapter
-        itemsViewModel.getUserItem(userId)
+        listOf(binding.offersButton, binding.requestsButton).forEach {
+            it.setOnClickListener {
+                itemsViewModel.getUserOffersAndRequests(userId, binding.requestsButton.isChecked)
+            }
+        }
+        itemsViewModel.getUserOffersAndRequests(userId, binding.requestsButton.isChecked)
         itemsViewModel.addObserver(
             viewLifecycleOwner,
             adapter,
-            ItemsViewModel.OBSERVABLES.USER_ITEMS
+            ItemsViewModel.OBSERVABLES.USER_ITEMS_AND_REQUESTS
         )
         itemsViewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
             { item ->

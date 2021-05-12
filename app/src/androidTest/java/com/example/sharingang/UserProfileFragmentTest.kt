@@ -184,4 +184,21 @@ class UserProfileFragmentTest {
         onView(withId(R.id.createItemButton)).perform(click())
         waitAfterSaveItem()
     }
+
+    @Test
+    fun canSeeOffersAndRequests(){
+        addSingleItemToDB("Naruto")
+        navigate_to(R.id.newEditFragment)
+        onView(withId(R.id.itemTitle)).perform(
+            typeText("One piece"),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.switch_is_request)).perform(click())
+        onView(withId(R.id.createItemButton)).perform(click())
+        waitAfterSaveItem()
+        navigate_to(R.id.userProfileFragment)
+        onView(withText("Naruto")).check(matches(isDisplayed()))
+        onView(withId(R.id.requestsButton)).perform(click())
+        onView(withText("One piece")).check(matches(isDisplayed()))
+    }
 }

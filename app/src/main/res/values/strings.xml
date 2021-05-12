@@ -78,4 +78,6 @@
     <string name="sold">Sold</string>
     <string name="subscribed_to">You are subscribed to these categories:\u0020</string>
     <string name="is_request">Is it an item request?</string>
+    <string name="offers">Offers</string>
+    <string name="requests">Requests</string>
 </resources>
