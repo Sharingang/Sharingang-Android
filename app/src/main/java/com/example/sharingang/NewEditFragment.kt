@@ -167,7 +167,8 @@ class NewEditFragment : Fragment() {
             longitude = binding.longitude?.toDoubleOrNull() ?: 0.0,
             userId = existingItem?.userId ?: userId,
             createdAt = existingItem?.createdAt,
-            localId = existingItem?.localId ?: 0
+            localId = existingItem?.localId ?: 0,
+            isRequest = binding.switchIsRequest.isChecked
         )
     }
 
@@ -222,6 +223,7 @@ class NewEditFragment : Fragment() {
             it.image?.let { url ->
                 Glide.with(requireContext()).load(url).into(binding.itemImage)
             }
+            binding.switchIsRequest.isChecked = it.isRequest
             updateLocationWithCoordinates(it.latitude, it.longitude)
         }
     }
