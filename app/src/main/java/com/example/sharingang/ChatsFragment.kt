@@ -22,6 +22,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
+/**
+ * ChatsFragment takes care of displaying and representing the current
+ * chat partners of the logged-in user.
+ */
 @AndroidEntryPoint
 class ChatsFragment : Fragment() {
 
@@ -55,6 +59,9 @@ class ChatsFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Sets up the UI (views) with the help of the UserAdapter
+     */
     private fun setupUI() {
         if (currentUserId != null) {
             binding.loggedOutInfo.visibility = View.GONE
@@ -79,6 +86,11 @@ class ChatsFragment : Fragment() {
         }
     }
 
+    /**
+     * Decorates the displayed list of users with a marginbetween elements.
+     *
+     * @param margin the margin between items
+     */
     private fun setRecyclerViewDecoration(margin: Int) {
         binding.chatUsersList.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(

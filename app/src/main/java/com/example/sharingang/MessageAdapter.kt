@@ -7,7 +7,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-
+/**
+ * MessageAdapter takes care of adapting a list of messages into a Recycler View.
+ *
+ * @param context the context
+ * @param chats the list of chats we are adapting
+ * @param currentUserId the current logged in user's id
+ */
 class MessageAdapter(
     private val context: Context, private var chats: MutableList<Chat>,
     private val currentUserId: String
@@ -23,9 +29,13 @@ class MessageAdapter(
         const val MSG_TYPE_RECEIVE = 1
     }
 
+    /**
+     * ViewHolder holds the fields of a message element inside a View.
+     *
+     * @param messageEntryView the designed View for a message
+     */
     class ViewHolder(messageEntryView: View) : RecyclerView.ViewHolder(messageEntryView) {
         var text: TextView = messageEntryView.findViewById(R.id.messageText)
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -56,6 +66,11 @@ class MessageAdapter(
 
     }
 
+    /**
+     * Updates the list of messages based on new incoming data.
+     *
+     * @param newData the incoming data
+     */
     fun submitList(newData: List<Chat>) {
         chats.clear()
         chats.addAll(newData)

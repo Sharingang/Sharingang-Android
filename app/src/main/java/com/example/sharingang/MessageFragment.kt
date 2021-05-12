@@ -22,6 +22,11 @@ import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
 
+
+/**
+ * MessageFragment takes care of representing and displaying
+ * the messages in a view for a pair of communicating users.
+ */
 @AndroidEntryPoint
 class MessageFragment : Fragment() {
 
@@ -43,7 +48,17 @@ class MessageFragment : Fragment() {
     @Inject
     lateinit var userRepository: UserRepository
 
+    /**
+     * This class is useful for creating a pair where we can retrieve
+     * one value from the other.
+     */
     private class LinkedPair<A>(private val fst: A, private val snd: A) {
+        /**
+         * Retrieve the pair's other element
+         *
+         * @param x The pair's element whose partner we want to get
+         * @return The pair's partner (null if x is not part of the pain)
+         */
         fun otherOf(x: A): A? {
             return if(x == fst) snd else if(x == snd) fst else null
         }
@@ -70,11 +85,18 @@ class MessageFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Setup the views for the profile picture and the username
+     * of the chat partner on the top of the fragment.
+     */
     private fun setupFields() {
         Glide.with(this).load(partnerProfilePic).into(binding.chatPartnerPic)
         binding.chatPartnerUsername.text = partnerUsername
     }
 
+    /**
+     * Setup the View and action for the button used for sending a message.
+     */
     private fun setupSendButton() {
         binding.btnSend.isEnabled = false
         binding.messageEditText.addTextChangedListener {
@@ -86,11 +108,24 @@ class MessageFragment : Fragment() {
         }
     }
 
+    /**
+     * Retrieve the user's document from the database based on its id.
+     *
+     * @param userId the id of the user we want to get the document of
+     * @return the document of the user
+     */
     private fun getUserDocument(userId: String): DocumentReference {
         val usersCollection = firebaseFirestore.collection(getString(R.string.users))
         return usersCollection.document(userId)
     }
 
+    /**
+     * Puts a message into the database and clears the message text field.
+     *
+     * @param from the sender
+     * @param to the receiver
+     * @param message the message to send
+     */
     private fun sendMessage(from: String, to: String, message: String) {
         val data = hashMapOf<String, Any>(
             getString(R.string.message) to message,
@@ -111,6 +146,9 @@ class MessageFragment : Fragment() {
         binding.messageEditText.text.clear()
     }
 
+    /**
+     * Sets up the UI of the fragment
+     */
     private fun setupUI() {
         listChats = mutableListOf()
         messageAdapter = MessageAdapter(requireContext(), listChats, currentUserId)
@@ -121,6 +159,11 @@ class MessageFragment : Fragment() {
         }
     }
 
+    /**
+     * Adds the messages documents to the current list of messages.
+     *
+     * @param documents the list of documents we are fetching the messages from
+     */
     private fun addMessagesToChatList(documents: MutableList<DocumentSnapshot>) {
         for (document in documents) {
             val message = document.getString(getString(R.string.message))
@@ -135,12 +178,20 @@ class MessageFragment : Fragment() {
         }
     }
 
+    /**
+     * Adds a change listener to the document where the last chat time is stored.
+     */
     private fun setupMessageRefresh() {
         val lastTimeChatDocument = getUserDocument(currentUserId)
             .collection(getString(R.string.messagePartners)).document(partnerId)
         addOnChangeListener(lastTimeChatDocument)
     }
 
+    /**
+     * Adds a change listener to a document
+     *
+     * @param ref the document to add the listener to
+     */
     private fun addOnChangeListener(ref: DocumentReference) {
         ref.addSnapshotListener { _, e ->
             if (e == null) {
@@ -149,6 +200,9 @@ class MessageFragment : Fragment() {
         }
     }
 
+    /**
+     * Gets the messages and displays them with the help of the adapter
+     */
     private suspend fun getAndDisplayMessages() {
         listChats.clear()
         val messages = firebaseFirestore.collection(getString(R.string.users))

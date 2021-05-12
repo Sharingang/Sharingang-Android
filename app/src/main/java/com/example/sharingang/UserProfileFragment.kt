@@ -299,6 +299,9 @@ class UserProfileFragment : Fragment() {
         }
     }
 
+    /**
+     * Sets up the action for the chat button
+     */
     private fun setupChatButton() {
         binding.btnChat.setOnClickListener() {
             view?.findNavController()?.navigate(UserProfileFragmentDirections

@@ -13,6 +13,12 @@ import com.example.sharingang.ChatsFragmentDirections
 import com.example.sharingang.R
 
 
+/**
+ * UserAdapter takes care of adapting a list of users into a Recycler View.
+ *
+ * @param context the context
+ * @param users the list of users we are adapting
+ */
 class UserAdapter(private val context: Context, private var users: MutableList<User>) :
     RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
@@ -20,6 +26,11 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
         users = mutableListOf()
     }
 
+    /**
+     * ViewHolder holds the fields of a user element inside a View.
+     *
+     * @param userEntryView the designed View for a user entry
+     */
     class ViewHolder(userEntryView: View) : RecyclerView.ViewHolder(userEntryView) {
         var username: TextView = userEntryView.findViewById(R.id.chatPartnerUsername)
         var imageView: ImageView = userEntryView.findViewById(R.id.chatPartnerPic)
@@ -47,6 +58,11 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
         return users.size
     }
 
+    /**
+     * Updates the current list of users based on new incoming data.
+     *
+     * @param newData the incoming data
+     */
     fun submitList(newData: List<User>) {
         users.clear()
         users.addAll(newData)
