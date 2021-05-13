@@ -115,7 +115,7 @@ class ItemsViewModel @Inject constructor(
             viewModelScope.launch(Dispatchers.IO) {
                 _userItemsAndRequests.postValue(
                     itemRepository.userItems(userId)?.filter { item ->
-                        !item.sold && if (isRequest) item.request else !item.request
+                        !item.sold && isRequest == item.request
                     }
                 )
             }

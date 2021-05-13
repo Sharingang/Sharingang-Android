@@ -186,18 +186,20 @@ class UserProfileFragmentTest {
 
     @Test
     fun canSeeOffersAndRequests(){
-        addSingleItemToDB("Naruto")
+        val firstItem = "Naruto"
+        val secondItem = "One piece"
+        addSingleItemToDB(firstItem)
         navigate_to(R.id.newEditFragment)
         onView(withId(R.id.itemTitle)).perform(
-            typeText("One piece"),
+            typeText(secondItem),
             closeSoftKeyboard()
         )
         onView(withId(R.id.switch_is_request)).perform(click())
         onView(withId(R.id.createItemButton)).perform(click())
         waitAfterSaveItem()
         navigate_to(R.id.userProfileFragment)
-        onView(withText("Naruto")).check(matches(isDisplayed()))
+        onView(withText(firstItem)).check(matches(isDisplayed()))
         onView(withId(R.id.requestsButton)).perform(click())
-        onView(withText("One piece")).check(matches(isDisplayed()))
+        onView(withText(secondItem)).check(matches(isDisplayed()))
     }
 }
