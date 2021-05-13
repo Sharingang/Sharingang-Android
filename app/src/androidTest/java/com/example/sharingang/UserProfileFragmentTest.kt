@@ -4,7 +4,6 @@ package com.example.sharingang
 import android.Manifest
 import android.content.Intent
 import android.provider.MediaStore
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.*
@@ -183,5 +182,24 @@ class UserProfileFragmentTest {
 
         onView(withId(R.id.createItemButton)).perform(click())
         waitAfterSaveItem()
+    }
+
+    @Test
+    fun canSeeOffersAndRequests(){
+        val firstItem = "Naruto"
+        val secondItem = "One piece"
+        addSingleItemToDB(firstItem)
+        navigate_to(R.id.newEditFragment)
+        onView(withId(R.id.itemTitle)).perform(
+            typeText(secondItem),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.switch_is_request)).perform(click())
+        onView(withId(R.id.createItemButton)).perform(click())
+        waitAfterSaveItem()
+        navigate_to(R.id.userProfileFragment)
+        onView(withText(firstItem)).check(matches(isDisplayed()))
+        onView(withId(R.id.requestsButton)).perform(click())
+        onView(withText(secondItem)).check(matches(isDisplayed()))
     }
 }

@@ -158,7 +158,7 @@ class DetailedItemFragment : Fragment() {
     }
 
     private fun initiateWishlistButton() {
-        if (currentUserProvider.getCurrentUserId() != null) {
+        if (currentUserProvider.getCurrentUserId() != null && !args.item.request) {
             viewModel.wishlistContains.observe(viewLifecycleOwner, {
                 binding.addToWishlist.text = getButtonText(it)
             })

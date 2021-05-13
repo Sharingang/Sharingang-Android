@@ -79,14 +79,10 @@ class UserProfileFragment : Fragment() {
             else -> args.userId
         }
         authHelper = AuthHelper(
-            requireContext(),
-            auth,
-            authUI,
-            lifecycleScope,
-            userRepository,
-            this,
+            requireContext(), auth, authUI, lifecycleScope, userRepository, this,
             currentUserProvider
         ) { user: FirebaseUser, userId: String -> execAfterSignIn(user, userId) }
+        currentUser = auth.currentUser
         setUserType()
         userViewModel.setUser(shownUserProfileId)
         imageAccess = ImageAccess(requireActivity())
@@ -170,15 +166,23 @@ class UserProfileFragment : Fragment() {
     private fun setVisibilities() {
         val visibleViews = when (userType) {
             UserType.LOGGED_OUT -> listOf(
-                binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList
+                binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList,
+                binding.offersRequestsGroup
             )
             UserType.VISITOR -> listOf(
                 binding.imageView, binding.nameText, binding.ratingTextview,
-                binding.userItemList, binding.btnReport, binding.btnChat
+                binding.userItemList, binding.btnReport, binding.btnChat,
+                binding.offersRequestsGroup
             )
             UserType.SELF -> listOf(
-                binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList,
-                binding.textEmail, binding.gallerycameraholder, binding.btnLogout
+                binding.imageView,
+                binding.nameText,
+                binding.ratingTextview,
+                binding.userItemList,
+                binding.textEmail,
+                binding.gallerycameraholder,
+                binding.btnLogout,
+                binding.offersRequestsGroup
             )
             else -> listOf(binding.upfTopinfo, binding.btnLogin)
         }
@@ -197,11 +201,16 @@ class UserProfileFragment : Fragment() {
     private fun setupRecyclerView(userId: String?) {
         val adapter = itemsViewModel.setupItemAdapter()
         binding.userItemList.adapter = adapter
-        itemsViewModel.getUserItem(userId)
+        listOf(binding.offersButton, binding.requestsButton).forEach {
+            it.setOnClickListener {
+                itemsViewModel.getUserOffersAndRequests(userId, binding.requestsButton.isChecked)
+            }
+        }
+        itemsViewModel.getUserOffersAndRequests(userId, binding.requestsButton.isChecked)
         itemsViewModel.addObserver(
             viewLifecycleOwner,
             adapter,
-            ItemsViewModel.OBSERVABLES.USER_ITEMS
+            ItemsViewModel.OBSERVABLES.USER_ITEMS_AND_REQUESTS
         )
         itemsViewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
             { item ->

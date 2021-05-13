@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     // We need the parameter for the callback
-    fun onRandomItem(item: MenuItem) {
+    fun onRandomItem(@Suppress("UNUSED_PARAMETER") item: MenuItem) {
         selectRandomItem()
     }
 
