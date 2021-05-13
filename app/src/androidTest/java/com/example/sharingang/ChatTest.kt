@@ -62,7 +62,7 @@ class ChatTest {
         onView(withId(R.id.btnSend)).perform(click())
         Thread.sleep(2000)
         onView(withId(R.id.messageEditText)).check(matches(withText("")))
-        onView(withId(R.id.btnSend)).check(matches(not(isClickable())))
+        onView(withId(R.id.btnSend)).check(matches(not(isEnabled())))
         Espresso.pressBack()
         Espresso.pressBack()
         Espresso.pressBack()
@@ -72,14 +72,15 @@ class ChatTest {
         onView(withText("Test User 2")).perform(click())
         Thread.sleep(2000)
         onView(withId(R.id.messageEditText)).check(matches(withText("")))
-        onView(withId(R.id.btnSend)).check(matches(not(isClickable())))
+        onView(withId(R.id.btnSend)).check(matches(not(isEnabled())))
         onView(withId(R.id.messageEditText)).perform(
             typeText(getRandomString(15)),
             closeSoftKeyboard()
         )
         onView(withId(R.id.btnSend)).perform(click())
+        Thread.sleep(2000)
         onView(withId(R.id.messageEditText)).check(matches(withText("")))
-        onView(withId(R.id.btnSend)).check(matches(not(isClickable())))
+        onView(withId(R.id.btnSend)).check(matches(not(isEnabled())))
     }
 
     private fun getRandomString(length: Int): String {
