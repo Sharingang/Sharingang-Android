@@ -30,4 +30,20 @@ class ARViewModel : ViewModel() {
     fun setItemLocation(location: Location) {
         _itemLocation.value = location
     }
+
+    // We have this private to hide mutability
+    private val _heading: MutableLiveData<Heading> = MutableLiveData(Heading(0.0))
+
+    /**
+     * Represents the current heading of the device, which we use to orient ourselves
+     */
+    val heading: LiveData<Heading>
+        get() = _heading
+
+    /**
+     * Set the current heading of the user.
+     */
+    fun setHeading(heading: Heading) {
+        _heading.value = heading
+    }
 }
