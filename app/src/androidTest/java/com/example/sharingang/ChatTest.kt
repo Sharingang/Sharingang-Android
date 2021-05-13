@@ -25,7 +25,6 @@ class ChatTest {
     @Test
     fun usersCannotChatThemselves() {
         navigate_to(R.id.userProfileFragment)
-        Thread.sleep(2000)
         onView(withId(R.id.btnChat)).check(matches(not(isDisplayed())))
     }
 
@@ -33,7 +32,6 @@ class ChatTest {
     fun loggedOutUserSeesLoggedOutInfo() {
         FakeCurrentUserProvider.instance = 0
         navigate_to(R.id.chatsFragment)
-        Thread.sleep(2000)
         onView(withId(R.id.loggedOutInfo)).check(matches(isDisplayed()))
         onView(withId(R.id.loggedOutInfo)).check(matches(withText("You need to be logged in to chat.")))
     }
@@ -60,9 +58,8 @@ class ChatTest {
             replaceText(message),
             closeSoftKeyboard()
         )
-        Thread.sleep(2000)
+        Thread.sleep(1000)
         onView(withId(R.id.btnSend)).perform(click())
-        Thread.sleep(2000)
         onView(withText(message)).check(matches(isDisplayed()))
         onView(withId(R.id.messageEditText)).check(matches(withText("")))
         onView(withId(R.id.btnSend)).check(matches(not(isEnabled())))
@@ -81,7 +78,7 @@ class ChatTest {
             closeSoftKeyboard()
         )
         onView(withId(R.id.btnSend)).perform(click())
-        Thread.sleep(2000)
+        Thread.sleep(1000)
         onView(withId(R.id.messageEditText)).check(matches(withText("")))
         onView(withText(message2)).check(matches(isDisplayed()))
         onView(withId(R.id.btnSend)).check(matches(not(isEnabled())))
