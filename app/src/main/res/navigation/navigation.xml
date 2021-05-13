@@ -63,6 +63,9 @@
         <action
             android:id="@+id/action_detailedItemFragment_to_newEditFragment"
             app:destination="@id/newEditFragment" />
+        <action
+            android:id="@+id/action_detailedItemFragment_to_ARActivity"
+            app:destination="@id/ARActivity" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -155,4 +158,9 @@
         android:id="@+id/subscriptionFragment"
         android:name="com.example.sharingang.SubscriptionFragment"
         android:label="Subscriptions" />
+    <activity
+        android:id="@+id/ARActivity"
+        android:name="com.example.sharingang.ar.ARActivity"
+        android:label="activity_aractivity"
+        tools:layout="@layout/activity_aractivity" />
 </navigation>

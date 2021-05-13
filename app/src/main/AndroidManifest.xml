@@ -15,6 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Sharingang">
+        <activity android:name=".ar.ARActivity" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_api_key" />
@@ -53,9 +55,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="https"
                     android:host="sharingang.page.link"
-                    android:path="/item" />
+                    android:path="/item"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
     </application>

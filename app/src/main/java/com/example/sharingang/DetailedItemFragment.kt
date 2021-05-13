@@ -72,6 +72,7 @@ class DetailedItemFragment : Fragment() {
         initRating()
 
         binding.shareButton.setOnClickListener { shareItem() }
+        binding.locateButton.setOnClickListener { locateItem() }
 
         viewModel.setUser(args.item.userId)
         viewModel.user.observe(viewLifecycleOwner, this::onUserChange)
@@ -133,7 +134,11 @@ class DetailedItemFragment : Fragment() {
     private fun deleteItem(itemId: String) {
         lifecycleScope.launch(Dispatchers.IO) {
             if (itemRepository.delete(itemId)) {
-                Snackbar.make(binding.root, getString(R.string.item_deleted_success), Snackbar.LENGTH_SHORT)
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.item_deleted_success),
+                    Snackbar.LENGTH_SHORT
+                )
                     .show()
                 lifecycleScope.launch(Dispatchers.Main) {
                     findNavController().popBackStack()
@@ -236,5 +241,14 @@ class DetailedItemFragment : Fragment() {
 
     private fun generateLinkTitle(item: Item): String {
         return item.title + " - " + getString(R.string.app_name)
+    }
+
+    /**
+     * The callback for when a user wants to locate her item
+     */
+    private fun locateItem() {
+        view?.findNavController()?.navigate(
+            DetailedItemFragmentDirections.actionDetailedItemFragmentToARActivity()
+        )
     }
 }

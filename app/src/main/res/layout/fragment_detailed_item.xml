@@ -164,5 +164,13 @@
             android:layout_marginTop="16dp"
             android:contentDescription="@string/share"
             app:srcCompat="?attr/actionModeShareDrawable" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/locateButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/locate_item"
+            app:srcCompat="@drawable/baseline_search_black_24dp" />
     </LinearLayout>
 </layout>
