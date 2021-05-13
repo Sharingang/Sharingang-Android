@@ -35,6 +35,12 @@ exports.checkout = functions.https.onCall(async (data, context) => {
     };
 });
 
+/**
+ * Search for an existing Stripe customer, if it doesn't exist, create a new one
+ * 
+ * @param {admin.auth.UserRecord} user - FirebaseAuth user
+ * @returns {object} Stripe customer
+ */
 async function getOrCreateCustomer(user) {
     const customers = (await stripe.customers.list({ email: user.email })).data;
     if (customers.length > 0) {
@@ -50,6 +56,15 @@ async function getOrCreateCustomer(user) {
     }
 }
 
+/**
+ * Create a Stripe payment intent for the given item and customer
+ * 
+ * @param {object} customer - Stripe customer
+ * @param {admin.auth.UserRecord} user - FirebaseAuth user
+ * @param {FirebaseFirestore.DocumentData} item - item being sold
+ * @param {string} itemId - ID of the item being sold
+ * @returns {object} Stripe payment intent
+ */
 async function createPaymentIntent(customer, user, item, itemId) {
     // Stripe expects price in cents
     const price = Math.round(item.price * 100);

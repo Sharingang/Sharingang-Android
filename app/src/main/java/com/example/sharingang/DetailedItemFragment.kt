@@ -85,9 +85,14 @@ class DetailedItemFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Initialize the buy button, display it only if the item is not sold, has a price and the user
+     * is not the seller
+     */
     private fun initBuy() {
         val currentUserId = currentUserProvider.getCurrentUserId()
-        val availableForSale = !args.item.sold && currentUserId != null && args.item.userId != currentUserId
+        val availableForSale = !args.item.sold && args.item.price >= 0.01 &&
+                currentUserId != null && args.item.userId != currentUserId
         binding.buyButton.visibility = if (availableForSale) View.VISIBLE else View.GONE
         binding.buyButton.setOnClickListener { buyItem() }
     }
@@ -147,7 +152,11 @@ class DetailedItemFragment : Fragment() {
     private fun deleteItem(itemId: String) {
         lifecycleScope.launch(Dispatchers.IO) {
             if (itemRepository.delete(itemId)) {
-                Snackbar.make(binding.root, getString(R.string.item_deleted_success), Snackbar.LENGTH_SHORT)
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.item_deleted_success),
+                    Snackbar.LENGTH_SHORT
+                )
                     .show()
                 lifecycleScope.launch(Dispatchers.Main) {
                     findNavController().popBackStack()
@@ -219,6 +228,11 @@ class DetailedItemFragment : Fragment() {
         viewModel.modifyWishList(args.item)
     }
 
+    /**
+     * Start the buying process
+     *
+     * On success, the item is marked as sold and the rating form is displayed
+     */
     private fun buyItem() {
         binding.buyButton.isEnabled = false
         lifecycleScope.launch {

@@ -85,6 +85,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         super.onPause()
     }
 
+    /**
+     * Retrieves the deep link using Firebase Dynamic Links and opens it
+     */
     private fun handleDeepLink() {
         Firebase.dynamicLinks
             .getDynamicLink(intent)
@@ -93,6 +96,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
     }
 
+    /**
+     * Parses the given deep link and open the activity
+     * @param deepLink expected format: /item?id=[item id]
+     */
     fun openDeepLink(deepLink: Uri) {
         val id = deepLink.getQueryParameter("id")
         if (deepLink.path == "/item" && id != null) {

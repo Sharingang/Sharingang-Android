@@ -10,13 +10,8 @@ class FakePaymentProvider : PaymentProvider {
         // Don't have to initialize anything
     }
 
-    override suspend fun requestPayment(item: Item): Boolean {
-        if (item.id == null || item.price < 0.01) {
-            return false
-        }
-
-        return paymentStatus.status
-    }
+    override suspend fun requestPayment(item: Item): Boolean =
+        if (item.id == null || item.price < 0.01) false else paymentStatus.status
 
     enum class Status(val status: Boolean) {
         ALWAYS_ACCEPT(true), ALWAYS_REJECT(false)

@@ -20,6 +20,8 @@ import kotlin.coroutines.suspendCoroutine
  * Payment provider implementation using Stripe
  *
  * When a payment is requested, a popup will ask the user to enter their payment details.
+ *
+ * @param firebaseFunctions FirebaseFunctions instance that enables to call cloud functions implemented in NodeJS
  */
 class StripePaymentProvider @Inject constructor(
     private val firebaseFunctions: FirebaseFunctions
