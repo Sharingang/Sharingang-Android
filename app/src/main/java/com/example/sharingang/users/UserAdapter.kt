@@ -17,8 +17,8 @@ import com.example.sharingang.R
 /**
  * UserAdapter takes care of adapting a list of users into a Recycler View.
  *
- * @param context the context
- * @param users the list of users we are adapting
+ * @property context the context
+ * @property users the list of users we are adapting
  */
 class UserAdapter(private val context: Context, private var users: MutableList<User>) :
     RecyclerView.Adapter<UserAdapter.ViewHolder>() {

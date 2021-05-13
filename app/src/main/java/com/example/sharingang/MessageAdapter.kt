@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 /**
  * MessageAdapter takes care of adapting a list of messages into a Recycler View.
  *
- * @param context the context
- * @param chats the list of chats we are adapting
- * @param currentUserId the current logged in user's id
+ * @property context the context
+ * @property chats the list of chats we are adapting
+ * @property currentUserId the current logged in user's id
  */
 class MessageAdapter(
     private val context: Context, private var chats: MutableList<Chat>,
