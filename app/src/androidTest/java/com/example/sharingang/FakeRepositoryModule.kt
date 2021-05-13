@@ -3,6 +3,7 @@ package com.example.sharingang
 import android.content.Context
 import androidx.room.Room
 import com.example.sharingang.items.*
+import com.example.sharingang.payment.PaymentProvider
 import com.example.sharingang.users.*
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
@@ -92,7 +93,7 @@ object FakeRepositoryModule {
     fun provideImageStore(imageStore: PlaceholderImageStore): ImageStore {
         return imageStore
     }
-
+  
     @Singleton
     @Provides
     fun provideFirebaseFirestore(): FirebaseFirestore {
@@ -102,6 +103,11 @@ object FakeRepositoryModule {
             isPersistenceEnabled = true
         }
         return firestore
+    }
+
+    @Provides
+    fun providePaymentProvider(): PaymentProvider {
+        return FakePaymentProvider()
     }
 }
 

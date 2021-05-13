@@ -9,7 +9,7 @@
     <string name="delete_item">Delete Item</string>
     <string name="title">Title</string>
     <string name="default_price">Price (default: 0.0)</string>
-    <string name="display_price">$ %.2f</string>
+    <string name="display_price">CHF %.2f</string>
     <string name="item_image_description">Item Image</string>
     <string name="search_hint">Search…</string>
     <string name="search_go_button">Go</string>
@@ -87,4 +87,5 @@
     <string name="offers">Offers</string>
     <string name="requests">Requests</string>
     <string name="message">message</string>
+    <string name="buy">Buy</string>
 </resources>
