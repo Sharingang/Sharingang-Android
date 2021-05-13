@@ -1,12 +1,17 @@
 package com.example.sharingang.utils
 
+import android.app.Activity
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.example.sharingang.MainActivity
 import com.example.sharingang.R
+import com.google.firebase.messaging.FirebaseMessaging
 
 private const val NOTIFICATION_ID = 0
 
@@ -32,10 +37,36 @@ private fun buildNotification(
         applicationContext.getString(R.string.new_item_notification_channel_id)
     ).setSmallIcon(R.drawable.ic_launcher_foreground)
         .setContentTitle(
-            applicationContext.getString(R.string.new_item_notification_message, "test")
+            applicationContext.getString(R.string.new_item_notification_message)
         )
         .setContentText(messageBody)
         .setContentIntent(contentPendingIntent)
         .setPriority(NotificationCompat.PRIORITY_LOW)
         .setAutoCancel(true)
+}
+
+fun createChannel(channelId: String, channelName: String, activity: Activity) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val notificationChannel =
+            NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply { setShowBadge(false) }
+
+        notificationChannel.enableLights(true)
+        notificationChannel.lightColor = Color.BLUE
+        notificationChannel.enableVibration(true)
+        notificationChannel.description = activity.getString(R.string.new_item_notification_channel_description)
+        val notificationManager = activity.getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(notificationChannel)
+    }
+}
+
+fun subscribeToTopic(topic: String) {
+    FirebaseMessaging.getInstance().subscribeToTopic(topic)
+}
+
+fun unsubscribeFromTopic(topic:String) {
+    FirebaseMessaging.getInstance().unsubscribeFromTopic(topic)
 }

@@ -7,6 +7,8 @@ import com.example.sharingang.items.ItemsViewModel
 import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.User
 import com.example.sharingang.users.UserRepository
+import com.example.sharingang.utils.subscribeToTopic
+import com.example.sharingang.utils.unsubscribeFromTopic
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -123,14 +125,40 @@ class UserProfileViewModel @Inject constructor(
                     true -> {
                         subs.remove(category)
                         _subscriptionsContains.postValue(false)
+                        unsubscribeFromTopic(category)
                     }
                     false -> {
                         subs.add(category)
                         _subscriptionsContains.postValue(true)
+                        subscribeToTopic(category)
                     }
                 }
                 user.subscriptions = subs
                 userRepository.update(user)
+            }
+        }
+    }
+
+    fun loginResubscribe(userId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val user = userRepository.get(userId)
+            if (user != null) {
+                val subs = ArrayList(user.subscriptions)
+                for (sub in subs) {
+                    if (sub != "") subscribeToTopic(sub)
+                }
+            }
+        }
+    }
+
+    fun logoutUnsubscribe(userId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val user = userRepository.get(userId)
+            if (user != null) {
+                val subs = ArrayList(user.subscriptions)
+                for (sub in subs) {
+                    if (sub != "") unsubscribeFromTopic(sub)
+                }
             }
         }
     }

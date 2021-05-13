@@ -285,8 +285,10 @@ class UserProfileFragment : Fragment() {
     private fun setupAuthenticationButtons() {
         binding.btnLogin.setOnClickListener {
             authHelper.signIn()
+            userViewModel.loginResubscribe(currentUserId!!)
         }
         binding.btnLogout.setOnClickListener {
+            userViewModel.logoutUnsubscribe(currentUserId!!)
             authHelper.signOut()
             initSetup()
             userType = UserType.LOGGED_OUT_SELF

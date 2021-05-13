@@ -15,6 +15,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.sharingang.items.ItemRepository
 import com.example.sharingang.shake.ShakeListener
+import com.example.sharingang.utils.createChannel
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
@@ -72,6 +73,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         setupShakeListener()
 
         handleDeepLink()
+
+        createChannel(
+            this.getString(R.string.new_item_notification_channel_id),
+            this.getString(R.string.new_item_notification_channel_name),
+            this
+        )
     }
 
     override fun onResume() {
