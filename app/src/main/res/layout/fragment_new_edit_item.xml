@@ -110,13 +110,23 @@
                 android:minLines="3"
                 android:singleLine="false"
                 android:text="@={description}" />
-
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
             <Spinner
                 android:id="@+id/category_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:entries="@array/categories" />
 
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switch_is_request"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/is_request"/>
+            </LinearLayout>
             <EditText
                 android:id="@+id/itemPrice"
                 android:layout_width="match_parent"

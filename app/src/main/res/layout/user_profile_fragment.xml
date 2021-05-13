@@ -111,7 +111,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/default_rating" />
+        <RadioGroup
+            android:id="@+id/offersRequestsGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/offersButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/offers"
+                android:checked="true"/>
+            <RadioButton
+                android:id="@+id/requestsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/requests"/>
 
+        </RadioGroup>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/userItemList"
             android:layout_width="match_parent"
