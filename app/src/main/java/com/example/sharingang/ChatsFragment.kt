@@ -68,6 +68,7 @@ class ChatsFragment : Fragment() {
      * Sets up the UI (views) with the help of the UserAdapter
      */
     private fun setupUI() {
+        listUsers.clear()
         if (currentUserId != null) {
             binding.loggedOutInfo.visibility = View.GONE
             lifecycleScope.launch(Dispatchers.IO) {

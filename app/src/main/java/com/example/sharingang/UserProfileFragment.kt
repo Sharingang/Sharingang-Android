@@ -319,7 +319,7 @@ class UserProfileFragment : Fragment() {
             view?.findNavController()?.navigate(
                 UserProfileFragmentDirections
                     .actionUserProfileFragmentToMessageFragment(
-                        shownUserProfileId!!, binding.nameText.text.toString(), imageUri.toString()
+                        shownUserProfileId!!, binding.nameText.text.toString(), imageUri?.toString()
                     )
             )
         }

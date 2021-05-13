@@ -32,13 +32,13 @@ class MessageFragment : Fragment() {
 
     private lateinit var currentUserId: String
     private lateinit var partnerId: String
-    private lateinit var partnerProfilePic: String
+    private var partnerProfilePic: String? = null
     private lateinit var partnerUsername: String
     private lateinit var binding: FragmentMessageBinding
     private lateinit var messageAdapter: MessageAdapter
     private val args: MessageFragmentArgs by navArgs()
     private val messagesLiveData: MutableLiveData<List<Chat>> = MutableLiveData(listOf())
-    private lateinit var listChats: MutableList<Chat>
+    private val listChats: MutableList<Chat> = mutableListOf()
 
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
@@ -75,7 +75,6 @@ class MessageFragment : Fragment() {
         messagesLiveData.observe(viewLifecycleOwner, { newList ->
             (binding.history.adapter as MessageAdapter).submitList(newList)
         })
-        listChats = mutableListOf()
         partnerId = args.partnerId
         partnerUsername = args.partnerUsername
         partnerProfilePic = args.partnerProfilePictureUrl
@@ -105,7 +104,7 @@ class MessageFragment : Fragment() {
             binding.btnSend.isEnabled = !it.isNullOrBlank()
         }
         binding.btnSend.setOnClickListener {
-            val message: String = binding.messageEditText.text.toString()
+            val message = binding.messageEditText.text.toString()
             sendMessage(currentUserId, partnerId, message)
         }
     }
@@ -135,14 +134,15 @@ class MessageFragment : Fragment() {
             getString(R.string.from) to from,
             getString(R.string.to) to to
         )
+        val date = Date()
         val lastTimeChat = hashMapOf(
-            getString(R.string.last_message) to "${Date()} (${System.currentTimeMillis()})"
+            getString(R.string.last_message) to "$date (${System.currentTimeMillis()})"
         )
         val fromToPair = LinkedPair(from, to)
         listOf(from, to).forEach {
             val userDocument = getUserDocument(it)
             userDocument.collection(getString(R.string.chats)).document(fromToPair.otherOf(it)!!)
-                .collection(getString(R.string.messages)).document(Date().toString()).set(data)
+                .collection(getString(R.string.messages)).document(date.toString()).set(data)
             userDocument.collection(getString(R.string.messagePartners))
                 .document(fromToPair.otherOf(it)!!).set(lastTimeChat)
         }

@@ -7,4 +7,4 @@ package com.example.sharingang
  * @param to the receiver
  * @param message the actual message
  */
-class Chat constructor(val from: String?, val to: String?, val message: String)
+data class Chat(val from: String?, val to: String?, val message: String)

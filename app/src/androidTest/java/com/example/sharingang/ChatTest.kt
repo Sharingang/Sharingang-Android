@@ -85,8 +85,17 @@ class ChatTest {
         onView(withId(R.id.messageEditText)).check(matches(withText("")))
         onView(withText(message2)).check(matches(isDisplayed()))
         onView(withId(R.id.btnSend)).check(matches(not(isEnabled())))
+        Espresso.pressBack()
+        onView(withText("Test User 2")).check(matches(isDisplayed()))
     }
 
+    /**
+     * Generate a random string of chosen length. This is used for generating
+     * a random message to send. Because of caching issues, when testing, we want
+     * to make sure that no multiple views match the same text.
+     *
+     * @param length the lenght of the string
+     */
     private fun getRandomString(length: Int): String {
         val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
         return (1..length)
