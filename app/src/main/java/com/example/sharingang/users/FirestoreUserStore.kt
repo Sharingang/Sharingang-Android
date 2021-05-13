@@ -2,6 +2,7 @@ package com.example.sharingang.users
 
 import android.util.Log
 import com.example.sharingang.AbstractFirestoreStore
+import com.example.sharingang.utils.DatabaseFields
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import java.util.*
@@ -18,7 +19,8 @@ private const val TAG = "FirestoreUserStore"
  */
 @Singleton
 class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFirestore) :
-    UserStore, AbstractFirestoreStore<User>("users", User::class.java, firestore) {
+    UserStore, AbstractFirestoreStore<User>(DatabaseFields.DBFIELD_USERS,
+    User::class.java, firestore) {
 
     override suspend fun add(element: User): String? {
         requireNotNull(element.id)
@@ -42,13 +44,13 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
     ): Boolean {
         return try {
             firestore
-                .collection("users").document(reportedUser.id!!)
-                .collection("reports").document(reporterUser.id!!).set(
+                .collection(DatabaseFields.DBFIELD_USERS).document(reportedUser.id!!)
+                .collection(DatabaseFields.DBFIELD_REPORTS).document(reporterUser.id!!).set(
                     hashMapOf(
-                        "reporter" to reporterUser.id,
-                        "reason" to reason,
-                        "description" to description,
-                        "reportedAt" to Date()
+                        DatabaseFields.DBFIELD_REPORTER to reporterUser.id,
+                        DatabaseFields.DBFIELD_REASON to reason,
+                        DatabaseFields.DBFIELD_DESCRIPTION to description,
+                        DatabaseFields.DBFIELD_REPORTEDAT to Date()
                     )
                 )
             Log.d(TAG, "User ${reporterUser.id} reported ${reportedUser.id}")
@@ -61,8 +63,8 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
     }
 
     override suspend fun hasBeenReported(reporterId: String, reportedId: String): Boolean {
-        val docIdRef = firestore.collection("users").document(reportedId)
-            .collection("reports").document(reporterId).get().await()
+        val docIdRef = firestore.collection(DatabaseFields.DBFIELD_USERS).document(reportedId)
+            .collection(DatabaseFields.DBFIELD_REPORTS).document(reporterId).get().await()
         return docIdRef.exists()
     }
 }

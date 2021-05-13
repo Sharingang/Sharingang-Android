@@ -130,6 +130,9 @@ class UserProfileFragment : Fragment() {
         loggedInUserEmail = currentUserProvider.getCurrentUserEmail()
         userViewModel.user.observe(viewLifecycleOwner, { user ->
             displayUserFields(user)
+            if (user!!.profilePicture != null) {
+                imageUri = Uri.parse(user.profilePicture)
+            }
         })
         setupRecyclerView(shownUserProfileId)
         setupAuthenticationButtons()
@@ -139,9 +142,11 @@ class UserProfileFragment : Fragment() {
         setupViews()
         setupReportButton()
         setupRatingView()
+        setupChatButton()
     }
 
     private fun setUserType() {
+        currentUser = auth.currentUser
         userType = when (currentUserId) {
             null -> if (shownUserProfileId == null) UserType.LOGGED_OUT_SELF else UserType.LOGGED_OUT
             shownUserProfileId -> UserType.SELF
@@ -151,18 +156,10 @@ class UserProfileFragment : Fragment() {
 
     private fun initSetup() {
         listOf(
-            binding.upfTopinfo,
-            binding.imageView,
-            binding.gallerycameraholder,
-            binding.nameText,
-            binding.textEmail,
-            binding.applyholder,
-            binding.ratingTextview,
-            binding.offersRequestsGroup,
-            binding.btnReport,
-            binding.userItemList,
-            binding.btnLogout,
-            binding.btnLogin
+            binding.upfTopinfo, binding.imageView, binding.gallerycameraholder, binding.nameText,
+            binding.textEmail, binding.applyholder, binding.ratingTextview, binding.applyholder,
+            binding.btnReport, binding.userItemList, binding.btnLogout,
+            binding.btnLogin, binding.btnChat
         ).forEach { view -> view.visibility = View.GONE }
     }
 
@@ -174,7 +171,8 @@ class UserProfileFragment : Fragment() {
             )
             UserType.VISITOR -> listOf(
                 binding.imageView, binding.nameText, binding.ratingTextview,
-                binding.userItemList, binding.btnReport, binding.offersRequestsGroup
+                binding.userItemList, binding.btnReport, binding.btnChat,
+                binding.offersRequestsGroup
             )
             UserType.SELF -> listOf(
                 binding.imageView,
@@ -319,6 +317,20 @@ class UserProfileFragment : Fragment() {
             userType = UserType.LOGGED_OUT_SELF
             setupViews()
             setVisibilities()
+        }
+    }
+
+    /**
+     * Sets up the action for the chat button
+     */
+    private fun setupChatButton() {
+        binding.btnChat.setOnClickListener() {
+            view?.findNavController()?.navigate(
+                UserProfileFragmentDirections
+                    .actionUserProfileFragmentToMessageFragment(
+                        shownUserProfileId!!, binding.nameText.text.toString(), imageUri?.toString()
+                    )
+            )
         }
     }
 }
