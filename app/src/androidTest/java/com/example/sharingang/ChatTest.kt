@@ -77,6 +77,7 @@ class ChatTest {
             typeText(getRandomString(15)),
             closeSoftKeyboard()
         )
+        onView(withId(R.id.btnSend)).perform(click())
         onView(withId(R.id.messageEditText)).check(matches(withText("")))
         onView(withId(R.id.btnSend)).check(matches(not(isClickable())))
     }
