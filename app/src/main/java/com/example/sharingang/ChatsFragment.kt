@@ -72,8 +72,9 @@ class ChatsFragment : Fragment() {
             binding.loggedOutInfo.visibility = View.GONE
             lifecycleScope.launch(Dispatchers.IO) {
                 userRepository.refreshUsers()
-                // We get a snapshot containing the current user's message partners (user Ids),
-                // so that we can then use this snapshot to read  the data we need inside.
+                // We get a snapshot of the collection containing the current user's message
+                // partners (user Ids), so that we can then use this snapshot to read
+                // the data of the documents we need inside.
                 val chatPartners = firebaseFirestore.collection(getString(R.string.users))
                     .document(currentUserId!!).collection(getString(R.string.messagePartners)).get()
                     .await()
