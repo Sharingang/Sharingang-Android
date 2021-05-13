@@ -139,6 +139,10 @@ class UserProfileViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Resubscribe to all the topics of the user on login
+     * @param userId the id of the user
+     */
     fun loginResubscribe(userId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val user = userRepository.get(userId)
@@ -151,6 +155,10 @@ class UserProfileViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Unsubscribe from all topics of the user on logout
+     * @param userId the id of the user
+     */
     fun logoutUnsubscribe(userId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val user = userRepository.get(userId)

@@ -15,6 +15,11 @@ import com.google.firebase.messaging.FirebaseMessaging
 
 private const val NOTIFICATION_ID = 0
 
+/**
+ * Send and display a notification
+ * @param messageBody the message to be displayed in the notification
+ * @param applicationContext the context of the application
+ */
 fun NotificationManager.sendNotification(messageBody: String, applicationContext: Context) {
     val contentIntent = Intent(applicationContext, MainActivity::class.java)
     val contentPendingIntent = PendingIntent.getActivity(
@@ -45,6 +50,12 @@ private fun buildNotification(
         .setAutoCancel(true)
 }
 
+/**
+ * Create a notification channel, required since Android O
+ * @param channelId the id of the channel
+ * @param channelName the name of the channel
+ * @param activity the activity
+ */
 fun createChannel(channelId: String, channelName: String, activity: Activity) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val notificationChannel =
@@ -63,10 +74,18 @@ fun createChannel(channelId: String, channelName: String, activity: Activity) {
     }
 }
 
+/**
+ * Subscribe to the topic on FirebaseMessaging
+ * @param topic the topic to subscribe to
+ */
 fun subscribeToTopic(topic: String) {
     FirebaseMessaging.getInstance().subscribeToTopic(topic)
 }
 
+/**
+ * Unsubscribe from the topic on FirebaseMessaging
+ * @param topic the topic to unsubscribe from
+ */
 fun unsubscribeFromTopic(topic:String) {
     FirebaseMessaging.getInstance().unsubscribeFromTopic(topic)
 }

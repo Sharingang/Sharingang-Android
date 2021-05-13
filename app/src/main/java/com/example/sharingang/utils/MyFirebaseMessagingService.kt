@@ -9,6 +9,9 @@ import com.example.sharingang.users.CurrentUserProvider
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+/**
+ * Class used to receive the push notifications from Firebase Message
+ */
 @AndroidEntryPoint
 class MyFirebaseMessagingService: FirebaseMessagingService() {
 
@@ -27,7 +30,7 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
     }
 
     override fun onNewToken(token: String) {
-        Log.d(TAG, "Refreshed token: $token")
+        // Save the token if needed
     }
 
     private fun sendNotification(messageBody: String) {
