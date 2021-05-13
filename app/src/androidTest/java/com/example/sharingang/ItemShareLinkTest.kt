@@ -1,6 +1,7 @@
 package com.example.sharingang
 
 import android.content.Intent
+import android.net.Uri
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -10,6 +11,8 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
@@ -60,5 +63,17 @@ class ItemShareLinkTest {
         val linkPrefix =
             "https://sharingang.page.link?apn=com.example.sharingang&link=https%3A%2F%2Fsharingang.page.link%2Fitem%3Fid%3D"
         assert(link?.startsWith(linkPrefix) ?: false)
+
+        Thread.sleep(1000)
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        device.pressBack()
+        device.pressBack()
+        Thread.sleep(1000)
+
+        val deepLink = Uri.parse(Uri.parse(link).getQueryParameter("link"))
+        getActivity(activityRule).openDeepLink(deepLink)
+        Thread.sleep(1000)
+        onView(withId(R.id.itemTitle))
+            .check(matches(withText(itemTitle)))
     }
 }

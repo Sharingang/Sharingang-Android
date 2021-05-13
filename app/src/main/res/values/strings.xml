@@ -9,7 +9,7 @@
     <string name="delete_item">Delete Item</string>
     <string name="title">Title</string>
     <string name="default_price">Price (default: 0.0)</string>
-    <string name="display_price">$ %.2f</string>
+    <string name="display_price">CHF %.2f</string>
     <string name="item_image_description">Item Image</string>
     <string name="search_hint">Search…</string>
     <string name="search_go_button">Go</string>
@@ -71,7 +71,13 @@
         <item>Ascending</item>
         <item>Descending</item>
     </string-array>
-    <string name="new_item_notification_message">A new item has been posted!</string>
+    <string name="chats_title">Chats</string>
+    <string name="username">Username</string>
+    <string name="profilePicture">profilePicture</string>
+    <string name="logged_out_user_info_chat">You need to be logged in to chat.</string>
+    <string name="messageHint">Your message…</string>
+    <string name="chat">Chat</string>
+    <string name="new_item_notification_message">A new item in %1$s has been posted!</string>
     <string name="new_item_notification_channel_id">new_item_channel</string>
     <string name="new_item_notification_channel_name">New Item</string>
     <string name="new_item_notification_channel_description">You receive a notification when a new item that is a category you subscribed to is posted.</string>
@@ -79,4 +85,9 @@
     <string name="see_subscriptions">See subscriptions</string>
     <string name="sold">Sold</string>
     <string name="subscribed_to">You are subscribed to these categories:\u0020</string>
+    <string name="is_request">Is it a request?</string>
+    <string name="offers">Offers</string>
+    <string name="requests">Requests</string>
+    <string name="message">message</string>
+    <string name="buy">Buy</string>
 </resources>

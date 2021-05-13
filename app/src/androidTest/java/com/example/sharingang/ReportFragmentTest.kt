@@ -24,7 +24,7 @@ class ReportFragmentTest {
 
     @Test
     fun reportCanBeCancelled() {
-        FakeCurrentUserProvider.instance = 2
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_2
         navigate_to(R.id.newEditFragment)
         Thread.sleep(500)
         onView(withId(R.id.itemTitle)).perform(
@@ -33,7 +33,7 @@ class ReportFragmentTest {
         )
         onView(withId(R.id.createItemButton)).perform(click())
         waitAfterSaveItem()
-        FakeCurrentUserProvider.instance = 1
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
         onView(withId(R.id.item_list_view_title)).perform(click())
         onView(withId(R.id.itemPostedBy)).perform(click())
         Thread.sleep(500)
@@ -55,7 +55,7 @@ class ReportFragmentTest {
 
     @Test
     fun reportCanBeSent() {
-        FakeCurrentUserProvider.instance = 2
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_2
         navigate_to(R.id.newEditFragment)
         Thread.sleep(500)
         onView(withId(R.id.itemTitle)).perform(
@@ -64,7 +64,7 @@ class ReportFragmentTest {
         )
         onView(withId(R.id.createItemButton)).perform(click())
         waitAfterSaveItem()
-        FakeCurrentUserProvider.instance = 1
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
         onView(withId(R.id.item_list_view_title)).perform(click())
         onView(withId(R.id.itemPostedBy)).perform(click())
         Thread.sleep(500)
@@ -80,7 +80,7 @@ class ReportFragmentTest {
 
     @Test
     fun aUserCannotReportThemselves() {
-        FakeCurrentUserProvider.instance = 1
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
         navigate_to(R.id.userProfileFragment)
         onView(withId(R.id.btn_report)).check(matches(not(isDisplayed())))
     }

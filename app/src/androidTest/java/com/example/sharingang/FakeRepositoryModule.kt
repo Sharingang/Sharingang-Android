@@ -3,9 +3,14 @@ package com.example.sharingang
 import android.content.Context
 import androidx.room.Room
 import com.example.sharingang.items.*
+import com.example.sharingang.payment.PaymentProvider
 import com.example.sharingang.users.*
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.firestoreSettings
+import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -87,6 +92,22 @@ object FakeRepositoryModule {
     @Provides
     fun provideImageStore(imageStore: PlaceholderImageStore): ImageStore {
         return imageStore
+    }
+  
+    @Singleton
+    @Provides
+    fun provideFirebaseFirestore(): FirebaseFirestore {
+        val firestore = Firebase.firestore
+        firestore.useEmulator("10.0.2.2", 8080)
+        firestore.firestoreSettings = firestoreSettings {
+            isPersistenceEnabled = true
+        }
+        return firestore
+    }
+
+    @Provides
+    fun providePaymentProvider(): PaymentProvider {
+        return FakePaymentProvider()
     }
 }
 

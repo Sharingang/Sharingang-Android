@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_itemsListFragment_to_wishlistViewFragment"
             app:destination="@id/wishlistViewFragment" />
+        <action
+            android:id="@+id/action_itemsListFragment_to_chatsFragment"
+            app:destination="@id/chatsFragment" />
     </fragment>
     <fragment
         android:id="@+id/newEditFragment"
@@ -110,6 +113,9 @@
         <action
             android:id="@+id/action_userProfileFragment_to_subscriptionFragment"
             app:destination="@id/subscriptionFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_messageFragment"
+            app:destination="@id/messageFragment" />
 
     </fragment>
     <fragment
@@ -150,6 +156,29 @@
         <action
             android:id="@+id/action_soldItemList_to_detailedItemFragment"
             app:destination="@id/detailedItemFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatsFragment"
+        android:name="com.example.sharingang.ChatsFragment"
+        android:label="Chats">
+        <action
+            android:id="@+id/action_chatsFragment_to_messageFragment"
+            app:destination="@id/messageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/messageFragment"
+        android:name="com.example.sharingang.MessageFragment"
+        android:label="@string/chat">
+        <argument
+            android:name="partnerId"
+            app:argType="string" />
+        <argument
+            android:name="partnerUsername"
+            app:argType="string" />
+        <argument
+            android:name="partnerProfilePictureUrl"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/subscriptionFragment"
