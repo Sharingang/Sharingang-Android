@@ -38,6 +38,8 @@ class ChatsFragment : Fragment() {
 
     private var firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
+    private val listUsers: MutableList<User> = mutableListOf()
+
     @Inject
     lateinit var userRepository: UserRepository
     private val usersLiveData: MutableLiveData<List<User>> = MutableLiveData(listOf())
@@ -49,6 +51,8 @@ class ChatsFragment : Fragment() {
         currentUserId = currentUserProvider.getCurrentUserId()
         binding = FragmentChatsBinding.inflate(inflater, container, false)
         if (currentUserId != null) {
+            userAdapter = UserAdapter(requireContext(), listUsers)
+            binding.chatUsersList.adapter = userAdapter
             setRecyclerViewDecoration(margin = 10)
             binding.chatUsersList.layoutManager = LinearLayoutManager(requireContext())
             usersLiveData.observe(viewLifecycleOwner, { newList ->
@@ -65,15 +69,13 @@ class ChatsFragment : Fragment() {
     private fun setupUI() {
         if (currentUserId != null) {
             binding.loggedOutInfo.visibility = View.GONE
-            val listUsers = mutableListOf<User>()
-            userAdapter = UserAdapter(requireContext(), listUsers)
-            binding.chatUsersList.adapter = userAdapter
             lifecycleScope.launch(Dispatchers.IO) {
                 userRepository.refreshUsers()
+                // We get a snapshot containing the current user's message partners (user Ids),
+                // so that we can then use this snapshot to read  the data we need inside.
                 val chatPartners = firebaseFirestore.collection(getString(R.string.users))
                     .document(currentUserId!!).collection(getString(R.string.messagePartners)).get()
                     .await()
-                listUsers.clear()
                 chatPartners.documents.forEach {
                     val user = userRepository.get(it.id)
                     listUsers.add(user!!)

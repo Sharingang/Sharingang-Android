@@ -52,7 +52,6 @@ class ChatTest {
         onView(withId(R.id.item_list_view_title)).perform(click())
         onView(withId(R.id.itemPostedBy)).perform(click())
         onView(withId(R.id.btnChat)).perform(click())
-        Thread.sleep(2000)
         onView(withId(R.id.chatPartnerUsername)).check(matches(withText(FakeCurrentUserProvider.fakeUser1.name)))
         val message = getRandomString(15)
         onView(withId(R.id.messageEditText)).perform(
@@ -60,7 +59,6 @@ class ChatTest {
             closeSoftKeyboard()
         )
         onView(withId(R.id.btnSend)).perform(click())
-        Thread.sleep(2000)
         onView(withId(R.id.messageEditText)).check(matches(withText("")))
         onView(withId(R.id.btnSend)).check(matches(not(isEnabled())))
         Espresso.pressBack()
@@ -68,9 +66,7 @@ class ChatTest {
         Espresso.pressBack()
         FakeCurrentUserProvider.instance = 1
         navigate_to(R.id.chatsFragment)
-        Thread.sleep(2000)
         onView(withText("Test User 2")).perform(click())
-        Thread.sleep(2000)
         onView(withId(R.id.messageEditText)).check(matches(withText("")))
         onView(withId(R.id.btnSend)).check(matches(not(isEnabled())))
         onView(withId(R.id.messageEditText)).perform(
@@ -78,7 +74,6 @@ class ChatTest {
             closeSoftKeyboard()
         )
         onView(withId(R.id.btnSend)).perform(click())
-        Thread.sleep(2000)
         onView(withId(R.id.messageEditText)).check(matches(withText("")))
         onView(withId(R.id.btnSend)).check(matches(not(isEnabled())))
     }

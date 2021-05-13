@@ -42,15 +42,18 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val user: User = users[position]
-        holder.username.text = user.name
-        Glide.with(context).load(user.profilePicture).into(holder.imageView)
-        holder.itemView.setOnClickListener { view ->
-            view.findNavController().navigate(
-                ChatsFragmentDirections.actionChatsFragmentToMessageFragment(
-                    user.id!!, user.name, user.profilePicture!!
+        if(position >= 0 && position < users.size) {
+            val user: User = users[position]
+            holder.username.text = user.name
+            Glide.with(context).load(user.profilePicture).into(holder.imageView)
+            holder.itemView.setOnClickListener { view ->
+                val partnerPicture = user.profilePicture ?: ""
+                view.findNavController().navigate(
+                    ChatsFragmentDirections.actionChatsFragmentToMessageFragment(
+                        user.id!!, user.name, partnerPicture
+                    )
                 )
-            )
+            }
         }
     }
 
