@@ -57,7 +57,7 @@ class MessageFragment : Fragment() {
          * Retrieve the pair's other element
          *
          * @param x The pair's element whose partner we want to get
-         * @return The pair's partner (null if x is not part of the pain)
+         * @return The pair's partner (null if x is not part of the pair)
          */
         fun otherOf(x: A): A? {
             return if (x == fst) snd else if (x == snd) fst else null
@@ -156,7 +156,6 @@ class MessageFragment : Fragment() {
         messageAdapter = MessageAdapter(requireContext(), listChats, currentUserId)
         binding.history.adapter = messageAdapter
         lifecycleScope.launch(Dispatchers.Main) {
-            userRepository.refreshUsers()
             getAndDisplayMessages()
         }
     }
