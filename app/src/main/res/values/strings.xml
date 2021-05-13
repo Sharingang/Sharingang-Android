@@ -77,14 +77,6 @@
     <string name="logged_out_user_info_chat">You need to be logged in to chat.</string>
     <string name="messageHint">Your message…</string>
     <string name="chat">Chat</string>
-    <string name="message">message</string>
-    <string name="messagePartners">messagePartners</string>
-    <string name="users">users</string>
-    <string name="messages">messages</string>
-    <string name="chats">chats</string>
-    <string name="from">from</string>
-    <string name="to">to</string>
-    <string name="last_message">LastMessage</string>
     <string name="new_item_notification_message">A new item in %1$s has been posted!</string>
     <string name="new_item_notification_channel_id">new_item_channel</string>
     <string name="not_subscribed">You are not subscribed to any category yet!</string>
@@ -94,4 +86,5 @@
     <string name="is_request">Is it a request?</string>
     <string name="offers">Offers</string>
     <string name="requests">Requests</string>
+    <string name="message">message</string>
 </resources>

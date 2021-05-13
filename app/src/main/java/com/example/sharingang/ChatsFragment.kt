@@ -15,6 +15,7 @@ import com.example.sharingang.users.CurrentUserProvider
 import com.example.sharingang.users.User
 import com.example.sharingang.users.UserAdapter
 import com.example.sharingang.users.UserRepository
+import com.example.sharingang.utils.DatabaseFields
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -76,8 +77,8 @@ class ChatsFragment : Fragment() {
                 // We get a snapshot of the collection containing the current user's message
                 // partners (user Ids), so that we can then use this snapshot to read
                 // the data of the documents we need inside.
-                val chatPartners = firebaseFirestore.collection(getString(R.string.users))
-                    .document(currentUserId!!).collection(getString(R.string.messagePartners)).get()
+                val chatPartners = firebaseFirestore.collection(DatabaseFields.DBFIELD_USERS)
+                    .document(currentUserId!!).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).get()
                     .await()
                 chatPartners.documents.forEach {
                     val user = userRepository.get(it.id)

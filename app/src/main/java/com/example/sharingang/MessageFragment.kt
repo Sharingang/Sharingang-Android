@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.sharingang.databinding.FragmentMessageBinding
 import com.example.sharingang.users.CurrentUserProvider
-import com.example.sharingang.users.UserRepository
+import com.example.sharingang.utils.DatabaseFields
 import com.google.firebase.firestore.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -45,9 +45,6 @@ class MessageFragment : Fragment() {
 
     @Inject
     lateinit var firebaseFirestore: FirebaseFirestore
-
-    @Inject
-    lateinit var userRepository: UserRepository
 
     /**
      * This class is useful for creating a pair where we can retrieve
@@ -116,7 +113,7 @@ class MessageFragment : Fragment() {
      * @return the document of the user
      */
     private fun getUserDocument(userId: String): DocumentReference {
-        val usersCollection = firebaseFirestore.collection(getString(R.string.users))
+        val usersCollection = firebaseFirestore.collection(DatabaseFields.DBFIELD_USERS)
         return usersCollection.document(userId)
     }
 
@@ -128,22 +125,21 @@ class MessageFragment : Fragment() {
      * @param message the message to send
      */
     private fun sendMessage(from: String, to: String, message: String) {
-        listChats.clear()
         val data = hashMapOf<String, Any>(
-            getString(R.string.message) to message,
-            getString(R.string.from) to from,
-            getString(R.string.to) to to
+            DatabaseFields.DBFIELD_MESSAGE to message,
+            DatabaseFields.DBFIELD_FROM to from,
+            DatabaseFields.DBFIELD_TO to to
         )
         val date = Date()
         val lastTimeChat = hashMapOf(
-            getString(R.string.last_message) to "$date (${System.currentTimeMillis()})"
+            DatabaseFields.DBFIELD_LAST_MESSAGE to "$date (${System.currentTimeMillis()})"
         )
         val fromToPair = LinkedPair(from, to)
         listOf(from, to).forEach {
             val userDocument = getUserDocument(it)
-            userDocument.collection(getString(R.string.chats)).document(fromToPair.otherOf(it)!!)
-                .collection(getString(R.string.messages)).document(date.toString()).set(data)
-            userDocument.collection(getString(R.string.messagePartners))
+            userDocument.collection(DatabaseFields.DBFIELD_CHATS).document(fromToPair.otherOf(it)!!)
+                .collection(DatabaseFields.DBFIELD_MESSAGES).document(date.toString()).set(data)
+            userDocument.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
                 .document(fromToPair.otherOf(it)!!).set(lastTimeChat)
         }
         binding.messageEditText.text.clear()
@@ -169,12 +165,12 @@ class MessageFragment : Fragment() {
     private fun addMessagesToChatList(documents: MutableList<DocumentSnapshot>) {
         listChats.clear()
         for (document in documents) {
-            val message = document.getString(getString(R.string.message))
+            val message = document.getString(DatabaseFields.DBFIELD_MESSAGE)
             if (message != null) {
                 listChats.add(
                     Chat(
-                        document.getString(getString(R.string.from)),
-                        document.getString(getString(R.string.to)),
+                        document.getString(DatabaseFields.DBFIELD_FROM),
+                        document.getString(DatabaseFields.DBFIELD_TO),
                         message
                     )
                 )
@@ -188,7 +184,7 @@ class MessageFragment : Fragment() {
      */
     private fun setupMessageRefresh() {
         val lastTimeChatDocument = getUserDocument(currentUserId)
-            .collection(getString(R.string.messagePartners)).document(partnerId)
+            .collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).document(partnerId)
         addOnChangeListener(lastTimeChatDocument)
     }
 
@@ -212,9 +208,9 @@ class MessageFragment : Fragment() {
      */
     private suspend fun getAndDisplayMessages() {
         listChats.clear()
-        val messages = firebaseFirestore.collection(getString(R.string.users))
-            .document(currentUserId).collection(getString(R.string.chats))
-            .document(partnerId).collection(getString(R.string.messages))
+        val messages = firebaseFirestore.collection(DatabaseFields.DBFIELD_USERS)
+            .document(currentUserId).collection(DatabaseFields.DBFIELD_CHATS)
+            .document(partnerId).collection(DatabaseFields.DBFIELD_MESSAGES)
             .get().await()
         addMessagesToChatList(messages.documents)
         lifecycleScope.launch(Dispatchers.Main) {
