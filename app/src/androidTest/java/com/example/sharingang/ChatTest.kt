@@ -11,7 +11,6 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.CoreMatchers.not
 import org.junit.Rule
 import org.junit.Test
-import kotlin.streams.asSequence
 
 @HiltAndroidTest
 class ChatTest {
@@ -30,7 +29,7 @@ class ChatTest {
 
     @Test
     fun loggedOutUserSeesLoggedOutInfo() {
-        FakeCurrentUserProvider.instance = 0
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.LOGGED_OUT
         navigate_to(R.id.chatsFragment)
         onView(withId(R.id.loggedOutInfo)).check(matches(isDisplayed()))
         onView(withId(R.id.loggedOutInfo)).check(matches(withText("You need to be logged in to chat.")))
@@ -38,7 +37,7 @@ class ChatTest {
 
     @Test
     fun loggedInUserCanSendAMessageToAUser() {
-        FakeCurrentUserProvider.instance = 1
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
         navigate_to(R.id.newEditFragment)
         onView(withId(R.id.itemTitle)).perform(
             typeText("TestItem"),
@@ -46,7 +45,7 @@ class ChatTest {
         )
         onView(withId(R.id.createItemButton)).perform(click())
         waitAfterSaveItem()
-        FakeCurrentUserProvider.instance = 2
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_2
         onView(withId(R.id.item_list_view_title)).perform(click())
         onView(withId(R.id.itemPostedBy)).perform(click())
         onView(withId(R.id.btnChat)).perform(click())
@@ -66,7 +65,7 @@ class ChatTest {
         Espresso.pressBack()
         Espresso.pressBack()
         Espresso.pressBack()
-        FakeCurrentUserProvider.instance = 1
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
         navigate_to(R.id.chatsFragment)
         onView(withText("Test User 2")).perform(click())
         onView(withText(message)).check(matches(isDisplayed()))
@@ -91,7 +90,7 @@ class ChatTest {
      * a random message to send. Because of caching issues, when testing, we want
      * to make sure that no multiple views match the same text.
      *
-     * @param length the lenght of the string
+     * @param length the length of the string
      */
     private fun getRandomString(length: Int): String {
         val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
