@@ -71,6 +71,12 @@
         <item>Ascending</item>
         <item>Descending</item>
     </string-array>
+    <string name="chats_title">Chats</string>
+    <string name="username">Username</string>
+    <string name="profilePicture">profilePicture</string>
+    <string name="logged_out_user_info_chat">You need to be logged in to chat.</string>
+    <string name="messageHint">Your message…</string>
+    <string name="chat">Chat</string>
     <string name="new_item_notification_message">A new item in %1$s has been posted!</string>
     <string name="new_item_notification_channel_id">new_item_channel</string>
     <string name="not_subscribed">You are not subscribed to any category yet!</string>
@@ -80,5 +86,6 @@
     <string name="is_request">Is it a request?</string>
     <string name="offers">Offers</string>
     <string name="requests">Requests</string>
+    <string name="message">message</string>
     <string name="buy">Buy</string>
 </resources>
