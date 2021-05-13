@@ -5,7 +5,10 @@ const publishable_key = functions.config().stripe.publishable_key;
 const stripe = require("stripe")(secret_key);
 
 const admin = require('firebase-admin');
-admin.initializeApp();
+const serviceAccount = require("./serviceAccountKey.json");
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+});
 const db = admin.firestore();
 const auth = admin.auth();
 
@@ -34,6 +37,38 @@ exports.checkout = functions.https.onCall(async (data, context) => {
         ephemeralKey: (await ephemeralKeyPromise).secret
     };
 });
+
+exports.newItemNotification = functions.firestore.document('items/{itemId}').onCreate((snap, context) => {
+    const newItem = snap.data();
+
+    var message = {
+        data: {
+            userId: newItem.userId
+        },
+        notification: {
+            body: newItem.title
+        }
+    };
+
+    pushMessage(message, newItem.categoryString);
+    return true;
+});
+
+/**
+ * Send a notification to users subscribed to the topic
+ *
+ * @param payload the content of the notification
+ * @param topic the topic to send the notification to
+ */
+function pushMessage(payload, topic) {
+    admin.messaging().sendToTopic(topic, payload)
+    .then(function(response) {
+        console.log("Successfully sent notification!");
+    })
+    .catch(function(error) {
+        console.log("Error sending notification:", error);
+    });
+}
 
 /**
  * Search for an existing Stripe customer, if it doesn't exist, create a new one

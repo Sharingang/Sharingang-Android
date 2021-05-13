@@ -301,6 +301,7 @@ class UserProfileFragment : Fragment() {
         currentUser = loggedInUser
         currentUserId = loggedInUserId
         shownUserProfileId = loggedInUserId
+        userViewModel.loginResubscribe(currentUserId!!)
         initializeFields()
         binding.nameText.text = currentUser!!.displayName
         if (currentUser!!.photoUrl != null) Glide.with(this).load(currentUser!!.photoUrl)
@@ -310,7 +311,6 @@ class UserProfileFragment : Fragment() {
     private fun setupAuthenticationButtons() {
         binding.btnLogin.setOnClickListener {
             authHelper.signIn()
-            userViewModel.loginResubscribe(currentUserId!!)
         }
         binding.btnLogout.setOnClickListener {
             userViewModel.logoutUnsubscribe(currentUserId!!)
