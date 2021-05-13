@@ -36,7 +36,8 @@ class ChatsFragment : Fragment() {
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
 
-    private var firebaseFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+    @Inject
+    lateinit var firebaseFirestore: FirebaseFirestore
 
     private val listUsers: MutableList<User> = mutableListOf()
 

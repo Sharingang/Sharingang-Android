@@ -43,7 +43,8 @@ class MessageFragment : Fragment() {
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
 
-    private var firebaseFirestore = FirebaseFirestore.getInstance()
+    @Inject
+    lateinit var firebaseFirestore: FirebaseFirestore
 
     @Inject
     lateinit var userRepository: UserRepository
