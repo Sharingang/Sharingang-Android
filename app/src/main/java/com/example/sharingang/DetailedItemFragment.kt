@@ -247,8 +247,10 @@ class DetailedItemFragment : Fragment() {
      * The callback for when a user wants to locate her item
      */
     private fun locateItem() {
-        view?.findNavController()?.navigate(
-            DetailedItemFragmentDirections.actionDetailedItemFragmentToARActivity()
-        )
+        item?.let {
+            view?.findNavController()?.navigate(
+                DetailedItemFragmentDirections.actionDetailedItemFragmentToARActivity(it)
+            )
+        }
     }
 }

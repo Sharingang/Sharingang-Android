@@ -65,7 +65,8 @@
             app:destination="@id/newEditFragment" />
         <action
             android:id="@+id/action_detailedItemFragment_to_ARActivity"
-            app:destination="@id/ARActivity" />
+            app:destination="@id/ARActivity"
+            app:popUpTo="@id/detailedItemFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -149,7 +150,7 @@
         android:id="@+id/soldItemList"
         android:name="com.example.sharingang.SoldItemList"
         android:label="fragment_sold_item_list"
-        tools:layout="@layout/fragment_sold_item_list" >
+        tools:layout="@layout/fragment_sold_item_list">
         <action
             android:id="@+id/action_soldItemList_to_detailedItemFragment"
             app:destination="@id/detailedItemFragment" />
@@ -162,5 +163,10 @@
         android:id="@+id/ARActivity"
         android:name="com.example.sharingang.ar.ARActivity"
         android:label="activity_aractivity"
-        tools:layout="@layout/activity_aractivity" />
+        tools:layout="@layout/activity_aractivity">
+        <argument
+            android:name="item"
+            app:argType="com.example.sharingang.items.Item"
+            app:nullable="false" />
+    </activity>
 </navigation>
