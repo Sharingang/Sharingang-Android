@@ -3,6 +3,7 @@ package com.example.sharingang
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.sharingang.items.ItemRepository
 import com.example.sharingang.shake.ShakeListener
+import com.example.sharingang.utils.createChannel
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
@@ -72,6 +74,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         setupShakeListener()
 
         handleDeepLink()
+
+        createChannel(
+            this.getString(R.string.new_item_notification_channel_id),
+            this.getString(R.string.new_item_notification_channel_name),
+            this
+        )
     }
 
     override fun onResume() {
@@ -84,30 +92,40 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         super.onPause()
     }
 
+    /**
+     * Retrieves the deep link using Firebase Dynamic Links and opens it
+     */
     private fun handleDeepLink() {
         Firebase.dynamicLinks
             .getDynamicLink(intent)
             .addOnSuccessListener(this) { pendingDynamicLinkData ->
-                val deepLink = pendingDynamicLinkData?.link
-                val id = deepLink?.getQueryParameter("id")
-                if (deepLink?.path == "/item" && id != null) {
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        val item = itemRepository.get(id)
-                        if (item != null) {
-                            runOnUiThread {
-                                getNavController().navigate(
-                                    ItemsListFragmentDirections
-                                        .actionItemsListFragmentToDetailedItemFragment(item)
-                                )
-                            }
-                        }
-                    }
-                }
+                pendingDynamicLinkData?.link?.let { openDeepLink(it) }
             }
     }
 
+    /**
+     * Parses the given deep link and open the activity
+     * @param deepLink expected format: /item?id=[item id]
+     */
+    fun openDeepLink(deepLink: Uri) {
+        val id = deepLink.getQueryParameter("id")
+        if (deepLink.path == "/item" && id != null) {
+            lifecycleScope.launch(Dispatchers.IO) {
+                val item = itemRepository.get(id)
+                if (item != null) {
+                    runOnUiThread {
+                        getNavController().navigate(
+                            ItemsListFragmentDirections
+                                .actionItemsListFragmentToDetailedItemFragment(item)
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     // We need the parameter for the callback
-    fun onRandomItem(item: MenuItem) {
+    fun onRandomItem(@Suppress("UNUSED_PARAMETER") item: MenuItem) {
         selectRandomItem()
     }
 

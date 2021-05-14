@@ -79,7 +79,8 @@ class UserProfileFragment : Fragment() {
             else -> args.userId
         }
         authHelper = AuthHelper(
-            requireContext(), auth, authUI, lifecycleScope, userRepository,this, currentUserProvider
+            requireContext(), auth, authUI, lifecycleScope, userRepository, this,
+            currentUserProvider
         ) { user: FirebaseUser, userId: String -> execAfterSignIn(user, userId) }
         currentUser = auth.currentUser
         setUserType()
@@ -129,6 +130,9 @@ class UserProfileFragment : Fragment() {
         loggedInUserEmail = currentUserProvider.getCurrentUserEmail()
         userViewModel.user.observe(viewLifecycleOwner, { user ->
             displayUserFields(user)
+            if (user!!.profilePicture != null) {
+                imageUri = Uri.parse(user.profilePicture)
+            }
         })
         setupRecyclerView(shownUserProfileId)
         setupAuthenticationButtons()
@@ -138,9 +142,11 @@ class UserProfileFragment : Fragment() {
         setupViews()
         setupReportButton()
         setupRatingView()
+        setupChatButton()
     }
 
     private fun setUserType() {
+        currentUser = auth.currentUser
         userType = when (currentUserId) {
             null -> if (shownUserProfileId == null) UserType.LOGGED_OUT_SELF else UserType.LOGGED_OUT
             shownUserProfileId -> UserType.SELF
@@ -153,22 +159,30 @@ class UserProfileFragment : Fragment() {
             binding.upfTopinfo, binding.imageView, binding.gallerycameraholder, binding.nameText,
             binding.textEmail, binding.applyholder, binding.ratingTextview, binding.applyholder,
             binding.btnReport, binding.userItemList, binding.btnLogout,
-            binding.btnLogin
+            binding.btnLogin, binding.btnChat
         ).forEach { view -> view.visibility = View.GONE }
     }
 
     private fun setVisibilities() {
         val visibleViews = when (userType) {
             UserType.LOGGED_OUT -> listOf(
-                binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList
+                binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList,
+                binding.offersRequestsGroup
             )
             UserType.VISITOR -> listOf(
                 binding.imageView, binding.nameText, binding.ratingTextview,
-                binding.userItemList, binding.btnReport
+                binding.userItemList, binding.btnReport, binding.btnChat,
+                binding.offersRequestsGroup
             )
             UserType.SELF -> listOf(
-                binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList,
-                binding.textEmail, binding.gallerycameraholder, binding.btnLogout
+                binding.imageView,
+                binding.nameText,
+                binding.ratingTextview,
+                binding.userItemList,
+                binding.textEmail,
+                binding.gallerycameraholder,
+                binding.btnLogout,
+                binding.offersRequestsGroup
             )
             else -> listOf(binding.upfTopinfo, binding.btnLogin)
         }
@@ -187,11 +201,16 @@ class UserProfileFragment : Fragment() {
     private fun setupRecyclerView(userId: String?) {
         val adapter = itemsViewModel.setupItemAdapter()
         binding.userItemList.adapter = adapter
-        itemsViewModel.getUserItem(userId)
+        listOf(binding.offersButton, binding.requestsButton).forEach {
+            it.setOnClickListener {
+                itemsViewModel.getUserOffersAndRequests(userId, binding.requestsButton.isChecked)
+            }
+        }
+        itemsViewModel.getUserOffersAndRequests(userId, binding.requestsButton.isChecked)
         itemsViewModel.addObserver(
             viewLifecycleOwner,
             adapter,
-            ItemsViewModel.OBSERVABLES.USER_ITEMS
+            ItemsViewModel.OBSERVABLES.USER_ITEMS_AND_REQUESTS
         )
         itemsViewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
             { item ->
@@ -282,6 +301,7 @@ class UserProfileFragment : Fragment() {
         currentUser = loggedInUser
         currentUserId = loggedInUserId
         shownUserProfileId = loggedInUserId
+        userViewModel.loginResubscribe(currentUserId!!)
         initializeFields()
         binding.nameText.text = currentUser!!.displayName
         if (currentUser!!.photoUrl != null) Glide.with(this).load(currentUser!!.photoUrl)
@@ -293,11 +313,23 @@ class UserProfileFragment : Fragment() {
             authHelper.signIn()
         }
         binding.btnLogout.setOnClickListener {
+            userViewModel.logoutUnsubscribe(currentUserId!!)
             authHelper.signOut()
             initSetup()
             userType = UserType.LOGGED_OUT_SELF
             setupViews()
             setVisibilities()
+        }
+    }
+
+    private fun setupChatButton() {
+        binding.btnChat.setOnClickListener() {
+            view?.findNavController()?.navigate(
+                UserProfileFragmentDirections
+                    .actionUserProfileFragmentToMessageFragment(
+                        shownUserProfileId!!, binding.nameText.text.toString(), imageUri?.toString()
+                    )
+            )
         }
     }
 }

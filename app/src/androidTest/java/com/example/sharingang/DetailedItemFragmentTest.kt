@@ -184,4 +184,39 @@ class DetailedItemFragmentTest {
         waitAfterSaveItem()
         onView(withText(testTitle)).check(doesNotExist())
     }
+
+    @Test
+    fun canBuyAnItem() {
+        // User 2 creates an item
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_2
+        val testTitle = "For sale"
+        navigate_to(R.id.newEditFragment)
+        onView(withId(R.id.itemTitle)).perform(
+            typeText(testTitle),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.itemPrice)).perform(
+            typeText("42"),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.createItemButton)).perform(click())
+        waitAfterSaveItem()
+
+        // User 1 clicks on the item
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
+        onView(withText(testTitle)).perform(click())
+
+        // If the payment is rejected, the button is still visible
+        FakePaymentProvider.paymentStatus = FakePaymentProvider.Status.ALWAYS_REJECT
+        onView(withId(R.id.buyButton)).perform(click())
+        Thread.sleep(1000)
+        onView(withId(R.id.buyButton)).check(matches(isDisplayed()))
+
+        // If the payment is accepted, the button disappears
+        FakePaymentProvider.paymentStatus = FakePaymentProvider.Status.ALWAYS_ACCEPT
+        onView(withId(R.id.buyButton)).perform(click())
+        Thread.sleep(1000)
+        // Display rating form after purchase
+        onView(withId(R.id.ratingButton)).check(matches(isDisplayed()))
+    }
 }

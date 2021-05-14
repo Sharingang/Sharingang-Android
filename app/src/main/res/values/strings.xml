@@ -9,7 +9,7 @@
     <string name="delete_item">Delete Item</string>
     <string name="title">Title</string>
     <string name="default_price">Price (default: 0.0)</string>
-    <string name="display_price">$ %.2f</string>
+    <string name="display_price">CHF %.2f</string>
     <string name="item_image_description">Item Image</string>
     <string name="search_hint">Search…</string>
     <string name="search_go_button">Go</string>
@@ -34,6 +34,14 @@
     <string name="userNotLoggedInInfo">You need to be logged in to view your User Profile.</string>
     <string name="default_rating">No Ratings</string>
     <string name="apply_rating">Rate</string>
+    <string-array name="categories">
+        <item>None</item>
+        <item>Book</item>
+        <item>Electronics</item>
+        <item>Games</item>
+        <item>Clothes</item>
+        <item>Miscellaneous</item>
+    </string-array>
     <string name="report_user">Report User</string>
     <string name="inappropriate_username">Inappropriate Username</string>
     <string name="inappropriate_profile_picture">Inappropriate Profile Picture</string>
@@ -50,35 +58,36 @@
     <string name="item_save_failure">Cannot save the item.</string>
     <string name="item_deleted_success">Item deleted successfully.</string>
     <string name="posted_by">Posted by %1$s</string>
-    <string name="sort">Sort</string>
-    <string name="subscribe">Subscribe</string>
-    <string name="unsubscribe">Unsubscribe</string>
-    <string name="new_item_notification_message">A new item in %1$s has been posted!</string>
-    <string name="new_item_notification_channel_id">new_item_channel</string>
-    <string name="not_subscribed">You are not subscribed to any category yet!</string>
-    <string name="see_subscriptions">See subscriptions</string>
-    <string name="sold">Sold</string>
-    <string name="subscribed_to">You are subscribed to these categories:\u0020</string>
-    <string name="sold_list_title">Sold Item List</string>
-
-    <string-array name="categories">
-        <item>None</item>
-        <item>Book</item>
-        <item>Electronics</item>
-        <item>Games</item>
-        <item>Clothes</item>
-        <item>Miscellaneous</item>
-    </string-array>
-
     <string-array name="order_categories">
         <item>Date</item>
         <item>Price</item>
         <item>Name</item>
         <item>Category</item>
     </string-array>
-
+    <string name="sort">Sort</string>
+    <string name="subscribe">Subscribe</string>
+    <string name="unsubscribe">Unsubscribe</string>
     <string-array name="order_ascending_descending">
         <item>Ascending</item>
         <item>Descending</item>
     </string-array>
+    <string name="chats_title">Chats</string>
+    <string name="username">Username</string>
+    <string name="profilePicture">profilePicture</string>
+    <string name="logged_out_user_info_chat">You need to be logged in to chat.</string>
+    <string name="messageHint">Your message…</string>
+    <string name="chat">Chat</string>
+    <string name="new_item_notification_message">A new item has been posted!</string>
+    <string name="new_item_notification_channel_id">new_item_channel</string>
+    <string name="new_item_notification_channel_name">New Item</string>
+    <string name="new_item_notification_channel_description">You receive a notification when a new item that is a category you subscribed to is posted.</string>
+    <string name="not_subscribed">You are not subscribed to any category yet!</string>
+    <string name="see_subscriptions">See subscriptions</string>
+    <string name="sold">Sold</string>
+    <string name="subscribed_to">You are subscribed to these categories:\u0020</string>
+    <string name="is_request">Is it a request?</string>
+    <string name="offers">Offers</string>
+    <string name="requests">Requests</string>
+    <string name="message">message</string>
+    <string name="buy">Buy</string>
 </resources>

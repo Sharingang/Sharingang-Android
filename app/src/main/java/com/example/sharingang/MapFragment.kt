@@ -201,7 +201,7 @@ class MapFragment : Fragment() {
     inner class MapItem(val item: Item) : ClusterItem {
         private val position = LatLng(item.latitude, item.longitude)
         private val title: String = item.title
-        private val snippet: String = "$ %.2f".format(item.price)
+        private val snippet: String = getString(R.string.display_price, item.price)
 
         override fun getPosition() = position
         override fun getTitle() = title

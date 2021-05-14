@@ -23,6 +23,10 @@
         android:icon="@android:drawable/btn_star_big_off"
         android:title="@string/wishlist_menu_title" />
     <item
+        android:id="@+id/chatsFragment"
+        android:icon="@android:drawable/stat_notify_chat"
+        android:title="@string/chats_title" />
+    <item
         android:id="@+id/nav_random_item"
         android:icon="@drawable/baseline_casino_black_24dp"
         android:onClick="onRandomItem"
