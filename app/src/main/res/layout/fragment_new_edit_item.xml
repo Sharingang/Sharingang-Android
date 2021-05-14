@@ -158,11 +158,19 @@
                 android:layout_height="wrap_content"
                 android:text="@string/get_location" />
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
             <Button
                 android:id="@+id/createItemButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/create_item" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
 
             <Button
                 android:id="@+id/editItemButton"
