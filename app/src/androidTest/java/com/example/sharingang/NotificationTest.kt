@@ -30,5 +30,7 @@ class NotificationTest {
             NotificationManager::class.java
         ) as NotificationManager
         notificationManager.sendNotification("Test message body", applicationContext)
+        // Wait for notification to clear up so later tests don't have the top of the screen obstructed
+        Thread.sleep(6000)
     }
 }
