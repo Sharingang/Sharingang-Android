@@ -13,6 +13,10 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import com.example.sharingang.ui.activities.MainActivity
+import com.example.sharingang.utils.getActivity
+import com.example.sharingang.utils.navigate_to
+import com.example.sharingang.utils.waitAfterSaveItem
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule

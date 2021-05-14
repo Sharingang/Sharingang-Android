@@ -4,7 +4,9 @@ import android.app.NotificationManager
 import androidx.core.content.ContextCompat
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.sharingang.utils.sendNotification
+import com.example.sharingang.ui.activities.MainActivity
+import com.example.sharingang.utils.getActivity
+import com.example.sharingang.utils.notification.sendNotification
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule

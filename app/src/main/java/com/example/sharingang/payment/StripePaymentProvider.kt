@@ -5,7 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.sharingang.R
-import com.example.sharingang.items.Item
+import com.example.sharingang.models.Item
 import com.google.firebase.functions.FirebaseFunctions
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.paymentsheet.PaymentSheet

@@ -2,7 +2,7 @@ package com.example.sharingang.payment
 
 import android.content.Context
 import androidx.fragment.app.Fragment
-import com.example.sharingang.items.Item
+import com.example.sharingang.models.Item
 
 /**
  * PaymentProvider enables to collect a payment from the user.

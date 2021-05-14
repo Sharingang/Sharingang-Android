@@ -13,6 +13,10 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
+import com.example.sharingang.auth.FakeCurrentUserProvider
+import com.example.sharingang.payment.FakePaymentProvider
+import com.example.sharingang.ui.activities.MainActivity
+import com.example.sharingang.utils.*
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers
