@@ -157,7 +157,7 @@ class UserProfileFragment : Fragment() {
     private fun initSetup() {
         listOf(
             binding.upfTopinfo, binding.imageView, binding.gallerycameraholder, binding.nameText,
-            binding.textEmail, binding.applyholder, binding.ratingTextview, binding.applyholder,
+            binding.textEmail, binding.applyholder, binding.ratingTextview, binding.offersRequestsGroup,
             binding.btnReport, binding.userItemList, binding.btnLogout,
             binding.btnLogin, binding.btnChat
         ).forEach { view -> view.visibility = View.GONE }
