@@ -11,6 +11,6 @@
     <color name="colorMsgLeft">#686868</color>
     <color name="colorChatTitle">#252525</color>
     <color name="darkBackground">#2F2F2F</color>
-    <color name="checkedCustomSelector">#33FF66</color>
     <color name="uncheckedCustomSelector">#1F1F1F</color>
+    <color name="themeColor">#008888</color>
 </resources>
