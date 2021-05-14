@@ -13,4 +13,5 @@
     <color name="darkBackground">#2F2F2F</color>
     <color name="uncheckedCustomSelector">#1F1F1F</color>
     <color name="themeColor">#008888</color>
+    <color name="faded_red">#DD4444</color>
 </resources>
