@@ -90,4 +90,5 @@
     <string name="requests">Requests</string>
     <string name="message">message</string>
     <string name="buy">Buy</string>
+    <string name="sold_list_title">Sold List</string>
 </resources>

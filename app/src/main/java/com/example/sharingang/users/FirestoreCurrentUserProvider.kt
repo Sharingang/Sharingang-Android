@@ -5,6 +5,7 @@ import javax.inject.Inject
 
 /**
  * Class used to retrieve the current signed in user.
+ * @property auth the authenticator to use
  */
 class FirestoreCurrentUserProvider @Inject constructor(
     private val auth: FirebaseAuth

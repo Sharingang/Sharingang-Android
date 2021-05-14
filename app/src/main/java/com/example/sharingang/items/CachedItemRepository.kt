@@ -8,6 +8,8 @@ import javax.inject.Inject
 
 /**
  * Class to implement an ItemRepository in cache.
+ * @property itemDao used item data access object
+ * @property store used ItemStore
  */
 class CachedItemRepository @Inject constructor(
     private val itemDao: ItemDao,

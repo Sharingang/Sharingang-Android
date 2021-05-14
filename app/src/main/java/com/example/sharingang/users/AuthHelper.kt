@@ -15,6 +15,8 @@ import kotlinx.coroutines.launch
 
 /**
  * Helper class to manage user authentification with database.
+ * @property context the Context
+ * @property auth the authenticator to be used
  */
 class AuthHelper(
     private val context: Context,

@@ -42,7 +42,7 @@ interface ItemDao {
 
     /**
      * Function to replace all items in database with a new list of items.
-     * @param[items] List aof new items.
+     * @param[items] List of new items.
      */
     @Transaction
     fun replace(items: List<Item>) {

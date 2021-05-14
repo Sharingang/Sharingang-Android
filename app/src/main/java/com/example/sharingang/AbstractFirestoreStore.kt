@@ -7,6 +7,9 @@ import kotlinx.coroutines.tasks.await
 /**
  * Abstract class to implement basic database usage.
  * @param[T] Type of element to use for database.
+ * @property collectionName The name of the collection
+ * @property typeClass Class with type T
+ * @property firestore instance of FirebaseFirestore
  */
 abstract class AbstractFirestoreStore<T : Any>(
     private val collectionName: String,

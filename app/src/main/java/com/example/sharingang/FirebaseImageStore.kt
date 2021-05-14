@@ -10,6 +10,7 @@ import javax.inject.Inject
 
 /**
  * Class used to store images on Firebase.
+ * @property currentUserProvider the current user provider
  */
 class FirebaseImageStore @Inject constructor(
     private val currentUserProvider: CurrentUserProvider
