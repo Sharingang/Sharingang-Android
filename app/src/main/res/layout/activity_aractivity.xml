@@ -25,5 +25,10 @@
             android:layout_height="wrap_content"
             android:text="@{viewModel.heading.toString()}" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.location.toString()}" />
+
     </LinearLayout>
 </layout>

@@ -1,14 +1,20 @@
 package com.example.sharingang.ar
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.hardware.SensorManager
 import android.os.Bundle
+import android.os.Looper
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.navArgs
 import com.example.sharingang.R
 import com.example.sharingang.databinding.ActivityAractivityBinding
+import com.example.sharingang.utils.doOrGetPermission
+import com.example.sharingang.utils.requestPermissionLauncher
+import com.google.android.gms.location.*
 
 /**
  * An Activity we use for the AR interactions.
@@ -28,6 +34,14 @@ class ARActivity : AppCompatActivity() {
     private lateinit var sensorManager: SensorManager
     private lateinit var headingListener: HeadingListener
 
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val requestPermissionLauncher = requestPermissionLauncher(this) {
+        doOrGetPermission(
+            this, this, Manifest.permission.ACCESS_FINE_LOCATION, { startLocationUpdates() }, null
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_aractivity)
@@ -43,12 +57,24 @@ class ARActivity : AppCompatActivity() {
 
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         setupHeadingListener()
+
+        setupLocationListener()
     }
 
     private fun setupHeadingListener() {
         headingListener = HeadingListener {
             viewModel.setHeading(it)
         }
+    }
+
+    private fun setupLocationListener() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        doOrGetPermission(
+            this, this,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            { startLocationUpdates() },
+            requestPermissionLauncher
+        )
     }
 
     override fun onResume() {
@@ -60,4 +86,24 @@ class ARActivity : AppCompatActivity() {
         sensorManager.unregisterListener(headingListener)
         super.onPause()
     }
+
+    @SuppressLint("MissingPermission")
+    private fun startLocationUpdates() {
+        fusedLocationClient.requestLocationUpdates(
+            LocationRequest.create().apply {
+                interval = 5000
+                fastestInterval = 2500
+                priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            },
+            object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult) {
+                    val lastLocation = locationResult.lastLocation
+                    val location = Location(lastLocation.latitude, lastLocation.longitude)
+                    viewModel.setLocation(location)
+                }
+            },
+            Looper.getMainLooper()
+        )
+    }
+
 }

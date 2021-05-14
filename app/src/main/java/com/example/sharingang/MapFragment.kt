@@ -6,7 +6,9 @@ import android.content.Context
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -36,9 +38,13 @@ const val DEFAULT_ZOOM = 15
 class MapFragment : Fragment() {
     private lateinit var binding: FragmentMapBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private val requestPermissionLauncher = requestPermissionLauncher(this) {
+    private val requestPermissionLauncher = requestPermissionLauncher(this.requireActivity()) {
         doOrGetPermission(
-            this, Manifest.permission.ACCESS_FINE_LOCATION, { startLocationUpdates() }, null
+            this.requireContext(),
+            this.requireActivity(),
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            { startLocationUpdates() },
+            null
         )
     }
     private var lastLocation: Location? = null
@@ -139,6 +145,7 @@ class MapFragment : Fragment() {
     }
 
     private fun initMap() {
+        val thiz = this
         lifecycle.coroutineScope.launchWhenCreated {
             map = binding.mapView.awaitMap()
 
@@ -147,7 +154,7 @@ class MapFragment : Fragment() {
             addItemMarkers(viewModel.searchResults.value ?: listOf())
 
             doOrGetPermission(
-                this@MapFragment,
+                thiz.requireContext(), thiz.requireActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 { startLocationUpdates() },
                 requestPermissionLauncher

@@ -1,23 +1,24 @@
 package com.example.sharingang.utils
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.tasks.CancellationTokenSource
 
 fun requestPermissionLauncher(
-    fragment: Fragment,
+    activity: ComponentActivity,
     callback: () -> Unit
 ): ActivityResultLauncher<String> {
-    return fragment.registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+    return activity.registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
         if (isGranted) {
             callback()
         }
@@ -25,25 +26,26 @@ fun requestPermissionLauncher(
 }
 
 fun doOrGetPermission(
-    fragment: Fragment,
+    context: Context,
+    activity: Activity,
     permission: String,
     callback: () -> Unit,
     resultLauncher: ActivityResultLauncher<String>?
 ) {
     if (ContextCompat.checkSelfPermission(
-            fragment.requireContext(),
+            context,
             permission
         ) == PackageManager.PERMISSION_GRANTED
     ) {
         callback()
     } else {
-        requestPermission(fragment.requireContext(), fragment, permission, resultLauncher!!)
+        requestPermission(context, activity, permission, resultLauncher!!)
     }
 }
 
 fun requestPermission(
     context: Context?,
-    fragment: Fragment,
+    fragment: Activity,
     permission: String,
     resultLauncher: ActivityResultLauncher<String>
 ) {

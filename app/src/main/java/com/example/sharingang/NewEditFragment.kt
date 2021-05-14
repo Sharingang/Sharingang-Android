@@ -57,9 +57,9 @@ class NewEditFragment : Fragment() {
 
     // Allows the cancellation of a location request if, for example, the user exists the activity
     private var cancellationTokenSource = CancellationTokenSource()
-    private val requestPermissionLauncher = requestPermissionLauncher(this) {
+    private val requestPermissionLauncher = requestPermissionLauncher(this.requireActivity()) {
         doOrGetPermission(
-            this, Manifest.permission.ACCESS_FINE_LOCATION,
+            this.requireContext(), this.requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION,
             {
                 consumeLocation(
                     fusedLocationCreate,
@@ -138,16 +138,29 @@ class NewEditFragment : Fragment() {
             viewModel.setItem(item) { itemId ->
                 binding.isLoading = false
                 if (itemId != null) {
-                    Snackbar.make(binding.root, getString(R.string.item_save_success), Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(
+                        binding.root,
+                        getString(R.string.item_save_success),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                     observer.unregister()
                     if (existingItem == null) {
-                        view.findNavController().navigate(NewEditFragmentDirections.actionNewEditFragmentToItemsListFragment())
+                        view.findNavController()
+                            .navigate(NewEditFragmentDirections.actionNewEditFragmentToItemsListFragment())
                     } else {
-                        view.findNavController().navigate(NewEditFragmentDirections.actionNewEditFragmentToDetailedItemFragment(item))
+                        view.findNavController().navigate(
+                            NewEditFragmentDirections.actionNewEditFragmentToDetailedItemFragment(
+                                item
+                            )
+                        )
                     }
                 } else {
                     button.isClickable = true
-                    Snackbar.make(binding.root, getString(R.string.item_save_failure), Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(
+                        binding.root,
+                        getString(R.string.item_save_failure),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -175,7 +188,7 @@ class NewEditFragment : Fragment() {
         fusedLocationCreate = LocationServices.getFusedLocationProviderClient(requireContext())
         binding.itemGetLocation.setOnClickListener {
             doOrGetPermission(
-                this,
+                this.requireContext(), this.requireActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 {
                     consumeLocation(fusedLocationCreate, cancellationTokenSource) {
