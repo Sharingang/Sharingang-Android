@@ -128,7 +128,7 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideFirebaseFunctions(): FirebaseFunctions {
-        val functions = Firebase.functions
+        val functions = Firebase.functions("europe-west6") // Zurich
         if (useEmulator) {
             Log.d("RepositoryModule", "Using FirebaseFunctions emulator.")
             functions.useEmulator("10.0.2.2", 5001)

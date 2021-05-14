@@ -5,14 +5,20 @@ const publishable_key = functions.config().stripe.publishable_key;
 const stripe = require("stripe")(secret_key);
 
 const admin = require('firebase-admin');
-const serviceAccount = require("./serviceAccountKey.json");
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
+if (process.env.FUNCTIONS_EMULATOR === 'true') {
+    const serviceAccount = require("./serviceAccountKey.json");
+	admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount)
+    });
+} else {
+    admin.initializeApp();
+}
 const db = admin.firestore();
 const auth = admin.auth();
 
-exports.checkout = functions.https.onCall(async (data, context) => {
+const region = 'europe-west6'; // Zurich
+
+exports.checkout = functions.region(region).https.onCall(async (data, context) => {
     if (!context.auth) {
         throw new functions.https.HttpsError('failed-precondition', 'The function must be called while authenticated.');
     }
@@ -38,7 +44,7 @@ exports.checkout = functions.https.onCall(async (data, context) => {
     };
 });
 
-exports.newItemNotification = functions.firestore.document('items/{itemId}').onCreate((snap, context) => {
+exports.newItemNotification = functions.region(region).firestore.document('items/{itemId}').onCreate((snap, context) => {
     const newItem = snap.data();
 
     var message = {
