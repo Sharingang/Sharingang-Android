@@ -42,7 +42,7 @@ When estimating the time for the task, I split the story in multiple subtasks an
 
 ## Zacharie
 This week I worked on documenting the code for the entire project. This took roughly as much time as I had anticipated.
-No real problems encountered, just a few diffirence of opinions with peoples' way of documenting.
+No real problems encountered, just a few difference of opinions with peoples' way of documenting.
 Next week I will start working on new features again now that the documentation is done.
 
 
