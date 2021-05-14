@@ -10,7 +10,7 @@ import com.example.sharingang.databinding.ItemViewBinding
 
 /**
  * Adapter to display items in a recycler view.
- * @property listener an item listener
+ * @property[clickListener] an item listener
  */
 class ItemsAdapter(private val clickListener: ItemListener) :
     ListAdapter<Item, ItemsAdapter.ItemViewHolder>(ItemsDiffCallback()) {

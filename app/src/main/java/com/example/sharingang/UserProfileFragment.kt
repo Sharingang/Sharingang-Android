@@ -323,7 +323,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupChatButton() {
-        binding.btnChat.setOnClickListener() {
+        binding.btnChat.setOnClickListener {
             view?.findNavController()?.navigate(
                 UserProfileFragmentDirections
                     .actionUserProfileFragmentToMessageFragment(
