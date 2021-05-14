@@ -18,12 +18,20 @@
         android:orientation="vertical"
         tools:context=".UserProfileFragment">
 
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="5dp" />
+
         <TextView
             android:id="@+id/upf_topinfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/userNotLoggedInInfo"
             android:textSize="14sp" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="5dp" />
 
         <Button
             android:id="@+id/btn_login"
@@ -32,6 +40,24 @@
             android:text="@string/log_in"
             app:icon="@drawable/googleg_standard_color_18" />
 
+        <TextView
+            android:id="@+id/nameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textSize="30sp"
+            tools:text="John Doe" />
+
+        <TextView
+            android:id="@+id/text_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"/>
+
+
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="100dp"
@@ -39,30 +65,35 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
             android:contentDescription="@string/txt_user_profile_picture"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@tools:sample/avatars"
+            android:background="@drawable/imageview_border"
+            android:cropToPadding="true"
+            android:padding="3dp"/>
 
         <LinearLayout
             android:id="@+id/gallerycameraholder"
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="0dp">
 
             <Button
                 android:id="@+id/btn_open_camera"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:text="@string/open_camera"
-                tools:ignore="ButtonStyle,InefficientWeight" />
+                tools:ignore="ButtonStyle,InefficientWeight"/>
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"/>
 
             <Button
                 android:id="@+id/btn_open_gallery"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
                 android:layout_weight="0"
                 android:text="@string/open_gallery"
-                tools:ignore="ButtonStyle" />
+                style="@style/button"/>
         </LinearLayout>
 
         <LinearLayout
@@ -78,16 +109,9 @@
                 android:layout_height="wrap_content"
                 android:text="@string/apply_changes" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/nameText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            tools:text="John Doe" />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
         <Button
             android:id="@+id/btn_logout"
@@ -95,11 +119,18 @@
             android:layout_height="wrap_content"
             android:text="@string/log_out" />
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
         <Button
             android:id="@+id/btnChat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/chat" />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
         <Button
             android:id="@+id/btn_report"
@@ -108,15 +139,14 @@
             android:text="@string/report_user" />
 
         <TextView
-            android:id="@+id/text_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
             android:id="@+id/rating_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/default_rating" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
         <RadioGroup
             android:id="@+id/offersRequestsGroup"
             android:layout_width="match_parent"
@@ -135,6 +165,9 @@
                 android:text="@string/requests"/>
 
         </RadioGroup>
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/userItemList"
             android:layout_width="match_parent"
