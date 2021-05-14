@@ -170,9 +170,8 @@ class UserProfileFragment : Fragment() {
                 binding.offersRequestsGroup
             )
             UserType.VISITOR -> listOf(
-                binding.imageView, binding.nameText, binding.ratingTextview,
-                binding.userItemList, binding.btnReport, binding.btnChat,
-                binding.offersRequestsGroup
+                binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList,
+                binding.btnReport, binding.btnChat, binding.offersRequestsGroup
             )
             UserType.SELF -> listOf(
                 binding.imageView,
