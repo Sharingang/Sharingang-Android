@@ -30,8 +30,8 @@ class UserProfileViewModel @Inject constructor(
     val wishlistContains: LiveData<Boolean>
         get() = _wishlistContains
 
-    private val _subscriptionsContains : MutableLiveData<Boolean> = MutableLiveData(false)
-    val subscriptionsContains : LiveData<Boolean>
+    private val _subscriptionsContains: MutableLiveData<Boolean> = MutableLiveData(false)
+    val subscriptionsContains: LiveData<Boolean>
         get() = _subscriptionsContains
 
     private val _rating = MutableLiveData(0f)
@@ -146,12 +146,7 @@ class UserProfileViewModel @Inject constructor(
     fun loginResubscribe(userId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val user = userRepository.get(userId)
-            if (user != null) {
-                val subs = ArrayList(user.subscriptions)
-                for (sub in subs) {
-                    if (sub != "") subscribeToTopic(sub)
-                }
-            }
+            user?.subscriptions?.forEach { if (it.isNotEmpty()) subscribeToTopic(it) }
         }
     }
 
@@ -163,9 +158,11 @@ class UserProfileViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val user = userRepository.get(userId)
             if (user != null) {
-                val subs = ArrayList(user.subscriptions)
+                val subs = user.subscriptions
                 for (sub in subs) {
-                    if (sub != "") unsubscribeFromTopic(sub)
+                    if (sub.isNotEmpty()) {
+                        unsubscribeFromTopic(sub)
+                    }
                 }
             }
         }
