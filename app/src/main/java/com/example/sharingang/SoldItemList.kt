@@ -30,14 +30,15 @@ class SoldItemList : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sold_item_list, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_sold_item_list, container, false)
 
         setupRecyclerview()
 
         return binding.root
     }
 
-    private fun setupRecyclerview(){
+    private fun setupRecyclerview() {
         val adapter = viewModel.setupItemAdapter()
         binding.soldList.adapter = adapter
         viewModel.getUserSoldItems(currentUserProvider.getCurrentUserId())

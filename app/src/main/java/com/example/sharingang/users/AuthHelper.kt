@@ -13,6 +13,11 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+/**
+ * Helper class to manage user authentification with database.
+ * @property context the Context
+ * @property auth the authenticator to be used
+ */
 class AuthHelper(
     private val context: Context,
     private val auth: FirebaseAuth,
@@ -38,6 +43,9 @@ class AuthHelper(
         }
 
 
+    /**
+     * Sign in.
+     */
     fun signIn() {
         val providers = arrayListOf(
             AuthUI.IdpConfig.GoogleBuilder().build()
@@ -50,6 +58,9 @@ class AuthHelper(
         resultLauncher.launch(intent)
     }
 
+    /**
+     * Sign out.
+     */
     fun signOut() {
         authUI.signOut(context)
     }

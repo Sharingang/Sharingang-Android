@@ -36,6 +36,9 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+/**
+ * Fragment to edit and create items.
+ */
 @AndroidEntryPoint
 class NewEditFragment : Fragment() {
 
@@ -143,7 +146,8 @@ class NewEditFragment : Fragment() {
                     if (existingItem == null) {
                         view.findNavController().navigate(NewEditFragmentDirections.actionNewEditFragmentToItemsListFragment())
                     } else {
-                        view.findNavController().navigate(NewEditFragmentDirections.actionNewEditFragmentToDetailedItemFragment(item))
+                        view.findNavController().navigate(NewEditFragmentDirections.actionNewEditFragmentToDetailedItemFragment(item)
+                        )
                     }
                 } else {
                     button.isClickable = true

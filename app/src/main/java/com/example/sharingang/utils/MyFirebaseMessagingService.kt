@@ -1,11 +1,10 @@
 package com.example.sharingang.utils
 
 import android.app.NotificationManager
-import android.util.Log
 import androidx.core.content.ContextCompat
+import com.example.sharingang.users.CurrentUserProvider
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.example.sharingang.users.CurrentUserProvider
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

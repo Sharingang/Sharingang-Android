@@ -33,6 +33,9 @@ import kotlin.properties.Delegates
 
 const val DEFAULT_ZOOM = 15
 
+/**
+ * Fragment to display a map and the items' location on the map.
+ */
 class MapFragment : Fragment() {
     private lateinit var binding: FragmentMapBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -192,6 +195,9 @@ class MapFragment : Fragment() {
         binding.mapView.onLowMemory()
     }
 
+    /**
+     * Class used to represent an item on the map.
+     */
     inner class MapItem(val item: Item) : ClusterItem {
         private val position = LatLng(item.latitude, item.longitude)
         private val title: String = item.title

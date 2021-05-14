@@ -16,6 +16,7 @@ interface ItemRepository : ItemStore {
 
     /**
      * The current user items that are available
+     * @param[userId] id of user
      */
     suspend fun userItems(userId: String): List<Item>?
 
