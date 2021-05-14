@@ -55,60 +55,8 @@
             android:id="@+id/text_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-black"/>
+            android:fontFamily="sans-serif-black" />
 
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:contentDescription="@string/txt_user_profile_picture"
-            tools:srcCompat="@tools:sample/avatars"
-            android:background="@drawable/imageview_border"
-            android:cropToPadding="true"
-            android:padding="3dp"/>
-
-        <LinearLayout
-            android:id="@+id/gallerycameraholder"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="0dp">
-
-            <Button
-                android:id="@+id/btn_open_camera"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:text="@string/open_camera"
-                tools:ignore="ButtonStyle,InefficientWeight"/>
-            <Space
-                android:layout_width="10dp"
-                android:layout_height="wrap_content"/>
-
-            <Button
-                android:id="@+id/btn_open_gallery"
-                android:layout_weight="0"
-                android:text="@string/open_gallery"
-                style="@style/button"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/applyholder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnApply"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/apply_changes" />
-        </LinearLayout>
         <Space
             android:layout_width="match_parent"
             android:layout_height="10dp" />
@@ -117,7 +65,63 @@
             android:id="@+id/btn_logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/log_out" />
+            android:text="@string/log_out"
+            android:background="@drawable/custom_button_red"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/imageview_border"
+                android:contentDescription="@string/txt_user_profile_picture"
+                android:cropToPadding="true"
+                android:padding="3dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <Button
+                android:id="@+id/btn_open_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@android:drawable/ic_menu_camera"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/btn_open_gallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@android:drawable/ic_menu_gallery"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <Button
+            android:id="@+id/btnApply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/apply_changes" />
 
         <Space
             android:layout_width="match_parent"
@@ -137,6 +141,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/report_user" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
         <TextView
             android:id="@+id/rating_textview"

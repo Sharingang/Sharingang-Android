@@ -156,9 +156,9 @@ class UserProfileFragment : Fragment() {
 
     private fun initSetup() {
         listOf(
-            binding.upfTopinfo, binding.imageView, binding.gallerycameraholder, binding.nameText,
-            binding.textEmail, binding.applyholder, binding.ratingTextview, binding.offersRequestsGroup,
-            binding.btnReport, binding.userItemList, binding.btnLogout,
+            binding.upfTopinfo, binding.imageView, binding.btnOpenCamera, binding.btnOpenGallery,
+            binding.nameText, binding.textEmail, binding.btnApply, binding.ratingTextview,
+            binding.offersRequestsGroup, binding.btnReport, binding.userItemList, binding.btnLogout,
             binding.btnLogin, binding.btnChat
         ).forEach { view -> view.visibility = View.GONE }
     }
@@ -180,9 +180,10 @@ class UserProfileFragment : Fragment() {
                 binding.ratingTextview,
                 binding.userItemList,
                 binding.textEmail,
-                binding.gallerycameraholder,
                 binding.btnLogout,
-                binding.offersRequestsGroup
+                binding.offersRequestsGroup,
+                binding.btnOpenGallery,
+                binding.btnOpenCamera
             )
             else -> listOf(binding.upfTopinfo, binding.btnLogin)
         }
@@ -226,7 +227,9 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupViews() {
-        val buttons = listOf(binding.btnApply, binding.btnOpenCamera, binding.btnOpenGallery)
+        val buttons = listOf(
+            binding.btnApply, binding.btnOpenCamera, binding.btnOpenGallery
+        )
         val topInfo = binding.upfTopinfo
         buttons.forEach { button -> button.setOnClickListener { setupPictureButton(button) } }
         topInfo.text = getString(R.string.userNotLoggedInInfo)
@@ -247,7 +250,7 @@ class UserProfileFragment : Fragment() {
     private fun setupPictureButton(button: Button) {
         when (button) {
             binding.btnOpenCamera, binding.btnOpenGallery -> {
-                binding.applyholder.visibility = View.VISIBLE
+                binding.btnApply.visibility = View.VISIBLE
                 if (button == binding.btnOpenGallery) imageAccess.openGallery()
                 else imageAccess.openCamera()
             }
@@ -257,7 +260,7 @@ class UserProfileFragment : Fragment() {
                     binding.imageView.setImageURI(imageUri)
                     changeImage(imageUri)
                 }
-                binding.applyholder.visibility = View.GONE
+                binding.btnApply.visibility = View.GONE
             }
         }
     }
