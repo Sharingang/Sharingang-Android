@@ -85,21 +85,20 @@
                 android:layout_height="wrap_content"
                 android:text="@string/posted_by"
                 android:textSize="18sp"
-                tools:text="Posted by"
-                tools:ignore="RtlSymmetry" />
+                tools:ignore="RtlSymmetry"
+                tools:text="Posted by" />
 
 
             <Button
                 android:id="@+id/itemPostedBy"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{username}"
-                android:textSize="18sp"
-                tools:text="TestUser"
                 android:padding="5dp"
+                android:text="@{username}"
                 android:textColor="@color/themeColor"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                />
+                android:textSize="18sp"
+                tools:text="TestUser" />
         </LinearLayout>
 
         <Button
@@ -111,10 +110,6 @@
             app:layout_constraintEnd_toEndOf="@+id/cardInputWidget"
             app:layout_constraintStart_toStartOf="@+id/cardInputWidget"
             app:layout_constraintTop_toBottomOf="@+id/cardInputWidget" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -207,25 +202,31 @@
 
         </LinearLayout>
 
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="10dp"
-            tools:ignore="InefficientWeight" />
-
-        <Button
-            android:id="@+id/addToWishlist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add_wishlist" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/shareButton"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_marginTop="16dp"
-            android:contentDescription="@string/share"
-            app:srcCompat="?attr/actionModeShareDrawable" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/addToWishlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_wishlist" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/shareButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal|top"
+                android:contentDescription="@string/share"
+                app:srcCompat="?attr/actionModeShareDrawable" />
+        </LinearLayout>
 
     </LinearLayout>
 </layout>
