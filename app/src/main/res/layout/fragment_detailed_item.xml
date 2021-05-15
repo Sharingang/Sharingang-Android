@@ -48,8 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:contentDescription="@string/item_image_description"
-            android:src="@drawable/ic_baseline_image_24"
-            app:tint="@color/white" />
+            android:src="@drawable/ic_baseline_image_24"/>
 
         <TextView
             android:id="@+id/itemCategory"

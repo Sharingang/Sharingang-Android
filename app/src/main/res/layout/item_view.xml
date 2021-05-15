@@ -39,8 +39,7 @@
                 android:layout_height="100dp"
                 android:contentDescription="@string/item_image_description"
                 android:paddingTop="10dp"
-                android:src="@drawable/ic_baseline_image_24"
-                app:tint="@color/white" />
+                android:src="@drawable/ic_baseline_image_24"/>
 
             <TextView
                 android:id="@+id/item_list_view_title"
