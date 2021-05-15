@@ -112,81 +112,82 @@
             app:layout_constraintTop_toBottomOf="@+id/cardInputWidget" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
 
             <RadioGroup
                 android:id="@+id/radioGroup"
-                android:layout_width="300dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
+                android:gravity="center_horizontal"
                 android:orientation="horizontal"
                 android:padding="10dp"
                 tools:ignore="InefficientWeight,UselessParent">
 
                 <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/radioButton1"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:layout_weight="1"
                     android:background="@drawable/rate_left_selector"
                     android:button="@android:color/transparent"
                     android:checked="false"
                     android:gravity="center"
+                    android:paddingHorizontal="20dp"
                     android:text="1"
                     android:textColor="@color/white"
                     tools:ignore="HardcodedText" />
 
                 <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/radioButton2"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:layout_weight="1"
                     android:background="@drawable/rate_center_selector"
                     android:button="@android:color/transparent"
                     android:checked="false"
                     android:gravity="center"
+                    android:paddingHorizontal="20dp"
                     android:text="2"
                     android:textColor="@color/white"
                     tools:ignore="HardcodedText" />
 
                 <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/radioButton3"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:layout_weight="1"
                     android:background="@drawable/rate_center_selector"
                     android:button="@android:color/transparent"
                     android:checked="false"
                     android:gravity="center"
+                    android:paddingHorizontal="20dp"
                     android:text="3"
                     android:textColor="@color/white"
                     tools:ignore="HardcodedText" />
 
                 <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/radioButton4"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:layout_weight="1"
                     android:background="@drawable/rate_center_selector"
                     android:button="@android:color/transparent"
                     android:checked="false"
                     android:gravity="center"
+                    android:paddingHorizontal="20dp"
                     android:text="4"
                     android:textColor="@color/white"
                     tools:ignore="HardcodedText" />
 
                 <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/radioButton5"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:layout_weight="1"
                     android:background="@drawable/rate_right_selector"
                     android:button="@android:color/transparent"
                     android:checked="false"
                     android:gravity="center"
+                    android:paddingHorizontal="20dp"
                     android:text="5"
                     android:textColor="@color/white"
                     tools:ignore="HardcodedText" />
