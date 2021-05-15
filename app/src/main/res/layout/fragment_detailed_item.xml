@@ -86,10 +86,10 @@
                 android:text="@string/posted_by"
                 android:textSize="18sp"
                 tools:text="Posted by"
-                android:paddingEnd="7dp"
                 tools:ignore="RtlSymmetry" />
 
-            <TextView
+
+            <Button
                 android:id="@+id/itemPostedBy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,8 +97,9 @@
                 android:textSize="18sp"
                 tools:text="TestUser"
                 android:padding="5dp"
-                android:background="@drawable/custom_button_blue"/>
-
+                android:textColor="@color/themeColor"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                />
         </LinearLayout>
 
         <Button
