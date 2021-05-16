@@ -157,17 +157,41 @@
                 android:minLines="3"
                 android:singleLine="false"
                 android:text="@={description}" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-            <Spinner
-                android:id="@+id/category_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:entries="@array/categories" />
+
+                <TextView
+                    android:id="@+id/textView_category"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="@string/category"
+                    android:textSize="20sp" />
+
+                <Space
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content" />
+
+                <Spinner
+                    android:id="@+id/category_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/themeColor"
+                    android:entries="@array/categories" />
 
             </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
             <EditText
                 android:id="@+id/itemPrice"
                 android:layout_width="match_parent"
