@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="button" parent="@android:style/Widget.Button">
-        <item name="android:background">@drawable/custom_button_blue</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">wrap_content</item>
+    <style name="blueButton" parent="Widget.AppCompat.Button">
         <item name="android:textColor">#FFFFFF</item>
-        <item name="android:padding">7dp</item>
-        <item name="android:textSize">15sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="textAllCaps">false</item>
+        <item name="android:backgroundTint">@color/themeColor</item>
     </style>
 </resources>

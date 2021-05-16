@@ -38,8 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/log_in"
-            app:icon="@drawable/googleg_standard_color_18" />
-
+            app:icon="@drawable/googleg_standard_color_18"/>
         <TextView
             android:id="@+id/nameText"
             android:layout_width="wrap_content"
@@ -66,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/log_out"
-            android:background="@drawable/custom_button_red"/>
+            android:backgroundTint="@color/faded_red"/>
 
         <Space
             android:layout_width="match_parent"
@@ -93,8 +92,8 @@
 
             <Button
                 android:id="@+id/btn_open_camera"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginBottom="5dp"
                 android:background="@android:drawable/ic_menu_camera"
@@ -103,8 +102,8 @@
 
             <Button
                 android:id="@+id/btn_open_gallery"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
                 android:background="@android:drawable/ic_menu_gallery"
