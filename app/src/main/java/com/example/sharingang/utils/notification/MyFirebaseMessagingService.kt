@@ -36,8 +36,4 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
         val notificationManager = ContextCompat.getSystemService(applicationContext, NotificationManager::class.java) as NotificationManager
         notificationManager.sendNotification(messageBody, applicationContext)
     }
-
-    companion object {
-        private const val TAG = "MyFirebaseMsgService"
-    }
 }

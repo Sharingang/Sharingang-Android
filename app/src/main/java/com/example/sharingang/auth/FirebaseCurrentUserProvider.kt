@@ -1,6 +1,5 @@
 package com.example.sharingang.auth
 
-import com.example.sharingang.auth.CurrentUserProvider
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
