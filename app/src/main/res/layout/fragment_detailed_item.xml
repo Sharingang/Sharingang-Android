@@ -226,6 +226,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal|top"
                 android:contentDescription="@string/share"
+                android:backgroundTint="@color/themeColor"
                 app:srcCompat="?attr/actionModeShareDrawable" />
         </LinearLayout>
 
