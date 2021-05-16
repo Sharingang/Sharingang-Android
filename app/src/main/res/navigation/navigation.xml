@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/itemsListFragment">
+    app:startDestination="@id/itemsListFragment"
+    android:background="@color/cardview_dark_background"
+    >
 
     <fragment
         android:id="@+id/itemsListFragment"

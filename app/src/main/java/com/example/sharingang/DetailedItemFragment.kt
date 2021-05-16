@@ -98,8 +98,9 @@ class DetailedItemFragment : Fragment() {
     }
 
     private fun onUserChange(user: User?) {
-        binding.username = getString(R.string.posted_by, user?.name)
+        binding.username = getString(R.string.posterUsername, user?.name)
         binding.itemPostedBy.visibility = if (user != null) View.VISIBLE else View.GONE
+        binding.textViewPostedBy.visibility = if(user != null) View.VISIBLE else View.GONE
         binding.itemPostedBy.setOnClickListener { view ->
             view.findNavController().navigate(
                 DetailedItemFragmentDirections.actionDetailedItemFragmentToUserProfileFragment(
@@ -202,7 +203,7 @@ class DetailedItemFragment : Fragment() {
             binding.ratingVisibility = visibility
         })
         binding.ratingButton.setOnClickListener {
-            val selectedOption: Int = binding.radioGroup1.checkedRadioButtonId
+            val selectedOption: Int = binding.radioGroup.checkedRadioButtonId
             if (selectedOption != -1) {
                 val rating = when (selectedOption) {
                     binding.radioButton1.id -> 1

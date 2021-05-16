@@ -124,7 +124,7 @@ class NewEditFragment : Fragment() {
         listOf(binding.createItemButton, binding.editItemButton).forEach {
             onSaveButtonClicked(it)
         }
-        binding.itemImage.setOnClickListener {
+        binding.itemOpenGallery.setOnClickListener {
             observer.openGallery()
         }
         binding.itemTakePicture.setOnClickListener {

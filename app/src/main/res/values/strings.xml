@@ -22,12 +22,10 @@
     <string name="log_in">Log In</string>
     <string name="clear_search_button">Clear search</string>
     <string name="share">Share</string>
-    <string name="open_gallery">Open Gallery</string>
-    <string name="open_camera">Open Camera</string>
     <string name="txt_user_profile_picture">User Profile Picture</string>
     <string name="apply_changes">Apply</string>
-    <string name="add_wishlist">Add wishlist</string>
-    <string name="remove_wishlist">Remove wishlist</string>
+    <string name="add_wishlist">Add to Wishlist</string>
+    <string name="remove_wishlist">Remove from Wishlist</string>
     <string name="wishlist_menu_title">Wish List</string>
     <string name="enter_address">Enter Address</string>
     <string name="item">Item</string>
@@ -57,7 +55,8 @@
     <string name="item_save_success">Item saved successfully.</string>
     <string name="item_save_failure">Cannot save the item.</string>
     <string name="item_deleted_success">Item deleted successfully.</string>
-    <string name="posted_by">Posted by %1$s</string>
+    <string name="posted_by">Posted by</string>
+    <string name="posterUsername">%1$s</string>
     <string-array name="order_categories">
         <item>Date</item>
         <item>Price</item>
@@ -91,4 +90,6 @@
     <string name="message">message</string>
     <string name="buy">Buy</string>
     <string name="sold_list_title">Sold List</string>
+    <string name="open_gallery">Oper Gallery</string>
+    <string name="category">Category:</string>
 </resources>

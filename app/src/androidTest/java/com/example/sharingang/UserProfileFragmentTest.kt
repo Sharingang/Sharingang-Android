@@ -73,8 +73,8 @@ class UserProfileFragmentTest {
     @Test
     fun pictureButtonsAreDisplayedCorrectly() {
         navigate_to(R.id.userProfileFragment)
-        onView(withId(R.id.btn_open_camera)).check(matches(withText("Open Camera")))
-        onView(withId(R.id.btn_open_gallery)).check(matches(withText("Open Gallery")))
+        onView(withId(R.id.btn_open_camera)).check(matches(isDisplayed()))
+        onView(withId(R.id.btn_open_gallery)).check(matches(isDisplayed()))
         onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
     }
 

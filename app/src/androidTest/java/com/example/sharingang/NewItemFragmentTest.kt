@@ -109,7 +109,6 @@ class NewItemFragmentTest {
     fun clickingOnGetLocationDisplaysLocation() {
         navigate_to(R.id.newEditFragment)
         val button = onView(withId(R.id.item_get_location))
-        button.check(matches(withText("Get Location")))
         button.perform(click())
         Thread.sleep(5000)
         onView(withId(R.id.postal_address)).check(matches(not(withText(""))))

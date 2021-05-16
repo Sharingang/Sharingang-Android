@@ -38,7 +38,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:contentDescription="@string/item_image_description"
-                android:src="@drawable/ic_baseline_image_24" />
+                android:paddingTop="10dp"
+                android:src="@drawable/ic_baseline_image_24"/>
 
             <TextView
                 android:id="@+id/item_list_view_title"
@@ -49,7 +50,7 @@
                 android:gravity="center"
                 android:onClick="@{() -> clickListener.onView(item)}"
                 android:paddingBottom="12dp"
-                android:textColor="@{item.sold ? @android:color/holo_red_dark : item.request?@color/quantum_cyan : @color/black}"
+                android:textColor="@{item.sold ? @color/faded_red : item.request?@color/quantum_cyan : @color/white}"
                 android:textSize="24sp"
                 tools:text="Test" />
 

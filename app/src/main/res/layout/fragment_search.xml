@@ -56,7 +56,7 @@
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#F3E5F5"
+            android:background="@color/darkBackground"
             android:orientation="vertical"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"

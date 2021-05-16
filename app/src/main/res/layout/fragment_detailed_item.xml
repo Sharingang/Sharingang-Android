@@ -41,12 +41,6 @@
                 android:textSize="30sp"
                 tools:text="Title" />
 
-            <Button
-                android:id="@+id/addToWishlist"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/add_wishlist" />
-
         </LinearLayout>
 
         <ImageView
@@ -54,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:contentDescription="@string/item_image_description"
-            android:src="@drawable/ic_baseline_image_24" />
+            android:src="@drawable/ic_baseline_image_24"/>
 
         <TextView
             android:id="@+id/itemCategory"
@@ -80,13 +74,32 @@
             android:textSize="18sp"
             tools:text="Here goes the description of the item." />
 
-        <TextView
-            android:id="@+id/itemPostedBy"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{username}"
-            android:textSize="18sp"
-            tools:text="Posted by TestUser" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewPostedBy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/posted_by"
+                android:textSize="18sp"
+                tools:ignore="RtlSymmetry"
+                tools:text="Posted by" />
+
+
+            <Button
+                android:id="@+id/itemPostedBy"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="@{username}"
+                android:textColor="@color/themeColor"
+                android:textSize="18sp"
+                tools:text="TestUser" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/buyButton"
@@ -101,58 +114,82 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <RadioGroup
-                android:id="@+id/radioGroup1"
+                android:id="@+id/radioGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:orientation="horizontal"
-                android:visibility="@{ratingVisibility}">
+                android:padding="10dp"
+                android:visibility="@{ratingVisibility}"
+                tools:ignore="UselessParent">
 
-                <RadioButton
+                <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/radioButton1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:background="@drawable/rate_left_selector"
+                    android:button="@android:color/transparent"
+                    android:checked="false"
+                    android:gravity="center"
+                    android:paddingHorizontal="20dp"
                     android:text="1"
-                    android:textSize="13sp"
-                    android:visibility="@{ratingVisibility}"
+                    android:textColor="@color/white"
                     tools:ignore="HardcodedText" />
 
-                <RadioButton
+                <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/radioButton2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:background="@drawable/rate_center_selector"
+                    android:button="@android:color/transparent"
+                    android:checked="false"
+                    android:gravity="center"
+                    android:paddingHorizontal="20dp"
                     android:text="2"
-                    android:textSize="13sp"
-                    android:visibility="@{ratingVisibility}"
+                    android:textColor="@color/white"
                     tools:ignore="HardcodedText" />
 
-                <RadioButton
+                <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/radioButton3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:background="@drawable/rate_center_selector"
+                    android:button="@android:color/transparent"
+                    android:checked="false"
+                    android:gravity="center"
+                    android:paddingHorizontal="20dp"
                     android:text="3"
-                    android:textSize="13sp"
-                    android:visibility="@{ratingVisibility}"
+                    android:textColor="@color/white"
                     tools:ignore="HardcodedText" />
 
-                <RadioButton
+                <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/radioButton4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:background="@drawable/rate_center_selector"
+                    android:button="@android:color/transparent"
+                    android:checked="false"
+                    android:gravity="center"
+                    android:paddingHorizontal="20dp"
                     android:text="4"
-                    android:textSize="13sp"
-                    android:visibility="@{ratingVisibility}"
+                    android:textColor="@color/white"
                     tools:ignore="HardcodedText" />
 
-                <RadioButton
+                <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/radioButton5"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:background="@drawable/rate_right_selector"
+                    android:button="@android:color/transparent"
+                    android:checked="false"
+                    android:gravity="center"
+                    android:paddingHorizontal="20dp"
                     android:text="5"
-                    android:textSize="13sp"
-                    android:visibility="@{ratingVisibility}"
+                    android:textColor="@color/white"
                     tools:ignore="HardcodedText" />
 
             </RadioGroup>
@@ -166,13 +203,32 @@
 
         </LinearLayout>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/shareButton"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_marginTop="16dp"
-            android:contentDescription="@string/share"
-            app:srcCompat="?attr/actionModeShareDrawable" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/addToWishlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_wishlist" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/shareButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal|top"
+                android:contentDescription="@string/share"
+                android:backgroundTint="@color/themeColor"
+                app:srcCompat="?attr/actionModeShareDrawable" />
+        </LinearLayout>
+
     </LinearLayout>
 </layout>
