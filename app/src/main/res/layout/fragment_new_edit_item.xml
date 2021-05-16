@@ -114,24 +114,24 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_marginStart="20dp"
-                        android:layout_marginTop="25dp"
+                        android:layout_marginBottom="25dp"
                         android:layout_weight="2"
                         android:contentDescription="@string/item_image_description"
                         android:src="@android:drawable/ic_menu_camera"
                         android:translationZ="1dp"
-                        app:layout_constraintStart_toStartOf="@+id/item_image"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/item_image" />
 
                     <ImageButton
                         android:id="@+id/item_open_gallery"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:layout_marginTop="25dp"
                         android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="25dp"
                         android:contentDescription="@string/open_gallery"
                         android:translationZ="1dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="@+id/item_image"
-                        app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@android:drawable/ic_menu_gallery" />
 
                     <ImageView
