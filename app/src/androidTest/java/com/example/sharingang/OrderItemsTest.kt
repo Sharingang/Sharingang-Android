@@ -58,9 +58,9 @@ class OrderItemsTest {
 
     @Test
     fun itemsCanBeOrderedInDifferentWays() {
-        addItem(first,firstPrice.toString(),book)
-        addItem(second,secondPrice.toString(),electronics)
-        addItem(third,thirdPrice.toString(),book)
+        addItem(first, firstPrice.toString(), book)
+        addItem(second, secondPrice.toString(), electronics)
+        addItem(third, thirdPrice.toString(), book)
         onView(withId(R.id.order_category_spinner)).perform(click())
         onView(withText(orderByName)).perform(click())
         onView(withId(R.id.start_ordering)).perform(click())

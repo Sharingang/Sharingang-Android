@@ -9,8 +9,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import com.example.sharingang.ui.activities.MainActivity
 import com.example.sharingang.R
+import com.example.sharingang.ui.activities.MainActivity
 import com.google.firebase.messaging.FirebaseMessaging
 
 private const val NOTIFICATION_ID = 0
@@ -68,7 +68,8 @@ fun createChannel(channelId: String, channelName: String, activity: Activity) {
         notificationChannel.enableLights(true)
         notificationChannel.lightColor = Color.BLUE
         notificationChannel.enableVibration(true)
-        notificationChannel.description = activity.getString(R.string.new_item_notification_channel_description)
+        notificationChannel.description =
+            activity.getString(R.string.new_item_notification_channel_description)
         val notificationManager = activity.getSystemService(NotificationManager::class.java)
         notificationManager.createNotificationChannel(notificationChannel)
     }
@@ -86,6 +87,6 @@ fun subscribeToTopic(topic: String) {
  * Unsubscribe from the topic on FirebaseMessaging
  * @param topic the topic to unsubscribe from
  */
-fun unsubscribeFromTopic(topic:String) {
+fun unsubscribeFromTopic(topic: String) {
     FirebaseMessaging.getInstance().unsubscribeFromTopic(topic)
 }

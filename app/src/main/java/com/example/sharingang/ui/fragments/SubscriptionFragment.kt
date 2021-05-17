@@ -9,8 +9,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.sharingang.R
-import com.example.sharingang.databinding.FragmentSubscriptionBinding
 import com.example.sharingang.auth.CurrentUserProvider
+import com.example.sharingang.databinding.FragmentSubscriptionBinding
 import com.example.sharingang.viewmodels.UserProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

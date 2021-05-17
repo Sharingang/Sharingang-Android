@@ -12,7 +12,7 @@ import javax.inject.Inject
  * Class used to receive the push notifications from Firebase Message
  */
 @AndroidEntryPoint
-class MyFirebaseMessagingService: FirebaseMessagingService() {
+class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
@@ -33,7 +33,10 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
     }
 
     private fun sendNotification(messageBody: String) {
-        val notificationManager = ContextCompat.getSystemService(applicationContext, NotificationManager::class.java) as NotificationManager
+        val notificationManager = ContextCompat.getSystemService(
+            applicationContext,
+            NotificationManager::class.java
+        ) as NotificationManager
         notificationManager.sendNotification(messageBody, applicationContext)
     }
 }

@@ -12,14 +12,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.sharingang.R
-import com.example.sharingang.databinding.UserProfileFragmentBinding
-import com.example.sharingang.viewmodels.ItemsViewModel
 import com.example.sharingang.auth.AuthHelper
 import com.example.sharingang.auth.CurrentUserProvider
-import com.example.sharingang.models.User
 import com.example.sharingang.database.repositories.UserRepository
+import com.example.sharingang.databinding.UserProfileFragmentBinding
 import com.example.sharingang.imagestore.ImageStore
+import com.example.sharingang.models.User
 import com.example.sharingang.utils.ImageAccess
+import com.example.sharingang.viewmodels.ItemsViewModel
 import com.example.sharingang.viewmodels.UserProfileViewModel
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth

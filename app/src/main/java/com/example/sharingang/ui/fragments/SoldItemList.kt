@@ -9,9 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.sharingang.R
+import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.databinding.FragmentSoldItemListBinding
 import com.example.sharingang.viewmodels.ItemsViewModel
-import com.example.sharingang.auth.CurrentUserProvider
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

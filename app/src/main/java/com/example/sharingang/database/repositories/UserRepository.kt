@@ -1,8 +1,8 @@
 package com.example.sharingang.database.repositories
 
 import androidx.lifecycle.LiveData
-import com.example.sharingang.models.User
 import com.example.sharingang.database.store.UserStore
+import com.example.sharingang.models.User
 
 /**
  * Represents a repository for accessing users

@@ -8,11 +8,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
-import com.example.sharingang.imagestore.ImageStore
 import com.example.sharingang.database.repositories.ItemRepository
+import com.example.sharingang.imagestore.ImageStore
+import com.example.sharingang.models.Item
 import com.example.sharingang.ui.adapters.ItemListener
 import com.example.sharingang.ui.adapters.ItemsAdapter
-import com.example.sharingang.models.Item
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

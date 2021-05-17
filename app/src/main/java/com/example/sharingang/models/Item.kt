@@ -46,7 +46,7 @@ data class Item(
 
     /** Where the item added is an offer (false), or a request*/
     val request: Boolean = false,
-    
+
     @ServerTimestamp
     val createdAt: Date? = null,
 

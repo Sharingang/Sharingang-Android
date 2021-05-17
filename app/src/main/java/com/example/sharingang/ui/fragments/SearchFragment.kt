@@ -9,9 +9,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.sharingang.R
+import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.databinding.FragmentSearchBinding
 import com.example.sharingang.viewmodels.ItemsViewModel
-import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.viewmodels.UserProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
