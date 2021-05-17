@@ -9,7 +9,7 @@
 
     <fragment
         android:id="@+id/itemsListFragment"
-        android:name="com.example.sharingang.ItemsListFragment"
+        android:name="com.example.sharingang.ui.fragments.ItemsListFragment"
         android:label="Items"
         tools:layout="@layout/fragment_items_list">
         <action
@@ -36,7 +36,7 @@
     </fragment>
     <fragment
         android:id="@+id/newEditFragment"
-        android:name="com.example.sharingang.NewEditFragment"
+        android:name="com.example.sharingang.ui.fragments.NewEditFragment"
         android:label="@string/item"
         tools:layout="@layout/fragment_new_edit_item">
         <action
@@ -45,7 +45,7 @@
         <argument
             android:name="item"
             android:defaultValue="@null"
-            app:argType="com.example.sharingang.items.Item"
+            app:argType="com.example.sharingang.models.Item"
             app:nullable="true" />
         <action
             android:id="@+id/action_newEditFragment_to_detailedItemFragment"
@@ -55,11 +55,11 @@
     </fragment>
     <fragment
         android:id="@+id/detailedItemFragment"
-        android:name="com.example.sharingang.DetailedItemFragment"
+        android:name="com.example.sharingang.ui.fragments.DetailedItemFragment"
         android:label="Detailed View">
         <argument
             android:name="item"
-            app:argType="com.example.sharingang.items.Item" />
+            app:argType="com.example.sharingang.models.Item" />
         <action
             android:id="@+id/action_detailedItemFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment"
@@ -71,7 +71,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.sharingang.SearchFragment"
+        android:name="com.example.sharingang.ui.fragments.SearchFragment"
         android:label="Search">
         <action
             android:id="@+id/action_searchFragment_to_detailedItemFragment"
@@ -79,7 +79,7 @@
     </fragment>
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.example.sharingang.MapFragment"
+        android:name="com.example.sharingang.ui.fragments.MapFragment"
         android:label="Map">
         <action
             android:id="@+id/action_mapFragment_to_detailedItemFragment"
@@ -87,7 +87,7 @@
     </fragment>
     <fragment
         android:id="@+id/userProfileFragment"
-        android:name="com.example.sharingang.UserProfileFragment"
+        android:name="com.example.sharingang.ui.fragments.UserProfileFragment"
         android:label="User Profile"
         tools:layout="@layout/user_profile_fragment">
         <argument
@@ -122,7 +122,7 @@
     </fragment>
     <fragment
         android:id="@+id/wishlistViewFragment"
-        android:name="com.example.sharingang.WishlistViewFragment"
+        android:name="com.example.sharingang.ui.fragments.WishlistViewFragment"
         android:label="@string/wishlist_menu_title">
         <action
             android:id="@+id/action_wishlistViewFragment_to_detailedItemFragment"
@@ -130,7 +130,7 @@
     </fragment>
     <fragment
         android:id="@+id/reportFragment"
-        android:name="com.example.sharingang.ReportFragment"
+        android:name="com.example.sharingang.ui.fragments.ReportFragment"
         android:label="Report User">
         <argument
             android:name="reporterId"
@@ -152,7 +152,7 @@
         app:destination="@id/detailedItemFragment" />
     <fragment
         android:id="@+id/soldItemList"
-        android:name="com.example.sharingang.SoldItemList"
+        android:name="com.example.sharingang.ui.fragments.SoldItemList"
         android:label="@string/sold_list_title"
         tools:layout="@layout/fragment_sold_item_list" >
         <action
@@ -161,7 +161,7 @@
     </fragment>
     <fragment
         android:id="@+id/chatsFragment"
-        android:name="com.example.sharingang.ChatsFragment"
+        android:name="com.example.sharingang.ui.fragments.ChatsFragment"
         android:label="Chats">
         <action
             android:id="@+id/action_chatsFragment_to_messageFragment"
@@ -169,7 +169,7 @@
     </fragment>
     <fragment
         android:id="@+id/messageFragment"
-        android:name="com.example.sharingang.MessageFragment"
+        android:name="com.example.sharingang.ui.fragments.MessageFragment"
         android:label="@string/chat">
         <argument
             android:name="partnerId"
@@ -184,6 +184,6 @@
     </fragment>
     <fragment
         android:id="@+id/subscriptionFragment"
-        android:name="com.example.sharingang.SubscriptionFragment"
+        android:name="com.example.sharingang.ui.fragments.SubscriptionFragment"
         android:label="Subscriptions" />
 </navigation>

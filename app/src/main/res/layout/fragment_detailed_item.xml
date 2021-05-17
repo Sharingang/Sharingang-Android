@@ -13,7 +13,7 @@
 
         <variable
             name="item"
-            type="com.example.sharingang.items.Item" />
+            type="com.example.sharingang.models.Item" />
 
         <variable
             name="username"

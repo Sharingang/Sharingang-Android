@@ -6,6 +6,10 @@ import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import com.example.sharingang.auth.FakeCurrentUserProvider
+import com.example.sharingang.ui.activities.MainActivity
+import com.example.sharingang.utils.navigate_to
+import com.example.sharingang.utils.waitAfterSaveItem
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.CoreMatchers.not

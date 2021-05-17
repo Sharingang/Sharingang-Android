@@ -9,11 +9,11 @@
 
         <variable
             name="item"
-            type="com.example.sharingang.items.Item" />
+            type="com.example.sharingang.models.Item" />
 
         <variable
             name="clickListener"
-            type="com.example.sharingang.items.ItemListener" />
+            type="com.example.sharingang.ui.adapters.ItemListener" />
 
     </data>
 

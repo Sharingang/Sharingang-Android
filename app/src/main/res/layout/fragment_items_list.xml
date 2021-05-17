@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.sharingang.items.ItemsViewModel" />
+            type="com.example.sharingang.viewmodels.ItemsViewModel" />
 
     </data>
 
@@ -18,7 +18,7 @@
         android:paddingRight="4dp"
         android:orientation="vertical"
         android:background="@color/darkBackground"
-        tools:context=".MainActivity">
+        tools:context=".ui.activities.MainActivity">
 
         <Space
             android:layout_width="match_parent"
