@@ -16,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
- * Helper class to manage user authentification with database.
+ * Helper class to manage user authentication with database.
  * @property context the Context
  * @property auth the authenticator to be used
  */

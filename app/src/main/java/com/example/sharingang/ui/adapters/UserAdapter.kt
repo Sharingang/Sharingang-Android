@@ -1,7 +1,6 @@
 package com.example.sharingang.ui.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,8 +43,7 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Log.e("xxx", "itemcount = $itemCount")
-        if(position < users.size) {
+        if (position < users.size) {
             val user: User = users[position]
             holder.username.text = user.name
             Glide.with(context).load(user.profilePicture).into(holder.imageView)
