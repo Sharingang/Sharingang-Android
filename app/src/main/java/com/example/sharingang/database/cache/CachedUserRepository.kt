@@ -1,10 +1,10 @@
 package com.example.sharingang.database.cache
 
 import androidx.lifecycle.LiveData
-import com.example.sharingang.database.repositories.UserRepository
-import com.example.sharingang.database.room.UserDao
-import com.example.sharingang.database.store.UserStore
 import com.example.sharingang.models.User
+import com.example.sharingang.database.room.UserDao
+import com.example.sharingang.database.repositories.UserRepository
+import com.example.sharingang.database.store.UserStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -47,7 +47,7 @@ class CachedUserRepository @Inject constructor(
     }
 
     override suspend fun get(id: String): User? {
-        if (userDao.getUser(id) == null) {
+        if(userDao.getUser(id) == null) {
             refreshUsers()
         }
         return userDao.getUser(id)

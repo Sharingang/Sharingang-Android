@@ -13,14 +13,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.sharingang.R
-import com.example.sharingang.auth.CurrentUserProvider
-import com.example.sharingang.database.repositories.ItemRepository
 import com.example.sharingang.databinding.FragmentDetailedItemBinding
 import com.example.sharingang.models.Item
-import com.example.sharingang.models.User
-import com.example.sharingang.payment.PaymentProvider
-import com.example.sharingang.utils.ImageAccess
+import com.example.sharingang.database.repositories.ItemRepository
 import com.example.sharingang.viewmodels.ItemsViewModel
+import com.example.sharingang.payment.PaymentProvider
+import com.example.sharingang.auth.CurrentUserProvider
+import com.example.sharingang.models.User
+import com.example.sharingang.utils.ImageAccess
 import com.example.sharingang.viewmodels.UserProfileViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.dynamiclinks.ktx.androidParameters
@@ -102,7 +102,7 @@ class DetailedItemFragment : Fragment() {
     private fun onUserChange(user: User?) {
         binding.username = getString(R.string.posterUsername, user?.name)
         binding.itemPostedBy.visibility = if (user != null) View.VISIBLE else View.GONE
-        binding.textViewPostedBy.visibility = if (user != null) View.VISIBLE else View.GONE
+        binding.textViewPostedBy.visibility = if(user != null) View.VISIBLE else View.GONE
         binding.itemPostedBy.setOnClickListener { view ->
             view.findNavController().navigate(
                 DetailedItemFragmentDirections.actionDetailedItemFragmentToUserProfileFragment(

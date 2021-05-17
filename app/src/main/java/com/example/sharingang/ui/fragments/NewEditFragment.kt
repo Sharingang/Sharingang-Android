@@ -16,14 +16,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.example.sharingang.R
-import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.databinding.FragmentNewEditItemBinding
 import com.example.sharingang.models.Item
+import com.example.sharingang.viewmodels.ItemsViewModel
+import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.utils.ImageAccess
 import com.example.sharingang.utils.consumeLocation
 import com.example.sharingang.utils.doOrGetPermission
 import com.example.sharingang.utils.requestPermissionLauncher
-import com.example.sharingang.viewmodels.ItemsViewModel
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -142,29 +142,17 @@ class NewEditFragment : Fragment() {
             viewModel.setItem(item) { itemId ->
                 binding.isLoading = false
                 if (itemId != null) {
-                    Snackbar.make(
-                        binding.root,
-                        getString(R.string.item_save_success),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+                    Snackbar.make(binding.root, getString(R.string.item_save_success), Snackbar.LENGTH_SHORT).show()
                     observer.unregister()
                     if (existingItem == null) {
-                        view.findNavController()
-                            .navigate(NewEditFragmentDirections.actionNewEditFragmentToItemsListFragment())
+                        view.findNavController().navigate(NewEditFragmentDirections.actionNewEditFragmentToItemsListFragment())
                     } else {
-                        view.findNavController().navigate(
-                            NewEditFragmentDirections.actionNewEditFragmentToDetailedItemFragment(
-                                item
-                            )
+                        view.findNavController().navigate(NewEditFragmentDirections.actionNewEditFragmentToDetailedItemFragment(item)
                         )
                     }
                 } else {
                     button.isClickable = true
-                    Snackbar.make(
-                        binding.root,
-                        getString(R.string.item_save_failure),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+                    Snackbar.make(binding.root, getString(R.string.item_save_failure), Snackbar.LENGTH_SHORT).show()
                 }
             }
         }

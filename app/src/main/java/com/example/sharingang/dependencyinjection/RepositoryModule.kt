@@ -4,6 +4,9 @@ import android.content.Context
 import android.util.Log
 import androidx.room.Room
 import com.example.sharingang.BuildConfig
+import com.example.sharingang.database.room.CacheDatabase
+import com.example.sharingang.imagestore.FirebaseImageStore
+import com.example.sharingang.imagestore.ImageStore
 import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.auth.FirebaseCurrentUserProvider
 import com.example.sharingang.database.cache.CachedItemRepository
@@ -12,13 +15,10 @@ import com.example.sharingang.database.firestore.FirestoreItemStore
 import com.example.sharingang.database.firestore.FirestoreUserStore
 import com.example.sharingang.database.repositories.ItemRepository
 import com.example.sharingang.database.repositories.UserRepository
-import com.example.sharingang.database.room.CacheDatabase
 import com.example.sharingang.database.room.ItemDao
 import com.example.sharingang.database.room.UserDao
 import com.example.sharingang.database.store.ItemStore
 import com.example.sharingang.database.store.UserStore
-import com.example.sharingang.imagestore.FirebaseImageStore
-import com.example.sharingang.imagestore.ImageStore
 import com.example.sharingang.payment.PaymentProvider
 import com.example.sharingang.payment.StripePaymentProvider
 import com.firebase.ui.auth.AuthUI

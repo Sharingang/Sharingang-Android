@@ -11,14 +11,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.example.sharingang.auth.CurrentUserProvider
-import com.example.sharingang.databinding.FragmentMessageBinding
 import com.example.sharingang.models.Chat
 import com.example.sharingang.ui.adapters.MessageAdapter
+import com.example.sharingang.databinding.FragmentMessageBinding
+import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.utils.constants.DatabaseFields
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

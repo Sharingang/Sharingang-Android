@@ -122,7 +122,7 @@ class DetailedItemFragmentTest {
     }
 
     @Test
-    fun canAddAndRemoveItemToWishlist() {
+    fun canAddAndRemoveItemToWishlist(){
         addItemsToDb(firstItem)
         addItemToWishList(firstItem)
 
@@ -137,7 +137,7 @@ class DetailedItemFragmentTest {
     }
 
     @Test
-    fun canViewWishListItems() {
+    fun canViewWishListItems(){
         addItemsToDb(firstItem, secondItem)
         addItemToWishList(firstItem, secondItem)
 
@@ -150,8 +150,8 @@ class DetailedItemFragmentTest {
         onView(withText(secondItem)).check(matches(isDisplayed()))
     }
 
-    private fun addItemToWishList(vararg itemNames: String) {
-        for (itemName in itemNames) {
+    private fun addItemToWishList(vararg itemNames: String){
+        for(itemName in itemNames){
             onView(withText(itemName)).perform(click())
             onView(withId(R.id.addToWishlist)).perform(click())
             onView(withId(R.id.addToWishlist)).check(matches(withText(R.string.remove_wishlist)))
@@ -160,8 +160,8 @@ class DetailedItemFragmentTest {
     }
 
 
-    private fun addItemsToDb(vararg itemNames: String) {
-        for (itemName in itemNames) {
+    private fun addItemsToDb(vararg itemNames: String){
+        for(itemName in itemNames){
             navigate_to(R.id.newEditFragment)
             onView(withId(R.id.itemTitle)).perform(
                 typeText(itemName),

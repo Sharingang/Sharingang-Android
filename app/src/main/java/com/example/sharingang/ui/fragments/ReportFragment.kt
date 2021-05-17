@@ -9,8 +9,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.sharingang.R
-import com.example.sharingang.database.repositories.UserRepository
 import com.example.sharingang.databinding.FragmentReportBinding
+import com.example.sharingang.database.repositories.UserRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

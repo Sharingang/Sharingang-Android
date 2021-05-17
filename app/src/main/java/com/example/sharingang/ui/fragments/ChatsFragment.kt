@@ -2,19 +2,19 @@ package com.example.sharingang.ui.fragments
 
 import android.graphics.Rect
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sharingang.auth.CurrentUserProvider
-import com.example.sharingang.database.repositories.UserRepository
 import com.example.sharingang.databinding.FragmentChatsBinding
+import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.models.User
 import com.example.sharingang.ui.adapters.UserAdapter
+import com.example.sharingang.database.repositories.UserRepository
 import com.example.sharingang.utils.constants.DatabaseFields
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
@@ -78,8 +78,7 @@ class ChatsFragment : Fragment() {
                 // partners (user Ids), so that we can then use this snapshot to read
                 // the data of the documents we need inside.
                 val chatPartners = firebaseFirestore.collection(DatabaseFields.DBFIELD_USERS)
-                    .document(currentUserId!!).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
-                    .get()
+                    .document(currentUserId!!).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).get()
                     .await()
                 chatPartners.documents.forEach {
                     val user = userRepository.get(it.id)

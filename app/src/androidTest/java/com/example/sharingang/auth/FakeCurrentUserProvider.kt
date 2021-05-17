@@ -1,7 +1,7 @@
 package com.example.sharingang.auth
 
-import com.example.sharingang.database.repositories.UserRepository
 import com.example.sharingang.models.User
+import com.example.sharingang.database.repositories.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject

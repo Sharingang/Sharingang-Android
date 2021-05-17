@@ -57,7 +57,7 @@ class UserProfileFragmentTest {
     }
 
     @Test
-    fun soldItemsListWorksCorrect() {
+    fun soldItemsListWorksCorrect(){
         val firstItemName = "Test Item"
         addSingleItemToDB(firstItemName)
         navigate_to(R.id.userProfileFragment)
@@ -188,7 +188,7 @@ class UserProfileFragmentTest {
     }
 
     @Test
-    fun canSeeOffersAndRequests() {
+    fun canSeeOffersAndRequests(){
         val firstItem = "Naruto"
         val secondItem = "One piece"
         addSingleItemToDB(firstItem)

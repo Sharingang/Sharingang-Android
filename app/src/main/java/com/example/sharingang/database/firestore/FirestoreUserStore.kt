@@ -1,8 +1,8 @@
 package com.example.sharingang.database.firestore
 
 import android.util.Log
-import com.example.sharingang.database.store.UserStore
 import com.example.sharingang.models.User
+import com.example.sharingang.database.store.UserStore
 import com.example.sharingang.utils.constants.DatabaseFields
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
@@ -22,8 +22,7 @@ private const val TAG = "FirestoreUserStore"
 class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFirestore) :
     UserStore, AbstractFirestoreStore<User>(
     DatabaseFields.DBFIELD_USERS,
-    User::class.java, firestore
-) {
+    User::class.java, firestore) {
 
     override suspend fun add(element: User): String? {
         requireNotNull(element.id)

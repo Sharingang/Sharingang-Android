@@ -2,22 +2,22 @@ package com.example.sharingang.dependencyinjection
 
 import android.content.Context
 import androidx.room.Room
-import com.example.sharingang.auth.CurrentUserProvider
+import com.example.sharingang.database.room.CacheDatabase
 import com.example.sharingang.auth.FakeCurrentUserProvider
+import com.example.sharingang.payment.FakePaymentProvider
+import com.example.sharingang.imagestore.PlaceholderImageStore
+import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.database.cache.CachedItemRepository
 import com.example.sharingang.database.cache.CachedUserRepository
 import com.example.sharingang.database.repositories.InMemoryItemRepository
 import com.example.sharingang.database.repositories.InMemoryUserRepository
 import com.example.sharingang.database.repositories.ItemRepository
 import com.example.sharingang.database.repositories.UserRepository
-import com.example.sharingang.database.room.CacheDatabase
 import com.example.sharingang.database.room.ItemDao
 import com.example.sharingang.database.room.UserDao
 import com.example.sharingang.database.store.ItemStore
 import com.example.sharingang.database.store.UserStore
 import com.example.sharingang.imagestore.ImageStore
-import com.example.sharingang.imagestore.PlaceholderImageStore
-import com.example.sharingang.payment.FakePaymentProvider
 import com.example.sharingang.payment.PaymentProvider
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
@@ -107,7 +107,7 @@ object FakeRepositoryModule {
     fun provideImageStore(imageStore: PlaceholderImageStore): ImageStore {
         return imageStore
     }
-
+  
     @Singleton
     @Provides
     fun provideFirebaseFirestore(): FirebaseFirestore {
