@@ -1,6 +1,7 @@
 package com.example.sharingang.ui.fragments
 
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -134,29 +135,42 @@ class MessageFragment : Fragment() {
             DatabaseFields.DBFIELD_TO to to
         )
         val date = Date()
-        val lastTimeChatCurrent = hashMapOf(
-            DatabaseFields.DBFIELD_LAST_MESSAGE to "$date (${System.currentTimeMillis()})",
-            DatabaseFields.DBFIELD_HAS_UNREAD to false
-        )
+        var currentNumUnread: Long? = 0
+        lifecycleScope.launch(Dispatchers.Main) {
+            currentNumUnread = getUserDocument(partnerId)
+                .collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).document(currentUserId)
+                .get().await().getLong(DatabaseFields.DBFIELD_NUM_UNREAD)
 
-        val lastTimeChatPartner = hashMapOf(
-            DatabaseFields.DBFIELD_LAST_MESSAGE to "$date (${System.currentTimeMillis()})",
-            DatabaseFields.DBFIELD_HAS_UNREAD to true
-        )
+            val nextNumUnread = if(currentNumUnread == null) 0 else currentNumUnread!! + 1
 
-        val fromToPair = LinkedPair(from, to)
-        val currentUD = getUserDocument(currentUserId)
-        currentUD.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
-            .document(partnerId).set(lastTimeChatCurrent)
-        val partnerUD = getUserDocument(partnerId)
-        partnerUD.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
-            .document(currentUserId).set(lastTimeChatPartner)
-        listOf(from, to).forEach {
-            val userDocument = getUserDocument(it)
-            userDocument.collection(DatabaseFields.DBFIELD_CHATS).document(fromToPair.otherOf(it)!!)
-                .collection(DatabaseFields.DBFIELD_MESSAGES).document(date.toString()).set(data)
+            val lastTimeChatCurrent = hashMapOf(
+                DatabaseFields.DBFIELD_LAST_MESSAGE to "$date (${System.currentTimeMillis()})",
+                DatabaseFields.DBFIELD_HAS_UNREAD to false,
+                DatabaseFields.DBFIELD_NUM_UNREAD to 0
+            )
+
+            val lastTimeChatPartner = hashMapOf(
+                DatabaseFields.DBFIELD_LAST_MESSAGE to "$date (${System.currentTimeMillis()})",
+                DatabaseFields.DBFIELD_HAS_UNREAD to true,
+                DatabaseFields.DBFIELD_NUM_UNREAD to nextNumUnread
+            )
+
+            val fromToPair = LinkedPair(from, to)
+            val currentUD = getUserDocument(currentUserId)
+            currentUD.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
+                .document(partnerId).set(lastTimeChatCurrent)
+            currentUD.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
+            val partnerUD = getUserDocument(partnerId)
+            partnerUD.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
+                .document(currentUserId).set(lastTimeChatPartner)
+            listOf(from, to).forEach {
+                val userDocument = getUserDocument(it)
+                userDocument.collection(DatabaseFields.DBFIELD_CHATS).document(fromToPair.otherOf(it)!!)
+                    .collection(DatabaseFields.DBFIELD_MESSAGES).document(date.toString()).set(data)
+            }
+            binding.messageEditText.text.clear()
         }
-        binding.messageEditText.text.clear()
+
     }
 
     /**
@@ -218,7 +232,10 @@ class MessageFragment : Fragment() {
                             .document(partnerId).update(
                                 DatabaseFields.DBFIELD_HAS_UNREAD, false
                             )
-
+                        currentUD.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
+                            .document(partnerId).update(
+                                DatabaseFields.DBFIELD_NUM_UNREAD, 0
+                            )
                     }
                 }
             }
@@ -242,6 +259,10 @@ class MessageFragment : Fragment() {
                 currentUD.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
                     .document(partnerId).update(
                         DatabaseFields.DBFIELD_HAS_UNREAD, false
+                    )
+                currentUD.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
+                    .document(partnerId).update(
+                        DatabaseFields.DBFIELD_NUM_UNREAD, 0
                     )
             }
         }

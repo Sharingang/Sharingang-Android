@@ -44,7 +44,7 @@ private val lifecycleScope: LifecycleCoroutineScope) :
     class ViewHolder(userEntryView: View) : RecyclerView.ViewHolder(userEntryView) {
         var username: TextView = userEntryView.findViewById(R.id.chatPartnerUsername)
         var imageView: ImageView = userEntryView.findViewById(R.id.chatPartnerPic)
-        var redDot: ImageView = userEntryView.findViewById(R.id.red_dot)
+        var numUnread: TextView = userEntryView.findViewById(R.id.numUnread)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -70,10 +70,15 @@ private val lifecycleScope: LifecycleCoroutineScope) :
                     firebaseFirestore.collection(DatabaseFields.DBFIELD_USERS).document(currentUserId)
                         .collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).document(user.id!!)
                         .get().await().getBoolean(DatabaseFields.DBFIELD_HAS_UNREAD)
+                val numUnread =
+                    firebaseFirestore.collection(DatabaseFields.DBFIELD_USERS).document(currentUserId)
+                        .collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).document(user.id)
+                        .get().await().getLong(DatabaseFields.DBFIELD_NUM_UNREAD)
                 lifecycleScope.launch(Dispatchers.Main) {
-                    holder.redDot.visibility =
+                    holder.numUnread.visibility =
                         if(hasUnreadMessages != null && hasUnreadMessages) View.VISIBLE
                         else View.GONE
+                    holder.numUnread.text = numUnread.toString()
                 }
             }
 

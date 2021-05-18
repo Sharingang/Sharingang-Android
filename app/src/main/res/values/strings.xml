@@ -92,4 +92,6 @@
     <string name="sold_list_title">Sold List</string>
     <string name="open_gallery">Open Gallery</string>
     <string name="category">Category:</string>
+    <string name="red_dot">Red Dot</string>
+    <string name="num_unread">NumUnread</string>
 </resources>
