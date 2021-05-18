@@ -48,13 +48,13 @@ class NewItemFragmentTest {
     @Test
     fun aDescriptionCanBeEnteredAndSeenOnMainActivity() {
         navigate_to(R.id.newEditFragment)
-        onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
+        onView(withId(R.id.itemPrompt)).check(matches(withText("New Item")))
 
         onView(withId(R.id.itemTitle)).perform(
             typeText(firstItem),
             closeSoftKeyboard()
         )
-        val button = onView(withId(R.id.createItemButton))
+        val button = onView(withId(R.id.saveItemButton))
         button.check(matches(withText("Create Item")))
         button.perform(click())
         waitAfterSaveItem()
@@ -66,7 +66,7 @@ class NewItemFragmentTest {
             typeText(secondItem),
             closeSoftKeyboard()
         )
-        onView(withId(R.id.createItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(click())
         waitAfterSaveItem()
 
         onView(withText(firstItem)).check(matches(isDisplayed()))
@@ -83,7 +83,7 @@ class NewItemFragmentTest {
             .respondWith(imgGalleryResult)
 
         navigate_to(R.id.newEditFragment)
-        onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
+        onView(withId(R.id.itemPrompt)).check(matches(withText("New Item")))
 
         onView(withId(R.id.item_image)).perform(click())
         onView(withId(R.id.item_image)).check(matches(hasContentDescription()))
@@ -100,7 +100,7 @@ class NewItemFragmentTest {
             .respondWith(imgGalleryResult)
 
         navigate_to(R.id.newEditFragment)
-        onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
+        onView(withId(R.id.itemPrompt)).check(matches(withText("New Item")))
 
         onView(withId(R.id.item_take_picture)).perform(click())
         onView(withId(R.id.item_image)).check(matches(hasContentDescription()))

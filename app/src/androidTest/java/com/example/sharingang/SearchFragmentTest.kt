@@ -134,7 +134,7 @@ class SearchFragmentTest {
         onView(withId(R.id.category_spinner)).perform(click())
         onView(withText(category)).perform(click())
 
-        onView(withId(R.id.createItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(click())
         waitAfterSaveItem()
     }
 }

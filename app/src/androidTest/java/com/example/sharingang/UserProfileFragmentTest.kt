@@ -84,13 +84,13 @@ class UserProfileFragmentTest {
     @Test
     fun aUserCanSeeTheirItems() {
         navigate_to(R.id.newEditFragment)
-        onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
+        onView(withId(R.id.itemPrompt)).check(matches(withText("New Item")))
 
         onView(withId(R.id.itemTitle)).perform(
             typeText(fakeText),
             closeSoftKeyboard()
         )
-        val button = onView(withId(R.id.createItemButton))
+        val button = onView(withId(R.id.saveItemButton))
         button.check(matches(withText("Create Item")))
         button.perform(click())
         waitAfterSaveItem()
@@ -113,7 +113,7 @@ class UserProfileFragmentTest {
             typeText("TestItem"),
             closeSoftKeyboard()
         )
-        onView(withId(R.id.createItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(click())
         waitAfterSaveItem()
         FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_2
         onView(withId(R.id.item_list_view_title)).perform(click())
@@ -183,7 +183,7 @@ class UserProfileFragmentTest {
             closeSoftKeyboard()
         )
 
-        onView(withId(R.id.createItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(click())
         waitAfterSaveItem()
     }
 
@@ -198,7 +198,7 @@ class UserProfileFragmentTest {
             closeSoftKeyboard()
         )
         onView(withId(R.id.switch_is_request)).perform(click())
-        onView(withId(R.id.createItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(click())
         waitAfterSaveItem()
         navigate_to(R.id.userProfileFragment)
         onView(withText(firstItem)).check(matches(isDisplayed()))

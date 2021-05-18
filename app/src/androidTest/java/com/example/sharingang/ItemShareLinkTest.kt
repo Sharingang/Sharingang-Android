@@ -43,7 +43,7 @@ class ItemShareLinkTest {
             typeText(itemTitle),
             closeSoftKeyboard()
         )
-        val buttonCreate = onView(withId(R.id.createItemButton))
+        val buttonCreate = onView(withId(R.id.saveItemButton))
         buttonCreate.check(matches(withText("Create Item")))
         buttonCreate.perform(click())
         waitAfterSaveItem()

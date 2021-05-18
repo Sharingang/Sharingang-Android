@@ -47,7 +47,7 @@ class ChatTest {
             typeText("TestItem"),
             closeSoftKeyboard()
         )
-        onView(withId(R.id.createItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(click())
         waitAfterSaveItem()
         FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_2
         onView(withId(R.id.item_list_view_title)).perform(click())

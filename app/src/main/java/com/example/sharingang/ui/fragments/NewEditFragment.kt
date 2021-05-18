@@ -9,21 +9,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.sharingang.R
+import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.databinding.FragmentNewEditItemBinding
 import com.example.sharingang.models.Item
-import com.example.sharingang.viewmodels.ItemsViewModel
-import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.utils.ImageAccess
 import com.example.sharingang.utils.consumeLocation
 import com.example.sharingang.utils.doOrGetPermission
 import com.example.sharingang.utils.requestPermissionLauncher
+import com.example.sharingang.viewmodels.ItemsViewModel
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -43,10 +44,11 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class NewEditFragment : Fragment() {
 
+    private val args: NewEditFragmentArgs by navArgs()
     private val viewModel: ItemsViewModel by activityViewModels()
     private var existingItem: Item? = null
 
-    private lateinit var observer: ImageAccess
+    private lateinit var imageAccess: ImageAccess
 
     private var imageUri: Uri? = null
 
@@ -75,29 +77,30 @@ class NewEditFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        observer = ImageAccess(requireActivity())
-        lifecycle.addObserver(observer)
+        imageAccess = ImageAccess(requireActivity())
+        lifecycle.addObserver(imageAccess)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        userId = currentUserProvider.getCurrentUserId()
+        existingItem = args.item
+
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_new_edit_item, container, false)
-        setupNewOrEditFragment()
-        setupAutocomplete()
-        userId = currentUserProvider.getCurrentUserId()
 
-        observer.setupImageView(binding.itemImage)
-        setupBinding()
-
-        setupButtonActions()
+        setupAddressAutocomplete()
         setupLocation()
+        setupImagePicker()
+        setupItemForm()
+        setupSaveButton()
+
         return binding.root
     }
 
-    private fun setupAutocomplete() {
+    private fun setupAddressAutocomplete() {
         geocoder = Geocoder(requireContext())
         if (!Places.isInitialized()) {
             Places.initialize(requireContext(), getString(R.string.google_api_key))
@@ -121,34 +124,35 @@ class NewEditFragment : Fragment() {
         })
     }
 
-    private fun setupButtonActions() {
-        listOf(binding.createItemButton, binding.editItemButton).forEach {
-            onSaveButtonClicked(it)
-        }
+    private fun setupImagePicker() {
+        imageAccess.setupImageView(binding.itemImage)
         binding.itemOpenGallery.setOnClickListener {
-            observer.openGallery()
+            imageAccess.openGallery()
         }
         binding.itemTakePicture.setOnClickListener {
-            observer.openCamera()
+            imageAccess.openCamera()
         }
     }
 
-    private fun onSaveButtonClicked(button: Button) {
+    private fun setupSaveButton() {
+        val button = binding.saveItemButton
         button.setOnClickListener { view: View ->
+            if (!validateForm()) {
+                return@setOnClickListener
+            }
             button.isClickable = false
             binding.isLoading = true
-            imageUri = observer.getImageUri()
+            imageUri = imageAccess.getImageUri()
             val item = itemToAdd()
             viewModel.setItem(item) { itemId ->
                 binding.isLoading = false
                 if (itemId != null) {
                     Snackbar.make(binding.root, getString(R.string.item_save_success), Snackbar.LENGTH_SHORT).show()
-                    observer.unregister()
+                    imageAccess.unregister()
                     if (existingItem == null) {
                         view.findNavController().navigate(NewEditFragmentDirections.actionNewEditFragmentToItemsListFragment())
                     } else {
-                        view.findNavController().navigate(NewEditFragmentDirections.actionNewEditFragmentToDetailedItemFragment(item)
-                        )
+                        view.findNavController().navigate(NewEditFragmentDirections.actionNewEditFragmentToDetailedItemFragment(item))
                     }
                 } else {
                     button.isClickable = true
@@ -156,6 +160,17 @@ class NewEditFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun validateForm(): Boolean {
+        val titleEmpty = binding.title?.trim()?.isEmpty() ?: true
+        binding.itemTitleContainer.error =
+            if (titleEmpty) getString(R.string.required_field) else null
+        if (titleEmpty) {
+            binding.itemTitle.requestFocus()
+        }
+
+        return !titleEmpty
     }
 
     private fun itemToAdd(): Item {
@@ -206,18 +221,9 @@ class NewEditFragment : Fragment() {
         binding.postalAddress.text = address?.getAddressLine(0) ?: ""
     }
 
-    private fun setupNewOrEditFragment() {
-        val args = NewEditFragmentArgs.fromBundle(requireArguments())
-        existingItem = args.item
-        listOf(binding.editItemPrompt, binding.editItemButton).forEach {
-            it.visibility = if (existingItem == null) View.GONE else View.VISIBLE
-        }
-        listOf(binding.newItemPrompt, binding.createItemButton).forEach {
-            it.visibility = if (existingItem == null) View.VISIBLE else View.GONE
-        }
-    }
+    private fun setupItemForm() {
+        binding.isNewItem = existingItem == null
 
-    private fun setupBinding() {
         existingItem?.let {
             binding.title = it.title
             binding.description = it.description
@@ -231,5 +237,7 @@ class NewEditFragment : Fragment() {
             binding.switchIsRequest.isChecked = it.request
             updateLocationWithCoordinates(it.latitude, it.longitude)
         }
+
+        binding.itemTitle.doOnTextChanged { _, _, _, _ -> validateForm() }
     }
 }

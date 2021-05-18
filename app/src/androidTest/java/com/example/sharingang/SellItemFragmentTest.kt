@@ -32,13 +32,13 @@ class SellItemFragmentTest {
     @Test
     fun anItemCanBeEditedAndSeenOnItemsListFragment() {
         navigate_to(R.id.newEditFragment)
-        onView(withId(R.id.newItemPrompt))
+        onView(withId(R.id.itemPrompt))
             .check(matches(withText("New Item")))
         onView(withId(R.id.itemTitle)).perform(
             ViewActions.typeText(itemTitle),
             ViewActions.closeSoftKeyboard()
         )
-        val buttonCreate = onView(withId(R.id.createItemButton))
+        val buttonCreate = onView(withId(R.id.saveItemButton))
         buttonCreate.check(matches(withText("Create Item")))
         buttonCreate.perform(ViewActions.click())
         waitAfterSaveItem()
