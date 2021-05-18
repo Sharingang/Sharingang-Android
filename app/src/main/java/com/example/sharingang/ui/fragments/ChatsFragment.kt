@@ -54,7 +54,7 @@ class ChatsFragment : Fragment() {
         currentUserId = currentUserProvider.getCurrentUserId()
         binding = FragmentChatsBinding.inflate(inflater, container, false)
         if (currentUserId != null) {
-            userAdapter = UserAdapter(requireContext(), listUsers, firebaseFirestore,
+            userAdapter = UserAdapter(requireContext(), listUsers, this,
                 currentUserId!!, lifecycleScope)
             binding.chatUsersList.adapter = userAdapter
             setRecyclerViewDecoration(margin = 10)
@@ -86,7 +86,7 @@ class ChatsFragment : Fragment() {
                 // we update the list to show an accurate number of unread messages. We do this for
                 // every element in the list of partners.
                 chatPartnersRef.documents.forEach {
-                    //setOnDocumentChange(chatPartners.document(it.id)) <- Makes CI tests fail
+                    setOnDocumentChange(chatPartners.document(it.id))
                     val user = userRepository.get(it.id)
                     listUsers.add(user!!)
                 }
@@ -134,5 +134,11 @@ class ChatsFragment : Fragment() {
                 }
             }
         }
+    }
+
+   suspend fun getNumUnread(userId: String, partnerId: String): Long? {
+        return firebaseFirestore.collection(DatabaseFields.DBFIELD_USERS).document(userId)
+            .collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).document(partnerId)
+            .get().await().getLong(DatabaseFields.DBFIELD_NUM_UNREAD)
     }
 }

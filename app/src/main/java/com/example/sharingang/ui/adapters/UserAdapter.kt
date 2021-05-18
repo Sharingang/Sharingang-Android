@@ -9,16 +9,13 @@ import android.widget.TextView
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Database
 import com.bumptech.glide.Glide
 import com.example.sharingang.R
 import com.example.sharingang.models.User
+import com.example.sharingang.ui.fragments.ChatsFragment
 import com.example.sharingang.ui.fragments.ChatsFragmentDirections
-import com.example.sharingang.utils.constants.DatabaseFields
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 
 /**
@@ -28,13 +25,12 @@ import kotlinx.coroutines.tasks.await
  * @property users the list of users we are adapting
  */
 class UserAdapter(private val context: Context, private var users: MutableList<User>,
-var firebaseFirestore: FirebaseFirestore, private val currentUserId: String,
-private val lifecycleScope: LifecycleCoroutineScope) :
+                  private val fragment: ChatsFragment, private val currentUserId: String,
+                  private val lifecycleScope: LifecycleCoroutineScope) :
     RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
     init {
         users = mutableListOf()
-        firebaseFirestore = FirebaseFirestore.getInstance()
     }
 
     /**
@@ -88,10 +84,8 @@ private val lifecycleScope: LifecycleCoroutineScope) :
     private fun getUnreadMessagesIntoHolder(user: User, holder: ViewHolder) {
         lifecycleScope.launch(Dispatchers.IO) {
             // get the number of unread messages for that particular user
-            val numUnread =
-                firebaseFirestore.collection(DatabaseFields.DBFIELD_USERS).document(currentUserId)
-                    .collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).document(user.id!!)
-                    .get().await().getLong(DatabaseFields.DBFIELD_NUM_UNREAD)
+            val numUnread = fragment.getNumUnread(currentUserId, user.id!!)
+
             lifecycleScope.launch(Dispatchers.Main) {
                 holder.numUnread.visibility =
                     if(numUnread != null && numUnread > 0) View.VISIBLE else View.GONE
