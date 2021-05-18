@@ -233,7 +233,10 @@ class UserProfileFragment : Fragment() {
             binding.btnOpenCamera, binding.btnOpenGallery
         )
         val topInfo = binding.upfTopinfo
-        buttons.forEach { button -> button.setOnClickListener { setupPictureButton(button) } }
+        buttons.forEach { button -> button.setOnClickListener {
+            if (button == binding.btnOpenGallery) imageAccess.openGallery()
+            else imageAccess.openCamera()
+        } }
         topInfo.text = getString(R.string.userNotLoggedInInfo)
         setEmailText()
     }
@@ -247,11 +250,6 @@ class UserProfileFragment : Fragment() {
             Glide.with(this).load(userPictureUri).into(userProfilePicture)
             setEmailText()
         }
-    }
-
-    private fun setupPictureButton(button: Button) {
-        if (button == binding.btnOpenGallery) imageAccess.openGallery()
-        else imageAccess.openCamera()
     }
 
     private fun changeImage(imageUri: Uri?) {
