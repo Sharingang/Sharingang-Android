@@ -138,9 +138,12 @@ class MessageFragment : Fragment() {
         val date = Date()
         var currentNumUnread: Long?
         lifecycleScope.launch(Dispatchers.Main) {
+            // get the current number of unread messages from the database
             currentNumUnread = getUserDocument(partnerId)
                 .collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).document(currentUserId)
                 .get().await().getLong(DatabaseFields.DBFIELD_NUM_UNREAD)
+            // if the document does not exist, we have a new partner -> the number of unread
+            // messages is then 1.
             val nextNumUnread = if(currentNumUnread == null) 1 else currentNumUnread!! + 1
             val chatMaps = generateUnreadData(date, nextNumUnread)
             val lastTimeChatCurrent = chatMaps.first

@@ -66,6 +66,7 @@ private val lifecycleScope: LifecycleCoroutineScope) :
                 )
             }
             lifecycleScope.launch(Dispatchers.IO) {
+                // get the number of unread messages for that particular user
                 val numUnread =
                     firebaseFirestore.collection(DatabaseFields.DBFIELD_USERS).document(currentUserId)
                         .collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).document(user.id!!)

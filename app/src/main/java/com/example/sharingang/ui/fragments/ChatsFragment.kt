@@ -82,6 +82,9 @@ class ChatsFragment : Fragment() {
                 val chatPartners = firebaseFirestore.collection(DatabaseFields.DBFIELD_USERS)
                     .document(currentUserId!!).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
                 val chatPartnersRef = chatPartners.get().await()
+                // if we see a change in the document that links the current user with the partner,
+                // we update the list to show an accurate number of unread messages. We do this for
+                // every element in the list of partners.
                 chatPartnersRef.documents.forEach {
                     setOnDocumentChange(chatPartners.document(it.id))
                     val user = userRepository.get(it.id)
