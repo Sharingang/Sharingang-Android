@@ -25,6 +25,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.HashMap
 
 
 /**
@@ -43,6 +44,8 @@ class MessageFragment : Fragment() {
     private val args: MessageFragmentArgs by navArgs()
     private val messagesLiveData: MutableLiveData<List<Chat>> = MutableLiveData(listOf())
     private val listChats: MutableList<Chat> = mutableListOf()
+    private lateinit var currentUserDocRef: DocumentReference
+    private lateinit var partnerUserDocRef: DocumentReference
 
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
@@ -80,6 +83,8 @@ class MessageFragment : Fragment() {
         partnerUsername = args.partnerUsername
         partnerProfilePic = args.partnerProfilePictureUrl
         currentUserId = currentUserProvider.getCurrentUserId()!!
+        currentUserDocRef = getUserDocument(currentUserId)
+        partnerUserDocRef = getUserDocument(partnerId)
         setupFields()
         setupSendButton()
         setupUI()
@@ -129,48 +134,27 @@ class MessageFragment : Fragment() {
      * @param message the message to send
      */
     private fun sendMessage(from: String, to: String, message: String) {
-        val data = hashMapOf<String, Any>(
-            DatabaseFields.DBFIELD_MESSAGE to message,
-            DatabaseFields.DBFIELD_FROM to from,
-            DatabaseFields.DBFIELD_TO to to
-        )
+        val messageData = generateMsgData(from, to, message)
         val date = Date()
-        var currentNumUnread: Long? = 0
+        var currentNumUnread: Long?
         lifecycleScope.launch(Dispatchers.Main) {
             currentNumUnread = getUserDocument(partnerId)
                 .collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).document(currentUserId)
                 .get().await().getLong(DatabaseFields.DBFIELD_NUM_UNREAD)
-
             val nextNumUnread = if(currentNumUnread == null) 0 else currentNumUnread!! + 1
-
-            val lastTimeChatCurrent = hashMapOf(
-                DatabaseFields.DBFIELD_LAST_MESSAGE to "$date (${System.currentTimeMillis()})",
-                DatabaseFields.DBFIELD_HAS_UNREAD to false,
-                DatabaseFields.DBFIELD_NUM_UNREAD to 0
-            )
-
-            val lastTimeChatPartner = hashMapOf(
-                DatabaseFields.DBFIELD_LAST_MESSAGE to "$date (${System.currentTimeMillis()})",
-                DatabaseFields.DBFIELD_HAS_UNREAD to true,
-                DatabaseFields.DBFIELD_NUM_UNREAD to nextNumUnread
-            )
-
+            val chatMaps = generateUnreadData(date, nextNumUnread)
+            val lastTimeChatCurrent = chatMaps.first
+            val lastTimeChatPartner = chatMaps.second
             val fromToPair = LinkedPair(from, to)
-            val currentUD = getUserDocument(currentUserId)
-            currentUD.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
-                .document(partnerId).set(lastTimeChatCurrent)
-            currentUD.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
-            val partnerUD = getUserDocument(partnerId)
-            partnerUD.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
-                .document(currentUserId).set(lastTimeChatPartner)
+            updateLastChat(currentUserId, partnerId, lastTimeChatCurrent)
+            updateLastChat(partnerId, currentUserId, lastTimeChatPartner)
             listOf(from, to).forEach {
                 val userDocument = getUserDocument(it)
                 userDocument.collection(DatabaseFields.DBFIELD_CHATS).document(fromToPair.otherOf(it)!!)
-                    .collection(DatabaseFields.DBFIELD_MESSAGES).document(date.toString()).set(data)
+                    .collection(DatabaseFields.DBFIELD_MESSAGES).document(date.toString()).set(messageData)
             }
             binding.messageEditText.text.clear()
         }
-
     }
 
     /**
@@ -227,15 +211,7 @@ class MessageFragment : Fragment() {
                 lifecycleScope.launch(Dispatchers.Main) {
                     if(isAdded) {
                         getAndDisplayMessages()
-                        val currentUD = getUserDocument(currentUserId)
-                        currentUD.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
-                            .document(partnerId).update(
-                                DatabaseFields.DBFIELD_HAS_UNREAD, false
-                            )
-                        currentUD.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
-                            .document(partnerId).update(
-                                DatabaseFields.DBFIELD_NUM_UNREAD, 0
-                            )
+                        clearNumUnread(currentUserDocRef)
                     }
                 }
             }
@@ -255,16 +231,70 @@ class MessageFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.Main) {
             if (listChats.isNotEmpty()) {
                 binding.history.scrollToPosition(listChats.size - 1)
-                val currentUD = getUserDocument(currentUserId)
-                currentUD.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
-                    .document(partnerId).update(
-                        DatabaseFields.DBFIELD_HAS_UNREAD, false
-                    )
-                currentUD.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
-                    .document(partnerId).update(
-                        DatabaseFields.DBFIELD_NUM_UNREAD, 0
-                    )
+                clearNumUnread(currentUserDocRef)
             }
         }
+    }
+
+    /**
+     * Generates the data of a message document
+     *
+     * @param from the sender
+     * @param to the receiver
+     * @param msg the message
+     * @return
+     */
+    private fun generateMsgData(from: String, to: String, msg: String): HashMap<String, String> {
+        return (
+            hashMapOf (
+                DatabaseFields.DBFIELD_MESSAGE to msg,
+                DatabaseFields.DBFIELD_FROM to from,
+                DatabaseFields.DBFIELD_TO to to
+            )
+        )
+    }
+
+    /**
+     * Generates the data for unread messages
+     *
+     * @param date the date
+     * @param updatedUnread the number of unread messages
+     * @return the generated data for both users as a Pair(current, partner)
+     */
+    private fun generateUnreadData(date: Date, updatedUnread: Long):
+            Pair<HashMap<String, out Any>, HashMap<String, out Any>> {
+        val lastTimeChatCurrent = hashMapOf(
+            DatabaseFields.DBFIELD_LAST_MESSAGE to "$date (${System.currentTimeMillis()})",
+            DatabaseFields.DBFIELD_NUM_UNREAD to 0
+        )
+
+        val lastTimeChatPartner = hashMapOf(
+            DatabaseFields.DBFIELD_LAST_MESSAGE to "$date (${System.currentTimeMillis()})",
+            DatabaseFields.DBFIELD_NUM_UNREAD to updatedUnread
+        )
+        return Pair(lastTimeChatCurrent, lastTimeChatPartner)
+    }
+
+    /**
+     * Updates the last time two users have chatted
+     *
+     * @param rootUser the user whose data we need to update
+     * @param childUser the user with whom the rootUser's data we need to update
+     * @param data the new data
+     */
+    private fun updateLastChat(rootUser: String, childUser: String, data: HashMap<String, out Any>) {
+        firebaseFirestore.collection(DatabaseFields.DBFIELD_USERS).document(rootUser)
+            .collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).document(childUser)
+            .set(data)
+    }
+
+    /**
+     * Clears the number of unread messages for a particular document
+     *
+     * @param documentReference the document's number of unread messages to clear
+     */
+    private fun clearNumUnread(documentReference: DocumentReference) {
+        documentReference.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
+            .document(partnerId).update(DatabaseFields.DBFIELD_NUM_UNREAD, 0)
     }
 }

@@ -16,6 +16,7 @@ import com.example.sharingang.models.User
 import com.example.sharingang.ui.adapters.UserAdapter
 import com.example.sharingang.database.repositories.UserRepository
 import com.example.sharingang.utils.constants.DatabaseFields
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -79,14 +80,14 @@ class ChatsFragment : Fragment() {
                 // partners (user Ids), so that we can then use this snapshot to read
                 // the data of the documents we need inside.
                 val chatPartners = firebaseFirestore.collection(DatabaseFields.DBFIELD_USERS)
-                    .document(currentUserId!!).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).get()
-                    .await()
-                chatPartners.documents.forEach {
+                    .document(currentUserId!!).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
+                val chatPartnersRef = chatPartners.get().await()
+                chatPartnersRef.documents.forEach {
+                    setOnDocumentChange(chatPartners.document(it.id))
                     val user = userRepository.get(it.id)
                     listUsers.add(user!!)
                 }
                 usersLiveData.postValue(listUsers)
-
             }
         } else {
             binding.chatUsersList.visibility = View.GONE
@@ -113,5 +114,22 @@ class ChatsFragment : Fragment() {
                 }
             }
         })
+    }
+
+    /**
+     * Adds a change listener to a particular document
+     *
+     * @param ref the documents to add the listener to
+     */
+    private fun setOnDocumentChange (ref: DocumentReference) {
+        ref.addSnapshotListener { _, e ->
+            if (e == null) {
+                lifecycleScope.launch(Dispatchers.Main) {
+                    if(isAdded) {
+                        usersLiveData.postValue(listUsers)
+                    }
+                }
+            }
+        }
     }
 }
