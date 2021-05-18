@@ -39,7 +39,7 @@ class RandomItemTest {
         )
         val button = Espresso.onView(withId(R.id.saveItemButton))
         button.check(matches(withText("Create Item")))
-        button.perform(click())
+        button.perform(scrollTo(), click())
         waitAfterSaveItem()
         navigate_to(R.id.nav_random_item)
         Espresso.onView(withId(R.id.itemTitle))

@@ -56,7 +56,7 @@ class NewItemFragmentTest {
         )
         val button = onView(withId(R.id.saveItemButton))
         button.check(matches(withText("Create Item")))
-        button.perform(click())
+        button.perform(scrollTo(), click())
         waitAfterSaveItem()
 
         onView(withText(firstItem)).check(matches(isDisplayed()))
@@ -66,7 +66,7 @@ class NewItemFragmentTest {
             typeText(secondItem),
             closeSoftKeyboard()
         )
-        onView(withId(R.id.saveItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
 
         onView(withText(firstItem)).check(matches(isDisplayed()))

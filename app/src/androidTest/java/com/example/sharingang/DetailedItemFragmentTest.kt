@@ -55,7 +55,7 @@ class DetailedItemFragmentTest {
         )
         onView(withId(R.id.category_spinner)).perform(click())
         onView(withText(testCategory)).perform(click())
-        onView(withId(R.id.saveItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
 
         onView(withText(testTitle)).perform(click())
@@ -75,7 +75,7 @@ class DetailedItemFragmentTest {
             typeText(testTitle),
             closeSoftKeyboard()
         )
-        onView(withId(R.id.saveItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
         onView(withText(testTitle)).perform(click())
 
@@ -109,7 +109,7 @@ class DetailedItemFragmentTest {
         onView(withId(R.id.item_take_picture)).perform(click())
         onView(withId(R.id.item_image)).check(matches(hasContentDescription()))
         val buttonCreate = onView(withId(R.id.saveItemButton))
-        buttonCreate.perform(click())
+        buttonCreate.perform(scrollTo(), click())
         waitAfterSaveItem()
 
         onView(withId(R.id.item_list_view_title)).perform(click())
@@ -171,7 +171,7 @@ class DetailedItemFragmentTest {
                 typeText(itemName),
                 closeSoftKeyboard()
             )
-            onView(withId(R.id.saveItemButton)).perform(click())
+            onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
             waitAfterSaveItem()
         }
     }
@@ -184,7 +184,7 @@ class DetailedItemFragmentTest {
             typeText(testTitle),
             closeSoftKeyboard()
         )
-        onView(withId(R.id.saveItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
 
         onView(withText(testTitle)).perform(click())
@@ -207,7 +207,7 @@ class DetailedItemFragmentTest {
             typeText("42"),
             closeSoftKeyboard()
         )
-        onView(withId(R.id.saveItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
 
         // User 1 clicks on the item

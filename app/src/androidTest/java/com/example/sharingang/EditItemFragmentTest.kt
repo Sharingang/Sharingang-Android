@@ -51,7 +51,7 @@ class EditItemFragmentTest {
         onView(withId(R.id.category_spinner)).perform(click())
         onView(withText("Book")).perform(click())
 
-        onView(withId(R.id.saveItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
 
         onView(withText(item)).check(matches(isDisplayed()))
@@ -64,7 +64,7 @@ class EditItemFragmentTest {
         onView(withId(R.id.category_spinner)).perform(click())
         onView(withText("Games")).perform(click())
 
-        onView(withId(R.id.saveItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
 
         onView(withMenuIdOrText(R.id.menuEdit, R.string.edit_item)).perform(click())
@@ -91,7 +91,7 @@ class EditItemFragmentTest {
         )
         val buttonCreate = onView(withId(R.id.saveItemButton))
         buttonCreate.check(matches(withText("Create Item")))
-        buttonCreate.perform(click())
+        buttonCreate.perform(scrollTo(), click())
         waitAfterSaveItem()
 
         onView(withText(item))
@@ -115,7 +115,7 @@ class EditItemFragmentTest {
             closeSoftKeyboard()
         )
 
-        onView(withId(R.id.saveItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
 
         pressBack()
