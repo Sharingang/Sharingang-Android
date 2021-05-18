@@ -78,7 +78,6 @@ class UserProfileFragmentTest {
         navigate_to(R.id.userProfileFragment)
         onView(withId(R.id.btn_open_camera)).check(matches(isDisplayed()))
         onView(withId(R.id.btn_open_gallery)).check(matches(isDisplayed()))
-        onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
     }
 
     @Test
@@ -151,10 +150,6 @@ class UserProfileFragmentTest {
 
         navigate_to(R.id.userProfileFragment)
         onView(withId(R.id.btn_open_gallery)).perform(click())
-        onView(withId(R.id.btnApply)).check(matches(isDisplayed()))
-        onView(withId(R.id.btnApply)).perform(click())
-        onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
-
         Intents.release()
     }
 
@@ -169,10 +164,6 @@ class UserProfileFragmentTest {
 
         navigate_to(R.id.userProfileFragment)
         onView(withId(R.id.btn_open_camera)).perform(click())
-        onView(withId(R.id.btnApply)).check(matches(isDisplayed()))
-        onView(withId(R.id.btnApply)).perform(click())
-        onView(withId(R.id.btnApply)).check(matches(not(isDisplayed())))
-
         Intents.release()
     }
 

@@ -160,7 +160,7 @@ class UserProfileFragment : Fragment() {
     private fun initSetup() {
         listOf(
             binding.upfTopinfo, binding.imageView, binding.btnOpenCamera, binding.btnOpenGallery,
-            binding.nameText, binding.textEmail, binding.btnApply, binding.ratingTextview,
+            binding.nameText, binding.textEmail, binding.ratingTextview,
             binding.offersRequestsGroup, binding.btnReport, binding.userItemList, binding.btnLogout,
             binding.btnLogin, binding.btnChat
         ).forEach { view -> view.visibility = View.GONE }
@@ -230,10 +230,13 @@ class UserProfileFragment : Fragment() {
 
     private fun setupViews() {
         val buttons = listOf(
-            binding.btnApply, binding.btnOpenCamera, binding.btnOpenGallery
+            binding.btnOpenCamera, binding.btnOpenGallery
         )
         val topInfo = binding.upfTopinfo
-        buttons.forEach { button -> button.setOnClickListener { setupPictureButton(button) } }
+        buttons.forEach { button -> button.setOnClickListener {
+            if (button == binding.btnOpenGallery) imageAccess.openGallery()
+            else imageAccess.openCamera()
+        } }
         topInfo.text = getString(R.string.userNotLoggedInInfo)
         setEmailText()
     }
@@ -246,24 +249,6 @@ class UserProfileFragment : Fragment() {
             val userProfilePicture = binding.imageView
             Glide.with(this).load(userPictureUri).into(userProfilePicture)
             setEmailText()
-        }
-    }
-
-    private fun setupPictureButton(button: Button) {
-        when (button) {
-            binding.btnOpenCamera, binding.btnOpenGallery -> {
-                binding.btnApply.visibility = View.VISIBLE
-                if (button == binding.btnOpenGallery) imageAccess.openGallery()
-                else imageAccess.openCamera()
-            }
-            binding.btnApply -> {
-                imageUri = imageAccess.getImageUri()
-                if (imageUri != Uri.EMPTY && imageUri != null) {
-                    binding.imageView.setImageURI(imageUri)
-                    changeImage(imageUri)
-                }
-                binding.btnApply.visibility = View.GONE
-            }
         }
     }
 
@@ -335,6 +320,16 @@ class UserProfileFragment : Fragment() {
                         shownUserProfileId!!, binding.nameText.text.toString(), imageUri?.toString()
                     )
             )
+        }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        if(imageAccess.getImageUri() != null) {
+            val currentImageUri = imageAccess.getImageUri()
+            binding.imageView.setImageURI(currentImageUri)
+            changeImage(currentImageUri)
         }
     }
 }
