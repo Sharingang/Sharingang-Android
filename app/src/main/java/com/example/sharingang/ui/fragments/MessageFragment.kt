@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Database
 import com.bumptech.glide.Glide
 import com.example.sharingang.models.Chat
 import com.example.sharingang.ui.adapters.MessageAdapter
@@ -133,16 +134,27 @@ class MessageFragment : Fragment() {
             DatabaseFields.DBFIELD_TO to to
         )
         val date = Date()
-        val lastTimeChat = hashMapOf(
-            DatabaseFields.DBFIELD_LAST_MESSAGE to "$date (${System.currentTimeMillis()})"
+        val lastTimeChatCurrent = hashMapOf(
+            DatabaseFields.DBFIELD_LAST_MESSAGE to "$date (${System.currentTimeMillis()})",
+            DatabaseFields.DBFIELD_HAS_UNREAD to false
         )
+
+        val lastTimeChatPartner = hashMapOf(
+            DatabaseFields.DBFIELD_LAST_MESSAGE to "$date (${System.currentTimeMillis()})",
+            DatabaseFields.DBFIELD_HAS_UNREAD to true
+        )
+
         val fromToPair = LinkedPair(from, to)
+        val currentUD = getUserDocument(currentUserId)
+        currentUD.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
+            .document(partnerId).set(lastTimeChatCurrent)
+        val partnerUD = getUserDocument(partnerId)
+        partnerUD.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
+            .document(currentUserId).set(lastTimeChatPartner)
         listOf(from, to).forEach {
             val userDocument = getUserDocument(it)
             userDocument.collection(DatabaseFields.DBFIELD_CHATS).document(fromToPair.otherOf(it)!!)
                 .collection(DatabaseFields.DBFIELD_MESSAGES).document(date.toString()).set(data)
-            userDocument.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
-                .document(fromToPair.otherOf(it)!!).set(lastTimeChat)
         }
         binding.messageEditText.text.clear()
     }
@@ -199,7 +211,15 @@ class MessageFragment : Fragment() {
         ref.addSnapshotListener { _, e ->
             if (e == null) {
                 lifecycleScope.launch(Dispatchers.Main) {
-                    getAndDisplayMessages()
+                    if(isAdded) {
+                        getAndDisplayMessages()
+                        val currentUD = getUserDocument(currentUserId)
+                        currentUD.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
+                            .document(partnerId).update(
+                                DatabaseFields.DBFIELD_HAS_UNREAD, false
+                            )
+
+                    }
                 }
             }
         }
@@ -218,6 +238,11 @@ class MessageFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.Main) {
             if (listChats.isNotEmpty()) {
                 binding.history.scrollToPosition(listChats.size - 1)
+                val currentUD = getUserDocument(currentUserId)
+                currentUD.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
+                    .document(partnerId).update(
+                        DatabaseFields.DBFIELD_HAS_UNREAD, false
+                    )
             }
         }
     }

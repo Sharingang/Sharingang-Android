@@ -6,12 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Database
 import com.bumptech.glide.Glide
 import com.example.sharingang.R
 import com.example.sharingang.models.User
 import com.example.sharingang.ui.fragments.ChatsFragmentDirections
+import com.example.sharingang.utils.constants.DatabaseFields
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 
 /**
@@ -20,7 +27,9 @@ import com.example.sharingang.ui.fragments.ChatsFragmentDirections
  * @property context the context
  * @property users the list of users we are adapting
  */
-class UserAdapter(private val context: Context, private var users: MutableList<User>) :
+class UserAdapter(private val context: Context, private var users: MutableList<User>,
+private val firebaseFirestore: FirebaseFirestore, private val currentUserId: String,
+private val lifecycleScope: LifecycleCoroutineScope) :
     RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
     init {
@@ -35,6 +44,7 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
     class ViewHolder(userEntryView: View) : RecyclerView.ViewHolder(userEntryView) {
         var username: TextView = userEntryView.findViewById(R.id.chatPartnerUsername)
         var imageView: ImageView = userEntryView.findViewById(R.id.chatPartnerPic)
+        var redDot: ImageView = userEntryView.findViewById(R.id.red_dot)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -55,6 +65,18 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
                     )
                 )
             }
+            lifecycleScope.launch(Dispatchers.IO) {
+                val hasUnreadMessages =
+                    firebaseFirestore.collection(DatabaseFields.DBFIELD_USERS).document(currentUserId)
+                        .collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).document(user.id!!)
+                        .get().await().getBoolean(DatabaseFields.DBFIELD_HAS_UNREAD)
+                lifecycleScope.launch(Dispatchers.Main) {
+                    holder.redDot.visibility =
+                        if(hasUnreadMessages != null && hasUnreadMessages) View.VISIBLE
+                        else View.GONE
+                }
+            }
+
         }
     }
 

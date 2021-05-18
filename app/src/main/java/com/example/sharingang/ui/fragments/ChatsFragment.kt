@@ -53,7 +53,8 @@ class ChatsFragment : Fragment() {
         currentUserId = currentUserProvider.getCurrentUserId()
         binding = FragmentChatsBinding.inflate(inflater, container, false)
         if (currentUserId != null) {
-            userAdapter = UserAdapter(requireContext(), listUsers)
+            userAdapter = UserAdapter(requireContext(), listUsers, firebaseFirestore,
+                currentUserId!!, lifecycleScope)
             binding.chatUsersList.adapter = userAdapter
             setRecyclerViewDecoration(margin = 10)
             binding.chatUsersList.layoutManager = LinearLayoutManager(requireContext())
