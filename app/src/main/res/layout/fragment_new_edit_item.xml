@@ -12,6 +12,10 @@
             type="Boolean" />
 
         <variable
+            name="isAuthenticated"
+            type="Boolean" />
+
+        <variable
             name="title"
             type="String" />
 
@@ -49,9 +53,19 @@
             android:visibility="@{isLoading ? View.VISIBLE : View.INVISIBLE}"
             tools:visibility="visible" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/userNotLoggedInCreateItem"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:visibility="@{isAuthenticated ? View.GONE : View.VISIBLE}"
+            tools:visibility="gone"/>
+
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="@{isAuthenticated ? View.VISIBLE : View.GONE}">
 
             <LinearLayout
                 android:layout_width="match_parent"

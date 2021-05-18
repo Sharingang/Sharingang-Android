@@ -29,6 +29,8 @@
     <string name="enter_address">Enter Address</string>
     <string name="item">Item</string>
     <string name="userNotLoggedInInfo">You need to be logged in to view your User Profile.</string>
+    <string name="userNotLoggedInCreateItem">You need to be logged in to create an item.</string>
+    <string name="userNotLoggedInWishlist">You need to be logged in to access the wishlist.</string>
     <string name="default_rating">No Ratings</string>
     <string name="apply_rating">Rate</string>
     <string-array name="categories">

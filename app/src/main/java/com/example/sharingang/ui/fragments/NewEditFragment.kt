@@ -46,7 +46,9 @@ class NewEditFragment : Fragment() {
 
     private val args: NewEditFragmentArgs by navArgs()
     private val viewModel: ItemsViewModel by activityViewModels()
+
     private var existingItem: Item? = null
+    private var userId: String? = null
 
     private lateinit var imageAccess: ImageAccess
 
@@ -56,7 +58,6 @@ class NewEditFragment : Fragment() {
 
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
-    private var userId: String? = null
 
     private lateinit var fusedLocationCreate: FusedLocationProviderClient
     private lateinit var geocoder: Geocoder
@@ -177,7 +178,7 @@ class NewEditFragment : Fragment() {
      * Check if the form is valid.
      * If not, it displays error messages on the view.
      *
-     * @return wether the form is valid and ready to be saved
+     * @return whether the form is valid and ready to be saved
      */
     private fun validateForm(): Boolean {
         val titleEmpty = binding.title?.trim()?.isEmpty() ?: true
@@ -202,7 +203,7 @@ class NewEditFragment : Fragment() {
             categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
             latitude = binding.latitude?.toDoubleOrNull() ?: 0.0,
             longitude = binding.longitude?.toDoubleOrNull() ?: 0.0,
-            userId = existingItem?.userId ?: userId,
+            userId = existingItem?.userId ?: userId!!, // The form is only displayed for logged in users
             createdAt = existingItem?.createdAt,
             localId = existingItem?.localId ?: 0,
             request = binding.switchIsRequest.isChecked
@@ -244,6 +245,7 @@ class NewEditFragment : Fragment() {
      */
     private fun setupItemForm() {
         binding.isNewItem = existingItem == null
+        binding.isAuthenticated = userId != null
 
         existingItem?.let {
             binding.title = it.title

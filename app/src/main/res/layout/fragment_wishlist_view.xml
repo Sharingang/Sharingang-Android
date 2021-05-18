@@ -2,7 +2,17 @@
 
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="isAuthenticated"
+            type="Boolean" />
+    </data>
 
     <GridLayout
         android:layout_width="match_parent"
@@ -11,6 +21,15 @@
         android:orientation="vertical"
         android:paddingLeft="4dp"
         android:paddingRight="4dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/userNotLoggedInWishlist"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:visibility="@{isAuthenticated ? View.GONE : View.VISIBLE}"
+            tools:visibility="gone"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/wishlistview"

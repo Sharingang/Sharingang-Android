@@ -49,14 +49,12 @@ class WishlistViewFragment : Fragment() {
                     item
                 )
             })
+
         checkUser()
         return binding.root
     }
 
     private fun checkUser() {
-        if (currentUserProvider.getCurrentUserId() == null) {
-            Toast.makeText(this.context, "Login to view your wish list", Toast.LENGTH_SHORT).show()
-        }
+        binding.isAuthenticated = currentUserProvider.getCurrentUserId() != null
     }
-
 }
