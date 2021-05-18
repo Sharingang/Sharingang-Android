@@ -28,12 +28,13 @@ import kotlinx.coroutines.tasks.await
  * @property users the list of users we are adapting
  */
 class UserAdapter(private val context: Context, private var users: MutableList<User>,
-private val firebaseFirestore: FirebaseFirestore, private val currentUserId: String,
+var firebaseFirestore: FirebaseFirestore, private val currentUserId: String,
 private val lifecycleScope: LifecycleCoroutineScope) :
     RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
     init {
         users = mutableListOf()
+        firebaseFirestore = FirebaseFirestore.getInstance()
     }
 
     /**
