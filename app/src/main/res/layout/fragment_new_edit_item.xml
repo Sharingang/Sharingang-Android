@@ -73,7 +73,8 @@
                         android:layout_height="wrap_content"
                         android:text="@{isNewItem ? @string/new_item : @string/edit_item}"
                         android:textSize="30sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:text="@string/new_item" />
 
                 </LinearLayout>
 
@@ -267,7 +268,8 @@
                     android:id="@+id/saveItemButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{isNewItem ? @string/create_item : @string/edit}" />
+                    android:text="@{isNewItem ? @string/create_item : @string/edit}"
+                    tools:text="@string/create_item" />
             </LinearLayout>
 
         </LinearLayout>

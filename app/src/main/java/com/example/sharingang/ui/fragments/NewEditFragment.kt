@@ -134,34 +134,51 @@ class NewEditFragment : Fragment() {
         }
     }
 
+    /**
+     * Setup click listener for the save button
+     */
     private fun setupSaveButton() {
         val button = binding.saveItemButton
-        button.setOnClickListener { view: View ->
-            if (!validateForm()) {
-                return@setOnClickListener
-            }
-            button.isClickable = false
-            binding.isLoading = true
-            imageUri = imageAccess.getImageUri()
-            val item = itemToAdd()
-            viewModel.setItem(item) { itemId ->
-                binding.isLoading = false
-                if (itemId != null) {
-                    Snackbar.make(binding.root, getString(R.string.item_save_success), Snackbar.LENGTH_SHORT).show()
-                    imageAccess.unregister()
-                    if (existingItem == null) {
-                        view.findNavController().navigate(NewEditFragmentDirections.actionNewEditFragmentToItemsListFragment())
-                    } else {
-                        view.findNavController().navigate(NewEditFragmentDirections.actionNewEditFragmentToDetailedItemFragment(item))
-                    }
-                } else {
-                    button.isClickable = true
-                    Snackbar.make(binding.root, getString(R.string.item_save_failure), Snackbar.LENGTH_SHORT).show()
-                }
+        button.setOnClickListener {
+            if (validateForm()) {
+                saveItem()
             }
         }
     }
 
+    /**
+     * Save the item to the database and navigate to it
+     * Doesn't perform validation!
+     */
+    private fun saveItem() {
+        val button = binding.saveItemButton
+        button.isClickable = false
+        binding.isLoading = true
+        imageUri = imageAccess.getImageUri()
+        val item = itemToAdd()
+        viewModel.setItem(item) { itemId ->
+            binding.isLoading = false
+            if (itemId != null) {
+                Snackbar.make(binding.root, getString(R.string.item_save_success), Snackbar.LENGTH_SHORT).show()
+                imageAccess.unregister()
+                if (existingItem == null) {
+                    button.findNavController().navigate(NewEditFragmentDirections.actionNewEditFragmentToItemsListFragment())
+                } else {
+                    button.findNavController().navigate(NewEditFragmentDirections.actionNewEditFragmentToDetailedItemFragment(item))
+                }
+            } else {
+                button.isClickable = true
+                Snackbar.make(binding.root, getString(R.string.item_save_failure), Snackbar.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    /**
+     * Check if the form is valid.
+     * If not, it displays error messages on the view.
+     *
+     * @return wether the form is valid and ready to be saved
+     */
     private fun validateForm(): Boolean {
         val titleEmpty = binding.title?.trim()?.isEmpty() ?: true
         binding.itemTitleContainer.error =
@@ -221,6 +238,10 @@ class NewEditFragment : Fragment() {
         binding.postalAddress.text = address?.getAddressLine(0) ?: ""
     }
 
+    /**
+     * Retrieve the existing item and populate the bindings
+     * Add event listener to validate the form
+     */
     private fun setupItemForm() {
         binding.isNewItem = existingItem == null
 
