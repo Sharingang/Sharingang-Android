@@ -141,7 +141,7 @@ class MessageFragment : Fragment() {
             currentNumUnread = getUserDocument(partnerId)
                 .collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).document(currentUserId)
                 .get().await().getLong(DatabaseFields.DBFIELD_NUM_UNREAD)
-            val nextNumUnread = if(currentNumUnread == null) 0 else currentNumUnread!! + 1
+            val nextNumUnread = if(currentNumUnread == null) 1 else currentNumUnread!! + 1
             val chatMaps = generateUnreadData(date, nextNumUnread)
             val lastTimeChatCurrent = chatMaps.first
             val lastTimeChatPartner = chatMaps.second
