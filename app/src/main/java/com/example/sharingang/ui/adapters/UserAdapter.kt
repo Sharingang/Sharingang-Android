@@ -65,18 +65,7 @@ private val lifecycleScope: LifecycleCoroutineScope) :
                     )
                 )
             }
-            lifecycleScope.launch(Dispatchers.IO) {
-                // get the number of unread messages for that particular user
-                val numUnread =
-                    firebaseFirestore.collection(DatabaseFields.DBFIELD_USERS).document(currentUserId)
-                        .collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).document(user.id!!)
-                        .get().await().getLong(DatabaseFields.DBFIELD_NUM_UNREAD)
-                lifecycleScope.launch(Dispatchers.Main) {
-                    holder.numUnread.visibility =
-                        if(numUnread != null && numUnread > 0) View.VISIBLE else View.GONE
-                    holder.numUnread.text = numUnread.toString()
-                }
-            }
+            getUnreadMessagesIntoHolder(user = user, holder = holder)
         }
     }
 
@@ -93,6 +82,21 @@ private val lifecycleScope: LifecycleCoroutineScope) :
         users.clear()
         users.addAll(newData)
         notifyDataSetChanged()
+    }
+
+    private fun getUnreadMessagesIntoHolder(user: User, holder: ViewHolder) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            // get the number of unread messages for that particular user
+            val numUnread =
+                firebaseFirestore.collection(DatabaseFields.DBFIELD_USERS).document(currentUserId)
+                    .collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).document(user.id!!)
+                    .get().await().getLong(DatabaseFields.DBFIELD_NUM_UNREAD)
+            lifecycleScope.launch(Dispatchers.Main) {
+                holder.numUnread.visibility =
+                    if(numUnread != null && numUnread > 0) View.VISIBLE else View.GONE
+                holder.numUnread.text = numUnread.toString()
+            }
+        }
     }
 
 }
