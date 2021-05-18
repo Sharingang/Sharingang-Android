@@ -171,7 +171,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="top"
                     android:inputType="textMultiLine"
-                    android:minLines="3"
+                    android:minLines="2"
                     android:text="@={description}" />
 
             </com.google.android.material.textfield.TextInputLayout>
