@@ -51,7 +51,7 @@ class EditItemFragmentTest {
         onView(withId(R.id.category_spinner)).perform(click())
         onView(withText("Book")).perform(click())
 
-        onView(withId(R.id.createItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
 
         onView(withText(item)).check(matches(isDisplayed()))
@@ -59,12 +59,12 @@ class EditItemFragmentTest {
 
         onView(withMenuIdOrText(R.id.menuEdit, R.string.edit_item)).perform(click())
 
-        onView(withId(R.id.editItemPrompt)).check(matches(withText("Edit Item")))
+        onView(withId(R.id.itemPrompt)).check(matches(withText("Edit Item")))
         onView(withId(R.id.category_spinner)).check(matches(withSpinnerText("Book")))
         onView(withId(R.id.category_spinner)).perform(click())
         onView(withText("Games")).perform(click())
 
-        onView(withId(R.id.editItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
 
         onView(withMenuIdOrText(R.id.menuEdit, R.string.edit_item)).perform(click())
@@ -83,15 +83,15 @@ class EditItemFragmentTest {
         intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgGalleryResult)
 
         navigate_to(R.id.newEditFragment)
-        onView(withId(R.id.newItemPrompt))
+        onView(withId(R.id.itemPrompt))
             .check(matches(withText("New Item")))
         onView(withId(R.id.itemTitle)).perform(
             typeText(item),
             closeSoftKeyboard()
         )
-        val buttonCreate = onView(withId(R.id.createItemButton))
+        val buttonCreate = onView(withId(R.id.saveItemButton))
         buttonCreate.check(matches(withText("Create Item")))
-        buttonCreate.perform(click())
+        buttonCreate.perform(scrollTo(), click())
         waitAfterSaveItem()
 
         onView(withText(item))
@@ -101,7 +101,7 @@ class EditItemFragmentTest {
 
         onView(withMenuIdOrText(R.id.menuEdit, R.string.edit_item)).perform(click())
 
-        onView(withId(R.id.editItemPrompt))
+        onView(withId(R.id.itemPrompt))
             .check(matches(withText("Edit Item")))
 
         onView(withId(R.id.item_image)).perform(click())
@@ -115,7 +115,7 @@ class EditItemFragmentTest {
             closeSoftKeyboard()
         )
 
-        onView(withId(R.id.editItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
 
         pressBack()
@@ -134,7 +134,7 @@ class EditItemFragmentTest {
         intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgGalleryResult)
 
         navigate_to(R.id.newEditFragment)
-        onView(withId(R.id.newItemPrompt)).check(matches(withText("New Item")))
+        onView(withId(R.id.itemPrompt)).check(matches(withText("New Item")))
 
         onView(withId(R.id.item_take_picture)).perform(click())
         onView(withId(R.id.item_image)).check(matches(hasContentDescription()))

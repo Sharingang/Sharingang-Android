@@ -55,7 +55,7 @@ class DetailedItemFragmentTest {
         )
         onView(withId(R.id.category_spinner)).perform(click())
         onView(withText(testCategory)).perform(click())
-        onView(withId(R.id.createItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
 
         onView(withText(testTitle)).perform(click())
@@ -75,7 +75,7 @@ class DetailedItemFragmentTest {
             typeText(testTitle),
             closeSoftKeyboard()
         )
-        onView(withId(R.id.createItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
         onView(withText(testTitle)).perform(click())
 
@@ -102,10 +102,14 @@ class DetailedItemFragmentTest {
         Intents.intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(imgGalleryResult)
 
         navigate_to(R.id.newEditFragment)
+        onView(withId(R.id.itemTitle)).perform(
+            typeText("Test"),
+            closeSoftKeyboard()
+        )
         onView(withId(R.id.item_take_picture)).perform(click())
         onView(withId(R.id.item_image)).check(matches(hasContentDescription()))
-        val buttonCreate = onView(withId(R.id.createItemButton))
-        buttonCreate.perform(click())
+        val buttonCreate = onView(withId(R.id.saveItemButton))
+        buttonCreate.perform(scrollTo(), click())
         waitAfterSaveItem()
 
         onView(withId(R.id.item_list_view_title)).perform(click())
@@ -167,7 +171,7 @@ class DetailedItemFragmentTest {
                 typeText(itemName),
                 closeSoftKeyboard()
             )
-            onView(withId(R.id.createItemButton)).perform(click())
+            onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
             waitAfterSaveItem()
         }
     }
@@ -180,7 +184,7 @@ class DetailedItemFragmentTest {
             typeText(testTitle),
             closeSoftKeyboard()
         )
-        onView(withId(R.id.createItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
 
         onView(withText(testTitle)).perform(click())
@@ -203,7 +207,7 @@ class DetailedItemFragmentTest {
             typeText("42"),
             closeSoftKeyboard()
         )
-        onView(withId(R.id.createItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
 
         // User 1 clicks on the item

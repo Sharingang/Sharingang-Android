@@ -30,16 +30,16 @@ class RandomItemTest {
     @Test
     fun weCanFindTheRandomItemWeMade() {
         navigate_to(R.id.newEditFragment)
-        Espresso.onView(withId(R.id.newItemPrompt))
+        Espresso.onView(withId(R.id.itemPrompt))
             .check(matches(withText("New Item")))
 
         Espresso.onView(withId(R.id.itemTitle)).perform(
             typeText("A"),
             closeSoftKeyboard()
         )
-        val button = Espresso.onView(withId(R.id.createItemButton))
+        val button = Espresso.onView(withId(R.id.saveItemButton))
         button.check(matches(withText("Create Item")))
-        button.perform(click())
+        button.perform(scrollTo(), click())
         waitAfterSaveItem()
         navigate_to(R.id.nav_random_item)
         Espresso.onView(withId(R.id.itemTitle))
