@@ -2,6 +2,7 @@ package com.example.sharingang.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.example.sharingang.models.Heading
 import com.example.sharingang.models.Location
@@ -63,5 +64,14 @@ class ARViewModel : ViewModel() {
      */
     fun setLocation(location: Location) {
         _location.value = location
+    }
+
+    /**
+     * The current distance in meters between us and the item
+     */
+    val distance: LiveData<Double> = Transformations.switchMap(location) { myLocation ->
+        Transformations.map(itemLocation) { theirLocation ->
+            myLocation.crowDistance(theirLocation)
+        }
     }
 }
