@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/logged_out_user_info_chat"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
     </FrameLayout>

@@ -40,7 +40,7 @@ data class Item(
     val longitude: Double = 0.0,
 
     /** Id of the user that created the item */
-    val userId: String? = null,
+    val userId: String = "",
 
     val rated: Boolean = false,
 

@@ -8,7 +8,7 @@
     <string name="edit_item">Edit Item</string>
     <string name="delete_item">Delete Item</string>
     <string name="title">Title</string>
-    <string name="default_price">Price (default: 0.0)</string>
+    <string name="price">Price</string>
     <string name="display_price">CHF %.2f</string>
     <string name="item_image_description">Item Image</string>
     <string name="search_hint">Search…</string>
@@ -23,13 +23,14 @@
     <string name="clear_search_button">Clear search</string>
     <string name="share">Share</string>
     <string name="txt_user_profile_picture">User Profile Picture</string>
-    <string name="apply_changes">Apply</string>
     <string name="add_wishlist">Add to Wishlist</string>
     <string name="remove_wishlist">Remove from Wishlist</string>
     <string name="wishlist_menu_title">Wish List</string>
     <string name="enter_address">Enter Address</string>
     <string name="item">Item</string>
     <string name="userNotLoggedInInfo">You need to be logged in to view your User Profile.</string>
+    <string name="userNotLoggedInCreateItem">You need to be logged in to create an item.</string>
+    <string name="userNotLoggedInWishlist">You need to be logged in to access the wishlist.</string>
     <string name="default_rating">No Ratings</string>
     <string name="apply_rating">Rate</string>
     <string-array name="categories">
@@ -92,4 +93,5 @@
     <string name="sold_list_title">Sold List</string>
     <string name="open_gallery">Open Gallery</string>
     <string name="category">Category:</string>
+    <string name="required_field">Required field</string>
 </resources>
