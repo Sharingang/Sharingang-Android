@@ -53,7 +53,7 @@ class OrderItemsTest {
             typeText(price),
             closeSoftKeyboard()
         )
-        onView(withId(R.id.createItemButton)).perform(click())
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
     }
 
     @Test

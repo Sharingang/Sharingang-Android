@@ -93,7 +93,7 @@ class DetailedItemFragment : Fragment() {
      */
     private fun initBuy() {
         val currentUserId = currentUserProvider.getCurrentUserId()
-        val availableForSale = !args.item.sold && args.item.price >= 0.01 &&
+        val availableForSale = !args.item.sold && args.item.price >= 0.01 && !args.item.request &&
                 currentUserId != null && args.item.userId != currentUserId
         binding.buyButton.visibility = if (availableForSale) View.VISIBLE else View.GONE
         binding.buyButton.setOnClickListener { buyItem() }
@@ -102,7 +102,7 @@ class DetailedItemFragment : Fragment() {
     private fun onUserChange(user: User?) {
         binding.username = getString(R.string.posterUsername, user?.name)
         binding.itemPostedBy.visibility = if (user != null) View.VISIBLE else View.GONE
-        binding.textViewPostedBy.visibility = if(user != null) View.VISIBLE else View.GONE
+        binding.textViewPostedBy.visibility = if (user != null) View.VISIBLE else View.GONE
         binding.itemPostedBy.setOnClickListener { view ->
             view.findNavController().navigate(
                 DetailedItemFragmentDirections.actionDetailedItemFragmentToUserProfileFragment(
@@ -121,7 +121,7 @@ class DetailedItemFragment : Fragment() {
         super.onPrepareOptionsMenu(menu)
         val sell = menu.findItem(R.id.menuSell)
         val resell = menu.findItem(R.id.menuResell)
-        if (!args.item.userId.equals(currentUserProvider.getCurrentUserId())) {
+        if (args.item.userId != currentUserProvider.getCurrentUserId()) {
             menu.findItem(R.id.menuEdit).isVisible = false
             menu.findItem(R.id.menuDelete).isVisible = false
             sell.isVisible = false
@@ -198,10 +198,9 @@ class DetailedItemFragment : Fragment() {
     private fun initRating(item: Item) {
         itemViewModel.setRated(item)
         itemViewModel.rated.observe(viewLifecycleOwner, {
-            val visibility = if (!it && item.userId != null
-                && item.sold && currentUserProvider.getCurrentUserId() != null
-            ) View.VISIBLE
-            else View.GONE
+            val visibility =
+                if (!it && item.sold && currentUserProvider.getCurrentUserId() != null) View.VISIBLE
+                else View.GONE
             binding.ratingVisibility = visibility
         })
         binding.ratingButton.setOnClickListener {
