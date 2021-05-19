@@ -44,9 +44,9 @@ class NotificationTest {
             ViewActions.typeText(itemTitle),
             ViewActions.closeSoftKeyboard()
         )
-        val buttonCreate = Espresso.onView(ViewMatchers.withId(R.id.createItemButton))
+        val buttonCreate = Espresso.onView(ViewMatchers.withId(R.id.saveItemButton))
         buttonCreate.check(ViewAssertions.matches(ViewMatchers.withText("Create Item")))
-        buttonCreate.perform(ViewActions.click())
+        buttonCreate.perform(ViewActions.scrollTo(), ViewActions.click())
         waitAfterSaveItem()
 
         Espresso.onView(ViewMatchers.withId(R.id.item_list_view_title)).perform(ViewActions.click())
