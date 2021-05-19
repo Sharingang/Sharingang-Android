@@ -11,7 +11,7 @@ service cloud.firestore {
 
             allow create: if isSignedInAndSelf(request.resource.data.userId);
             allow update: if isSignedInAndSelf(resource.data.userId) || (isSignedIn() && request.resource.data.diff(resource.data).affectedKeys()
-                .hasOnly(['sold' , 'rated', 'localId']));
+                .hasOnly(['sold' , 'rated']));
             allow delete: if isSignedInAndSelf(resource.data.userId);
             allow read: if true;
         }
@@ -30,7 +30,7 @@ service cloud.firestore {
             }
             allow read, create: if true;
             allow update: if isSignedInAndSelf(userId) || (isSignedIn() && request.resource.data.diff(resource.data).affectedKeys()
-                .hasOnly(['rating' , 'numberOfRatings', 'localId']));
+                .hasOnly(['rating' , 'numberOfRatings']));
             allow delete: if false;
             match /{document=**} {
                 allow read: if true;

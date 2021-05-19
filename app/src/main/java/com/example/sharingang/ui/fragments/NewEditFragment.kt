@@ -181,7 +181,7 @@ class NewEditFragment : Fragment() {
      * @return whether the form is valid and ready to be saved
      */
     private fun validateForm(): Boolean {
-        val titleEmpty = binding.title?.trim()?.isEmpty() ?: true
+        val titleEmpty = binding.itemTitle.text?.trim()?.isEmpty() ?: true
         binding.itemTitleContainer.error = if (titleEmpty) {
             binding.itemTitle.requestFocus()
             getString(R.string.required_field)
