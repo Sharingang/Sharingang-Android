@@ -274,9 +274,7 @@ class DetailedItemFragment : Fragment() {
     }
 
     private fun generateDeepLink(item: Item): Uri {
-        val itemDeepLinkPrefix = "https://sharingang.page.link/item?id="
-        val deepLink = itemDeepLinkPrefix + item.id
-        return Uri.parse(deepLink)
+        return Uri.parse("https://sharingang.page.link/item?id=${item.id}")
     }
 
     private fun generateLinkTitle(item: Item): String {
