@@ -7,6 +7,17 @@ import androidx.lifecycle.ViewModel
 import com.example.sharingang.models.Heading
 import com.example.sharingang.models.Location
 
+private fun <A, B, C> transformBoth(
+    liveA: LiveData<A>,
+    liveB: LiveData<B>,
+    f: (A, B) -> C
+): LiveData<C> =
+    Transformations.switchMap(liveA) { a ->
+        Transformations.map(liveB) { b ->
+            f(a, b)
+        }
+    }
+
 /**
  * ARViewModel contains the logic for our AR class.
  *
@@ -66,21 +77,16 @@ class ARViewModel : ViewModel() {
         _location.value = location
     }
 
+
     /**
      * The current distance in meters between us and the item
      */
-    val distance: LiveData<Double> = Transformations.switchMap(location) { myLocation ->
-        Transformations.map(itemLocation) { theirLocation ->
-            myLocation.crowDistance(theirLocation)
-        }
-    }
+    val distance: LiveData<Double> =
+        transformBoth(location, itemLocation) { a, b -> a.crowDistance(b) }
 
     /**
      * The required heading between our location and their location
      */
-    val requiredHeading: LiveData<Heading> = Transformations.switchMap(location) { myLocation ->
-        Transformations.map(itemLocation) { theirLocation ->
-            myLocation.requiredHeading(theirLocation)
-        }
-    }
+    val requiredHeading: LiveData<Heading> =
+        transformBoth(location, itemLocation) { a, b -> a.requiredHeading(b) }
 }
