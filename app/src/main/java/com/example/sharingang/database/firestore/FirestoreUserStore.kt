@@ -69,4 +69,14 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
             .collection(DatabaseFields.DBFIELD_REPORTS).document(reporterId).get().await()
         return docIdRef.exists()
     }
+
+    override suspend fun getChatPartners(userId: String): MutableList<String> {
+        val partnerIds = mutableListOf<String>()
+        val chatPartners = firestore.collection(DatabaseFields.DBFIELD_USERS)
+            .document(userId).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).get()
+            .await()
+        val listOfDocuments = chatPartners.documents
+        listOfDocuments.forEach { partnerIds.add(it.id) }
+        return partnerIds
+    }
 }

@@ -5,6 +5,7 @@ import com.example.sharingang.models.User
 import com.example.sharingang.database.room.UserDao
 import com.example.sharingang.database.repositories.UserRepository
 import com.example.sharingang.database.store.UserStore
+import com.google.maps.android.ktx.model.streetViewPanoramaOrientation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -18,6 +19,7 @@ class CachedUserRepository @Inject constructor(
     private val userDao: UserDao,
     private val store: UserStore
 ) : UserRepository {
+
 
     override fun user(id: String): LiveData<User?> {
         return userDao.getUserLiveData(id)
@@ -72,5 +74,9 @@ class CachedUserRepository @Inject constructor(
 
     override suspend fun hasBeenReported(reporterId: String, reportedId: String): Boolean {
         return thenRefresh { store.hasBeenReported(reporterId, reportedId) }
+    }
+
+    override suspend fun getChatPartners(userId: String): MutableList<String> {
+        return thenRefresh { store.getChatPartners(userId) }
     }
 }

@@ -12,6 +12,8 @@ class InMemoryUserRepository : UserRepository {
 
     private val usersMap = HashMap<String, User>()
 
+    private val chatPartnersMap = HashMap<String, MutableList<String>>()
+
     override suspend fun get(id: String): User? {
         return usersMap[id]
     }
@@ -55,6 +57,10 @@ class InMemoryUserRepository : UserRepository {
 
     override suspend fun hasBeenReported(reporterId: String, reportedId: String): Boolean {
         return false
+    }
+
+    override suspend fun getChatPartners(userId: String): MutableList<String> {
+        return chatPartnersMap[userId] ?: mutableListOf()
     }
 
 }

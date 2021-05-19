@@ -1,6 +1,7 @@
 package com.example.sharingang.database.store
 
 import com.example.sharingang.models.User
+import com.google.firebase.firestore.QuerySnapshot
 
 /**
  * Represents a remote store of users, that we can access in some way.
@@ -58,4 +59,11 @@ interface UserStore {
      * @return true if yes, false if no
      */
     suspend fun hasBeenReported(reporterId: String, reportedId: String): Boolean
+
+    /**
+     * Retrieves all the chat partners of a particular user
+     *
+     * @param userId the id of the user whose partners to retrieve
+     */
+    suspend fun getChatPartners(userId: String): MutableList<String>
 }
