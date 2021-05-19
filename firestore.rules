@@ -8,21 +8,21 @@ service cloud.firestore {
             return isSignedIn() && request.auth.uid == id;
         }
         match /items/{itemId} {
-            allow create: if isSignedIn();
+            allow create: if isSignedInAndSelf(request.resource.data.userId);
             allow update, delete: if isSignedInAndSelf(resource.data.userId);
             allow read: if true;
         }
         match /users/{userId} {
             function isFromOrTo(){
-                return resource.data.from == userId || resource.data.to == userId;
+                return (resource.data.from == request.auth.uid && resource.data.to == userId) || (resource.data.to == request.auth.uid && resource.data.from == userId);
             }
             match /chats/{chatId}/messages/{messageId} {
                 allow create: if isSignedIn();
                 allow read, update: if isSignedIn() && isFromOrTo();
                 allow delete: if false;
             }
-            match /messagePartners/{document=**} {
-                allow read, create, update: if isSignedIn();
+            match /messagePartners/{messagePartner} {
+                allow read, create, update: if isSignedIn() && (messagePartner == request.auth.uid || userId == request.auth.uid);
                 allow delete: if false;
             }
             allow read: if true;
