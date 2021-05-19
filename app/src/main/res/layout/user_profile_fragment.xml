@@ -90,27 +90,27 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@tools:sample/avatars" />
 
-            <Button
-                android:id="@+id/btn_open_camera"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="@android:drawable/ic_menu_camera"
-                android:backgroundTint="#FFFFFFFF"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <Button
+            <ImageButton
                 android:id="@+id/btn_open_gallery"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
-                android:background="@android:drawable/ic_menu_gallery"
-                android:backgroundTint="#FFFFFFFF"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@android:drawable/ic_menu_gallery"
+                android:contentDescription="@string/open_gallery" />
+
+            <ImageButton
+                android:id="@+id/btn_open_camera"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@android:drawable/ic_menu_camera"
+                android:contentDescription="@string/open_camera"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
