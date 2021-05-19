@@ -74,4 +74,13 @@ class ARViewModel : ViewModel() {
             myLocation.crowDistance(theirLocation)
         }
     }
+
+    /**
+     * The required heading between our location and their location
+     */
+    val requiredHeading: LiveData<Heading> = Transformations.switchMap(location) { myLocation ->
+        Transformations.map(itemLocation) { theirLocation ->
+            myLocation.requiredHeading(theirLocation)
+        }
+    }
 }

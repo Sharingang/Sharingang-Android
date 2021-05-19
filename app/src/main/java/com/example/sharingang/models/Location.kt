@@ -50,4 +50,21 @@ data class Location(val lat: Double, val lon: Double) {
         val c = 2 * atan2(sqrt(a), sqrt(1 - a))
         return EARTH_RADIUS * c
     }
+
+    /**
+     * This calculates the heading required to orient yourself towards another location.
+     *
+     * @param that the location to orient yourself to, from this location
+     * @return the required heading
+     */
+    fun requiredHeading(that: Location): Heading {
+        val phi1 = degreesToRadians(this.lat)
+        val phi2 = degreesToRadians(that.lat)
+        val deltaLambda = degreesToRadians(that.lon - this.lon)
+
+        val y = sin(deltaLambda) * cos(phi2)
+        val x = cos(phi1) * sin(phi2) - sin(phi1) * cos(phi2) * cos(deltaLambda)
+        val theta = atan2(y, x)
+        return Heading(theta)
+    }
 }
