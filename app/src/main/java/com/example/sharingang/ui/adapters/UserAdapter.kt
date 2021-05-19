@@ -82,7 +82,7 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
     }
 
     private fun getUnreadMessagesIntoHolder(user: User, holder: ViewHolder) {
-        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.Main) {
             // get the number of unread messages for that particular user
             val numUnread = fragment.getNumUnread(currentUserId, user.id!!)
 
