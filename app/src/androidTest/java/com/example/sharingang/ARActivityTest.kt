@@ -40,7 +40,8 @@ class ARActivityTest {
             ViewActions.typeText(itemTitle),
             ViewActions.closeSoftKeyboard()
         )
-        Espresso.onView(ViewMatchers.withId(R.id.createItemButton)).perform(ViewActions.click())
+        Espresso.onView(ViewMatchers.withId(R.id.saveItemButton))
+            .perform(ViewActions.scrollTo(), ViewActions.click())
         waitAfterSaveItem()
         Espresso.onView(ViewMatchers.withText(itemTitle)).perform(ViewActions.click())
         Espresso.onView(ViewMatchers.withId(R.id.locateButton)).perform(ViewActions.click())
