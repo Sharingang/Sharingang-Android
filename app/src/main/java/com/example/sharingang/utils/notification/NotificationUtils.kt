@@ -10,6 +10,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import com.example.sharingang.BuildConfig
 import com.example.sharingang.R
 import com.google.firebase.messaging.FirebaseMessaging
 
@@ -22,7 +23,7 @@ private const val NOTIFICATION_ID = 0
  */
 fun NotificationManager.sendNotification(messageBody: String, deeplink: String, applicationContext: Context) {
     val contentIntent = Intent(Intent.ACTION_VIEW, Uri.parse(deeplink))
-    contentIntent.setPackage("com.example.sharingang")
+    contentIntent.setPackage(BuildConfig.APPLICATION_ID)
     contentIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
     val contentPendingIntent = PendingIntent.getActivity(
         applicationContext,
