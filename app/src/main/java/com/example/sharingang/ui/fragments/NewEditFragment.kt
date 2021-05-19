@@ -182,11 +182,10 @@ class NewEditFragment : Fragment() {
      */
     private fun validateForm(): Boolean {
         val titleEmpty = binding.title?.trim()?.isEmpty() ?: true
-        binding.itemTitleContainer.error =
-            if (titleEmpty) getString(R.string.required_field) else null
-        if (titleEmpty) {
+        binding.itemTitleContainer.error = if (titleEmpty) {
             binding.itemTitle.requestFocus()
-        }
+            getString(R.string.required_field)
+        } else null
 
         return !titleEmpty
     }
