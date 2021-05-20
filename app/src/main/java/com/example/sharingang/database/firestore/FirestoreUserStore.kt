@@ -91,13 +91,10 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
     }
 
     override suspend fun getChatPartners(userId: String): List<String> {
-        val partnerIds = mutableListOf<String>()
         val chatPartners = firestore.collection(DatabaseFields.DBFIELD_USERS)
             .document(userId).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).get()
             .await()
-        val listOfDocuments = chatPartners.documents
-        listOfDocuments.forEach { partnerIds.add(it.id) }
-        return partnerIds
+        return chatPartners.documents.map { it.id }
     }
 
     override suspend fun getMessages(userId: String, with: String): List<Chat> {
