@@ -17,6 +17,7 @@ const db = admin.firestore();
 const auth = admin.auth();
 
 const region = 'europe-west6'; // Zurich
+const deeplink = "https://sharingang.page.link/item?id="
 
 exports.checkout = functions.region(region).https.onCall(async (data, context) => {
     if (!context.auth) {
@@ -49,7 +50,8 @@ exports.newItemNotification = functions.region(region).firestore.document('items
 
     var message = {
         data: {
-            userId: newItem.userId
+            userId: newItem.userId,
+            deeplink: deeplink + context.params.itemId
         },
         notification: {
             body: newItem.title

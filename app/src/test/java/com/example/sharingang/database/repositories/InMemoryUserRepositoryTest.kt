@@ -1,8 +1,6 @@
 package com.example.sharingang.database.repositories
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.sharingang.database.repositories.InMemoryUserRepository
-import com.example.sharingang.database.repositories.UserRepository
 import com.example.sharingang.models.User
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
