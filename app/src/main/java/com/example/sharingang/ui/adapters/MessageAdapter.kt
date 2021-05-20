@@ -78,6 +78,7 @@ class MessageAdapter(
     fun submitList(newData: List<Chat>) {
         chats.clear()
         chats.addAll(newData)
+        Log.e("xxx", "adapter chat size = ${chats.size}")
         notifyDataSetChanged()
         attachedFragment.scrollToEnd()
     }

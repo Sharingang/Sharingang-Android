@@ -42,7 +42,7 @@ class MessageFragment : Fragment() {
     private lateinit var messageAdapter: MessageAdapter
     private val args: MessageFragmentArgs by navArgs()
     private val messagesLiveData: MutableLiveData<List<Chat>> = MutableLiveData(listOf())
-    private val listChats: MutableList<Chat> = mutableListOf()
+    private var listChats: MutableList<Chat> = mutableListOf()
 
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
@@ -67,10 +67,10 @@ class MessageFragment : Fragment() {
         setupFields()
         setupSendButton()
         setupUI()
+        messagesLiveData.postValue(listChats)
         lifecycleScope.launch(Dispatchers.Main) {
             setupMessageRefresh()
         }
-        messagesLiveData.postValue(listChats)
         return binding.root
     }
 
@@ -94,7 +94,8 @@ class MessageFragment : Fragment() {
         binding.btnSend.setOnClickListener {
             val message = binding.messageEditText.text.toString()
             binding.messageEditText.text.clear()
-            lifecycleScope.launch(Dispatchers.Main) {
+            listChats.clear()
+            lifecycleScope.launch(Dispatchers.IO) {
                 sendMessage(currentUserId, partnerId, message)
             }
         }
@@ -108,8 +109,7 @@ class MessageFragment : Fragment() {
      * @param message the message to send
      */
     private suspend fun sendMessage(from: String, to: String, message: String) {
-        listChats.clear()
-        listChats.addAll(userRepository.putMessage(from, to, message))
+        listChats = userRepository.putMessage(from, to, message)
         messagesLiveData.postValue(listChats)
     }
 
@@ -122,7 +122,6 @@ class MessageFragment : Fragment() {
         binding.history.adapter = messageAdapter
         lifecycleScope.launch(Dispatchers.Main) {
             userRepository.clearNumUnread(currentUserId, partnerId)
-            getAndDisplayMessages()
         }
     }
 
@@ -132,6 +131,7 @@ class MessageFragment : Fragment() {
     private suspend fun setupMessageRefresh() {
         userRepository.setupRefresh(currentUserId, partnerId) {
             if(isAdded) {
+                Log.e("xxx", "refreshing: size = ${listChats.size}")
                 getAndDisplayMessages()
             }
         }
@@ -141,10 +141,11 @@ class MessageFragment : Fragment() {
      * Gets the messages and displays them
      */
     fun getAndDisplayMessages() {
-        listChats.clear()
         lifecycleScope.launch(Dispatchers.Main) {
+            listChats.clear()
+            Log.e("xxx", "1. numChats = ${listChats.size}")
             listChats.addAll(userRepository.getMessages(currentUserId, partnerId))
-            userRepository.clearNumUnread(currentUserId, partnerId)
+            Log.e("xxx", "2. numChats = ${listChats.size}")
             messagesLiveData.postValue(listChats)
         }
     }
