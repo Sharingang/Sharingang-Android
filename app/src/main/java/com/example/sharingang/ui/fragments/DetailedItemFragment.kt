@@ -31,6 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import android.graphics.Paint
 
 @AndroidEntryPoint
 class DetailedItemFragment : Fragment() {
@@ -79,7 +80,7 @@ class DetailedItemFragment : Fragment() {
         initWishlistButton()
         initRating(args.item)
         initBuy()
-
+        if (args.item.discount) binding.itemPrice.paintFlags = binding.itemPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         binding.shareButton.setOnClickListener { shareItem() }
         binding.locateButton.setOnClickListener { locateItem() }
 
