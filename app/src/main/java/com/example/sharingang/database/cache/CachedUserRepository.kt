@@ -49,7 +49,7 @@ class CachedUserRepository @Inject constructor(
     }
 
     override suspend fun get(id: String): User? {
-        if(userDao.getUser(id) == null) {
+        if (userDao.getUser(id) == null) {
             refreshUsers()
         }
         return userDao.getUser(id)

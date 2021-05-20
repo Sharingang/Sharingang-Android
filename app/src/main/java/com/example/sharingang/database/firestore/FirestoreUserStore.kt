@@ -25,7 +25,8 @@ private const val TAG = "FirestoreUserStore"
 class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFirestore) :
     UserStore, AbstractFirestoreStore<User>(
     DatabaseFields.DBFIELD_USERS,
-    User::class.java, firestore) {
+    User::class.java, firestore
+) {
 
     /**
      * This class is useful for creating a pair where we can retrieve
@@ -140,7 +141,8 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
     }
 
     override suspend fun setupRefresh(
-        userId: String, with: String, action: () -> Unit) {
+        userId: String, with: String, action: () -> Unit
+    ) {
         val ref = getUserDocument(userId)
             .collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).document(with)
         ref.addSnapshotListener { _, e ->

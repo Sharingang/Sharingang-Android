@@ -15,7 +15,7 @@ class InMemoryUserRepository : UserRepository {
 
     private var chatPartnersMap = hashMapOf<String, MutableList<String>>()
     private var messagesMap = hashMapOf<String, HashMap<String, MutableList<Chat>>>()
-    private var numUnreadMap = hashMapOf<String,HashMap<String, Long>>()
+    private var numUnreadMap = hashMapOf<String, HashMap<String, Long>>()
 
     override suspend fun get(id: String): User? {
         return usersMap[id]
@@ -64,7 +64,7 @@ class InMemoryUserRepository : UserRepository {
 
     override suspend fun getChatPartners(userId: String): MutableList<String> {
         val partners = chatPartnersMap[userId]
-        if(partners == null) {
+        if (partners == null) {
             chatPartnersMap[userId] = mutableListOf()
         }
         return chatPartnersMap[userId]!!
@@ -73,7 +73,7 @@ class InMemoryUserRepository : UserRepository {
     override suspend fun getMessages(userId: String, with: String): MutableList<Chat> {
         val allMessages = messagesMap[userId]
         numUnreadMap[userId] = hashMapOf(with to 0)
-        if(allMessages != null) {
+        if (allMessages != null) {
             val messages = allMessages[with]
             return messages ?: mutableListOf()
         }
@@ -89,13 +89,14 @@ class InMemoryUserRepository : UserRepository {
     }
 
     override suspend fun setupRefresh(
-        userId: String, with: String, action: () -> Unit) {
+        userId: String, with: String, action: () -> Unit
+    ) {
         return
     }
 
     override suspend fun getNumUnread(userId: String, with: String): Long {
         val userEntry = numUnreadMap[userId]
-        if(userEntry != null){
+        if (userEntry != null) {
             return userEntry[with]!!
         }
         return 0
@@ -113,11 +114,10 @@ class InMemoryUserRepository : UserRepository {
      * @param chat the chat element
      */
     private fun updateMessages(from: String, to: String, chat: Chat) {
-        if(!messagesMap.containsKey(from) || !messagesMap.containsKey(to)) {
+        if (!messagesMap.containsKey(from) || !messagesMap.containsKey(to)) {
             messagesMap[from] = hashMapOf(to to mutableListOf(chat))
             messagesMap[to] = hashMapOf(from to mutableListOf(chat))
-        }
-        else {
+        } else {
             messagesMap[from]!![to]!!.add(chat)
             messagesMap[to]!![from]!!.add(chat)
         }
@@ -130,11 +130,10 @@ class InMemoryUserRepository : UserRepository {
      * @param to the receiver
      */
     private fun updateChatPartners(from: String, to: String) {
-        if(!chatPartnersMap.containsKey(from) || !messagesMap.containsKey(to)) {
+        if (!chatPartnersMap.containsKey(from) || !messagesMap.containsKey(to)) {
             chatPartnersMap[from] = mutableListOf(to)
             chatPartnersMap[to] = mutableListOf(from)
-        }
-        else if(!chatPartnersMap[from]!!.contains(to) && !chatPartnersMap[to]!!.contains(from)) {
+        } else if (!chatPartnersMap[from]!!.contains(to) && !chatPartnersMap[to]!!.contains(from)) {
             chatPartnersMap[from]!!.add(to)
             chatPartnersMap[to]!!.add(from)
         }
@@ -149,7 +148,7 @@ class InMemoryUserRepository : UserRepository {
     private suspend fun updateUnreads(from: String, to: String) {
         numUnreadMap[from] = hashMapOf(to to 0)
         numUnreadMap[to] =
-            if(!numUnreadMap.containsKey(to)) hashMapOf(from to 1)
+            if (!numUnreadMap.containsKey(to)) hashMapOf(from to 1)
             else hashMapOf(from to getNumUnread(to, from) + 1)
     }
 

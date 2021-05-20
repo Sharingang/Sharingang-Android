@@ -127,7 +127,7 @@ class MessageFragment : Fragment() {
      */
     private suspend fun setupMessageRefresh() {
         userRepository.setupRefresh(currentUserId, partnerId) {
-            if(isAdded && shouldUpdate) {
+            if (isAdded && shouldUpdate) {
                 getAndDisplayMessages()
             }
         }
