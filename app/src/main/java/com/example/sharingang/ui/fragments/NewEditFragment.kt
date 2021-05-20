@@ -272,8 +272,6 @@ class NewEditFragment : Fragment() {
             binding.priceDiscount = it.discountPrice.toString().format("%.2f")
             updateLocationWithCoordinates(it.latitude, it.longitude)
         }
-
-        binding.itemTitle.doOnTextChanged { _, _, _, _ -> validateForm() }
     }
 
     private fun setupDiscountSwitch() {

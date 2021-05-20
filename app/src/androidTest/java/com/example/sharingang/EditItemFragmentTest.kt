@@ -140,4 +140,48 @@ class EditItemFragmentTest {
         onView(withId(R.id.item_image)).check(matches(hasContentDescription()))
         Intents.release()
     }
+
+    @Test
+    fun anItemCanBeDiscounted() {
+        val price = "5"
+        val discountPrice = "2"
+        val badDiscountPrice = "6"
+        navigate_to(R.id.newEditFragment)
+        onView(withId(R.id.itemTitle)).perform(
+            typeText(item),
+            closeSoftKeyboard()
+        )
+
+        onView(withId(R.id.itemPrice)).perform(
+            replaceText(price),
+            closeSoftKeyboard()
+        )
+
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
+        waitAfterSaveItem()
+
+        onView(withText(item)).check(matches(isDisplayed()))
+        onView(withId(R.id.item_list_view_title)).perform(click())
+
+        onView(withMenuIdOrText(R.id.menuEdit, R.string.edit_item)).perform(click())
+
+        onView(withId(R.id.switch_is_discount)).perform(click())
+        onView(withId(R.id.discountPrice)).perform(
+            replaceText(badDiscountPrice),
+            closeSoftKeyboard()
+        )
+
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
+        Thread.sleep(500)
+
+        onView(withId(R.id.discountPrice)).perform(
+            replaceText(discountPrice),
+            closeSoftKeyboard()
+        )
+
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
+        waitAfterSaveItem()
+
+        onView(withId(R.id.itemDiscountPrice)).check(matches(isDisplayed()))
+    }
 }
