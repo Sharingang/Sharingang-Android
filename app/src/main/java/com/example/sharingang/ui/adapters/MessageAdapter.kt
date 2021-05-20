@@ -20,7 +20,7 @@ import com.example.sharingang.ui.fragments.MessageFragment
  */
 class MessageAdapter(
     private val context: Context, private var chats: MutableList<Chat>,
-    private val currentUserId: String, private val fragment: MessageFragment
+    private val currentUserId: String, private val attachedFragment: MessageFragment
 ) :
     RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
@@ -79,8 +79,7 @@ class MessageAdapter(
         chats.clear()
         chats.addAll(newData)
         notifyDataSetChanged()
-        Log.e("xxx", "size = ${chats.size}")
-        fragment.scrollToEnd()
+        attachedFragment.scrollToEnd()
     }
 
 }

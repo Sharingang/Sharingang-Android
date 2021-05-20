@@ -131,13 +131,14 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
             DatabaseFields.DBFIELD_TO to to
         )
         val date = Date()
+        val now = System.currentTimeMillis()
         val lastTimeChatCurrent = hashMapOf(
-            DatabaseFields.DBFIELD_LAST_MESSAGE to "$date (${System.currentTimeMillis()})",
+            DatabaseFields.DBFIELD_LAST_MESSAGE to "$date ($now)",
             DatabaseFields.DBFIELD_NUM_UNREAD to 0
         )
         val numUnread = getNumUnread(to, from)
         val lastTimeChatOther = hashMapOf(
-            DatabaseFields.DBFIELD_LAST_MESSAGE to "$date(${System.currentTimeMillis()})",
+            DatabaseFields.DBFIELD_LAST_MESSAGE to "$date ($now)",
             DatabaseFields.DBFIELD_NUM_UNREAD to numUnread + 1
         )
         getUserDocument(from).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)

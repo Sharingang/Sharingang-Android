@@ -16,6 +16,7 @@ class InMemoryUserRepository : UserRepository {
 
     private var chatPartnersMap = hashMapOf<String, MutableList<String>>()
     private var messagesMap = hashMapOf<String, HashMap<String, MutableList<Chat>>>()
+    private var numUnreadMap = hashMapOf<String,HashMap<String, Long>>()
 
     override suspend fun get(id: String): User? {
         return usersMap[id]
@@ -72,6 +73,7 @@ class InMemoryUserRepository : UserRepository {
 
     override suspend fun getMessages(userId: String, with: String): MutableList<Chat> {
         val allMessages = messagesMap[userId]
+        numUnreadMap[userId] = hashMapOf(with to 0)
         if(allMessages != null) {
             val messages = allMessages[with]
             return messages ?: mutableListOf()
@@ -88,10 +90,17 @@ class InMemoryUserRepository : UserRepository {
             chatPartnersMap[from] = mutableListOf(to)
             chatPartnersMap[to] = mutableListOf(from)
         }
+
+        numUnreadMap[from] = hashMapOf(to to 0)
+        if(!numUnreadMap.containsKey(to)) {
+            numUnreadMap[to] = hashMapOf(from to 1)
+        }
+        else {
+            numUnreadMap[to] = hashMapOf(from to getNumUnread(to, from) + 1)
+        }
         val chat = Chat(from, to, message)
         messagesMap[from]!![to]!!.add(chat)
         messagesMap[to]!![from]!!.add(chat)
-        Log.e("xxx","$messagesMap")
         return messagesMap[from]!![to]!!
     }
 
@@ -101,11 +110,15 @@ class InMemoryUserRepository : UserRepository {
     }
 
     override suspend fun getNumUnread(userId: String, with: String): Long {
-        TODO("Not yet implemented")
+        val userEntry = numUnreadMap[userId]
+        if(userEntry != null){
+            return userEntry[with]!!
+        }
+        return 0
     }
 
     override suspend fun clearNumUnread(userId: String, with: String) {
-        TODO("Not yet implemented")
+        numUnreadMap[userId]!![with] = 0
     }
 
 }

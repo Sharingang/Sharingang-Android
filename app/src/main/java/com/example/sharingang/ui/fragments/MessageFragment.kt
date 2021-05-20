@@ -114,7 +114,7 @@ class MessageFragment : Fragment() {
     }
 
     /**
-     * Sets up the UI of the fragment
+     * Sets up the UI of the fragment (adapter + messages)
      */
     private fun setupUI() {
         listChats.clear()
