@@ -78,7 +78,6 @@ class InMemoryUserRepository : UserRepository {
             val messages = allMessages[with]
             return messages ?: mutableListOf()
         }
-        Log.d("inMem", "isNll")
         return mutableListOf()
     }
 
@@ -87,8 +86,10 @@ class InMemoryUserRepository : UserRepository {
         if(!messagesMap.containsKey(from) || !messagesMap.containsKey(to)) {
             messagesMap[from] = hashMapOf(to to mutableListOf(chat))
             messagesMap[to] = hashMapOf(from to mutableListOf(chat))
+            Log.d("inMem", "was empty; now contains ${messagesMap[from]!![to]!!.size} elements")
         }
         else {
+            Log.d("inMem", "contains ${messagesMap[from]!![to]!!.size} elements")
             messagesMap[from]!![to]!!.add(chat)
             messagesMap[to]!![from]!!.add(chat)
         }
@@ -96,11 +97,9 @@ class InMemoryUserRepository : UserRepository {
             chatPartnersMap[from] = mutableListOf(to)
             chatPartnersMap[to] = mutableListOf(from)
         }
-        else {
-            if(!chatPartnersMap[from]!!.contains(to) && !chatPartnersMap[to]!!.contains(from)) {
-                chatPartnersMap[from]!!.add(to)
-                chatPartnersMap[to]!!.add(from)
-            }
+        else if(!chatPartnersMap[from]!!.contains(to) && !chatPartnersMap[to]!!.contains(from)) {
+            chatPartnersMap[from]!!.add(to)
+            chatPartnersMap[to]!!.add(from)
         }
 
         numUnreadMap[from] = hashMapOf(to to 0)
@@ -108,6 +107,7 @@ class InMemoryUserRepository : UserRepository {
             if(!numUnreadMap.containsKey(to)) hashMapOf(from to 1)
             else hashMapOf(from to getNumUnread(to, from) + 1)
 
+        Log.d("inMem: ","${messagesMap[from]!![to]!!}")
         return messagesMap[from]!![to]!!
     }
 

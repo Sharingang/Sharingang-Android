@@ -39,6 +39,7 @@ class MessageFragment : Fragment() {
     private val args: MessageFragmentArgs by navArgs()
     private val messagesLiveData: MutableLiveData<List<Chat>> = MutableLiveData(listOf())
     private var listChats: MutableList<Chat> = mutableListOf()
+    private var shouldUpdate = false
 
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
@@ -105,7 +106,10 @@ class MessageFragment : Fragment() {
      * @param message the message to send
      */
     private suspend fun sendMessage(from: String, to: String, message: String) {
-        listChats = userRepository.putMessage(from, to, message)
+        listChats.clear()
+        shouldUpdate = false
+        listChats.addAll(userRepository.putMessage(from, to, message))
+        shouldUpdate = true
         messagesLiveData.postValue(listChats)
     }
 
@@ -116,9 +120,7 @@ class MessageFragment : Fragment() {
         listChats.clear()
         messageAdapter = MessageAdapter(requireContext(), listChats, currentUserId, this)
         binding.history.adapter = messageAdapter
-        lifecycleScope.launch(Dispatchers.Main) {
-            getAndDisplayMessages()
-        }
+        getAndDisplayMessages()
     }
 
     /**
@@ -126,7 +128,7 @@ class MessageFragment : Fragment() {
      */
     private suspend fun setupMessageRefresh() {
         userRepository.setupRefresh(currentUserId, partnerId) {
-            if(isAdded) {
+            if(isAdded && shouldUpdate) {
                 getAndDisplayMessages()
             }
         }
@@ -137,8 +139,11 @@ class MessageFragment : Fragment() {
      */
     fun getAndDisplayMessages() {
         lifecycleScope.launch(Dispatchers.Main) {
+            shouldUpdate = false
             userRepository.clearNumUnread(currentUserId, partnerId)
-            listChats = userRepository.getMessages(currentUserId, partnerId)
+            shouldUpdate = true
+            listChats.clear()
+            listChats.addAll(userRepository.getMessages(currentUserId, partnerId))
             Log.e("xxx", "numMessages = ${listChats.size}")
             messagesLiveData.postValue(listChats)
         }
