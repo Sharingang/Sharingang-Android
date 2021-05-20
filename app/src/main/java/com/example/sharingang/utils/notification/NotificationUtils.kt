@@ -7,9 +7,10 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import com.example.sharingang.ui.activities.MainActivity
+import com.example.sharingang.BuildConfig
 import com.example.sharingang.R
 import com.google.firebase.messaging.FirebaseMessaging
 
@@ -20,13 +21,15 @@ private const val NOTIFICATION_ID = 0
  * @param messageBody the message to be displayed in the notification
  * @param applicationContext the context of the application
  */
-fun NotificationManager.sendNotification(messageBody: String, applicationContext: Context) {
-    val contentIntent = Intent(applicationContext, MainActivity::class.java)
+fun NotificationManager.sendNotification(messageBody: String, deeplink: String, applicationContext: Context) {
+    val contentIntent = Intent(Intent.ACTION_VIEW, Uri.parse(deeplink))
+    contentIntent.setPackage(BuildConfig.APPLICATION_ID)
+    contentIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
     val contentPendingIntent = PendingIntent.getActivity(
         applicationContext,
         NOTIFICATION_ID,
         contentIntent,
-        PendingIntent.FLAG_UPDATE_CURRENT
+        PendingIntent.FLAG_ONE_SHOT
     )
     val builder = buildNotification(messageBody, applicationContext, contentPendingIntent)
     notify(NOTIFICATION_ID, builder.build())
