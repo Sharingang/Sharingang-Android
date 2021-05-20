@@ -118,7 +118,7 @@ class InMemoryUserRepository : UserRepository {
     }
 
     override suspend fun clearNumUnread(userId: String, with: String) {
-        numUnreadMap[userId]!![with] = 0
+        numUnreadMap[userId] = hashMapOf(with to 0)
     }
 
 }
