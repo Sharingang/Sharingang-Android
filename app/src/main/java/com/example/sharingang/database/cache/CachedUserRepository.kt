@@ -77,15 +77,15 @@ class CachedUserRepository @Inject constructor(
     }
 
     override suspend fun getChatPartners(userId: String): MutableList<String> {
-        return thenRefresh { store.getChatPartners(userId) }
+        return store.getChatPartners(userId)
     }
 
     override suspend fun getMessages(userId: String, with: String): MutableList<Chat> {
-        return thenRefresh { store.getMessages(userId, with) }
+        return store.getMessages(userId, with)
     }
 
     override suspend fun putMessage(from: String, to: String, message: String): MutableList<Chat> {
-        return thenRefresh { store.putMessage(from, to, message) }
+        return store.putMessage(from, to, message)
     }
 
     override suspend fun setupRefresh(
@@ -93,14 +93,14 @@ class CachedUserRepository @Inject constructor(
         with: String,
         action: () -> Unit
     ) {
-        return thenRefresh { store.setupRefresh(userId, with, action) }
+        return store.setupRefresh(userId, with, action)
     }
 
     override suspend fun getNumUnread(userId: String, with: String): Long {
-        return thenRefresh { store.getNumUnread(userId, with) }
+        return store.getNumUnread(userId, with)
     }
 
     override suspend fun clearNumUnread(userId: String, with: String) {
-        return thenRefresh { store.clearNumUnread(userId, with) }
+        return store.clearNumUnread(userId, with)
     }
 }
