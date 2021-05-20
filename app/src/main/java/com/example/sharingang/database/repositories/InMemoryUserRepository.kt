@@ -78,29 +78,36 @@ class InMemoryUserRepository : UserRepository {
             val messages = allMessages[with]
             return messages ?: mutableListOf()
         }
+        Log.d("inMem", "isNll")
         return mutableListOf()
     }
 
     override suspend fun putMessage(from: String, to: String, message: String): MutableList<Chat> {
-        if(!messagesMap.containsKey(from)) {
-            messagesMap[from] = hashMapOf(to to mutableListOf())
-            messagesMap[to] = hashMapOf(from to mutableListOf())
+        val chat = Chat(from, to, message)
+        if(!messagesMap.containsKey(from) || !messagesMap.containsKey(to)) {
+            messagesMap[from] = hashMapOf(to to mutableListOf(chat))
+            messagesMap[to] = hashMapOf(from to mutableListOf(chat))
         }
-        if(!chatPartnersMap.containsKey(from)) {
+        else {
+            messagesMap[from]!![to]!!.add(chat)
+            messagesMap[to]!![from]!!.add(chat)
+        }
+        if(!chatPartnersMap.containsKey(from) || !messagesMap.containsKey(to)) {
             chatPartnersMap[from] = mutableListOf(to)
             chatPartnersMap[to] = mutableListOf(from)
         }
+        else {
+            if(!chatPartnersMap[from]!!.contains(to) && !chatPartnersMap[to]!!.contains(from)) {
+                chatPartnersMap[from]!!.add(to)
+                chatPartnersMap[to]!!.add(from)
+            }
+        }
 
         numUnreadMap[from] = hashMapOf(to to 0)
-        if(!numUnreadMap.containsKey(to)) {
-            numUnreadMap[to] = hashMapOf(from to 1)
-        }
-        else {
-            numUnreadMap[to] = hashMapOf(from to getNumUnread(to, from) + 1)
-        }
-        val chat = Chat(from, to, message)
-        messagesMap[from]!![to]!!.add(chat)
-        messagesMap[to]!![from]!!.add(chat)
+        numUnreadMap[to] =
+            if(!numUnreadMap.containsKey(to)) hashMapOf(from to 1)
+            else hashMapOf(from to getNumUnread(to, from) + 1)
+
         return messagesMap[from]!![to]!!
     }
 

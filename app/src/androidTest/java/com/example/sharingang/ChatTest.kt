@@ -56,7 +56,6 @@ class ChatTest {
         onView(withId(R.id.btnChat)).perform(click())
         onView(withId(R.id.chatPartnerUsername)).check(matches(withText(FakeCurrentUserProvider.fakeUser1.name)))
         val message1 = getRandomString(15)
-        val message2 = getRandomString(15)
         onView(withId(R.id.messageEditText)).check(matches(isClickable()))
         onView(withId(R.id.messageEditText)).check(matches(isDisplayed()))
         onView(withId(R.id.messageEditText)).perform(
@@ -67,12 +66,6 @@ class ChatTest {
         onView(withId(R.id.btnSend)).perform(click())
         onView(withText(message1)).check(matches(isDisplayed()))
         onView(withId(R.id.messageEditText)).check(matches(withText("")))
-        onView(withId(R.id.messageEditText)).perform(
-            replaceText(message2),
-            closeSoftKeyboard()
-        )
-        Thread.sleep(1000)
-        onView(withId(R.id.btnSend)).perform(click())
         onView(withId(R.id.btnSend)).check(matches(not(isEnabled())))
         Espresso.pressBack()
         Espresso.pressBack()
@@ -80,20 +73,22 @@ class ChatTest {
         FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
         navigate_to(R.id.chatsFragment)
         onView(withId(R.id.numUnread)).check(matches(isDisplayed()))
-        onView(withId(R.id.numUnread)).check(matches(withText("2")))
+        onView(withId(R.id.numUnread)).check(matches(withText("1")))
         onView(withText("Test User 2")).perform(click())
+        Thread.sleep(3000)
         onView(withText(message1)).check(matches(isDisplayed()))
         onView(withId(R.id.messageEditText)).check(matches(withText("")))
         onView(withId(R.id.btnSend)).check(matches(not(isEnabled())))
-        val message3 = getRandomString(15)
+        val message2 = getRandomString(15)
         onView(withId(R.id.messageEditText)).perform(
-            replaceText(message3),
+            replaceText(message2),
             closeSoftKeyboard()
         )
         onView(withId(R.id.btnSend)).perform(click())
         Thread.sleep(1000)
         onView(withId(R.id.messageEditText)).check(matches(withText("")))
-        onView(withText(message3)).check(matches(isDisplayed()))
+        Thread.sleep(3000)
+        onView(withText(message2)).check(matches(isDisplayed()))
         onView(withId(R.id.btnSend)).check(matches(not(isEnabled())))
         Espresso.pressBack()
         onView(withText("Test User 2")).check(matches(isDisplayed()))

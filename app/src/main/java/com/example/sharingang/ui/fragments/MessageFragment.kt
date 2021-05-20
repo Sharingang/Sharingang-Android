@@ -117,7 +117,7 @@ class MessageFragment : Fragment() {
         messageAdapter = MessageAdapter(requireContext(), listChats, currentUserId, this)
         binding.history.adapter = messageAdapter
         lifecycleScope.launch(Dispatchers.Main) {
-            userRepository.clearNumUnread(currentUserId, partnerId)
+            getAndDisplayMessages()
         }
     }
 
@@ -139,6 +139,7 @@ class MessageFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.Main) {
             userRepository.clearNumUnread(currentUserId, partnerId)
             listChats = userRepository.getMessages(currentUserId, partnerId)
+            Log.e("xxx", "numMessages = ${listChats.size}")
             messagesLiveData.postValue(listChats)
         }
     }

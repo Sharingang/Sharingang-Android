@@ -16,6 +16,7 @@ import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.collections.HashMap
 
 
 private const val TAG = "FirestoreUserStore"
@@ -125,26 +126,14 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
     }
 
     override suspend fun putMessage(from: String, to: String, message: String): MutableList<Chat> {
-        val data = hashMapOf<String, Any>(
-            DatabaseFields.DBFIELD_MESSAGE to message,
-            DatabaseFields.DBFIELD_FROM to from,
-            DatabaseFields.DBFIELD_TO to to
-        )
         val date = Date()
-        val now = System.currentTimeMillis()
-        val lastTimeChatCurrent = hashMapOf(
-            DatabaseFields.DBFIELD_LAST_MESSAGE to "$date ($now)",
-            DatabaseFields.DBFIELD_NUM_UNREAD to 0
-        )
-        val numUnread = getNumUnread(to, from)
-        val lastTimeChatOther = hashMapOf(
-            DatabaseFields.DBFIELD_LAST_MESSAGE to "$date ($now)",
-            DatabaseFields.DBFIELD_NUM_UNREAD to numUnread + 1
-        )
-        getUserDocument(from).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
-            .document(to).set(lastTimeChatCurrent)
-        getUserDocument(to).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
-            .document(from).set(lastTimeChatOther)
+        val dataMaps = generateDataMaps(from, to, message, date)
+        val data = dataMaps.first
+        val lastTimeChatCurrent = dataMaps.second
+        val lastTimeChatOther = dataMaps.third
+
+        setLastTimeChatData(from, to, lastTimeChatCurrent)
+        setLastTimeChatData(to, from, lastTimeChatOther)
 
         val fromToPair = LinkedPair(from, to)
         listOf(from, to).forEach {
@@ -187,5 +176,46 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
      */
     private fun getUserDocument(userId: String): DocumentReference {
         return firestore.collection(DatabaseFields.DBFIELD_USERS).document(userId)
+    }
+
+    /**
+     * Updates the data of the last chatted time for a user with their partner
+     *
+     * @param root the user whose data we need to update
+     * @param child the user with whom we want to update the data
+     * @param data the new data
+     */
+    private fun setLastTimeChatData(root: String, child: String, data: HashMap<String, out Any>) {
+        getUserDocument(root).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
+            .document(child).set(data)
+    }
+
+    /**
+     * Generate the data maps needed for user chat interaction (metadata + message)
+     *
+     * @param from the sender
+     * @param to the receiver
+     * @param message the message
+     * @param date the current date
+     * @return the generated maps
+     */
+    private suspend fun generateDataMaps(from: String, to: String, message: String, date: Date):
+            Triple<HashMap<String, out Any>, HashMap<String, out Any>, HashMap<String, out Any>> {
+        val data = hashMapOf<String, Any>(
+            DatabaseFields.DBFIELD_MESSAGE to message,
+            DatabaseFields.DBFIELD_FROM to from,
+            DatabaseFields.DBFIELD_TO to to
+        )
+        val now = System.currentTimeMillis()
+        val lastTimeChatCurrent = hashMapOf(
+            DatabaseFields.DBFIELD_LAST_MESSAGE to "$date ($now)",
+            DatabaseFields.DBFIELD_NUM_UNREAD to 0
+        )
+        val numUnread = getNumUnread(to, from)
+        val lastTimeChatOther = hashMapOf(
+            DatabaseFields.DBFIELD_LAST_MESSAGE to "$date ($now)",
+            DatabaseFields.DBFIELD_NUM_UNREAD to numUnread + 1
+        )
+        return Triple(data, lastTimeChatCurrent, lastTimeChatOther)
     }
 }
