@@ -51,7 +51,7 @@ class ChatsFragment : Fragment() {
         binding = FragmentChatsBinding.inflate(inflater, container, false)
         if (currentUserId != null) {
             userAdapter = UserAdapter(
-                requireContext(), listUsers, userRepository, currentUserId!!, lifecycleScope
+                requireContext(), listUsers, userRepository, currentUserId!!, lifecycleScope, this
             )
             binding.chatUsersList.adapter = userAdapter
             setRecyclerViewDecoration(margin = 10)

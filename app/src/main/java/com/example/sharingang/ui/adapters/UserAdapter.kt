@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.sharingang.R
 import com.example.sharingang.database.repositories.UserRepository
 import com.example.sharingang.models.User
+import com.example.sharingang.ui.fragments.ChatsFragment
 import com.example.sharingang.ui.fragments.ChatsFragmentDirections
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,7 +27,8 @@ import kotlinx.coroutines.launch
  */
 class UserAdapter(private val context: Context, private var users: MutableList<User>,
                   private val userRepository: UserRepository, private val currentUserId: String,
-                  private val lifecycleScope: LifecycleCoroutineScope) :
+                  private val lifecycleScope: LifecycleCoroutineScope,
+                  private val attachedFragment: ChatsFragment) :
     RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
     init {
@@ -63,15 +65,29 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
                 )
             }
             lifecycleScope.launch(Dispatchers.Main) {
-                val nUnread = userRepository.getNumUnread(userId = currentUserId, with = user.id!!)
-                holder.indicator.text = nUnread.toString()
-                holder.indicator.visibility = if(nUnread == 0L) View.GONE else View.VISIBLE
+                displayNumUnread(holder, user.id!!)
+                userRepository.setupRefresh(currentUserId, user.id) {
+                        if(attachedFragment.isAdded) {
+                            displayNumUnread(holder, user.id)
+                        }
+
+
+
+                }
             }
         }
     }
 
     override fun getItemCount(): Int {
         return users.size
+    }
+
+    private fun displayNumUnread(holder: ViewHolder, targetId: String) {
+        lifecycleScope.launch(Dispatchers.Main) {
+            val nUnread = userRepository.getNumUnread(userId = currentUserId, with = targetId)
+            holder.indicator.text = nUnread.toString()
+            holder.indicator.visibility = if (nUnread == 0L) View.GONE else View.VISIBLE
+        }
     }
 
     /**
