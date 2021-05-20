@@ -13,9 +13,9 @@ class InMemoryUserRepository : UserRepository {
 
     private val usersMap = HashMap<String, User>()
 
-    private var chatPartnersMap = hashMapOf<String, MutableList<String>>()
-    private var messagesMap = hashMapOf<String, HashMap<String, MutableList<Chat>>>()
-    private var numUnreadMap = hashMapOf<String, HashMap<String, Long>>()
+    private val chatPartnersMap = hashMapOf<String, MutableList<String>>()
+    private val messagesMap = hashMapOf<String, HashMap<String, MutableList<Chat>>>()
+    private val numUnreadMap = hashMapOf<String, HashMap<String, Long>>()
 
     override suspend fun get(id: String): User? {
         return usersMap[id]
