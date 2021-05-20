@@ -20,9 +20,10 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         remoteMessage.data.let {
             val userId = remoteMessage.data["userId"]
-            if (userId != currentUserProvider.getCurrentUserId()) {
+            val deeplink = remoteMessage.data["deeplink"]
+            if (userId != currentUserProvider.getCurrentUserId() && deeplink != null) {
                 remoteMessage.notification?.let {
-                    sendNotification(it.body!!)
+                    sendNotification(it.body!!, deeplink)
                 }
             }
         }
@@ -32,8 +33,8 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
         // Save the token if needed
     }
 
-    private fun sendNotification(messageBody: String) {
+    private fun sendNotification(messageBody: String, deeplink: String) {
         val notificationManager = ContextCompat.getSystemService(applicationContext, NotificationManager::class.java) as NotificationManager
-        notificationManager.sendNotification(messageBody, applicationContext)
+        notificationManager.sendNotification(messageBody, deeplink, applicationContext)
     }
 }

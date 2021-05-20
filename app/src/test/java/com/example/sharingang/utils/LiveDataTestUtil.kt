@@ -1,4 +1,4 @@
-package com.example.sharingang
+package com.example.sharingang.utils
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
