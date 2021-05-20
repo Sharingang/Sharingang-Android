@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:contentDescription="@string/item_image_description"
-            android:src="@drawable/ic_baseline_image_24"/>
+            android:src="@drawable/ic_baseline_image_24" />
 
         <TextView
             android:id="@+id/itemCategory"
@@ -241,9 +241,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal|top"
-                android:contentDescription="@string/share"
                 android:backgroundTint="@color/themeColor"
+                android:layout_marginTop="16dp"
+                android:contentDescription="@string/share"
                 app:srcCompat="?attr/actionModeShareDrawable" />
+
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="wrap_content" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/locateButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:backgroundTint="@color/themeColor"
+                android:layout_marginTop="16dp"
+                android:contentDescription="@string/locate_item"
+                app:srcCompat="@drawable/baseline_directions_white_24dp" />
         </LinearLayout>
 
     </LinearLayout>

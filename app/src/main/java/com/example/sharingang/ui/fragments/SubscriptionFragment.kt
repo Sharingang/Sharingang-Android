@@ -34,8 +34,7 @@ class SubscriptionFragment : Fragment() {
         val userId = currentUserProvider.getCurrentUserId()
         userViewmodel.setUser(userId)
         userViewmodel.user.observe(viewLifecycleOwner) { user ->
-            // More than one since the first item is always empty
-            if (user != null && user.subscriptions.size > 1) {
+            if (user != null && user.subscriptions.isNotEmpty()) {
                 val message = formatSubscriptions(user.subscriptions)
                 binding.subscriptions.text = message
             }
@@ -46,7 +45,7 @@ class SubscriptionFragment : Fragment() {
 
     private fun formatSubscriptions(subscriptions: List<String>): String {
         var message = context?.getString(R.string.subscribed_to)
-        message = message.plus(TextUtils.join(", ", subscriptions.drop(1))).plus(".")
+        message = message.plus(TextUtils.join(", ", subscriptions)).plus(".")
         return message
     }
 }

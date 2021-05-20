@@ -1,11 +1,11 @@
 package com.example.sharingang.viewmodels
 
 import androidx.lifecycle.*
-import com.example.sharingang.models.Item
-import com.example.sharingang.database.repositories.ItemRepository
 import com.example.sharingang.auth.CurrentUserProvider
-import com.example.sharingang.models.User
+import com.example.sharingang.database.repositories.ItemRepository
 import com.example.sharingang.database.repositories.UserRepository
+import com.example.sharingang.models.Item
+import com.example.sharingang.models.User
 import com.example.sharingang.utils.notification.subscribeToTopic
 import com.example.sharingang.utils.notification.unsubscribeFromTopic
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -145,7 +145,7 @@ class UserProfileViewModel @Inject constructor(
     fun loginResubscribe(userId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val user = userRepository.get(userId)
-            user?.subscriptions?.forEach { if (it.isNotEmpty()) subscribeToTopic(it) }
+            user?.subscriptions?.forEach { subscribeToTopic(it) }
         }
     }
 

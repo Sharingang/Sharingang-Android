@@ -40,6 +40,8 @@
             </intent-filter>
         </service>
 
+        <activity android:name=".ui.activities.ARActivity" />
+
         <activity android:name=".ui.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
