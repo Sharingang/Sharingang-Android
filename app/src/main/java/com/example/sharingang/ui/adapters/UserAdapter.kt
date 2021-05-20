@@ -6,12 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.sharingang.R
+import com.example.sharingang.database.repositories.UserRepository
 import com.example.sharingang.models.User
 import com.example.sharingang.ui.fragments.ChatsFragmentDirections
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 /**
@@ -20,7 +24,9 @@ import com.example.sharingang.ui.fragments.ChatsFragmentDirections
  * @property context the context
  * @property users the list of users we are adapting
  */
-class UserAdapter(private val context: Context, private var users: MutableList<User>) :
+class UserAdapter(private val context: Context, private var users: MutableList<User>,
+                  private val userRepository: UserRepository, private val currentUserId: String,
+                  private val lifecycleScope: LifecycleCoroutineScope) :
     RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
     init {
@@ -35,6 +41,7 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
     class ViewHolder(userEntryView: View) : RecyclerView.ViewHolder(userEntryView) {
         var username: TextView = userEntryView.findViewById(R.id.chatPartnerUsername)
         var imageView: ImageView = userEntryView.findViewById(R.id.chatPartnerPic)
+        var indicator: TextView = userEntryView.findViewById(R.id.numUnread)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -54,6 +61,11 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
                         user.id!!, user.name, partnerPicture
                     )
                 )
+            }
+            lifecycleScope.launch(Dispatchers.Main) {
+                val nUnread = userRepository.getNumUnread(userId = currentUserId, with = user.id!!)
+                holder.indicator.text = nUnread.toString()
+                holder.indicator.visibility = if(nUnread == 0L) View.GONE else View.VISIBLE
             }
         }
     }

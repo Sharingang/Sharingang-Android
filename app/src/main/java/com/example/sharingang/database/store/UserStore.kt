@@ -1,10 +1,7 @@
 package com.example.sharingang.database.store
 
-import androidx.lifecycle.LifecycleCoroutineScope
 import com.example.sharingang.models.Chat
 import com.example.sharingang.models.User
-import com.example.sharingang.ui.fragments.MessageFragment
-import com.google.firebase.firestore.QuerySnapshot
 
 /**
  * Represents a remote store of users, that we can access in some way.
@@ -102,7 +99,17 @@ interface UserStore {
     /**
      * Gets the current number of unread messages of a particular user with another user
      *
-     * @
+     * @param userId the user whose number of unread messages we want to get
+     * @param with the target user
+     * @return the number of unread messages
      */
     suspend fun getNumUnread(userId: String, with: String): Long
+
+    /**
+     * Clears the number of unread messages of a user with another user
+     *
+     * @param userId the user whose number of unread messages we want to clear
+     * @param with the target user
+     */
+    suspend fun clearNumUnread(userId: String, with: String)
 }

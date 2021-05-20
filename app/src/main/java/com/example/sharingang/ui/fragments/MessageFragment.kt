@@ -117,9 +117,11 @@ class MessageFragment : Fragment() {
      * Sets up the UI of the fragment
      */
     private fun setupUI() {
+        listChats.clear()
         messageAdapter = MessageAdapter(requireContext(), listChats, currentUserId, this)
         binding.history.adapter = messageAdapter
         lifecycleScope.launch(Dispatchers.Main) {
+            userRepository.clearNumUnread(currentUserId, partnerId)
             getAndDisplayMessages()
         }
     }
@@ -128,7 +130,11 @@ class MessageFragment : Fragment() {
      * Adds a change listener to the document where the last chat time is stored.
      */
     private suspend fun setupMessageRefresh() {
-        userRepository.setupRefresh(currentUserId, partnerId, {getAndDisplayMessages()}, lifecycleScope)
+        userRepository.setupRefresh(currentUserId, partnerId) {
+            if(isAdded) {
+                getAndDisplayMessages()
+            }
+        }
     }
 
     /**
@@ -138,6 +144,7 @@ class MessageFragment : Fragment() {
         listChats.clear()
         lifecycleScope.launch(Dispatchers.Main) {
             listChats.addAll(userRepository.getMessages(currentUserId, partnerId))
+            userRepository.clearNumUnread(currentUserId, partnerId)
             messagesLiveData.postValue(listChats)
         }
     }

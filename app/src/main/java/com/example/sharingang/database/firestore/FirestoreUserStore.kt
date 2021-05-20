@@ -172,6 +172,12 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
         return numUnread ?: 0
     }
 
+    override suspend fun clearNumUnread(userId: String, with: String) {
+        val currentUserDocument = getUserDocument(userId)
+        currentUserDocument.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
+            .document(with).update(DatabaseFields.DBFIELD_NUM_UNREAD, 0)
+    }
+
     /**
      * Gets the document corresponding to a particular user
      *

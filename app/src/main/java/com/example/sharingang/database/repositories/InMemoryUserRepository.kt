@@ -1,12 +1,10 @@
 package com.example.sharingang.database.repositories
 
 import android.util.Log
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.sharingang.models.Chat
 import com.example.sharingang.models.User
-import com.example.sharingang.ui.fragments.MessageFragment
 
 /**
  * In-memory implementation of the UserRepository
@@ -103,6 +101,10 @@ class InMemoryUserRepository : UserRepository {
     }
 
     override suspend fun getNumUnread(userId: String, with: String): Long {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun clearNumUnread(userId: String, with: String) {
         TODO("Not yet implemented")
     }
 

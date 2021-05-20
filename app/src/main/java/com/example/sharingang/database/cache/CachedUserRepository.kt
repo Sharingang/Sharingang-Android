@@ -1,13 +1,11 @@
 package com.example.sharingang.database.cache
 
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.LiveData
 import com.example.sharingang.models.User
 import com.example.sharingang.database.room.UserDao
 import com.example.sharingang.database.repositories.UserRepository
 import com.example.sharingang.database.store.UserStore
 import com.example.sharingang.models.Chat
-import com.example.sharingang.ui.fragments.MessageFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -100,5 +98,9 @@ class CachedUserRepository @Inject constructor(
 
     override suspend fun getNumUnread(userId: String, with: String): Long {
         return thenRefresh { store.getNumUnread(userId, with) }
+    }
+
+    override suspend fun clearNumUnread(userId: String, with: String) {
+        return thenRefresh { store.clearNumUnread(userId, with) }
     }
 }
