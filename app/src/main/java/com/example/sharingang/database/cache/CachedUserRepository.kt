@@ -93,9 +93,9 @@ class CachedUserRepository @Inject constructor(
     override suspend fun setupRefresh(
         userId: String,
         with: String,
-        fragment: MessageFragment,
+        action: () -> Unit,
         lifecycleScope: LifecycleCoroutineScope
     ) {
-        return thenRefresh { store.setupRefresh(userId, with, fragment, lifecycleScope) }
+        return thenRefresh { store.setupRefresh(userId, with, action, lifecycleScope) }
     }
 }

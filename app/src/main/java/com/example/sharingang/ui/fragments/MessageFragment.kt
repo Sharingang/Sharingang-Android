@@ -108,22 +108,19 @@ class MessageFragment : Fragment() {
      * @param message the message to send
      */
     private suspend fun sendMessage(from: String, to: String, message: String) {
-        val newMessages = userRepository.putMessage(from, to, message)
-        messagesLiveData.postValue(newMessages)
+        listChats.clear()
+        listChats.addAll(userRepository.putMessage(from, to, message))
+        messagesLiveData.postValue(listChats)
     }
 
     /**
      * Sets up the UI of the fragment
      */
     private fun setupUI() {
-        listChats.clear()
-        messageAdapter = MessageAdapter(requireContext(), listChats, currentUserId)
+        messageAdapter = MessageAdapter(requireContext(), listChats, currentUserId, this)
         binding.history.adapter = messageAdapter
-        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.Main) {
             getAndDisplayMessages()
-            lifecycleScope.launch(Dispatchers.Main) {
-                scrollToEnd()
-            }
         }
     }
 
@@ -131,28 +128,24 @@ class MessageFragment : Fragment() {
      * Adds a change listener to the document where the last chat time is stored.
      */
     private suspend fun setupMessageRefresh() {
-        userRepository.setupRefresh(currentUserId, partnerId, this, lifecycleScope)
+        userRepository.setupRefresh(currentUserId, partnerId, {scrollToEnd()}, lifecycleScope)
     }
 
     /**
-     * Gets the messages and displays them with the help of the adapter
+     * Gets the messages and displays them
      */
-    suspend fun getAndDisplayMessages() {
+    fun getAndDisplayMessages() {
         listChats.clear()
-        val messages = userRepository.getMessages(currentUserId, partnerId)
-        messagesLiveData.postValue(messages)
+        lifecycleScope.launch(Dispatchers.Main) {
+            listChats.addAll(userRepository.getMessages(currentUserId, partnerId))
+            messagesLiveData.postValue(listChats)
+        }
     }
 
     /**
      * Scrolls to the end of messages
      */
     fun scrollToEnd() {
-        if (listChats.isNotEmpty()) {
-            Log.e("xxx", "Size = ${listChats.size}")
-            binding.history.scrollToPosition(listChats.size - 1)
-        }
-        else {
-            Log.e("xxx", "Chat is empty")
-        }
+        binding.history.scrollToPosition(listChats.size - 1)
     }
 }

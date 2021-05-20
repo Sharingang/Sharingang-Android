@@ -82,7 +82,7 @@ class InMemoryUserRepository : UserRepository {
     }
 
     override suspend fun setupRefresh(
-        userId: String, with: String, fragment: MessageFragment, lifecycleScope: LifecycleCoroutineScope
+        userId: String, with: String, action: () -> Unit, lifecycleScope: LifecycleCoroutineScope
     ) { return }
 
 }

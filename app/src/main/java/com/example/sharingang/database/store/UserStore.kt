@@ -88,5 +88,5 @@ interface UserStore {
     /**
      * Sets up the listener on messages for a particular user with another user
      */
-    suspend fun setupRefresh(userId: String, with: String, fragment: MessageFragment, lifecycleScope: LifecycleCoroutineScope)
+    suspend fun setupRefresh(userId: String, with: String, action: () -> Unit, lifecycleScope: LifecycleCoroutineScope)
 }

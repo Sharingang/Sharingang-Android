@@ -145,14 +145,12 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
     }
 
     override suspend fun setupRefresh(
-        userId: String, with: String, fragment: MessageFragment, lifecycleScope: LifecycleCoroutineScope) {
+        userId: String, with: String, action: () -> Unit, lifecycleScope: LifecycleCoroutineScope) {
         val ref = getUserDocument(userId)
             .collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).document(with)
         ref.addSnapshotListener { _, e ->
             if (e == null) {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    fragment.getAndDisplayMessages()
-                }
+                action()
             }
         }
     }
