@@ -70,9 +70,6 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
                         if(attachedFragment.isAdded) {
                             displayNumUnread(holder, user.id)
                         }
-
-
-
                 }
             }
         }
@@ -100,5 +97,4 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
         users.addAll(newData)
         notifyDataSetChanged()
     }
-
 }
