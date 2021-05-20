@@ -53,7 +53,7 @@ data class Item(
     /**
      * The ID we use locally
      */
-    @Exclude
+    @get:Exclude
     @PrimaryKey(autoGenerate = true)
     val localId: Int = 0
 ) : Parcelable

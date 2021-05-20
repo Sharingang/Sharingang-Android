@@ -37,7 +37,7 @@ data class User(
     val createdAt: Date? = null,
 
     /** ID used in local cache */
-    @Exclude
+    @get:Exclude
     @PrimaryKey(autoGenerate = true)
     val localId: Int = 0
 )
