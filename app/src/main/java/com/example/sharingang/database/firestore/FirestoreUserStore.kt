@@ -90,7 +90,7 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
         return docIdRef.exists()
     }
 
-    override suspend fun getChatPartners(userId: String): MutableList<String> {
+    override suspend fun getChatPartners(userId: String): List<String> {
         val partnerIds = mutableListOf<String>()
         val chatPartners = firestore.collection(DatabaseFields.DBFIELD_USERS)
             .document(userId).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).get()
@@ -100,7 +100,7 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
         return partnerIds
     }
 
-    override suspend fun getMessages(userId: String, with: String): MutableList<Chat> {
+    override suspend fun getMessages(userId: String, with: String): List<Chat> {
         val documents = firestore.collection(DatabaseFields.DBFIELD_USERS)
             .document(userId).collection(DatabaseFields.DBFIELD_CHATS)
             .document(with).collection(DatabaseFields.DBFIELD_MESSAGES)
@@ -121,7 +121,7 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
         return listChats
     }
 
-    override suspend fun putMessage(from: String, to: String, message: String): MutableList<Chat> {
+    override suspend fun putMessage(from: String, to: String, message: String): List<Chat> {
         val date = Date()
         val dataMaps = generateDataMaps(from, to, message, date)
         val data = dataMaps.first

@@ -66,7 +66,7 @@ interface UserStore {
      * @param userId the id of the user whose partners to retrieve
      * @return the list of all ids of the partners of the user
      */
-    suspend fun getChatPartners(userId: String): MutableList<String>
+    suspend fun getChatPartners(userId: String): List<String>
 
     /**
      * Retrieves all messages of a user with a particular user
@@ -75,7 +75,7 @@ interface UserStore {
      * @param with the target user
      * @return the resulting list of messages / Chats
      */
-    suspend fun getMessages(userId: String, with: String): MutableList<Chat>
+    suspend fun getMessages(userId: String, with: String): List<Chat>
 
     /**
      * Puts a message into database
@@ -85,7 +85,7 @@ interface UserStore {
      * @param message the message
      * @return the new list of messages between the two users
      */
-    suspend fun putMessage(from: String, to: String, message: String): MutableList<Chat>
+    suspend fun putMessage(from: String, to: String, message: String): List<Chat>
 
     /**
      * Sets up the listener on messages for a particular user with another user

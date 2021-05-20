@@ -62,7 +62,7 @@ class InMemoryUserRepository : UserRepository {
         return false
     }
 
-    override suspend fun getChatPartners(userId: String): MutableList<String> {
+    override suspend fun getChatPartners(userId: String): List<String> {
         val partners = chatPartnersMap[userId]
         if (partners == null) {
             chatPartnersMap[userId] = mutableListOf()
@@ -70,7 +70,7 @@ class InMemoryUserRepository : UserRepository {
         return chatPartnersMap[userId]!!
     }
 
-    override suspend fun getMessages(userId: String, with: String): MutableList<Chat> {
+    override suspend fun getMessages(userId: String, with: String): List<Chat> {
         val allMessages = messagesMap[userId]
         numUnreadMap[userId] = hashMapOf(with to 0)
         if (allMessages != null) {
@@ -80,7 +80,7 @@ class InMemoryUserRepository : UserRepository {
         return mutableListOf()
     }
 
-    override suspend fun putMessage(from: String, to: String, message: String): MutableList<Chat> {
+    override suspend fun putMessage(from: String, to: String, message: String): List<Chat> {
         val chat = Chat(from, to, message)
         updateMessages(from, to, chat)
         updateChatPartners(from, to)

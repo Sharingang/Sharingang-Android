@@ -76,15 +76,15 @@ class CachedUserRepository @Inject constructor(
         return thenRefresh { store.hasBeenReported(reporterId, reportedId) }
     }
 
-    override suspend fun getChatPartners(userId: String): MutableList<String> {
+    override suspend fun getChatPartners(userId: String): List<String> {
         return store.getChatPartners(userId)
     }
 
-    override suspend fun getMessages(userId: String, with: String): MutableList<Chat> {
+    override suspend fun getMessages(userId: String, with: String): List<Chat> {
         return store.getMessages(userId, with)
     }
 
-    override suspend fun putMessage(from: String, to: String, message: String): MutableList<Chat> {
+    override suspend fun putMessage(from: String, to: String, message: String): List<Chat> {
         return store.putMessage(from, to, message)
     }
 
