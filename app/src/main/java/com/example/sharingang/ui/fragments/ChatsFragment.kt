@@ -70,13 +70,14 @@ class ChatsFragment : Fragment() {
         if (currentUserId != null) {
             binding.loggedOutInfo.visibility = View.GONE
             lifecycleScope.launch(Dispatchers.IO) {
-                userRepository.refreshUsers()
                 val chatPartners = userRepository.getChatPartners(currentUserId!!)
                 chatPartners.forEach {
                     val user = userRepository.get(it)
                     listUsers.add(user!!)
                 }
-                usersLiveData.postValue(listUsers)
+                lifecycleScope.launch(Dispatchers.Main) {
+                    usersLiveData.postValue(listUsers)
+                }
             }
         } else {
             binding.chatUsersList.visibility = View.GONE

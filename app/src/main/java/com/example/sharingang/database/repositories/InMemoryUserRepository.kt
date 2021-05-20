@@ -1,5 +1,6 @@
 package com.example.sharingang.database.repositories
 
+import android.util.Log
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,8 +16,8 @@ class InMemoryUserRepository : UserRepository {
 
     private val usersMap = HashMap<String, User>()
 
-    private val chatPartnersMap = HashMap<String, MutableList<String>>()
-    private val messagesMap = HashMap<String, HashMap<String, MutableList<Chat>>>()
+    private var chatPartnersMap = hashMapOf<String, MutableList<String>>()
+    private var messagesMap = hashMapOf<String, HashMap<String, MutableList<Chat>>>()
 
     override suspend fun get(id: String): User? {
         return usersMap[id]
@@ -64,7 +65,11 @@ class InMemoryUserRepository : UserRepository {
     }
 
     override suspend fun getChatPartners(userId: String): MutableList<String> {
-        return chatPartnersMap[userId] ?: mutableListOf()
+        val partners = chatPartnersMap[userId]
+        if(partners == null) {
+            chatPartnersMap[userId] = mutableListOf()
+        }
+        return chatPartnersMap[userId]!!
     }
 
     override suspend fun getMessages(userId: String, with: String): MutableList<Chat> {
@@ -77,7 +82,18 @@ class InMemoryUserRepository : UserRepository {
     }
 
     override suspend fun putMessage(from: String, to: String, message: String): MutableList<Chat> {
-        messagesMap[from]!![to]!!.add(Chat(from = from, to = to, message = message))
+        if(!messagesMap.containsKey(from)) {
+            messagesMap[from] = hashMapOf(to to mutableListOf())
+            messagesMap[to] = hashMapOf(from to mutableListOf())
+        }
+        if(!chatPartnersMap.containsKey(from)) {
+            chatPartnersMap[from] = mutableListOf(to)
+            chatPartnersMap[to] = mutableListOf(from)
+        }
+        val chat = Chat(from, to, message)
+        messagesMap[from]!![to]!!.add(chat)
+        messagesMap[to]!![from]!!.add(chat)
+        Log.e("xxx","$messagesMap")
         return messagesMap[from]!![to]!!
     }
 

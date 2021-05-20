@@ -71,6 +71,7 @@ class ChatTest {
         Espresso.pressBack()
         FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
         navigate_to(R.id.chatsFragment)
+        Thread.sleep(2000)
         onView(withText("Test User 2")).perform(click())
         onView(withText(message)).check(matches(isDisplayed()))
         onView(withId(R.id.messageEditText)).check(matches(withText("")))
