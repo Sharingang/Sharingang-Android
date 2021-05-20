@@ -1,7 +1,6 @@
 package com.example.sharingang.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -144,7 +143,6 @@ class MessageFragment : Fragment() {
             shouldUpdate = true
             listChats.clear()
             listChats.addAll(userRepository.getMessages(currentUserId, partnerId))
-            Log.e("xxx", "numMessages = ${listChats.size}")
             messagesLiveData.postValue(listChats)
         }
     }

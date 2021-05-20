@@ -1,17 +1,12 @@
 package com.example.sharingang.database.firestore
 
-import android.provider.ContactsContract
 import android.util.Log
-import androidx.lifecycle.LifecycleCoroutineScope
 import com.example.sharingang.models.User
 import com.example.sharingang.database.store.UserStore
 import com.example.sharingang.models.Chat
-import com.example.sharingang.ui.fragments.MessageFragment
 import com.example.sharingang.utils.constants.DatabaseFields
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject

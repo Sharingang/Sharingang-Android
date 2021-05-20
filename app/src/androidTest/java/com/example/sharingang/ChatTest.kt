@@ -15,7 +15,6 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.CoreMatchers.not
 import org.junit.Rule
 import org.junit.Test
-import java.time.chrono.ThaiBuddhistEra
 
 @HiltAndroidTest
 class ChatTest {

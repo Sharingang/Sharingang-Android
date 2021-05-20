@@ -1,6 +1,5 @@
 package com.example.sharingang.database.repositories
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.sharingang.models.Chat
@@ -86,10 +85,8 @@ class InMemoryUserRepository : UserRepository {
         if(!messagesMap.containsKey(from) || !messagesMap.containsKey(to)) {
             messagesMap[from] = hashMapOf(to to mutableListOf(chat))
             messagesMap[to] = hashMapOf(from to mutableListOf(chat))
-            Log.d("inMem", "was empty; now contains ${messagesMap[from]!![to]!!.size} elements")
         }
         else {
-            Log.d("inMem", "contains ${messagesMap[from]!![to]!!.size} elements")
             messagesMap[from]!![to]!!.add(chat)
             messagesMap[to]!![from]!!.add(chat)
         }
@@ -107,7 +104,6 @@ class InMemoryUserRepository : UserRepository {
             if(!numUnreadMap.containsKey(to)) hashMapOf(from to 1)
             else hashMapOf(from to getNumUnread(to, from) + 1)
 
-        Log.d("inMem: ","${messagesMap[from]!![to]!!}")
         return messagesMap[from]!![to]!!
     }
 
