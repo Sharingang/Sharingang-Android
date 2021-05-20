@@ -17,13 +17,9 @@ import com.example.sharingang.ui.adapters.MessageAdapter
 import com.example.sharingang.databinding.FragmentMessageBinding
 import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.database.repositories.UserRepository
-import com.example.sharingang.utils.constants.DatabaseFields
-import com.google.firebase.firestore.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import java.util.*
 import javax.inject.Inject
 
 
@@ -131,7 +127,6 @@ class MessageFragment : Fragment() {
     private suspend fun setupMessageRefresh() {
         userRepository.setupRefresh(currentUserId, partnerId) {
             if(isAdded) {
-                Log.e("xxx", "refreshing: size = ${listChats.size}")
                 getAndDisplayMessages()
             }
         }
@@ -142,10 +137,8 @@ class MessageFragment : Fragment() {
      */
     fun getAndDisplayMessages() {
         lifecycleScope.launch(Dispatchers.Main) {
-            listChats.clear()
-            Log.e("xxx", "1. numChats = ${listChats.size}")
-            listChats.addAll(userRepository.getMessages(currentUserId, partnerId))
-            Log.e("xxx", "2. numChats = ${listChats.size}")
+            userRepository.clearNumUnread(currentUserId, partnerId)
+            listChats = userRepository.getMessages(currentUserId, partnerId)
             messagesLiveData.postValue(listChats)
         }
     }
