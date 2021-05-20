@@ -205,7 +205,9 @@ class NewEditFragment : Fragment() {
             userId = existingItem?.userId ?: userId!!, // The form is only displayed for logged in users
             createdAt = existingItem?.createdAt,
             localId = existingItem?.localId ?: 0,
-            request = binding.switchIsRequest.isChecked
+            request = binding.switchIsRequest.isChecked,
+            discount = binding.switchIsDiscount.isChecked,
+            discountPrice = binding.priceDiscount?.toDoubleOrNull() ?: 0.0
         )
     }
 
@@ -257,9 +259,19 @@ class NewEditFragment : Fragment() {
                 Glide.with(requireContext()).load(url).into(binding.itemImage)
             }
             binding.switchIsRequest.isChecked = it.request
+            binding.switchIsDiscount.isChecked = it.discount
+            binding.isDiscount = it.discount
+            setupDiscountSwitch()
+            binding.priceDiscount = it.discountPrice.toString().format("%.2f")
             updateLocationWithCoordinates(it.latitude, it.longitude)
         }
 
         binding.itemTitle.doOnTextChanged { _, _, _, _ -> validateForm() }
+    }
+
+    private fun setupDiscountSwitch() {
+        binding.switchIsDiscount.setOnCheckedChangeListener{_, isChecked ->
+            binding.isDiscount = isChecked
+        }
     }
 }
