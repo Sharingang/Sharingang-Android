@@ -94,7 +94,7 @@ interface UserStore {
      * @param with the target user id
      * @param action what to do upon getting notified
      */
-    suspend fun setupRefresh(userId: String, with: String, action: () -> Unit)
+    suspend fun setupConversationRefresh(userId: String, with: String, action: () -> Unit)
 
     /**
      * Gets the current number of unread messages of a particular user with another user

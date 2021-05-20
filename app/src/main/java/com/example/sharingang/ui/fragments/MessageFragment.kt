@@ -126,7 +126,7 @@ class MessageFragment : Fragment() {
      * Adds a change listener to the document where the last chat time is stored.
      */
     private suspend fun setupMessageRefresh() {
-        userRepository.setupRefresh(currentUserId, partnerId) {
+        userRepository.setupConversationRefresh(currentUserId, partnerId) {
             if (isAdded && shouldUpdate) {
                 getAndDisplayMessages()
             }

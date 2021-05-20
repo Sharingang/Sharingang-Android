@@ -88,7 +88,7 @@ class InMemoryUserRepository : UserRepository {
         return messagesMap[from]!![to]!!
     }
 
-    override suspend fun setupRefresh(
+    override suspend fun setupConversationRefresh(
         userId: String, with: String, action: () -> Unit
     ) {
         return

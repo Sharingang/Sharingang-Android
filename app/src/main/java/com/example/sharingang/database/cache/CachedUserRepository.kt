@@ -88,12 +88,12 @@ class CachedUserRepository @Inject constructor(
         return store.putMessage(from, to, message)
     }
 
-    override suspend fun setupRefresh(
+    override suspend fun setupConversationRefresh(
         userId: String,
         with: String,
         action: () -> Unit
     ) {
-        return store.setupRefresh(userId, with, action)
+        return store.setupConversationRefresh(userId, with, action)
     }
 
     override suspend fun getNumUnread(userId: String, with: String): Long {

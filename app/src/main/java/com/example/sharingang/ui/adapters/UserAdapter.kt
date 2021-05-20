@@ -66,7 +66,7 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
             }
             lifecycleScope.launch(Dispatchers.Main) {
                 displayNumUnread(holder, user.id!!)
-                userRepository.setupRefresh(currentUserId, user.id) {
+                userRepository.setupConversationRefresh(currentUserId, user.id) {
                         if(attachedFragment.isAdded) {
                             displayNumUnread(holder, user.id)
                         }

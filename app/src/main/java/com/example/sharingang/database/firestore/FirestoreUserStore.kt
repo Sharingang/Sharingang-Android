@@ -102,20 +102,13 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
             .document(userId).collection(DatabaseFields.DBFIELD_CHATS)
             .document(with).collection(DatabaseFields.DBFIELD_MESSAGES)
             .get().await().documents
-        val listChats = mutableListOf<Chat>()
-        for (document in documents) {
-            val message = document.getString(DatabaseFields.DBFIELD_MESSAGE)
-            if (message != null) {
-                listChats.add(
-                    Chat(
-                        document.getString(DatabaseFields.DBFIELD_FROM),
-                        document.getString(DatabaseFields.DBFIELD_TO),
-                        message
-                    )
-                )
-            }
+        return documents.map {
+            Chat(
+                it.getString(DatabaseFields.DBFIELD_FROM),
+                it.getString(DatabaseFields.DBFIELD_TO),
+                it.getString(DatabaseFields.DBFIELD_MESSAGE)!!
+            )
         }
-        return listChats
     }
 
     override suspend fun putMessage(from: String, to: String, message: String): List<Chat> {
@@ -137,7 +130,7 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
         return getMessages(from, to)
     }
 
-    override suspend fun setupRefresh(
+    override suspend fun setupConversationRefresh(
         userId: String, with: String, action: () -> Unit
     ) {
         val ref = getUserDocument(userId)
