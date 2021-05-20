@@ -45,7 +45,6 @@ class ChatTest {
         navigate_to(R.id.newEditFragment)
         onView(withId(R.id.itemTitle)).perform(
             replaceText("TestItem"),
-            closeSoftKeyboard()
         )
         onView(withId(R.id.saveItemButton)).perform(click())
         waitAfterSaveItem()
@@ -80,7 +79,6 @@ class ChatTest {
         val message2 = getRandomString(15)
         onView(withId(R.id.messageEditText)).perform(
             replaceText(message2),
-            closeSoftKeyboard()
         )
         onView(withId(R.id.btnSend)).perform(click())
         Thread.sleep(1000)
