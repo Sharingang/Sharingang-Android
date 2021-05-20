@@ -13,14 +13,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.sharingang.R
+import com.example.sharingang.auth.CurrentUserProvider
+import com.example.sharingang.database.repositories.ItemRepository
 import com.example.sharingang.databinding.FragmentDetailedItemBinding
 import com.example.sharingang.models.Item
-import com.example.sharingang.database.repositories.ItemRepository
-import com.example.sharingang.viewmodels.ItemsViewModel
-import com.example.sharingang.payment.PaymentProvider
-import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.models.User
+import com.example.sharingang.payment.PaymentProvider
 import com.example.sharingang.utils.ImageAccess
+import com.example.sharingang.viewmodels.ItemsViewModel
 import com.example.sharingang.viewmodels.UserProfileViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.dynamiclinks.ktx.androidParameters
@@ -81,6 +81,7 @@ class DetailedItemFragment : Fragment() {
         initBuy()
 
         binding.shareButton.setOnClickListener { shareItem() }
+        binding.locateButton.setOnClickListener { locateItem() }
 
         viewModel.setUser(args.item.userId)
         viewModel.user.observe(viewLifecycleOwner, this::onUserChange)
@@ -273,12 +274,21 @@ class DetailedItemFragment : Fragment() {
     }
 
     private fun generateDeepLink(item: Item): Uri {
-        val itemDeepLinkPrefix = "https://sharingang.page.link/item?id="
-        val deepLink = itemDeepLinkPrefix + item.id
-        return Uri.parse(deepLink)
+        return Uri.parse("https://sharingang.page.link/item?id=${item.id}")
     }
 
     private fun generateLinkTitle(item: Item): String {
         return item.title + " - " + getString(R.string.app_name)
+    }
+
+    /**
+     * The callback for when a user wants to locate her item
+     */
+    private fun locateItem() {
+        item?.let {
+            view?.findNavController()?.navigate(
+                DetailedItemFragmentDirections.actionDetailedItemFragmentToARActivity(it)
+            )
+        }
     }
 }

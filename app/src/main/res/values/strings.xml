@@ -94,5 +94,6 @@
     <string name="open_gallery">Open Gallery</string>
     <string name="category">Category:</string>
     <string name="required_field">Required field</string>
+    <string name="locate_item">Locate Item</string>
     <string name="open_camera">Open Camera</string>
 </resources>
