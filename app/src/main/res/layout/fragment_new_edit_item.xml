@@ -38,6 +38,14 @@
         <variable
             name="isLoading"
             type="Boolean" />
+
+        <variable
+            name="isDiscount"
+            type="Boolean" />
+
+        <variable
+            name="priceDiscount"
+            type="String" />
     </data>
 
     <LinearLayout
@@ -60,7 +68,7 @@
             android:textAlignment="center"
             android:textSize="18sp"
             android:visibility="@{isAuthenticated ? View.GONE : View.VISIBLE}"
-            tools:visibility="gone"/>
+            tools:visibility="gone" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -212,6 +220,43 @@
                         android:text="@={price}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="start">
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switch_is_discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/is_discount"
+                        android:textSize="17sp"
+                        android:visibility="@{isNewItem ? View.GONE : View.VISIBLE}" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/itemDiscountContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/price"
+                        android:visibility="@{isDiscount ? View.VISIBLE : View.GONE}"
+                        app:suffixText="CHF">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/discountPrice"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:text="@={priceDiscount}" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
 
                 <Space
                     android:layout_width="match_parent"

@@ -1,6 +1,7 @@
 package com.example.sharingang.ui.activities
 
 import android.content.Context
+import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.net.Uri
@@ -20,8 +21,6 @@ import com.example.sharingang.shake.ShakeListener
 import com.example.sharingang.ui.fragments.ItemsListFragmentDirections
 import com.example.sharingang.utils.notification.createChannel
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.dynamiclinks.ktx.dynamicLinks
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -98,11 +97,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
      * Retrieves the deep link using Firebase Dynamic Links and opens it
      */
     private fun handleDeepLink() {
-        Firebase.dynamicLinks
-            .getDynamicLink(intent)
-            .addOnSuccessListener(this) { pendingDynamicLinkData ->
-                pendingDynamicLinkData?.link?.let { openDeepLink(it) }
-            }
+        val action: String? = intent?.action
+        val data: Uri? = intent?.data
+        if (action == Intent.ACTION_VIEW && data != null) {
+            openDeepLink(data)
+        }
     }
 
     /**

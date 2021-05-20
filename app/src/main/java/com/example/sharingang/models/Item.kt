@@ -31,6 +31,9 @@ data class Item(
 
     val price: Double = 0.0,
 
+    val discount: Boolean = false,
+    val discountPrice: Double = 0.0,
+
     val sold: Boolean = false,
 
     var category: Int = 0,
@@ -53,7 +56,7 @@ data class Item(
     /**
      * The ID we use locally
      */
-    @Exclude
+    @get:Exclude
     @PrimaryKey(autoGenerate = true)
     val localId: Int = 0
 ) : Parcelable
