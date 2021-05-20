@@ -94,6 +94,7 @@
     <string name="open_gallery">Open Gallery</string>
     <string name="category">Category:</string>
     <string name="required_field">Required field</string>
+    <string name="open_camera">Open Camera</string>
     <string name="is_discount">Discount?</string>
     <string name="discount_lower">Discount price must be lower</string>
 </resources>
