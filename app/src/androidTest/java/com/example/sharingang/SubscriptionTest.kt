@@ -34,6 +34,7 @@ class SubscriptionTest {
                 R.string.see_subscriptions
             )
         ).perform(click())
+        Thread.sleep(1000)
         onView(withId(R.id.subscriptions)).check(matches(withText(R.string.not_subscribed)))
     }
 
