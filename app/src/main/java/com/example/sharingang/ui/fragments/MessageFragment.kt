@@ -1,6 +1,7 @@
 package com.example.sharingang.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import com.example.sharingang.models.Chat
 import com.example.sharingang.ui.adapters.MessageAdapter
 import com.example.sharingang.databinding.FragmentMessageBinding
 import com.example.sharingang.auth.CurrentUserProvider
+import com.example.sharingang.database.repositories.UserRepository
 import com.example.sharingang.utils.constants.DatabaseFields
 import com.google.firebase.firestore.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,23 +48,7 @@ class MessageFragment : Fragment() {
     lateinit var currentUserProvider: CurrentUserProvider
 
     @Inject
-    lateinit var firebaseFirestore: FirebaseFirestore
-
-    /**
-     * This class is useful for creating a pair where we can retrieve
-     * one value from the other.
-     */
-    private class LinkedPair<A>(private val fst: A, private val snd: A) {
-        /**
-         * Retrieve the pair's other element
-         *
-         * @param x The pair's element whose partner we want to get
-         * @return The pair's partner (null if x is not part of the pair)
-         */
-        fun otherOf(x: A): A? {
-            return if (x == fst) snd else if (x == snd) fst else null
-        }
-    }
+    lateinit var userRepository: UserRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,7 +67,10 @@ class MessageFragment : Fragment() {
         setupFields()
         setupSendButton()
         setupUI()
-        setupMessageRefresh()
+        lifecycleScope.launch(Dispatchers.Main) {
+            setupMessageRefresh()
+        }
+        messagesLiveData.postValue(listChats)
         return binding.root
     }
 
@@ -104,19 +93,11 @@ class MessageFragment : Fragment() {
         }
         binding.btnSend.setOnClickListener {
             val message = binding.messageEditText.text.toString()
-            sendMessage(currentUserId, partnerId, message)
+            binding.messageEditText.text.clear()
+            lifecycleScope.launch(Dispatchers.Main) {
+                sendMessage(currentUserId, partnerId, message)
+            }
         }
-    }
-
-    /**
-     * Retrieve the user's document from the database based on its id.
-     *
-     * @param userId the id of the user we want to get the document of
-     * @return the document of the user
-     */
-    private fun getUserDocument(userId: String): DocumentReference {
-        val usersCollection = firebaseFirestore.collection(DatabaseFields.DBFIELD_USERS)
-        return usersCollection.document(userId)
     }
 
     /**
@@ -126,25 +107,9 @@ class MessageFragment : Fragment() {
      * @param to the receiver
      * @param message the message to send
      */
-    private fun sendMessage(from: String, to: String, message: String) {
-        val data = hashMapOf<String, Any>(
-            DatabaseFields.DBFIELD_MESSAGE to message,
-            DatabaseFields.DBFIELD_FROM to from,
-            DatabaseFields.DBFIELD_TO to to
-        )
-        val date = Date()
-        val lastTimeChat = hashMapOf(
-            DatabaseFields.DBFIELD_LAST_MESSAGE to "$date (${System.currentTimeMillis()})"
-        )
-        val fromToPair = LinkedPair(from, to)
-        listOf(from, to).forEach {
-            val userDocument = getUserDocument(it)
-            userDocument.collection(DatabaseFields.DBFIELD_CHATS).document(fromToPair.otherOf(it)!!)
-                .collection(DatabaseFields.DBFIELD_MESSAGES).document(date.toString()).set(data)
-            userDocument.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
-                .document(fromToPair.otherOf(it)!!).set(lastTimeChat)
-        }
-        binding.messageEditText.text.clear()
+    private suspend fun sendMessage(from: String, to: String, message: String) {
+        val newMessages = userRepository.putMessage(from, to, message)
+        messagesLiveData.postValue(newMessages)
     }
 
     /**
@@ -154,29 +119,10 @@ class MessageFragment : Fragment() {
         listChats.clear()
         messageAdapter = MessageAdapter(requireContext(), listChats, currentUserId)
         binding.history.adapter = messageAdapter
-        lifecycleScope.launch(Dispatchers.Main) {
+        lifecycleScope.launch(Dispatchers.IO) {
             getAndDisplayMessages()
-        }
-    }
-
-    /**
-     * Adds the messages documents to the current list of messages.
-     *
-     * @param documents the list of documents we are fetching the messages from
-     */
-    private fun addMessagesToChatList(documents: MutableList<DocumentSnapshot>) {
-        listChats.clear()
-        for (document in documents) {
-            val message = document.getString(DatabaseFields.DBFIELD_MESSAGE)
-            if (message != null) {
-                listChats.add(
-                    Chat(
-                        document.getString(DatabaseFields.DBFIELD_FROM),
-                        document.getString(DatabaseFields.DBFIELD_TO),
-                        message
-                    )
-                )
-                messagesLiveData.postValue(listChats)
+            lifecycleScope.launch(Dispatchers.Main) {
+                scrollToEnd()
             }
         }
     }
@@ -184,41 +130,29 @@ class MessageFragment : Fragment() {
     /**
      * Adds a change listener to the document where the last chat time is stored.
      */
-    private fun setupMessageRefresh() {
-        val lastTimeChatDocument = getUserDocument(currentUserId)
-            .collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).document(partnerId)
-        addOnChangeListener(lastTimeChatDocument)
-    }
-
-    /**
-     * Adds a change listener to a document
-     *
-     * @param ref the document to add the listener to
-     */
-    private fun addOnChangeListener(ref: DocumentReference) {
-        ref.addSnapshotListener { _, e ->
-            if (e == null) {
-                lifecycleScope.launch(Dispatchers.Main) {
-                    getAndDisplayMessages()
-                }
-            }
-        }
+    private suspend fun setupMessageRefresh() {
+        userRepository.setupRefresh(currentUserId, partnerId, this, lifecycleScope)
     }
 
     /**
      * Gets the messages and displays them with the help of the adapter
      */
-    private suspend fun getAndDisplayMessages() {
+    suspend fun getAndDisplayMessages() {
         listChats.clear()
-        val messages = firebaseFirestore.collection(DatabaseFields.DBFIELD_USERS)
-            .document(currentUserId).collection(DatabaseFields.DBFIELD_CHATS)
-            .document(partnerId).collection(DatabaseFields.DBFIELD_MESSAGES)
-            .get().await()
-        addMessagesToChatList(messages.documents)
-        lifecycleScope.launch(Dispatchers.Main) {
-            if (listChats.isNotEmpty()) {
-                binding.history.scrollToPosition(listChats.size - 1)
-            }
+        val messages = userRepository.getMessages(currentUserId, partnerId)
+        messagesLiveData.postValue(messages)
+    }
+
+    /**
+     * Scrolls to the end of messages
+     */
+    fun scrollToEnd() {
+        if (listChats.isNotEmpty()) {
+            Log.e("xxx", "Size = ${listChats.size}")
+            binding.history.scrollToPosition(listChats.size - 1)
+        }
+        else {
+            Log.e("xxx", "Chat is empty")
         }
     }
 }

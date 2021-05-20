@@ -1,11 +1,13 @@
 package com.example.sharingang.database.cache
 
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.LiveData
 import com.example.sharingang.models.User
 import com.example.sharingang.database.room.UserDao
 import com.example.sharingang.database.repositories.UserRepository
 import com.example.sharingang.database.store.UserStore
-import com.google.maps.android.ktx.model.streetViewPanoramaOrientation
+import com.example.sharingang.models.Chat
+import com.example.sharingang.ui.fragments.MessageFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -78,5 +80,22 @@ class CachedUserRepository @Inject constructor(
 
     override suspend fun getChatPartners(userId: String): MutableList<String> {
         return thenRefresh { store.getChatPartners(userId) }
+    }
+
+    override suspend fun getMessages(userId: String, with: String): MutableList<Chat> {
+        return thenRefresh { store.getMessages(userId, with) }
+    }
+
+    override suspend fun putMessage(from: String, to: String, message: String): MutableList<Chat> {
+        return thenRefresh { store.putMessage(from, to, message) }
+    }
+
+    override suspend fun setupRefresh(
+        userId: String,
+        with: String,
+        fragment: MessageFragment,
+        lifecycleScope: LifecycleCoroutineScope
+    ) {
+        return thenRefresh { store.setupRefresh(userId, with, fragment, lifecycleScope) }
     }
 }

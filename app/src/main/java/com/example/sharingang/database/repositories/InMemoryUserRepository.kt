@@ -1,8 +1,11 @@
 package com.example.sharingang.database.repositories
 
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.sharingang.models.Chat
 import com.example.sharingang.models.User
+import com.example.sharingang.ui.fragments.MessageFragment
 
 /**
  * In-memory implementation of the UserRepository
@@ -13,6 +16,7 @@ class InMemoryUserRepository : UserRepository {
     private val usersMap = HashMap<String, User>()
 
     private val chatPartnersMap = HashMap<String, MutableList<String>>()
+    private val messagesMap = HashMap<String, HashMap<String, MutableList<Chat>>>()
 
     override suspend fun get(id: String): User? {
         return usersMap[id]
@@ -62,5 +66,23 @@ class InMemoryUserRepository : UserRepository {
     override suspend fun getChatPartners(userId: String): MutableList<String> {
         return chatPartnersMap[userId] ?: mutableListOf()
     }
+
+    override suspend fun getMessages(userId: String, with: String): MutableList<Chat> {
+        val allMessages = messagesMap[userId]
+        if(allMessages != null) {
+            val messages = allMessages[with]
+            return messages ?: mutableListOf()
+        }
+        return mutableListOf()
+    }
+
+    override suspend fun putMessage(from: String, to: String, message: String): MutableList<Chat> {
+        messagesMap[from]!![to]!!.add(Chat(from = from, to = to, message = message))
+        return messagesMap[from]!![to]!!
+    }
+
+    override suspend fun setupRefresh(
+        userId: String, with: String, fragment: MessageFragment, lifecycleScope: LifecycleCoroutineScope
+    ) { return }
 
 }

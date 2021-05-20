@@ -1,6 +1,9 @@
 package com.example.sharingang.database.store
 
+import androidx.lifecycle.LifecycleCoroutineScope
+import com.example.sharingang.models.Chat
 import com.example.sharingang.models.User
+import com.example.sharingang.ui.fragments.MessageFragment
 import com.google.firebase.firestore.QuerySnapshot
 
 /**
@@ -64,6 +67,26 @@ interface UserStore {
      * Retrieves all the chat partners of a particular user
      *
      * @param userId the id of the user whose partners to retrieve
+     * @return the list of all ids of the partners of the user
      */
     suspend fun getChatPartners(userId: String): MutableList<String>
+
+    /**
+     * Retrieves all messages of a user with a particular user
+     *
+     * @param userId the user id of the user whose messages we want to retrieve
+     * @param with the target user
+     * @return the resulting list of messages / Chats
+     */
+    suspend fun getMessages(userId: String, with: String): MutableList<Chat>
+
+    /**
+     * Puts a message into database
+     */
+    suspend fun putMessage(from: String, to: String, message: String): MutableList<Chat>
+
+    /**
+     * Sets up the listener on messages for a particular user with another user
+     */
+    suspend fun setupRefresh(userId: String, with: String, fragment: MessageFragment, lifecycleScope: LifecycleCoroutineScope)
 }
