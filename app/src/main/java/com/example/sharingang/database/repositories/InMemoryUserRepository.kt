@@ -82,28 +82,9 @@ class InMemoryUserRepository : UserRepository {
 
     override suspend fun putMessage(from: String, to: String, message: String): MutableList<Chat> {
         val chat = Chat(from, to, message)
-        if(!messagesMap.containsKey(from) || !messagesMap.containsKey(to)) {
-            messagesMap[from] = hashMapOf(to to mutableListOf(chat))
-            messagesMap[to] = hashMapOf(from to mutableListOf(chat))
-        }
-        else {
-            messagesMap[from]!![to]!!.add(chat)
-            messagesMap[to]!![from]!!.add(chat)
-        }
-        if(!chatPartnersMap.containsKey(from) || !messagesMap.containsKey(to)) {
-            chatPartnersMap[from] = mutableListOf(to)
-            chatPartnersMap[to] = mutableListOf(from)
-        }
-        else if(!chatPartnersMap[from]!!.contains(to) && !chatPartnersMap[to]!!.contains(from)) {
-            chatPartnersMap[from]!!.add(to)
-            chatPartnersMap[to]!!.add(from)
-        }
-
-        numUnreadMap[from] = hashMapOf(to to 0)
-        numUnreadMap[to] =
-            if(!numUnreadMap.containsKey(to)) hashMapOf(from to 1)
-            else hashMapOf(from to getNumUnread(to, from) + 1)
-
+        updateMessages(from, to, chat)
+        updateChatPartners(from, to)
+        updateUnreads(from, to)
         return messagesMap[from]!![to]!!
     }
 
@@ -122,6 +103,54 @@ class InMemoryUserRepository : UserRepository {
 
     override suspend fun clearNumUnread(userId: String, with: String) {
         numUnreadMap[userId] = hashMapOf(with to 0)
+    }
+
+    /**
+     * Adds a new message to the messages list
+     *
+     * @param from the sender
+     * @param to the receiver
+     * @param chat the chat element
+     */
+    private fun updateMessages(from: String, to: String, chat: Chat) {
+        if(!messagesMap.containsKey(from) || !messagesMap.containsKey(to)) {
+            messagesMap[from] = hashMapOf(to to mutableListOf(chat))
+            messagesMap[to] = hashMapOf(from to mutableListOf(chat))
+        }
+        else {
+            messagesMap[from]!![to]!!.add(chat)
+            messagesMap[to]!![from]!!.add(chat)
+        }
+    }
+
+    /**
+     * Updates the chat partners of two messaging users
+     *
+     * @param from the sender
+     * @param to the receiver
+     */
+    private fun updateChatPartners(from: String, to: String) {
+        if(!chatPartnersMap.containsKey(from) || !messagesMap.containsKey(to)) {
+            chatPartnersMap[from] = mutableListOf(to)
+            chatPartnersMap[to] = mutableListOf(from)
+        }
+        else if(!chatPartnersMap[from]!!.contains(to) && !chatPartnersMap[to]!!.contains(from)) {
+            chatPartnersMap[from]!!.add(to)
+            chatPartnersMap[to]!!.add(from)
+        }
+    }
+
+    /**
+     * Update the number of unread messages of two messaging users
+     *
+     * @param from the sender
+     * @param to the receiver
+     */
+    private suspend fun updateUnreads(from: String, to: String) {
+        numUnreadMap[from] = hashMapOf(to to 0)
+        numUnreadMap[to] =
+            if(!numUnreadMap.containsKey(to)) hashMapOf(from to 1)
+            else hashMapOf(from to getNumUnread(to, from) + 1)
     }
 
 }
