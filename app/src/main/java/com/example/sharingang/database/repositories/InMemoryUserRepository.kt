@@ -98,7 +98,12 @@ class InMemoryUserRepository : UserRepository {
     }
 
     override suspend fun setupRefresh(
-        userId: String, with: String, action: () -> Unit, lifecycleScope: LifecycleCoroutineScope
-    ) { return }
+        userId: String, with: String, action: () -> Unit) {
+        return
+    }
+
+    override suspend fun getNumUnread(userId: String, with: String): Long {
+        TODO("Not yet implemented")
+    }
 
 }

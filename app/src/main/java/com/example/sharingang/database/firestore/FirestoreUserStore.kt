@@ -1,5 +1,6 @@
 package com.example.sharingang.database.firestore
 
+import android.provider.ContactsContract
 import android.util.Log
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.example.sharingang.models.User
@@ -130,22 +131,31 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
             DatabaseFields.DBFIELD_TO to to
         )
         val date = Date()
-        val lastTimeChat = hashMapOf(
-            DatabaseFields.DBFIELD_LAST_MESSAGE to "$date (${System.currentTimeMillis()})"
+        val lastTimeChatCurrent = hashMapOf(
+            DatabaseFields.DBFIELD_LAST_MESSAGE to "$date (${System.currentTimeMillis()})",
+            DatabaseFields.DBFIELD_NUM_UNREAD to 0
         )
+        val numUnread = getNumUnread(to, from)
+        val lastTimeChatOther = hashMapOf(
+            DatabaseFields.DBFIELD_LAST_MESSAGE to "$date(${System.currentTimeMillis()})",
+            DatabaseFields.DBFIELD_NUM_UNREAD to numUnread + 1
+        )
+        getUserDocument(from).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
+            .document(to).set(lastTimeChatCurrent)
+        getUserDocument(to).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
+            .document(from).set(lastTimeChatOther)
+
         val fromToPair = LinkedPair(from, to)
         listOf(from, to).forEach {
             val userDocument = getUserDocument(it)
             userDocument.collection(DatabaseFields.DBFIELD_CHATS).document(fromToPair.otherOf(it)!!)
                 .collection(DatabaseFields.DBFIELD_MESSAGES).document(date.toString()).set(data)
-            userDocument.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
-                .document(fromToPair.otherOf(it)!!).set(lastTimeChat)
         }
         return getMessages(from, to)
     }
 
     override suspend fun setupRefresh(
-        userId: String, with: String, action: () -> Unit, lifecycleScope: LifecycleCoroutineScope) {
+        userId: String, with: String, action: () -> Unit) {
         val ref = getUserDocument(userId)
             .collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).document(with)
         ref.addSnapshotListener { _, e ->
@@ -155,6 +165,19 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
         }
     }
 
+    override suspend fun getNumUnread(userId: String, with: String): Long {
+        val currentUserDocument = getUserDocument(userId)
+        val numUnread = currentUserDocument.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
+            .document(with).get().await().getLong(DatabaseFields.DBFIELD_NUM_UNREAD)
+        return numUnread ?: 0
+    }
+
+    /**
+     * Gets the document corresponding to a particular user
+     *
+     * @param userId the user whose document we want to fetch
+     * @return the fetched document
+     */
     private fun getUserDocument(userId: String): DocumentReference {
         return firestore.collection(DatabaseFields.DBFIELD_USERS).document(userId)
     }

@@ -82,11 +82,27 @@ interface UserStore {
 
     /**
      * Puts a message into database
+     *
+     * @param from the sender
+     * @param to the receiver
+     * @param message the message
+     * @return the new list of messages between the two users
      */
     suspend fun putMessage(from: String, to: String, message: String): MutableList<Chat>
 
     /**
      * Sets up the listener on messages for a particular user with another user
+     *
+     * @param userId the current user id
+     * @param with the target user id
+     * @param action what to do upon getting notified
      */
-    suspend fun setupRefresh(userId: String, with: String, action: () -> Unit, lifecycleScope: LifecycleCoroutineScope)
+    suspend fun setupRefresh(userId: String, with: String, action: () -> Unit)
+
+    /**
+     * Gets the current number of unread messages of a particular user with another user
+     *
+     * @
+     */
+    suspend fun getNumUnread(userId: String, with: String): Long
 }

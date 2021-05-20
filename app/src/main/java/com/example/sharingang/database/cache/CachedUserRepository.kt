@@ -93,9 +93,12 @@ class CachedUserRepository @Inject constructor(
     override suspend fun setupRefresh(
         userId: String,
         with: String,
-        action: () -> Unit,
-        lifecycleScope: LifecycleCoroutineScope
+        action: () -> Unit
     ) {
-        return thenRefresh { store.setupRefresh(userId, with, action, lifecycleScope) }
+        return thenRefresh { store.setupRefresh(userId, with, action) }
+    }
+
+    override suspend fun getNumUnread(userId: String, with: String): Long {
+        return thenRefresh { store.getNumUnread(userId, with) }
     }
 }
