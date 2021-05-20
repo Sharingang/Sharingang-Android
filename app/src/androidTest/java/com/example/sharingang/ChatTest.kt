@@ -44,7 +44,7 @@ class ChatTest {
         FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
         navigate_to(R.id.newEditFragment)
         onView(withId(R.id.itemTitle)).perform(
-            typeText("TestItem"),
+            replaceText("TestItem"),
             closeSoftKeyboard()
         )
         onView(withId(R.id.saveItemButton)).perform(click())
