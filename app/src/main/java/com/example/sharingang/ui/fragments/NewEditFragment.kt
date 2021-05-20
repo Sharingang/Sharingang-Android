@@ -186,8 +186,15 @@ class NewEditFragment : Fragment() {
             binding.itemTitle.requestFocus()
             getString(R.string.required_field)
         } else null
+        val discountLowerPrice = if (binding.switchIsDiscount.isChecked){
+            binding.priceDiscount?.toDouble() ?: 0.0 < binding.price?.toDouble() ?: 0.0
+        } else true
+        binding.itemDiscountContainer.error = if (!discountLowerPrice) {
+            binding.discountPrice.requestFocus()
+            getString(R.string.discount_lower)
+        } else null
 
-        return !titleEmpty
+        return !titleEmpty && discountLowerPrice
     }
 
     private fun itemToAdd(): Item {
