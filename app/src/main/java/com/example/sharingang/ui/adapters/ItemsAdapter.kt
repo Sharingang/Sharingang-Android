@@ -1,13 +1,17 @@
 package com.example.sharingang.ui.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.sharingang.R
 import com.example.sharingang.databinding.ItemViewBinding
 import com.example.sharingang.models.Item
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 /**
  * Adapter to display items in a recycler view.
@@ -36,6 +40,13 @@ class ItemsAdapter(private val clickListener: ItemListener) :
             binding.item = item
             Glide.with(binding.itemImagePreview).load(item.image).into(binding.itemImagePreview)
             binding.clickListener = clickListener
+            ("${getDateDifference(item.updatedAt!!, Date())}D")
+                .also{ binding.textViewLastUpdated.text = it }
+        }
+
+        private fun getDateDifference(startDate: Date, endDate: Date): Long {
+            return TimeUnit.DAYS.convert(endDate.time - startDate.time,
+                TimeUnit.MILLISECONDS)
         }
 
         companion object {

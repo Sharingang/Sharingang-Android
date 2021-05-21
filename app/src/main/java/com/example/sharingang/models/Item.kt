@@ -53,6 +53,9 @@ data class Item(
     @ServerTimestamp
     val createdAt: Date? = null,
 
+    @ServerTimestamp
+    val updatedAt: Date? = null,
+
     /**
      * The ID we use locally
      */
