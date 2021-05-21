@@ -99,4 +99,5 @@
     <string name="open_camera">Open Camera</string>
     <string name="is_discount">Discount?</string>
     <string name="discount_lower">Discount price must be lower</string>
+    <string name="message_time">Time</string>
 </resources>
