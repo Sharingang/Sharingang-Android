@@ -18,7 +18,7 @@ import com.example.sharingang.ui.fragments.MessageFragment
  * @property currentUserId the current logged in user's id
  */
 class MessageAdapter(
-    private val context: Context, private var chats: MutableList<Chat>,
+    private val context: Context, private var chats: List<Chat>,
     private val currentUserId: String, private val attachedFragment: MessageFragment
 ) :
     RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
@@ -39,6 +39,7 @@ class MessageAdapter(
      */
     class ViewHolder(messageEntryView: View) : RecyclerView.ViewHolder(messageEntryView) {
         var text: TextView = messageEntryView.findViewById(R.id.messageText)
+        var time: TextView = messageEntryView.findViewById(R.id.message_time)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -55,6 +56,7 @@ class MessageAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val message: String = chats[position].message
         holder.text.text = message
+        holder.time.text = chats[position].getMessageTime()
     }
 
     override fun getItemCount(): Int {
@@ -75,8 +77,7 @@ class MessageAdapter(
      * @param newData the incoming data
      */
     fun submitList(newData: List<Chat>) {
-        chats.clear()
-        chats.addAll(newData)
+        chats = newData
         notifyDataSetChanged()
         attachedFragment.scrollToEnd()
     }
