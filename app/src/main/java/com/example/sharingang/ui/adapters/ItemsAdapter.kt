@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.example.sharingang.R
 import com.example.sharingang.databinding.ItemViewBinding
 import com.example.sharingang.models.Item
+import com.example.sharingang.utils.DateHelper
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -40,13 +41,8 @@ class ItemsAdapter(private val clickListener: ItemListener) :
             binding.item = item
             Glide.with(binding.itemImagePreview).load(item.image).into(binding.itemImagePreview)
             binding.clickListener = clickListener
-            ("${getDateDifference(item.updatedAt!!, Date())}D")
+            ("${DateHelper.getDateDifferenceInDays(item.updatedAt!!, Date())}D")
                 .also{ binding.textViewLastUpdated.text = it }
-        }
-
-        private fun getDateDifference(startDate: Date, endDate: Date): Long {
-            return TimeUnit.DAYS.convert(endDate.time - startDate.time,
-                TimeUnit.MILLISECONDS)
         }
 
         companion object {

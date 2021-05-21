@@ -32,6 +32,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import android.graphics.Paint
+import com.example.sharingang.utils.DateHelper
+import java.util.*
 
 @AndroidEntryPoint
 class DetailedItemFragment : Fragment() {
@@ -86,6 +88,7 @@ class DetailedItemFragment : Fragment() {
 
         viewModel.setUser(args.item.userId)
         viewModel.user.observe(viewLifecycleOwner, this::onUserChange)
+        binding.lastUpdateText.text = DateHelper.getDateDifferenceInDays(Date(), item!!.updatedAt!!).toString()
         return binding.root
     }
 
