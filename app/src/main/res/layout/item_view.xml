@@ -54,8 +54,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="15dp"
                     android:gravity="center"
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -63,10 +63,10 @@
 
                     <ImageView
                         android:id="@+id/historyImage"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        app:srcCompat="@android:drawable/ic_menu_recent_history"
-                        android:contentDescription="@string/lastUpdate" />
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:contentDescription="@string/lastUpdate"
+                        app:srcCompat="@android:drawable/ic_menu_recent_history" />
 
                     <TextView
                         android:id="@+id/textViewLastUpdated"
