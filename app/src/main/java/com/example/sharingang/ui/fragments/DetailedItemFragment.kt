@@ -191,7 +191,9 @@ class DetailedItemFragment : Fragment() {
     private fun initWishlistButton() {
         if (currentUserProvider.getCurrentUserId() != null && !args.item.request) {
             viewModel.wishlistContains.observe(viewLifecycleOwner, {
-                binding.addToWishlist.text = getButtonText(it)
+                binding.addToWishlist.text =
+                    if(it) getString(R.string.remove_wishlist)
+                    else getString(R.string.add_wishlist)
             })
             binding.addToWishlist.setOnClickListener { updateWishlist() }
             viewModel.wishlistContains(args.item)
@@ -223,12 +225,6 @@ class DetailedItemFragment : Fragment() {
                 itemViewModel.rateItem(item)
             }
         }
-    }
-
-
-    private fun getButtonText(contains: Boolean): String {
-        return if (contains) getString(R.string.remove_wishlist)
-        else getString(R.string.add_wishlist)
     }
 
     private fun updateWishlist() {
