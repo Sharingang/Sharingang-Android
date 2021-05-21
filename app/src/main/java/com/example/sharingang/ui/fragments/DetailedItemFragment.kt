@@ -88,7 +88,7 @@ class DetailedItemFragment : Fragment() {
 
         viewModel.setUser(args.item.userId)
         viewModel.user.observe(viewLifecycleOwner, this::onUserChange)
-        binding.lastUpdateText.text = DateHelper.getDateDifferenceInDays(Date(), item!!.updatedAt!!).toString()
+        setLastUpdated()
         return binding.root
     }
 
@@ -293,6 +293,22 @@ class DetailedItemFragment : Fragment() {
             view?.findNavController()?.navigate(
                 DetailedItemFragmentDirections.actionDetailedItemFragmentToARActivity(it)
             )
+        }
+    }
+
+    /**
+     * Sets the text for when the item was last updated
+     */
+    private fun setLastUpdated() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val lastUpdate = itemRepository.getLastTimeUpdate(args.item.id!!)
+            lifecycleScope.launch(Dispatchers.Main) {
+                binding.lastUpdateText.text =
+                    getString(
+                        R.string.last_update,
+                        DateHelper.getDateDifferenceInDays(Date(), lastUpdate).toString()
+                    )
+            }
         }
     }
 }

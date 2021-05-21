@@ -99,6 +99,6 @@
     <string name="open_camera">Open Camera</string>
     <string name="is_discount">Discount?</string>
     <string name="discount_lower">Discount price must be lower</string>
-    <string name="last_update">%1$s D</string>
+    <string name="last_update">%1$sD</string>
     <string name="lastUpdate">lastUpdate</string>
 </resources>
