@@ -284,7 +284,6 @@
                 android:contentDescription="@string/share"
                 android:backgroundTint="@color/themeColor"
                 android:layout_marginTop="16dp"
-                android:contentDescription="@string/share"
                 app:srcCompat="?attr/actionModeShareDrawable" />
 
             <Space

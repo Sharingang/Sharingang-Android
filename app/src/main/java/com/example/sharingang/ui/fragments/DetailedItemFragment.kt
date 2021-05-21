@@ -1,9 +1,9 @@
 package com.example.sharingang.ui.fragments
 
 import android.content.Intent
+import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -33,7 +33,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import android.graphics.Paint
 
 @AndroidEntryPoint
 class DetailedItemFragment : Fragment() {
@@ -71,21 +70,18 @@ class DetailedItemFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_detailed_item, container, false)
         val itemId = args.item.id!!
-        lifecycleScope.launch(Dispatchers.IO) {
-            loadItem(itemId)
-        }
+        lifecycleScope.launch(Dispatchers.IO) { loadItem(itemId) }
         observer.setupImageView(binding.detailedItemImage)
         args.item.image?.let {
             Glide.with(this).load(it).into(binding.detailedItemImage)
         }
-
         initWishlistButton()
         initRating(args.item)
         initBuy()
-        if (args.item.discount) binding.itemPrice.paintFlags = binding.itemPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+        if (args.item.discount) binding.itemPrice.paintFlags =
+            binding.itemPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         binding.shareButton.setOnClickListener { shareItem() }
         binding.locateButton.setOnClickListener { locateItem() }
-
         viewModel.setUser(args.item.userId)
         viewModel.user.observe(viewLifecycleOwner, this::onUserChange)
         return binding.root
@@ -244,7 +240,7 @@ class DetailedItemFragment : Fragment() {
      */
     private fun buyItem() {
         binding.buyButton.isEnabled = false
-        val quantity : Int = binding.quantity?.toIntOrNull() ?: 1
+        val quantity: Int = binding.quantity?.toIntOrNull() ?: 1
         if (quantity > args.item.quantity) {
             Toast.makeText(context, "Not enough available", Toast.LENGTH_SHORT).show()
             binding.buyButton.isEnabled = true
@@ -291,10 +287,8 @@ class DetailedItemFragment : Fragment() {
         val dynamicLink = Firebase.dynamicLinks.dynamicLink {
             link = generateDeepLink(item)
             domainUriPrefix = "https://sharingang.page.link"
-            // Open links with this app on Android
             androidParameters { }
         }
-
         return dynamicLink.uri
     }
 
