@@ -95,6 +95,7 @@
     <string name="category">Category:</string>
     <string name="required_field">Required field</string>
     <string name="locate_item">Locate Item</string>
+    <string name="num_unread">numUnread</string>
     <string name="open_camera">Open Camera</string>
     <string name="is_discount">Discount?</string>
     <string name="discount_lower">Discount price must be lower</string>

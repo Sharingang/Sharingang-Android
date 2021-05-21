@@ -44,49 +44,79 @@ class ChatTest {
         FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
         navigate_to(R.id.newEditFragment)
         onView(withId(R.id.itemTitle)).perform(
-            typeText("TestItem"),
-            closeSoftKeyboard()
+            replaceText("TestItem"),
         )
-        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
+        onView(withId(R.id.saveItemButton)).perform(
+            scrollTo(),
+            click()
+        )
         waitAfterSaveItem()
         FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_2
         onView(withId(R.id.item_list_view_title)).perform(click())
         onView(withId(R.id.itemPostedBy)).perform(click())
         onView(withId(R.id.btnChat)).perform(click())
         onView(withId(R.id.chatPartnerUsername)).check(matches(withText(FakeCurrentUserProvider.fakeUser1.name)))
-        val message = getRandomString(15)
+        val message1 = getRandomString(15)
         onView(withId(R.id.messageEditText)).check(matches(isClickable()))
         onView(withId(R.id.messageEditText)).check(matches(isDisplayed()))
         onView(withId(R.id.messageEditText)).perform(
-            replaceText(message),
-            closeSoftKeyboard()
+            replaceText(message1),
         )
         Thread.sleep(1000)
         onView(withId(R.id.btnSend)).perform(click())
-        onView(withText(message)).check(matches(isDisplayed()))
+        onView(withText(message1)).check(matches(isDisplayed()))
         onView(withId(R.id.messageEditText)).check(matches(withText("")))
         onView(withId(R.id.btnSend)).check(matches(not(isEnabled())))
+        val message2 = getRandomString(15)
+        onView(withId(R.id.messageEditText)).perform(
+            replaceText(message2)
+        )
+        onView(withId(R.id.btnSend)).perform(click())
+        onView(withText(message1)).check(matches(isDisplayed()))
+        onView(withText(message2)).check(matches(isDisplayed()))
         Espresso.pressBack()
         Espresso.pressBack()
         Espresso.pressBack()
         FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
         navigate_to(R.id.chatsFragment)
-        onView(withText("Test User 2")).perform(click())
-        onView(withText(message)).check(matches(isDisplayed()))
+        onView(withId(R.id.numUnread)).check(matches(isDisplayed()))
+        onView(withId(R.id.numUnread)).check(matches(withText("2")))
+        onView(withText(FakeCurrentUserProvider.fakeUser2.name)).perform(click())
+        onView(withText(message1)).check(matches(isDisplayed()))
+        onView(withText(message2)).check(matches(isDisplayed()))
         onView(withId(R.id.messageEditText)).check(matches(withText("")))
         onView(withId(R.id.btnSend)).check(matches(not(isEnabled())))
-        val message2 = getRandomString(15)
+        val message3 = getRandomString(15)
         onView(withId(R.id.messageEditText)).perform(
-            replaceText(message2),
-            closeSoftKeyboard()
+            replaceText(message3),
         )
         onView(withId(R.id.btnSend)).perform(click())
         Thread.sleep(1000)
         onView(withId(R.id.messageEditText)).check(matches(withText("")))
-        onView(withText(message2)).check(matches(isDisplayed()))
         onView(withId(R.id.btnSend)).check(matches(not(isEnabled())))
+        onView(withText(message1)).check(matches(isDisplayed()))
+        onView(withText(message2)).check(matches(isDisplayed()))
+        onView(withText(message3)).check(matches(isDisplayed()))
         Espresso.pressBack()
-        onView(withText("Test User 2")).check(matches(isDisplayed()))
+        onView(withText(FakeCurrentUserProvider.fakeUser2.name)).check(matches(isDisplayed()))
+        onView(withId(R.id.numUnread)).check(matches(not(isDisplayed())))
+        Espresso.pressBack()
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_2
+        navigate_to(R.id.chatsFragment)
+        onView(withText(FakeCurrentUserProvider.fakeUser1.name)).check(matches(isDisplayed()))
+        onView(withId(R.id.numUnread)).check(matches(withText("1")))
+        onView(withText(FakeCurrentUserProvider.fakeUser1.name)).perform(click())
+        val message4 = getRandomString(15)
+        onView(withId(R.id.messageEditText)).perform(
+            replaceText(message4)
+        )
+        onView(withId(R.id.btnSend)).perform(click())
+        onView(withText(message1)).check(matches(isDisplayed()))
+        onView(withText(message2)).check(matches(isDisplayed()))
+        onView(withText(message3)).check(matches(isDisplayed()))
+        onView(withText(message4)).check(matches(isDisplayed()))
+        Espresso.pressBack()
+        onView(withId(R.id.numUnread)).check(matches(not(isDisplayed())))
     }
 
     /**
