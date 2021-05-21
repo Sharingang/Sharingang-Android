@@ -51,6 +51,7 @@ class LastUpdateTest {
         )
         waitAfterSaveItem()
         Espresso.pressBack()
+        Thread.sleep(2000)
         onView(withId(R.id.textViewLastUpdated)).check(matches(withText("0D")))
     }
 }
