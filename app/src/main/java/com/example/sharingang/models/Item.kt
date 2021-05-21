@@ -10,6 +10,7 @@ import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.ServerTimestamp
 import kotlinx.parcelize.Parcelize
 import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * Item represents an item available for sharing, or for sale.
@@ -31,6 +32,8 @@ data class Item(
 
     val price: Double = 0.0,
 
+    val quantity: Int = 0,
+
     val sold: Boolean = false,
 
     var category: Int = 0,
@@ -42,7 +45,7 @@ data class Item(
     /** Id of the user that created the item */
     val userId: String = "",
 
-    val rated: Boolean = false,
+    val reviews : Map<String, Boolean> = HashMap(),
 
     /** Where the item added is an offer (false), or a request*/
     val request: Boolean = false,

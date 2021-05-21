@@ -3,7 +3,9 @@ package com.example.sharingang.ui.fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -95,7 +97,7 @@ class DetailedItemFragment : Fragment() {
         val currentUserId = currentUserProvider.getCurrentUserId()
         val availableForSale = !args.item.sold && args.item.price >= 0.01 && !args.item.request &&
                 currentUserId != null && args.item.userId != currentUserId
-        binding.buyButton.visibility = if (availableForSale) View.VISIBLE else View.GONE
+        binding.sellerVisibility = if (availableForSale) View.VISIBLE else View.GONE
         binding.buyButton.setOnClickListener { buyItem() }
     }
 
@@ -196,10 +198,13 @@ class DetailedItemFragment : Fragment() {
     }
 
     private fun initRating(item: Item) {
-        itemViewModel.setRated(item)
-        itemViewModel.rated.observe(viewLifecycleOwner, {
+        itemViewModel.setReviews(item)
+        itemViewModel.reviews.observe(viewLifecycleOwner, {
             val visibility =
-                if (!it && item.sold && currentUserProvider.getCurrentUserId() != null) View.VISIBLE
+                if (it.keys.contains(currentUserProvider.getCurrentUserId())
+                    && currentUserProvider.getCurrentUserId() != null
+                    && it[currentUserProvider.getCurrentUserId()!!]!!
+                ) View.VISIBLE
                 else View.GONE
             binding.ratingVisibility = visibility
         })
@@ -215,7 +220,7 @@ class DetailedItemFragment : Fragment() {
                     else -> 0
                 }
                 viewModel.updateUserRating(item.userId, rating)
-                itemViewModel.rateItem(item)
+                itemViewModel.updateReview(item, currentUserProvider.getCurrentUserId(), false)
             }
         }
     }
@@ -237,16 +242,35 @@ class DetailedItemFragment : Fragment() {
      */
     private fun buyItem() {
         binding.buyButton.isEnabled = false
+        val quantity : Int = binding.quantity?.toIntOrNull() ?: 1
+        if (quantity > args.item.quantity) {
+            Toast.makeText(context, "Not enough available", Toast.LENGTH_SHORT).show()
+            binding.buyButton.isEnabled = true
+            return
+        }
         lifecycleScope.launch {
-            val status = paymentProvider.requestPayment(args.item)
+            val status = paymentProvider.requestPayment(args.item, quantity)
             if (status) {
                 itemViewModel.sellItem(args.item)
-                binding.buyButton.visibility = View.GONE
-                initRating(args.item.copy(sold = true))
+                val newQuantity = args.item.quantity - quantity
+                binding.sellerVisibility = if (newQuantity == 0) View.GONE else View.VISIBLE
+                binding.buyButton.isEnabled = !(newQuantity == 0)
+                updateBoughtItem(args.item, newQuantity)
             } else {
                 binding.buyButton.isEnabled = true
             }
         }
+    }
+
+    private fun updateBoughtItem(item: Item, quantity: Int) {
+        binding.detailedItemQuantity.text = String.format("Quantity: %s", quantity.toString())
+        val itemToUpdate = item.copy(quantity = quantity, sold = (quantity == 0))
+        itemViewModel.updateReview(
+            itemToUpdate,
+            currentUserProvider.getCurrentUserId(),
+            true
+        )
+        initRating(itemToUpdate)
     }
 
     private fun shareItem() {

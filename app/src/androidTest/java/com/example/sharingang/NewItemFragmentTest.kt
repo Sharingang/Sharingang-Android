@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.provider.MediaStore
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -142,4 +143,26 @@ class NewItemFragmentTest {
         }
         onView(withId(R.id.postal_address)).check(matches(withText("")))
     }
+
+    @Test
+    fun canSetQuantity() {
+        navigate_to(R.id.newEditFragment)
+        onView(withId(R.id.itemTitle)).perform(
+            typeText(firstItem),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.itemPrice)).perform(
+            typeText("10"),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.itemQuantity)).perform(
+            typeText("2"),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
+        waitAfterSaveItem()
+        onView(withText(firstItem)).perform(click())
+        onView(withId(R.id.detailedItemQuantity)).check(matches(withText("Quantity: 2")))
+    }
+
 }

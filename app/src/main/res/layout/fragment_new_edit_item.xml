@@ -28,6 +28,10 @@
             type="String" />
 
         <variable
+            name="quantity"
+            type="String" />
+
+        <variable
             name="latitude"
             type="String" />
 
@@ -213,9 +217,12 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="10dp" />
+
+
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -242,6 +249,25 @@
                         android:entries="@array/categories" />
 
                 </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/quantity">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/itemQuantity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:text="@={quantity}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <Space
                     android:layout_width="match_parent"

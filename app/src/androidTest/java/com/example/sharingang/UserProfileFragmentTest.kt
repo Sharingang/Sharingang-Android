@@ -16,6 +16,7 @@ import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.uiautomator.UiDevice
 import com.example.sharingang.auth.FakeCurrentUserProvider
+import com.example.sharingang.payment.FakePaymentProvider
 import com.example.sharingang.ui.activities.MainActivity
 import com.example.sharingang.utils.*
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -59,18 +60,22 @@ class UserProfileFragmentTest {
     @Test
     fun soldItemsListWorksCorrect(){
         val firstItemName = "Test Item"
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
         addSingleItemToDB(firstItemName)
+        waitAfterSaveItem()
         navigate_to(R.id.userProfileFragment)
         onView(withText(firstItemName)).check(matches(isDisplayed()))
-        Thread.sleep(2000)
-        onView(withText(firstItemName)).perform(click())
-        onView(withMenuIdOrText(R.id.menuSell, R.string.sell)).perform(click())
+        waitAfterSaveItem()
         pressBack()
-        Thread.sleep(2000)
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_2
+        onView(withText(firstItemName)).perform(click())
+        FakePaymentProvider.paymentStatus = FakePaymentProvider.Status.ALWAYS_ACCEPT
+        onView(withId(R.id.buyButton)).perform(click())
+        pressBack()
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
+        navigate_to(R.id.userProfileFragment)
         onView(withId(R.id.sold_list)).perform(click())
-        Thread.sleep(1000)
         onView(withText(firstItemName)).check(matches(isDisplayed()))
-
     }
 
     @Test
@@ -173,7 +178,10 @@ class UserProfileFragmentTest {
             typeText(name),
             closeSoftKeyboard()
         )
-
+        onView(withId(R.id.itemPrice)).perform(
+            typeText("10"),
+            closeSoftKeyboard()
+        )
         onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
     }

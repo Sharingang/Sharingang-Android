@@ -20,6 +20,7 @@ import com.example.sharingang.utils.*
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers
+import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -65,21 +66,16 @@ class DetailedItemFragmentTest {
     @Test
     fun canRateAUser() {
         val testTitle = "Book Item"
-
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
         navigate_to(R.id.userProfileFragment)
         onView(withId(R.id.rating_textview)).check(matches(withText("No Ratings")))
         pressBack()
-
-        navigate_to(R.id.newEditFragment)
-        onView(withId(R.id.itemTitle)).perform(
-            typeText(testTitle),
-            closeSoftKeyboard()
-        )
-        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
+        addItemsToDb(testTitle)
         waitAfterSaveItem()
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_2
         onView(withText(testTitle)).perform(click())
-
-        onView(withMenuIdOrText(R.id.menuSell, R.string.sell)).perform(click())
+        FakePaymentProvider.paymentStatus = FakePaymentProvider.Status.ALWAYS_ACCEPT
+        onView(withId(R.id.buyButton)).perform(click())
         pressBack()
         Thread.sleep(1000)
         onView(withText(testTitle)).perform(click())
@@ -89,6 +85,7 @@ class DetailedItemFragmentTest {
         onView(withId(R.id.ratingButton)).perform(click())
         Thread.sleep(500)
         pressBack()
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
         navigate_to(R.id.userProfileFragment)
         onView(withId(R.id.rating_textview)).check(matches(withText("5.00")))
     }
@@ -126,10 +123,11 @@ class DetailedItemFragmentTest {
     }
 
     @Test
-    fun canAddAndRemoveItemToWishlist(){
+    fun canAddAndRemoveItemToWishlist() {
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_2
         addItemsToDb(firstItem)
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
         addItemToWishList(firstItem)
-
         navigate_to(R.id.wishlistViewFragment)
         onView(withText(firstItem)).check(matches(isDisplayed()))
         onView(isRoot()).perform(ViewActions.pressBack())
@@ -141,8 +139,10 @@ class DetailedItemFragmentTest {
     }
 
     @Test
-    fun canViewWishListItems(){
+    fun canViewWishListItems() {
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_2
         addItemsToDb(firstItem, secondItem)
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
         addItemToWishList(firstItem, secondItem)
 
         navigate_to(R.id.wishlistViewFragment)
@@ -154,8 +154,8 @@ class DetailedItemFragmentTest {
         onView(withText(secondItem)).check(matches(isDisplayed()))
     }
 
-    private fun addItemToWishList(vararg itemNames: String){
-        for(itemName in itemNames){
+    private fun addItemToWishList(vararg itemNames: String) {
+        for (itemName in itemNames) {
             onView(withText(itemName)).perform(click())
             onView(withId(R.id.addToWishlist)).perform(click())
             onView(withId(R.id.addToWishlist)).check(matches(withText(R.string.remove_wishlist)))
@@ -164,11 +164,15 @@ class DetailedItemFragmentTest {
     }
 
 
-    private fun addItemsToDb(vararg itemNames: String){
-        for(itemName in itemNames){
+    private fun addItemsToDb(vararg itemNames: String) {
+        for (itemName in itemNames) {
             navigate_to(R.id.newEditFragment)
             onView(withId(R.id.itemTitle)).perform(
                 typeText(itemName),
+                closeSoftKeyboard()
+            )
+            onView(withId(R.id.itemPrice)).perform(
+                typeText("10"),
                 closeSoftKeyboard()
             )
             onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
@@ -186,11 +190,46 @@ class DetailedItemFragmentTest {
         )
         onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
-
         onView(withText(testTitle)).perform(click())
         onView(withMenuIdOrText(R.id.menuDelete, R.string.delete_item)).perform(click())
         waitAfterSaveItem()
         onView(withText(testTitle)).check(doesNotExist())
+    }
+
+
+    @Test
+    fun canBuyMultiple(){
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_2
+        navigate_to(R.id.newEditFragment)
+        onView(withId(R.id.itemTitle)).perform(
+            typeText(firstItem),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.itemPrice)).perform(
+            typeText("10"),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.itemQuantity)).perform(
+            typeText("5"),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
+        waitAfterSaveItem()
+
+        FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
+        onView(withText(firstItem)).perform(click())
+
+        FakePaymentProvider.paymentStatus = FakePaymentProvider.Status.ALWAYS_ACCEPT
+        onView(withId(R.id.buyQuantity)).perform(
+            typeText("2"),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.buyButton)).perform(click())
+        waitAfterSaveItem()
+        onView(withId(R.id.buyButton)).check(matches(isDisplayed()))
+        onView(withId(R.id.ratingButton)).check(matches(isDisplayed()))
+        onView(withId(R.id.detailedItemQuantity)).check(matches(withText("Quantity: 3")))
+
     }
 
     @Test

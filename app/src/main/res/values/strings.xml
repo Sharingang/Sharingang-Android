@@ -10,6 +10,7 @@
     <string name="title">Title</string>
     <string name="price">Price</string>
     <string name="display_price">CHF %.2f</string>
+    <string name="display_quantity">Quantity: %d</string>
     <string name="item_image_description">Item Image</string>
     <string name="search_hint">Search…</string>
     <string name="search_go_button">Go</string>
@@ -95,4 +96,7 @@
     <string name="category">Category:</string>
     <string name="required_field">Required field</string>
     <string name="open_camera">Open Camera</string>
+    <string name="quantity">Quantity</string>
+    <string name="buy_many">BUY MANY</string>
+    <string name="_1">1</string>
 </resources>

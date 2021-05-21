@@ -24,7 +24,8 @@ exports.checkout = functions.region(region).https.onCall(async (data, context) =
         throw new functions.https.HttpsError('failed-precondition', 'The function must be called while authenticated.');
     }
 
-    const itemPromise = db.collection('items').doc(data.itemId).get();
+    const itemPromise = db.collection('items').doc(data.itemId).get()
+    const quantity = data.quantity
     const user = await auth.getUser(context.auth.uid)
     const customer = await getOrCreateCustomer(user)
 
@@ -35,7 +36,7 @@ exports.checkout = functions.region(region).https.onCall(async (data, context) =
     );
 
     const item = (await itemPromise).data();
-    const paymentIntent = await createPaymentIntent(customer, user, item, data.itemId);
+    const paymentIntent = await createPaymentIntent(customer, user, item, quantity, data.itemId);
 
     return {
         publishableKey: publishable_key,
@@ -108,9 +109,9 @@ async function getOrCreateCustomer(user) {
  * @param {string} itemId - ID of the item being sold
  * @returns {object} Stripe payment intent
  */
-async function createPaymentIntent(customer, user, item, itemId) {
+async function createPaymentIntent(customer, user, item, quantity, itemId) {
     // Stripe expects price in cents
-    const price = Math.round(item.price * 100);
+    const price = Math.round(item.price * 100) * quantity;
 
     const paymentIntent = await stripe.paymentIntents.create({
         amount: price,
