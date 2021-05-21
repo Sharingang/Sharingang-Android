@@ -36,7 +36,7 @@ exports.checkout = functions.region(region).https.onCall(async (data, context) =
     );
 
     const item = (await itemPromise).data();
-    const paymentIntent = await createPaymentIntent(customer, user, item, quantity, data.itemId);
+    const paymentIntent = await createPaymentIntent(customer, user, item, quantity);
 
     return {
         publishableKey: publishable_key,
@@ -106,10 +106,10 @@ async function getOrCreateCustomer(user) {
  * @param {object} customer - Stripe customer
  * @param {admin.auth.UserRecord} user - FirebaseAuth user
  * @param {FirebaseFirestore.DocumentData} item - item being sold
- * @param {string} itemId - ID of the item being sold
+ * @param {int} quantity - Number of items
  * @returns {object} Stripe payment intent
  */
-async function createPaymentIntent(customer, user, item, quantity, itemId) {
+async function createPaymentIntent(customer, user, item, quantity) {
     // Stripe expects price in cents
     var price = 0;
     if (item.discount) {
@@ -124,13 +124,13 @@ async function createPaymentIntent(customer, user, item, quantity, itemId) {
         customer: customer.id,
         description: item.title,
         metadata: {
-            itemId: itemId,
+            itemId: item.id,
             buyerUserId: user.uid,
             sellerUserId: item.userId
         }
     });
 
-    console.log("Created payment intent", { email: user.email, customerId: customer.id, itemId: itemId, price: price });
+    console.log("Created payment intent", { email: user.email, customerId: customer.id, itemId: item.id, price: price });
 
     return paymentIntent;
 }
