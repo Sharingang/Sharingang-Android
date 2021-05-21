@@ -5,6 +5,7 @@ import com.example.sharingang.models.User
 import com.example.sharingang.database.room.UserDao
 import com.example.sharingang.database.repositories.UserRepository
 import com.example.sharingang.database.store.UserStore
+import com.example.sharingang.models.Chat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -18,6 +19,7 @@ class CachedUserRepository @Inject constructor(
     private val userDao: UserDao,
     private val store: UserStore
 ) : UserRepository {
+
 
     override fun user(id: String): LiveData<User?> {
         return userDao.getUserLiveData(id)
@@ -47,7 +49,7 @@ class CachedUserRepository @Inject constructor(
     }
 
     override suspend fun get(id: String): User? {
-        if(userDao.getUser(id) == null) {
+        if (userDao.getUser(id) == null) {
             refreshUsers()
         }
         return userDao.getUser(id)
@@ -72,5 +74,33 @@ class CachedUserRepository @Inject constructor(
 
     override suspend fun hasBeenReported(reporterId: String, reportedId: String): Boolean {
         return thenRefresh { store.hasBeenReported(reporterId, reportedId) }
+    }
+
+    override suspend fun getChatPartners(userId: String): List<String> {
+        return store.getChatPartners(userId)
+    }
+
+    override suspend fun getMessages(userId: String, with: String): List<Chat> {
+        return store.getMessages(userId, with)
+    }
+
+    override suspend fun putMessage(from: String, to: String, message: String): List<Chat> {
+        return store.putMessage(from, to, message)
+    }
+
+    override suspend fun setupConversationRefresh(
+        userId: String,
+        with: String,
+        action: () -> Unit
+    ) {
+        return store.setupConversationRefresh(userId, with, action)
+    }
+
+    override suspend fun getNumUnread(userId: String, with: String): Long {
+        return store.getNumUnread(userId, with)
+    }
+
+    override suspend fun clearNumUnread(userId: String, with: String) {
+        return store.clearNumUnread(userId, with)
     }
 }

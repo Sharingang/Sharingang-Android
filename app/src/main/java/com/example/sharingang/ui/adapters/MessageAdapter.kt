@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sharingang.R
 import com.example.sharingang.models.Chat
+import com.example.sharingang.ui.fragments.MessageFragment
 
 /**
  * MessageAdapter takes care of adapting a list of messages into a Recycler View.
@@ -18,7 +19,7 @@ import com.example.sharingang.models.Chat
  */
 class MessageAdapter(
     private val context: Context, private var chats: MutableList<Chat>,
-    private val currentUserId: String
+    private val currentUserId: String, private val attachedFragment: MessageFragment
 ) :
     RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
@@ -77,6 +78,7 @@ class MessageAdapter(
         chats.clear()
         chats.addAll(newData)
         notifyDataSetChanged()
+        attachedFragment.scrollToEnd()
     }
 
 }

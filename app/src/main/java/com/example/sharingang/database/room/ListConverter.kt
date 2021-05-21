@@ -15,7 +15,7 @@ object ListConverter {
      */
     @TypeConverter
     fun toList(stringList: String?): List<String?> {
-        if (stringList == null) {
+        if (stringList.isNullOrEmpty()) {
             return ArrayList()
         }
         return stringList.split(',')

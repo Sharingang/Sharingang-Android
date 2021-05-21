@@ -37,9 +37,6 @@ class ChatsFragment : Fragment() {
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
 
-    @Inject
-    lateinit var firebaseFirestore: FirebaseFirestore
-
     private val listUsers: MutableList<User> = mutableListOf()
 
     @Inject
@@ -53,7 +50,9 @@ class ChatsFragment : Fragment() {
         currentUserId = currentUserProvider.getCurrentUserId()
         binding = FragmentChatsBinding.inflate(inflater, container, false)
         if (currentUserId != null) {
-            userAdapter = UserAdapter(requireContext(), listUsers)
+            userAdapter = UserAdapter(
+                requireContext(), listUsers, userRepository, currentUserId!!, lifecycleScope, this
+            )
             binding.chatUsersList.adapter = userAdapter
             setRecyclerViewDecoration(margin = 10)
             binding.chatUsersList.layoutManager = LinearLayoutManager(requireContext())
@@ -73,19 +72,14 @@ class ChatsFragment : Fragment() {
         if (currentUserId != null) {
             binding.loggedOutInfo.visibility = View.GONE
             lifecycleScope.launch(Dispatchers.IO) {
-                userRepository.refreshUsers()
-                // We get a snapshot of the collection containing the current user's message
-                // partners (user Ids), so that we can then use this snapshot to read
-                // the data of the documents we need inside.
-                val chatPartners = firebaseFirestore.collection(DatabaseFields.DBFIELD_USERS)
-                    .document(currentUserId!!).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).get()
-                    .await()
-                chatPartners.documents.forEach {
-                    val user = userRepository.get(it.id)
+                val chatPartners = userRepository.getChatPartners(currentUserId!!)
+                chatPartners.forEach {
+                    val user = userRepository.get(it)
                     listUsers.add(user!!)
                 }
-                usersLiveData.postValue(listUsers)
-
+                lifecycleScope.launch(Dispatchers.Main) {
+                    usersLiveData.postValue(listUsers)
+                }
             }
         } else {
             binding.chatUsersList.visibility = View.GONE

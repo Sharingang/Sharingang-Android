@@ -111,7 +111,12 @@ async function getOrCreateCustomer(user) {
  */
 async function createPaymentIntent(customer, user, item, quantity, itemId) {
     // Stripe expects price in cents
-    const price = Math.round(item.price * 100) * quantity;
+    var price = 0;
+    if (item.discount) {
+        price = Math.round(item.discountPrice * 100) * quantity;
+    } else {
+        price = Math.round(item.price * 100) * quantity;
+    }
 
     const paymentIntent = await stripe.paymentIntents.create({
         amount: price,

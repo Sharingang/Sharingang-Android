@@ -1,5 +1,6 @@
 package com.example.sharingang.database.store
 
+import com.example.sharingang.models.Chat
 import com.example.sharingang.models.User
 
 /**
@@ -58,4 +59,57 @@ interface UserStore {
      * @return true if yes, false if no
      */
     suspend fun hasBeenReported(reporterId: String, reportedId: String): Boolean
+
+    /**
+     * Retrieves all the chat partners of a particular user
+     *
+     * @param userId the id of the user whose partners to retrieve
+     * @return the list of all ids of the partners of the user
+     */
+    suspend fun getChatPartners(userId: String): List<String>
+
+    /**
+     * Retrieves all messages of a user with a particular user
+     *
+     * @param userId the user id of the user whose messages we want to retrieve
+     * @param with the target user
+     * @return the resulting list of messages / Chats
+     */
+    suspend fun getMessages(userId: String, with: String): List<Chat>
+
+    /**
+     * Puts a message into database
+     *
+     * @param from the sender
+     * @param to the receiver
+     * @param message the message
+     * @return the new list of messages between the two users
+     */
+    suspend fun putMessage(from: String, to: String, message: String): List<Chat>
+
+    /**
+     * Sets up the listener on messages for a particular user with another user
+     *
+     * @param userId the current user id
+     * @param with the target user id
+     * @param action what to do upon getting notified
+     */
+    suspend fun setupConversationRefresh(userId: String, with: String, action: () -> Unit)
+
+    /**
+     * Gets the current number of unread messages of a particular user with another user
+     *
+     * @param userId the user whose number of unread messages we want to get
+     * @param with the target user
+     * @return the number of unread messages
+     */
+    suspend fun getNumUnread(userId: String, with: String): Long
+
+    /**
+     * Clears the number of unread messages of a user with another user
+     *
+     * @param userId the user whose number of unread messages we want to clear
+     * @param with the target user
+     */
+    suspend fun clearNumUnread(userId: String, with: String)
 }

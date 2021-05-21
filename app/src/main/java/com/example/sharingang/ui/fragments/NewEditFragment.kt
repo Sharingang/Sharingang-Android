@@ -181,13 +181,20 @@ class NewEditFragment : Fragment() {
      * @return whether the form is valid and ready to be saved
      */
     private fun validateForm(): Boolean {
-        val titleEmpty = binding.title?.trim()?.isEmpty() ?: true
+        val titleEmpty = binding.itemTitle.text?.trim()?.isEmpty() ?: true
         binding.itemTitleContainer.error = if (titleEmpty) {
             binding.itemTitle.requestFocus()
             getString(R.string.required_field)
         } else null
+        val discountLowerPrice = if (binding.switchIsDiscount.isChecked){
+            binding.priceDiscount?.toDouble() ?: 0.0 < binding.price?.toDouble() ?: 0.0
+        } else true
+        binding.itemDiscountContainer.error = if (!discountLowerPrice) {
+            binding.discountPrice.requestFocus()
+            getString(R.string.discount_lower)
+        } else null
 
-        return !titleEmpty
+        return !titleEmpty && discountLowerPrice
     }
 
     private fun itemToAdd(): Item {
@@ -207,7 +214,9 @@ class NewEditFragment : Fragment() {
             userId = existingItem?.userId ?: userId!!, // The form is only displayed for logged in users
             createdAt = existingItem?.createdAt,
             localId = existingItem?.localId ?: 0,
-            request = binding.switchIsRequest.isChecked
+            request = binding.switchIsRequest.isChecked,
+            discount = binding.switchIsDiscount.isChecked,
+            discountPrice = binding.priceDiscount?.toDoubleOrNull() ?: 0.0
         )
     }
 
@@ -259,9 +268,17 @@ class NewEditFragment : Fragment() {
                 Glide.with(requireContext()).load(url).into(binding.itemImage)
             }
             binding.switchIsRequest.isChecked = it.request
+            binding.switchIsDiscount.isChecked = it.discount
+            binding.isDiscount = it.discount
+            setupDiscountSwitch()
+            binding.priceDiscount = it.discountPrice.toString().format("%.2f")
             updateLocationWithCoordinates(it.latitude, it.longitude)
         }
+    }
 
-        binding.itemTitle.doOnTextChanged { _, _, _, _ -> validateForm() }
+    private fun setupDiscountSwitch() {
+        binding.switchIsDiscount.setOnCheckedChangeListener{_, isChecked ->
+            binding.isDiscount = isChecked
+        }
     }
 }
