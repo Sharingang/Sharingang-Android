@@ -1,7 +1,6 @@
 package com.example.sharingang
 
 
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -10,6 +9,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.sharingang.auth.FakeCurrentUserProvider
 import com.example.sharingang.ui.activities.MainActivity
+import com.example.sharingang.utils.DateHelper
 import com.example.sharingang.utils.navigate_to
 import com.example.sharingang.utils.waitAfterSaveItem
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -29,14 +29,16 @@ class LastUpdateTest {
     val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
     @Test
-    fun creatingItemShows0Days() {
+    fun creatingItemShowsLastUpdate() {
+        DateHelper.createDate("2021/01/01 10:00:00")
         FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
         navigate_to(R.id.newEditFragment)
         onView(withId(R.id.itemTitle)).perform(
             replaceText("Title")
         )
         onView(withId(R.id.saveItemButton)).perform(
-            scrollTo(), click()
+            scrollTo(),
+            click()
         )
         waitAfterSaveItem()
         onView(withText("0s")).check(matches(isDisplayed()))

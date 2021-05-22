@@ -24,6 +24,16 @@ object DateHelper {
         YEARS
     }
 
+    private val unitStringMap = hashMapOf (
+        Measure.SECONDS to "s",
+        Measure.MINUTES to "min",
+        Measure.HOURS to "h",
+        Measure.DAYS to "d",
+        Measure.WEEKS to "w",
+        Measure.MONTHS to "mon",
+        Measure.YEARS to "y"
+    )
+
     /*
      * Note: It is true that days can differ between years and months. Here, we are only
      * concerned by an estimation of the time between two dates, which is why this very simplified
@@ -48,18 +58,16 @@ object DateHelper {
      * @return the formatted difference between the two dates
      */
     fun getDateDifferenceString(startDate: Date, endDate: Date): String {
-        val endTime = endDate.time
-        val startTime = startDate.time
-        val diffInSeconds = TimeUnit.SECONDS.convert(endTime - startTime,
+        val end = endDate.time
+        val start = startDate.time
+        val timeDiff = end - start
+        val diffInSeconds = TimeUnit.SECONDS.convert(timeDiff,
             TimeUnit.MILLISECONDS)
         val lessThanADay = diffInSeconds < SECS_PER_DAY
         val accurateDiff =
-            if(lessThanADay) getAccurateDiffFromSeconds(diffInSeconds)
-            else {
-                val diffInDays =
-                    TimeUnit.DAYS.convert(endTime - startTime, TimeUnit.MILLISECONDS)
-                getAccurateDiffFromDays(diffInDays)
-            }
+            if(lessThanADay) getDiffFromSeconds(diffInSeconds)
+            else getDiffFromDays(TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS))
+
         return getFormattedDifference(accurateDiff)
     }
 
@@ -69,7 +77,7 @@ object DateHelper {
      * @param diffInSeconds the difference in seconds
      * @return a pair containing the difference number and its unit of measure
      */
-    private fun getAccurateDiffFromSeconds(diffInSeconds: Long): Pair<Long, Measure> {
+    private fun getDiffFromSeconds(diffInSeconds: Long): Pair<Long, Measure> {
         return (
             when {
                 diffInSeconds < SECS_PER_MINUTE -> Pair(diffInSeconds, Measure.SECONDS)
@@ -85,7 +93,7 @@ object DateHelper {
      * @param diffInDays the difference in days
      * @return a pair containing the difference number and its unit of measure
      */
-    private fun getAccurateDiffFromDays(diffInDays: Long): Pair<Long, Measure> {
+    private fun getDiffFromDays(diffInDays: Long): Pair<Long, Measure> {
         return (
             when {
                 diffInDays < DAYS_PER_WEEK -> Pair(diffInDays, Measure.DAYS)
@@ -104,16 +112,7 @@ object DateHelper {
      */
     private fun getFormattedDifference(time: Pair<Long, Measure>): String {
         val diffNumber = time.first
-        val measureStr =
-            when(time.second) {
-                Measure.SECONDS -> "s"
-                Measure.MINUTES -> "min"
-                Measure.HOURS -> "h"
-                Measure.DAYS -> "d"
-                Measure.WEEKS -> "w"
-                Measure.MONTHS -> "mon"
-                Measure.YEARS -> "y"
-            }
+        val measureStr = unitStringMap[time.second]
         return "$diffNumber$measureStr"
     }
 
