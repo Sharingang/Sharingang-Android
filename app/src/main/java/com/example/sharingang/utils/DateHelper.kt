@@ -1,6 +1,8 @@
 package com.example.sharingang.utils
 
 import android.annotation.SuppressLint
+import android.content.Context
+import com.example.sharingang.R
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -8,8 +10,9 @@ import java.util.concurrent.TimeUnit
 
 /**
  * Helper for date calculations and time formatting
+ * @property context the context
  */
-object DateHelper {
+class DateHelper(private val context: Context) {
 
     /**
      * Contains units of measure for time
@@ -25,13 +28,13 @@ object DateHelper {
     }
 
     private val unitStringMap = hashMapOf (
-        Measure.SECONDS to "s",
-        Measure.MINUTES to "min",
-        Measure.HOURS to "h",
-        Measure.DAYS to "d",
-        Measure.WEEKS to "w",
-        Measure.MONTHS to "mon",
-        Measure.YEARS to "y"
+        Measure.SECONDS to context.getString(R.string.eng_seconds),
+        Measure.MINUTES to context.getString(R.string.eng_minutes),
+        Measure.HOURS to context.getString(R.string.eng_hours),
+        Measure.DAYS to context.getString(R.string.eng_days),
+        Measure.WEEKS to context.getString(R.string.eng_weeks),
+        Measure.MONTHS to context.getString(R.string.eng_months),
+        Measure.YEARS to context.getString(R.string.eng_years)
     )
 
     /*
@@ -40,12 +43,12 @@ object DateHelper {
      * implementation will do (as it is used for the last time an item was updated for example,
      * which does not require a very precise estimation of time.)
      */
-    private const val SECS_PER_MINUTE = 60L
-    private const val SECS_PER_HOUR = 3600L
-    private const val SECS_PER_DAY = 86400L
-    private const val DAYS_PER_WEEK = 7L
-    private const val DAYS_PER_MONTH = 30L
-    private const val DAYS_PER_YEAR = 365L
+    private val SECS_PER_MINUTE = 60L
+    private val SECS_PER_HOUR = 3600L
+    private val SECS_PER_DAY = 86400L
+    private val DAYS_PER_WEEK = 7L
+    private val DAYS_PER_MONTH = 30L
+    private val DAYS_PER_YEAR = 365L
 
 
     /**
@@ -124,7 +127,7 @@ object DateHelper {
      */
     @SuppressLint("SimpleDateFormat")
     fun createDate(dateStr: String): Date? {
-        val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+        val dateFormat = SimpleDateFormat(context.getString(R.string.dateCreationFormat))
         return try {
             dateFormat.parse(dateStr)
         } catch (e: ParseException) {
