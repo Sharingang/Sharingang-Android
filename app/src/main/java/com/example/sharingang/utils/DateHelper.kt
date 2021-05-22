@@ -18,8 +18,8 @@ object DateHelper {
     /*
      * Note: It is true that days can differ between years and months. Here, we are only
      * concerned by an estimation of the time between two dates, which is why this very simplified
-     * implementation will do (used for the last time an item was updated for example, which does
-     * not require a very precise measure of time.)
+     * implementation will do (as it is used for the last time an item was updated for example,
+     * which does not require a very precise estimation of time.)
      */
     private const val SECS_PER_MINUTE = 60L
     private const val SECS_PER_HOUR = 3600L

@@ -15,6 +15,7 @@ import com.example.sharingang.utils.navigate_to
 import com.example.sharingang.utils.waitAfterSaveItem
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.hamcrest.CoreMatchers.containsString
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -40,10 +41,9 @@ class LastUpdateTest {
             scrollTo(), click()
         )
         waitAfterSaveItem()
-        Thread.sleep(2000)
-        onView(withId(R.id.textViewLastUpdated)).check(matches(withText("0D")))
+        onView(withId(R.id.textViewLastUpdated)).check(matches(withText("0s")))
         onView(withId(R.id.item_list_view_title)).perform(click())
-        onView(withId(R.id.lastUpdateText)).check(matches(withText("0D")))
+        onView(withId(R.id.lastUpdateText)).check(matches(withText(containsString("0s"))))
         onView(withId(R.id.menuEdit)).perform(click())
         onView(withId(R.id.itemTitle)).perform(
             replaceText("newTitle")
@@ -54,6 +54,6 @@ class LastUpdateTest {
         waitAfterSaveItem()
         Espresso.pressBack()
         Thread.sleep(1000)
-        onView(withId(R.id.textViewLastUpdated)).check(matches(withText("0D")))
+        onView(withId(R.id.textViewLastUpdated)).check(matches(withText(containsString("s"))))
     }
 }
