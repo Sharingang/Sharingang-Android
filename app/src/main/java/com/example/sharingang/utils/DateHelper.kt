@@ -3,8 +3,14 @@ package com.example.sharingang.utils
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+/**
+ * Helper for date calculations and time formatting
+ */
 object DateHelper {
 
+    /**
+     * Contains units of measure for time
+     */
     enum class Measure {
         SECONDS,
         MINUTES,
@@ -29,6 +35,15 @@ object DateHelper {
     private const val DAYS_PER_YEAR = 365L
 
 
+    /**
+     * Gives us the formatted difference between two dates depending on how far the two dates
+     * are from each other. Close dates will give us a result in seconds or minutes or hours,
+     * and dates that are far from each other will give us one in days, weeks, months or years.
+     *
+     * @param startDate the date from which we start counting
+     * @param endDate the date at which we stop counting
+     * @return the formatted difference between the two dates
+     */
     fun getDateDifferenceString(startDate: Date, endDate: Date): String {
         val endTime = endDate.time
         val startTime = startDate.time
@@ -45,6 +60,12 @@ object DateHelper {
         return getFormattedDifference(accurateDiff)
     }
 
+    /**
+     * Gives us an accurate difference based on the time difference in seconds
+     *
+     * @param diffInSeconds the difference in seconds
+     * @return a pair containing the difference number and its unit of measure
+     */
     private fun getAccurateDiffFromSeconds(diffInSeconds: Long): Pair<Long, Measure> {
         return (
             when {
@@ -55,6 +76,12 @@ object DateHelper {
         )
     }
 
+    /**
+     * Gives us an accurate difference based on the time difference in days
+     *
+     * @param diffInDays the difference in days
+     * @return a pair containing the difference number and its unit of measure
+     */
     private fun getAccurateDiffFromDays(diffInDays: Long): Pair<Long, Measure> {
         return (
             when {
@@ -66,10 +93,16 @@ object DateHelper {
         )
     }
 
-    private fun getFormattedDifference(difference: Pair<Long, Measure>): String {
-        val diffNumber = difference.first
+    /**
+     * Gives us a formatted time based on a number and its unit of measure
+     *
+     * @param time a pair containing the number and its unit of measure
+     * @return the formatted result
+     */
+    private fun getFormattedDifference(time: Pair<Long, Measure>): String {
+        val diffNumber = time.first
         val measureStr =
-            when(difference.second) {
+            when(time.second) {
                 Measure.SECONDS -> "s"
                 Measure.MINUTES -> "min"
                 Measure.HOURS -> "h"
