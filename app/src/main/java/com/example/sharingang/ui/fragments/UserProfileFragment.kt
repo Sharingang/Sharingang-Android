@@ -143,7 +143,7 @@ class UserProfileFragment : Fragment() {
         setupRecyclerView(shownUserProfileId)
         setupAuthenticationButtons()
         initSetup()
-        setEmailText()
+        if (userType == UserType.SELF) binding.textEmail.text = loggedInUserEmail
         setVisibilities()
         setupViews()
         setupReportButton()
@@ -226,11 +226,6 @@ class UserProfileFragment : Fragment() {
             })
     }
 
-    private fun setEmailText() {
-        val emailText = binding.textEmail
-        if (userType == UserType.SELF) emailText.text = loggedInUserEmail
-    }
-
     private fun setupViews() {
         val buttons = listOf(
             binding.btnOpenCamera, binding.btnOpenGallery
@@ -241,7 +236,7 @@ class UserProfileFragment : Fragment() {
             else imageAccess.openCamera()
         } }
         topInfo.text = getString(R.string.userNotLoggedInInfo)
-        setEmailText()
+        if (userType == UserType.SELF) binding.textEmail.text = loggedInUserEmail
     }
 
     private fun displayUserFields(requestedUser: User?) {
@@ -251,7 +246,7 @@ class UserProfileFragment : Fragment() {
             val userPictureUri = requestedUser.profilePicture
             val userProfilePicture = binding.imageView
             Glide.with(this).load(userPictureUri).into(userProfilePicture)
-            setEmailText()
+            if (userType == UserType.SELF) binding.textEmail.text = loggedInUserEmail
         }
     }
 
