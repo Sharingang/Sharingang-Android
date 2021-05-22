@@ -27,8 +27,7 @@ object DateHelper {
     }
 
     /**
-     * get the name of the month based on its integer value in real life (i.e. 1 is equivalent
-     * to January, not February)
+     * get the name of the month based on its integer value
      *
      * @param monthNumber the number of the month we want to get the name of
      * @return the name of the month
@@ -52,5 +51,4 @@ object DateHelper {
             }
         )
     }
-
 }
