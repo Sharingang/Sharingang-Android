@@ -1,22 +1,24 @@
 package com.example.sharingang.utils
 
+import android.content.Context
+import com.example.sharingang.R
 import java.util.*
 
-object DateHelper {
+class DateHelper(context: Context) {
 
     private val monthsMap = hashMapOf(
-        0 to "Jan",
-        1 to "Feb",
-        2 to "Mar",
-        3 to "Apr",
-        4 to "May",
-        5 to "Jun",
-        6 to "Jul",
-        7 to "Aug",
-        8 to "Sep",
-        9 to "Oct",
-        10 to "Nov",
-        11 to "Dec"
+        0 to context.resources.getString(R.string.eng_jan),
+        1 to context.resources.getString(R.string.eng_feb),
+        2 to context.resources.getString(R.string.eng_mar),
+        3 to context.resources.getString(R.string.eng_apr),
+        4 to context.resources.getString(R.string.eng_may),
+        5 to context.resources.getString(R.string.eng_jun),
+        6 to context.resources.getString(R.string.eng_jul),
+        7 to context.resources.getString(R.string.eng_aug),
+        8 to context.resources.getString(R.string.eng_sep),
+        9 to context.resources.getString(R.string.eng_oct),
+        10 to context.resources.getString(R.string.eng_nov),
+        11 to context.resources.getString(R.string.eng_dec),
     )
 
     /**

@@ -55,9 +55,10 @@ class MessageAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val dateHelper = DateHelper(context)
         val message: String = chats[position].message
         holder.text.text = message
-        holder.time.text = DateHelper.formatMessageDate(chats[position].date)
+        holder.time.text = dateHelper.formatMessageDate(chats[position].date)
     }
 
     override fun getItemCount(): Int {

@@ -100,4 +100,16 @@
     <string name="is_discount">Discount?</string>
     <string name="discount_lower">Discount price must be lower</string>
     <string name="message_time">Time</string>
+    <string name="eng_jan">Jan</string>
+    <string name="eng_feb">Feb</string>
+    <string name="eng_mar">Mar</string>
+    <string name="eng_apr">Apr</string>
+    <string name="eng_may">May</string>
+    <string name="eng_jun">Jun</string>
+    <string name="eng_jul">Jul</string>
+    <string name="eng_aug">Aug</string>
+    <string name="eng_sep">Sep</string>
+    <string name="eng_oct">Oct</string>
+    <string name="eng_nov">Nov</string>
+    <string name="eng_dec">Dec</string>
 </resources>
