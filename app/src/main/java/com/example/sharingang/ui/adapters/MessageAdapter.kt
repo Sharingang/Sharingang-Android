@@ -19,7 +19,7 @@ import com.example.sharingang.utils.DateHelper
  * @property currentUserId the current logged in user's id
  */
 class MessageAdapter(
-    private val context: Context, private var chats: List<Chat>,
+    private val context: Context, private var chats: MutableList<Chat>,
     private val currentUserId: String, private val attachedFragment: MessageFragment
 ) :
     RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
@@ -78,7 +78,8 @@ class MessageAdapter(
      * @param newData the incoming data
      */
     fun submitList(newData: List<Chat>) {
-        chats = newData
+        chats.clear()
+        chats.addAll(newData)
         notifyDataSetChanged()
         attachedFragment.scrollToEnd()
     }

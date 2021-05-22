@@ -38,7 +38,8 @@ class MessageFragment : Fragment() {
     private lateinit var messageAdapter: MessageAdapter
     private val args: MessageFragmentArgs by navArgs()
     private val messagesLiveData: MutableLiveData<List<Chat>> = MutableLiveData(listOf())
-    private var listChats: List<Chat> = mutableListOf()
+    private var listChats: MutableList<Chat> = mutableListOf()
+    private var shouldUpdate = false
 
     @Inject
     lateinit var currentUserProvider: CurrentUserProvider
@@ -63,10 +64,10 @@ class MessageFragment : Fragment() {
         setupFields()
         setupSendButton()
         setupUI()
+        messagesLiveData.value = listChats
         lifecycleScope.launch(Dispatchers.Main) {
             setupMessageRefresh()
         }
-        messagesLiveData.postValue(listChats)
         return binding.root
     }
 
@@ -90,7 +91,8 @@ class MessageFragment : Fragment() {
         binding.btnSend.setOnClickListener {
             val message = binding.messageEditText.text.toString()
             binding.messageEditText.text.clear()
-            lifecycleScope.launch(Dispatchers.IO) {
+            listChats.clear()
+            lifecycleScope.launch(Dispatchers.Main) {
                 sendMessage(currentUserId, partnerId, message)
             }
         }
@@ -104,7 +106,10 @@ class MessageFragment : Fragment() {
      * @param message the message to send
      */
     private suspend fun sendMessage(from: String, to: String, message: String) {
-        listChats = userRepository.putMessage(from, to, message, Date())
+        listChats.clear()
+        shouldUpdate = false
+        listChats.addAll(userRepository.putMessage(from, to, message, Date()))
+        shouldUpdate = true
         messagesLiveData.postValue(listChats)
     }
 
@@ -112,6 +117,7 @@ class MessageFragment : Fragment() {
      * Sets up the UI of the fragment (adapter + messages)
      */
     private fun setupUI() {
+        listChats.clear()
         messageAdapter = MessageAdapter(requireContext(), listChats, currentUserId, this)
         binding.history.adapter = messageAdapter
         getAndDisplayMessages()
@@ -122,7 +128,7 @@ class MessageFragment : Fragment() {
      */
     private suspend fun setupMessageRefresh() {
         userRepository.setupConversationRefresh(currentUserId, partnerId) {
-            if (isAdded) {
+            if (isAdded && shouldUpdate) {
                 getAndDisplayMessages()
             }
         }
@@ -133,8 +139,11 @@ class MessageFragment : Fragment() {
      */
     fun getAndDisplayMessages() {
         lifecycleScope.launch(Dispatchers.Main) {
+            listChats.clear()
+            shouldUpdate = false
             userRepository.clearNumUnread(currentUserId, partnerId)
-            listChats = userRepository.getMessages(currentUserId, partnerId)
+            listChats.addAll(userRepository.getMessages(currentUserId, partnerId))
+            shouldUpdate = true
             messagesLiveData.postValue(listChats)
         }
     }
