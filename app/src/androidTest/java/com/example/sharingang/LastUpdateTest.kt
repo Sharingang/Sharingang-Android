@@ -5,8 +5,7 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.sharingang.auth.FakeCurrentUserProvider
@@ -41,9 +40,9 @@ class LastUpdateTest {
             scrollTo(), click()
         )
         waitAfterSaveItem()
-        onView(withId(R.id.textViewLastUpdated)).check(matches(withText("0s")))
+        onView(withText("0s")).check(matches(isDisplayed()))
         onView(withId(R.id.item_list_view_title)).perform(click())
-        onView(withId(R.id.lastUpdateText)).check(matches(withText(containsString("0s"))))
+        onView(withText("0s")).check(matches(isDisplayed()))
         onView(withId(R.id.menuEdit)).perform(click())
         onView(withId(R.id.itemTitle)).perform(
             replaceText("newTitle")
@@ -54,6 +53,6 @@ class LastUpdateTest {
         waitAfterSaveItem()
         Espresso.pressBack()
         Thread.sleep(1000)
-        onView(withId(R.id.textViewLastUpdated)).check(matches(withText(containsString("s"))))
+        onView(withText("1s")).check(matches(isDisplayed()))
     }
 }
