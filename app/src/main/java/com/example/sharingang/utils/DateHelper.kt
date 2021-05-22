@@ -1,5 +1,8 @@
 package com.example.sharingang.utils
 
+import android.annotation.SuppressLint
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -71,7 +74,7 @@ object DateHelper {
             when {
                 diffInSeconds < SECS_PER_MINUTE -> Pair(diffInSeconds, Measure.SECONDS)
                 diffInSeconds < SECS_PER_HOUR -> Pair(diffInSeconds / SECS_PER_MINUTE, Measure.MINUTES)
-                else -> Pair(diffInSeconds / SECS_PER_DAY, Measure.HOURS)
+                else -> Pair(diffInSeconds / SECS_PER_HOUR, Measure.HOURS)
             }
         )
     }
@@ -112,6 +115,23 @@ object DateHelper {
                 Measure.YEARS -> "y"
             }
         return "$diffNumber$measureStr"
+    }
+
+    /**
+     * Creates a real Date from a formatted date and time
+     *
+     * @param dateStr date in format "yyyy/MM/dd HH:mm:ss"
+     * @return the created Date
+     */
+    @SuppressLint("SimpleDateFormat")
+    fun createDate(dateStr: String): Date? {
+        val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+        return try {
+            dateFormat.parse(dateStr)
+        } catch (e: ParseException) {
+            null
+        }
+
     }
 
 }
