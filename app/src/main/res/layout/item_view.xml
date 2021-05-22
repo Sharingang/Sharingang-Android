@@ -63,8 +63,8 @@
 
                     <ImageView
                         android:id="@+id/historyImage"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:contentDescription="@string/lastUpdate"
                         app:srcCompat="@android:drawable/ic_menu_recent_history" />
 
@@ -72,7 +72,7 @@
                         android:id="@+id/textViewLastUpdated"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

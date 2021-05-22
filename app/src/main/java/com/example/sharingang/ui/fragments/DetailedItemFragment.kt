@@ -299,11 +299,9 @@ class DetailedItemFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             val lastUpdate = itemRepository.getLastTimeUpdate(args.item.id!!)
             lifecycleScope.launch(Dispatchers.Main) {
-                binding.lastUpdateText.text =
-                    getString(
-                        R.string.last_update,
-                        DateHelper.getDateDifferenceInDays(Date(), lastUpdate).toString()
-                    )
+                binding.lastUpdateText.text = DateHelper.getDateDifferenceString(
+                    startDate = lastUpdate, endDate = Date()
+                )
             }
         }
     }

@@ -41,8 +41,10 @@ class ItemsAdapter(private val clickListener: ItemListener) :
             binding.item = item
             Glide.with(binding.itemImagePreview).load(item.image).into(binding.itemImagePreview)
             binding.clickListener = clickListener
-            ("${DateHelper.getDateDifferenceInDays(item.updatedAt!!, Date())}D")
-                .also{ binding.textViewLastUpdated.text = it }
+            binding.textViewLastUpdated.text =
+                DateHelper.getDateDifferenceString(
+                    startDate = item.updatedAt!!, endDate = Date()
+                )
         }
 
         companion object {

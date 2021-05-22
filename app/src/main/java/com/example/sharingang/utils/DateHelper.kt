@@ -70,15 +70,15 @@ object DateHelper {
         val diffNumber = difference.first
         val measureStr =
             when(difference.second) {
-                Measure.SECONDS -> if(diffNumber == 1L) "second" else "seconds"
-                Measure.MINUTES -> if(diffNumber == 1L) "minute" else "minutes"
-                Measure.HOURS -> if(diffNumber == 1L) "hour" else "hours"
-                Measure.DAYS -> if(diffNumber == 1L) "day" else "days"
-                Measure.WEEKS -> if(diffNumber == 1L) "week" else "weeks"
-                Measure.MONTHS -> if(diffNumber == 1L) "month" else "months"
-                Measure.YEARS -> if(diffNumber == 1L) "year" else "years"
+                Measure.SECONDS -> "s"
+                Measure.MINUTES -> "min"
+                Measure.HOURS -> "h"
+                Measure.DAYS -> "d"
+                Measure.WEEKS -> "w"
+                Measure.MONTHS -> "mon"
+                Measure.YEARS -> "y"
             }
-        return "$diffNumber $measureStr"
+        return "$diffNumber$measureStr"
     }
 
 }
