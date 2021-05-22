@@ -4,6 +4,21 @@ import java.util.*
 
 object DateHelper {
 
+    private val monthsMap = hashMapOf(
+        0 to "Jan",
+        1 to "Feb",
+        2 to "Mar",
+        3 to "Apr",
+        4 to "May",
+        5 to "Jun",
+        6 to "Jul",
+        7 to "Aug",
+        8 to "Sep",
+        9 to "Oct",
+        10 to "Nov",
+        11 to "Dec"
+    )
+
     /**
      * formats a date for message timestamps
      *
@@ -14,40 +29,14 @@ object DateHelper {
         val currentDate = Date()
         val today = Triple(currentDate.year, currentDate.month, currentDate.day)
         val messageTime = Triple(date.year, date.month, date.day)
-        val monthStr = getMonthName(date.month)
+        val monthStr = monthsMap[date.month]
         return (
             when {
                 today == messageTime -> "Today, ${date.hours}:${
                     date.minutes.toString().padStart(2, '0')
                 }"
-                today.first == messageTime.first -> "$monthStr ${date.day}"
-                else -> "$monthStr ${date.day}, ${date.year}"
-            }
-        )
-    }
-
-    /**
-     * get the name of the month based on its integer value
-     *
-     * @param monthNumber the number of the month we want to get the name of
-     * @return the name of the month
-     */
-    private fun getMonthName(monthNumber: Int): String {
-        return (
-            when(monthNumber) {
-                0 -> "Jan."
-                1 -> "Feb."
-                2 -> "Mar."
-                3 -> "Apr."
-                4 -> "May."
-                5 -> "Jun."
-                6 -> "Jul."
-                7 -> "Aug."
-                8 -> "Sep."
-                9 -> "Oct."
-                10 -> "Nov."
-                11 -> "Dec."
-                else -> ""
+                today.first == messageTime.first -> "$monthStr. ${date.day}"
+                else -> "$monthStr. ${date.day}, ${date.year}"
             }
         )
     }
