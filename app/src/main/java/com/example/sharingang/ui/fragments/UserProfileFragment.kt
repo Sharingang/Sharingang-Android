@@ -19,6 +19,9 @@ import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.models.User
 import com.example.sharingang.database.repositories.UserRepository
 import com.example.sharingang.imagestore.ImageStore
+import com.example.sharingang.models.Item
+import com.example.sharingang.ui.adapters.ItemListener
+import com.example.sharingang.ui.adapters.ItemsAdapter
 import com.example.sharingang.utils.ImageAccess
 import com.example.sharingang.viewmodels.UserProfileViewModel
 import com.firebase.ui.auth.AuthUI
@@ -202,7 +205,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupRecyclerView(userId: String?) {
-        val adapter = itemsViewModel.setupItemAdapter()
+        val adapter = setupItemAdapter()
         binding.userItemList.adapter = adapter
         listOf(binding.offersButton, binding.requestsButton).forEach {
             it.setOnClickListener {
@@ -331,5 +334,13 @@ class UserProfileFragment : Fragment() {
             binding.imageView.setImageURI(currentImageUri)
             changeImage(currentImageUri)
         }
+    }
+
+    /**
+    * Setup the item adapter for a recycler view.
+    */
+    private fun setupItemAdapter(): ItemsAdapter {
+        val onView = { item: Item -> itemsViewModel.onViewItem(item) }
+        return ItemsAdapter(ItemListener(onView), requireContext())
     }
 }

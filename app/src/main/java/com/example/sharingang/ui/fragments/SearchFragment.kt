@@ -12,6 +12,9 @@ import com.example.sharingang.R
 import com.example.sharingang.databinding.FragmentSearchBinding
 import com.example.sharingang.viewmodels.ItemsViewModel
 import com.example.sharingang.auth.CurrentUserProvider
+import com.example.sharingang.models.Item
+import com.example.sharingang.ui.adapters.ItemListener
+import com.example.sharingang.ui.adapters.ItemsAdapter
 import com.example.sharingang.viewmodels.UserProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -37,7 +40,7 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
-        val adapter = viewModel.setupItemAdapter()
+        val adapter = setupItemAdapter()
         setupToolbar()
         binding.itemSearchList.adapter = adapter
         binding.itemSearchList.layoutManager = GridLayoutManager(context, 2)
@@ -126,6 +129,14 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
             contained = it
             activity?.invalidateOptionsMenu()
         })
+    }
+
+    /**
+    * Setup the item adapter for a recycler view.
+    */
+    private fun setupItemAdapter(): ItemsAdapter {
+        val onView = { item: Item -> viewModel.onViewItem(item) }
+        return ItemsAdapter(ItemListener(onView), requireContext())
     }
 
 }

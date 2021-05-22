@@ -212,7 +212,7 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
-    private fun onViewItem(item: Item) {
+    fun onViewItem(item: Item) {
         _navigateToDetailItem.value = item
     }
 
@@ -242,14 +242,6 @@ class ItemsViewModel @Inject constructor(
         if (item != null) {
             onSellItem(item)
         }
-    }
-
-    /**
-     * Setup the item adapter for a recycle view.
-     */
-    fun setupItemAdapter(): ItemsAdapter {
-        val onView = { item: Item -> onViewItem(item) }
-        return ItemsAdapter(ItemListener(onView))
     }
 
     /**
