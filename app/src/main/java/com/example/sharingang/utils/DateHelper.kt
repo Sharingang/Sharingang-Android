@@ -2,6 +2,7 @@ package com.example.sharingang.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
+import androidx.test.platform.app.InstrumentationRegistry
 import com.example.sharingang.R
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -127,12 +128,7 @@ class DateHelper(private val context: Context) {
      */
     @SuppressLint("SimpleDateFormat")
     fun createDate(dateStr: String): Date? {
-        val dateFormat = SimpleDateFormat(context.getString(R.string.dateCreationFormat))
-        return try {
-            dateFormat.parse(dateStr)
-        } catch (e: ParseException) {
-            null
-        }
+        return SimpleDateFormat(context.getString(R.string.dateCreationFormat)).parse(dateStr)
 
     }
 
