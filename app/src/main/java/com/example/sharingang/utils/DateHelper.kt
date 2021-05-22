@@ -4,7 +4,11 @@ import android.content.Context
 import com.example.sharingang.R
 import java.util.*
 
-class DateHelper(context: Context) {
+/**
+ * Helper for date calculations and date/time formatting
+ * @property context the context
+ */
+class DateHelper(private val context: Context) {
 
     private val monthsMap = hashMapOf(
         0 to context.resources.getString(R.string.eng_jan),
@@ -34,9 +38,10 @@ class DateHelper(context: Context) {
         val monthStr = monthsMap[date.month]
         return (
             when {
-                today == messageTime -> "Today, ${date.hours}:${
-                    date.minutes.toString().padStart(2, '0')
-                }"
+                today == messageTime -> context.getString(R.string.eng_today,
+                    ", ${date.hours}:${date.minutes.toString()
+                        .padStart(2, '0')}"
+                )
                 today.first == messageTime.first -> "$monthStr. ${date.day}"
                 else -> "$monthStr. ${date.day}, ${date.year}"
             }

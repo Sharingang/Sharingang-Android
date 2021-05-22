@@ -112,4 +112,5 @@
     <string name="eng_oct">Oct</string>
     <string name="eng_nov">Nov</string>
     <string name="eng_dec">Dec</string>
+    <string name="eng_today">Today%s</string>
 </resources>
