@@ -14,7 +14,6 @@ import com.example.sharingang.utils.navigate_to
 import com.example.sharingang.utils.waitAfterSaveItem
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import org.hamcrest.CoreMatchers.containsString
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -43,16 +42,5 @@ class LastUpdateTest {
         onView(withText("0s")).check(matches(isDisplayed()))
         onView(withId(R.id.item_list_view_title)).perform(click())
         onView(withText("0s")).check(matches(isDisplayed()))
-        onView(withId(R.id.menuEdit)).perform(click())
-        onView(withId(R.id.itemTitle)).perform(
-            replaceText("newTitle")
-        )
-        onView(withId(R.id.saveItemButton)).perform(
-            scrollTo(), click()
-        )
-        waitAfterSaveItem()
-        Espresso.pressBack()
-        Thread.sleep(1000)
-        onView(withText("1s")).check(matches(isDisplayed()))
     }
 }
