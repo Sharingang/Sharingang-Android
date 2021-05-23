@@ -2,9 +2,7 @@ package com.example.sharingang.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
-import androidx.test.platform.app.InstrumentationRegistry
 import com.example.sharingang.R
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
