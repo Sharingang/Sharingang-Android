@@ -1,5 +1,6 @@
 package com.example.sharingang.viewmodels
 
+import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -76,9 +77,9 @@ class ItemsViewModel @Inject constructor(
     val wishlistItem: LiveData<List<Item>>
         get() = _wishlistItem
 
-    private val _rated: MutableLiveData<Boolean> = MutableLiveData(true)
-    val rated: LiveData<Boolean>
-        get() = _rated
+    private val _reviews: MutableLiveData<Map<String, Boolean>> = MutableLiveData()
+    val reviews: LiveData<Map<String, Boolean>>
+        get() = _reviews
 
 
     /**
@@ -167,6 +168,14 @@ class ItemsViewModel @Inject constructor(
     }
 
     /**
+     * Set the value of the reviews
+     * @param[item] item whose reviews to use
+     */
+    fun setReviews(item: Item){
+        _reviews.postValue(item.reviews)
+    }
+
+    /**
      * Searches through database, ignores searchName/
      * categoryID if null/empty.
      *
@@ -212,6 +221,16 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
+    fun updateReview(item: Item, userId: String?, reviewed: Boolean) {
+        if (userId == null) return
+        viewModelScope.launch(Dispatchers.IO) {
+            val newReviews = item.reviews.toMutableMap()
+            newReviews[userId] = reviewed
+            itemRepository.set(item.copy(reviews = newReviews))
+            _reviews.postValue(newReviews)
+        }
+    }
+
     private fun onViewItem(item: Item) {
         _navigateToDetailItem.value = item
     }
@@ -222,16 +241,6 @@ class ItemsViewModel @Inject constructor(
 
     private suspend fun onSellItem(item: Item) {
         itemRepository.set(item.copy(sold = !item.sold))
-    }
-
-    /**
-     * Set value of _rated based on if the item was rated.
-     * @param[item] Item who's rating is to be used.
-     */
-    fun setRated(item: Item?) {
-        if (item != null) {
-            _rated.postValue(item.rated)
-        }
     }
 
     /**
@@ -270,18 +279,6 @@ class ItemsViewModel @Inject constructor(
         observable.observe(LifeCycleOwner, {
             adapter.submitList(it)
         })
-    }
-
-    /**
-     * Updates rating of item in database.
-     * Also updates _rated livedata.
-     * @param[item] Item that was rated.
-     */
-    fun rateItem(item: Item) {
-        viewModelScope.launch(Dispatchers.IO) {
-            itemRepository.set(item.copy(rated = true))
-            _rated.postValue(true)
-        }
     }
 
     /**

@@ -39,12 +39,12 @@ class StripePaymentProvider @Inject constructor(
         }
     }
 
-    override suspend fun requestPayment(item: Item): Boolean {
-        if (item.id == null || item.price < 0.01) {
+    override suspend fun requestPayment(item: Item, quantity: Int): Boolean {
+        if (item.id == null || item.price < 0.01 || quantity < 1) {
             return false
         }
 
-        val paymentIntentData = fetchPaymentIntentData(item.id, context) ?: return false
+        val paymentIntentData = fetchPaymentIntentData(item.id, quantity, context) ?: return false
         val publishableKey = paymentIntentData["publishableKey"]!!
         val customerId = paymentIntentData["customer"]!!
         val ephemeralKeySecret = paymentIntentData["ephemeralKey"]!!
@@ -73,9 +73,10 @@ class StripePaymentProvider @Inject constructor(
      */
     private suspend fun fetchPaymentIntentData(
         itemId: String,
+        quantity: Int,
         context: Context
     ): Map<String, String>? {
-        return firebaseFunctions.getHttpsCallable("checkout").call(mapOf("itemId" to itemId))
+        return firebaseFunctions.getHttpsCallable("checkout").call(mapOf("itemId" to itemId, "quantity" to quantity))
             .continueWith { task ->
                 if (task.isSuccessful) {
                     // When successful, we are guaranteed that it returns a Map<String, String>
