@@ -127,8 +127,8 @@ class DateHelper(private val context: Context) {
      * @return the created Date
      */
     @SuppressLint("SimpleDateFormat")
-    fun createDate(dateStr: String): Date? {
-        return SimpleDateFormat(context.getString(R.string.dateCreationFormat)).parse(dateStr)
+    fun createDate(format: String, dateStr: String): Date? {
+        return SimpleDateFormat(format).parse(dateStr)
 
     }
 
