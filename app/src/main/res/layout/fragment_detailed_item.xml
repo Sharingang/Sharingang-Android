@@ -12,6 +12,14 @@
             type="int" />
 
         <variable
+            name="sellerVisibility"
+            type="int" />
+
+        <variable
+            name="quantity"
+            type="String"/>
+
+        <variable
             name="item"
             type="com.example.sharingang.models.Item" />
 
@@ -70,6 +78,10 @@
                 android:textSize="18sp"
                 tools:text="10.00" />
 
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="match_parent" />
+
             <TextView
                 android:id="@+id/itemDiscountPrice"
                 android:layout_width="wrap_content"
@@ -79,6 +91,17 @@
                 android:visibility="@{item.discount ? View.VISIBLE : View.GONE}"
                 android:textSize="18sp"
                 tools:text="10.00" />
+
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/detailedItemQuantity"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{@string/display_quantity(item.quantity)}"/>
 
         </LinearLayout>
 
@@ -117,15 +140,33 @@
                 tools:text="TestUser" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/buyButton"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/buy"
-            app:layout_constraintEnd_toEndOf="@+id/cardInputWidget"
-            app:layout_constraintStart_toStartOf="@+id/cardInputWidget"
-            app:layout_constraintTop_toBottomOf="@+id/cardInputWidget" />
+            android:orientation="horizontal"
+            android:visibility="@{sellerVisibility}">
+
+            <Button
+                android:id="@+id/buyButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/buy"
+                app:layout_constraintEnd_toEndOf="@+id/cardInputWidget"
+                app:layout_constraintStart_toStartOf="@+id/cardInputWidget"
+                app:layout_constraintTop_toBottomOf="@+id/cardInputWidget" />
+
+            <EditText
+                android:id="@+id/buyQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:hint="@string/_1"
+                android:autofillHints="@string/_1"
+                android:inputType="number"
+                android:text="@={quantity}"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -241,9 +282,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal|top"
+                android:contentDescription="@string/share"
                 android:backgroundTint="@color/themeColor"
                 android:layout_marginTop="16dp"
-                android:contentDescription="@string/share"
                 app:srcCompat="?attr/actionModeShareDrawable" />
 
             <Space

@@ -197,12 +197,15 @@ class NewEditFragment : Fragment() {
     }
 
     private fun itemToAdd(): Item {
+        val textQuantity = binding.itemQuantity.text.toString().toIntOrNull() ?: 1
         return Item(
             id = existingItem?.id,
             title = binding.title ?: "",
             description = binding.description ?: "",
             image = imageUri?.toString() ?: existingItem?.image,
             price = binding.price?.toDoubleOrNull() ?: 0.0,
+            quantity = if (textQuantity < 1) 1 else textQuantity,
+            reviews = mapOf(currentUserProvider.getCurrentUserId()!! to false),
             sold = existingItem?.sold ?: false,
             category = binding.categorySpinner.selectedItemPosition,
             categoryString = resources.getStringArray(R.array.categories)[binding.categorySpinner.selectedItemPosition],
