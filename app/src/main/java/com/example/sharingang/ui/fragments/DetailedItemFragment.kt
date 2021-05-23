@@ -195,10 +195,10 @@ class DetailedItemFragment : Fragment() {
 
     private fun initRating(item: Item) {
         itemViewModel.setReviews(item)
+        val currentUserId = currentUserProvider.getCurrentUserId()
         itemViewModel.reviews.observe(viewLifecycleOwner, {
-            val visibility = if (it.keys.contains(currentUserProvider.getCurrentUserId())
-                && currentUserProvider.getCurrentUserId() != null
-                && it[currentUserProvider.getCurrentUserId()!!]!!
+            val visibility = if (it.keys.contains(currentUserId)
+                && currentUserId != null && it[currentUserId]!!
             ) View.VISIBLE
             else View.GONE
             binding.ratingVisibility = visibility
@@ -242,8 +242,8 @@ class DetailedItemFragment : Fragment() {
     }
 
     private fun updateBoughtItem(item: Item, quantity: Int) {
-        binding.detailedItemQuantity.text = String.format("Quantity: %s", quantity.toString())
         val itemToUpdate = item.copy(quantity = quantity, sold = (quantity == 0))
+        binding.item = itemToUpdate
         itemViewModel.updateReview(
             itemToUpdate, currentUserProvider.getCurrentUserId(), true
         )

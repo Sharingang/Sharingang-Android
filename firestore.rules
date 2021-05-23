@@ -10,8 +10,8 @@ service cloud.firestore {
         match /items/{itemId} {
 
             allow create: if isSignedInAndSelf(request.resource.data.userId);
-            allow update:if isSignedInAndSelf(resource.data.userID) || (isSignedIn() && request.resource.data.diff(resource.data).affectedKeys()
-                    .hasOnly(['quantity','sold','reviews']))
+            allow update:if isSignedInAndSelf(resource.data.userId) || (isSignedIn() && request.resource.data.diff(resource.data).affectedKeys()
+                .hasOnly(['quantity','sold','reviews']))
             allow delete: if isSignedInAndSelf(resource.data.userId);
             allow read: if true;
         }

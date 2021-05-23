@@ -169,7 +169,7 @@ class ItemsViewModel @Inject constructor(
 
     /**
      * Set the value of the reviews
-     * @param[item] item who's reviews to use
+     * @param[item] item whose reviews to use
      */
     fun setReviews(item: Item){
         _reviews.postValue(item.reviews)
