@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -71,21 +72,18 @@ class DetailedItemFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_detailed_item, container, false)
         val itemId = args.item.id!!
-        lifecycleScope.launch(Dispatchers.IO) {
-            loadItem(itemId)
-        }
+        lifecycleScope.launch(Dispatchers.IO) { loadItem(itemId) }
         observer.setupImageView(binding.detailedItemImage)
         args.item.image?.let {
             Glide.with(this).load(it).into(binding.detailedItemImage)
         }
-
         initWishlistButton()
         initRating(args.item)
         initBuy()
-        if (args.item.discount) binding.itemPrice.paintFlags = binding.itemPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+        if (args.item.discount) binding.itemPrice.paintFlags =
+            binding.itemPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         binding.shareButton.setOnClickListener { shareItem() }
         binding.locateButton.setOnClickListener { locateItem() }
-
         viewModel.setUser(args.item.userId)
         viewModel.user.observe(viewLifecycleOwner, this::onUserChange)
         setLastUpdated()
@@ -100,7 +98,7 @@ class DetailedItemFragment : Fragment() {
         val currentUserId = currentUserProvider.getCurrentUserId()
         val availableForSale = !args.item.sold && args.item.price >= 0.01 && !args.item.request &&
                 currentUserId != null && args.item.userId != currentUserId
-        binding.buyButton.visibility = if (availableForSale) View.VISIBLE else View.GONE
+        binding.sellerVisibility = if (availableForSale) View.VISIBLE else View.GONE
         binding.buyButton.setOnClickListener { buyItem() }
     }
 
@@ -164,11 +162,8 @@ class DetailedItemFragment : Fragment() {
                     binding.root,
                     getString(R.string.item_deleted_success),
                     Snackbar.LENGTH_SHORT
-                )
-                    .show()
-                lifecycleScope.launch(Dispatchers.Main) {
-                    findNavController().popBackStack()
-                }
+                ).show()
+                lifecycleScope.launch(Dispatchers.Main) { findNavController().popBackStack() }
             }
         }
     }
@@ -203,27 +198,26 @@ class DetailedItemFragment : Fragment() {
     }
 
     private fun initRating(item: Item) {
-        itemViewModel.setRated(item)
-        itemViewModel.rated.observe(viewLifecycleOwner, {
-            val visibility =
-                if (!it && item.sold && currentUserProvider.getCurrentUserId() != null) View.VISIBLE
-                else View.GONE
+        itemViewModel.setReviews(item)
+        val currentUserId = currentUserProvider.getCurrentUserId()
+        itemViewModel.reviews.observe(viewLifecycleOwner, {
+            val visibility = if (it.keys.contains(currentUserId)
+                && currentUserId != null && it[currentUserId]!!
+            ) View.VISIBLE
+            else View.GONE
             binding.ratingVisibility = visibility
         })
         binding.ratingButton.setOnClickListener {
-            val selectedOption: Int = binding.radioGroup.checkedRadioButtonId
-            if (selectedOption != -1) {
-                val rating = when (selectedOption) {
-                    binding.radioButton1.id -> 1
-                    binding.radioButton2.id -> 2
-                    binding.radioButton3.id -> 3
-                    binding.radioButton4.id -> 4
-                    binding.radioButton5.id -> 5
-                    else -> 0
-                }
-                viewModel.updateUserRating(item.userId, rating)
-                itemViewModel.rateItem(item)
+            val rating = when (binding.radioGroup.checkedRadioButtonId) {
+                binding.radioButton1.id -> 1
+                binding.radioButton2.id -> 2
+                binding.radioButton3.id -> 3
+                binding.radioButton4.id -> 4
+                binding.radioButton5.id -> 5
+                else -> 0
             }
+            viewModel.updateUserRating(item.userId, rating)
+            itemViewModel.updateReview(item, currentUserProvider.getCurrentUserId(), false)
         }
     }
 
@@ -231,54 +225,56 @@ class DetailedItemFragment : Fragment() {
         viewModel.modifyWishList(args.item)
     }
 
-    /**
-     * Start the buying process
-     *
-     * On success, the item is marked as sold and the rating form is displayed
-     */
     private fun buyItem() {
-        binding.buyButton.isEnabled = false
-        lifecycleScope.launch {
-            val status = paymentProvider.requestPayment(args.item)
-            if (status) {
-                itemViewModel.sellItem(args.item)
-                binding.buyButton.visibility = View.GONE
-                initRating(args.item.copy(sold = true))
-            } else {
-                binding.buyButton.isEnabled = true
+        val quantity: Int = binding.quantity?.toIntOrNull() ?: 1
+        if (quantity > args.item.quantity || quantity < 1) {
+            Toast.makeText(context, getString(R.string.incorrect_quantity), Toast.LENGTH_SHORT).show()
+            binding.buyButton.isEnabled = true
+        } else {
+            lifecycleScope.launch {
+                if (paymentProvider.requestPayment(args.item, quantity)) {
+                    itemViewModel.sellItem(args.item)
+                    val newQuantity = args.item.quantity - quantity
+                    binding.sellerVisibility = if (newQuantity == 0) View.GONE else View.VISIBLE
+                    binding.buyButton.isEnabled = newQuantity != 0
+                    updateBoughtItem(args.item, newQuantity)
+                } else {
+                    binding.buyButton.isEnabled = true
+                }
             }
         }
     }
 
+    private fun updateBoughtItem(item: Item, quantity: Int) {
+        val itemToUpdate = item.copy(quantity = quantity, sold = (quantity == 0))
+        binding.item = itemToUpdate
+        itemViewModel.updateReview(
+            itemToUpdate, currentUserProvider.getCurrentUserId(), true
+        )
+        initRating(itemToUpdate)
+    }
+
     private fun shareItem() {
-        val item = args.item
-        val link = generateFirebaseDynamicLink(item)
+        val link = generateFirebaseDynamicLink(args.item)
         val shareIntent = Intent.createChooser(Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, link.toString())
-            putExtra(Intent.EXTRA_TITLE, generateLinkTitle(item))
+            putExtra(Intent.EXTRA_TITLE, args.item.title + " - " + getString(R.string.app_name))
             type = "text/plain"
         }, null)
         startActivity(shareIntent)
     }
 
     private fun generateFirebaseDynamicLink(item: Item): Uri {
-        val dynamicLink = Firebase.dynamicLinks.dynamicLink {
+        return Firebase.dynamicLinks.dynamicLink {
             link = generateDeepLink(item)
             domainUriPrefix = "https://sharingang.page.link"
-            // Open links with this app on Android
             androidParameters { }
-        }
-
-        return dynamicLink.uri
+        }.uri
     }
 
     private fun generateDeepLink(item: Item): Uri {
         return Uri.parse("https://sharingang.page.link/item?id=${item.id}")
-    }
-
-    private fun generateLinkTitle(item: Item): String {
-        return item.title + " - " + getString(R.string.app_name)
     }
 
     /**

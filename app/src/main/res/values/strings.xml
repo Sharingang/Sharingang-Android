@@ -10,6 +10,7 @@
     <string name="title">Title</string>
     <string name="price">Price</string>
     <string name="display_price">CHF %.2f</string>
+    <string name="display_quantity">Quantity: %d</string>
     <string name="item_image_description">Item Image</string>
     <string name="search_hint">Search…</string>
     <string name="search_go_button">Go</string>
@@ -108,4 +109,7 @@
     <string name="eng_months">mon</string>
     <string name="eng_years">y</string>
     <string name="dateCreationFormat">yyyy/MM/dd HH:mm:ss</string>
+    <string name="quantity">Quantity</string>
+    <string name="_1">1</string>
+    <string name="incorrect_quantity">Incorrect Quantity Selected</string>
 </resources>

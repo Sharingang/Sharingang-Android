@@ -46,7 +46,7 @@ class MapFragmentTest {
             typeText(itemTitle),
             closeSoftKeyboard()
         )
-        onView(withId(R.id.item_get_location)).perform(click())
+        onView(withId(R.id.item_get_location)).perform(scrollTo(), click())
         Thread.sleep(waitingTime)
         onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()

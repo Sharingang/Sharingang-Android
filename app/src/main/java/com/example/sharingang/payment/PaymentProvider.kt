@@ -26,5 +26,5 @@ interface PaymentProvider {
      * @param item item being bought. It must have an ID and a positive price.
      * @return whether the payment was successful
      */
-    suspend fun requestPayment(item: Item): Boolean
+    suspend fun requestPayment(item: Item, quantity: Int): Boolean
 }

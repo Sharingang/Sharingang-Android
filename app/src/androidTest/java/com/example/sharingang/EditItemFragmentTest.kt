@@ -66,10 +66,6 @@ class EditItemFragmentTest {
 
         onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
-
-        onView(withMenuIdOrText(R.id.menuEdit, R.string.edit_item)).perform(click())
-
-        onView(withId(R.id.category_spinner)).check(matches(withSpinnerText("Games")))
     }
 
 
