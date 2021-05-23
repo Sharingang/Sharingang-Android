@@ -1,14 +1,17 @@
 package com.example.sharingang.utils
 
+import android.content.Context
+import com.example.sharingang.ui.fragments.ItemsListFragment
 import junit.framework.Assert.assertEquals
 import org.junit.Test
+import org.junit.runner.manipulation.Ordering
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
 class DateHelperTest {
 
-    val dateHelper = DateHelper(null!!)
+    val dateHelper = DateHelper(null)
     val format = "yyyy/MM/dd HH:mm:ss"
 
     @Test

@@ -8,12 +8,13 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.HashMap
 
 /**
  * Helper for date calculations and time formatting
  * @property context the context
  */
-class DateHelper(private val context: Context) {
+class DateHelper(private val context: Context?) {
 
     /**
      * Contains units of measure for time
@@ -28,15 +29,16 @@ class DateHelper(private val context: Context) {
         YEARS
     }
 
-    private val unitStringMap = hashMapOf (
-        Measure.SECONDS to context.getString(R.string.eng_seconds),
-        Measure.MINUTES to context.getString(R.string.eng_minutes),
-        Measure.HOURS to context.getString(R.string.eng_hours),
-        Measure.DAYS to context.getString(R.string.eng_days),
-        Measure.WEEKS to context.getString(R.string.eng_weeks),
-        Measure.MONTHS to context.getString(R.string.eng_months),
-        Measure.YEARS to context.getString(R.string.eng_years)
-    )
+    private var unitStringMap: HashMap<Measure, String>? =
+        hashMapOf(
+            Measure.SECONDS to (context?.getString(R.string.eng_seconds) ?: "s"),
+            Measure.MINUTES to (context?.getString(R.string.eng_seconds) ?: "min"),
+            Measure.HOURS to (context?.getString(R.string.eng_seconds) ?: "h"),
+            Measure.DAYS to (context?.getString(R.string.eng_seconds) ?: "d"),
+            Measure.WEEKS to (context?.getString(R.string.eng_seconds) ?: "w"),
+            Measure.MONTHS to (context?.getString(R.string.eng_seconds) ?: "mon"),
+            Measure.YEARS to (context?.getString(R.string.eng_seconds) ?: "y"),
+        )
 
     /*
      * Note: It is true that days can differ between years and months. Here, we are only
@@ -116,7 +118,7 @@ class DateHelper(private val context: Context) {
      */
     private fun getFormattedDifference(time: Pair<Long, Measure>): String {
         val diffNumber = time.first
-        val measureStr = unitStringMap[time.second]
+        val measureStr = unitStringMap!![time.second]
         return "$diffNumber$measureStr"
     }
 
@@ -131,5 +133,6 @@ class DateHelper(private val context: Context) {
         return SimpleDateFormat(format).parse(dateStr)
 
     }
+
 
 }
