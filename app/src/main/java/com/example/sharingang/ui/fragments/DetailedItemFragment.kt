@@ -223,8 +223,8 @@ class DetailedItemFragment : Fragment() {
 
     private fun buyItem() {
         val quantity: Int = binding.quantity?.toIntOrNull() ?: 1
-        if (quantity > args.item.quantity) {
-            Toast.makeText(context, "Not enough available", Toast.LENGTH_SHORT).show()
+        if (quantity > args.item.quantity || quantity < 1) {
+            Toast.makeText(context, getString(R.string.incorrect_quantity), Toast.LENGTH_SHORT).show()
             binding.buyButton.isEnabled = true
         } else {
             lifecycleScope.launch {

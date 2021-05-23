@@ -40,7 +40,7 @@ class StripePaymentProvider @Inject constructor(
     }
 
     override suspend fun requestPayment(item: Item, quantity: Int): Boolean {
-        if (item.id == null || item.price < 0.01) {
+        if (item.id == null || item.price < 0.01 || quantity < 1) {
             return false
         }
 
