@@ -19,6 +19,7 @@ import com.example.sharingang.R
 import com.example.sharingang.database.repositories.ItemRepository
 import com.example.sharingang.shake.ShakeListener
 import com.example.sharingang.ui.fragments.ItemsListFragmentDirections
+import com.example.sharingang.utils.constants.NotificationFields
 import com.example.sharingang.utils.notification.createChannel
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -77,8 +78,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         handleDeepLink()
 
         createChannel(
-            this.getString(R.string.new_item_notification_channel_id),
-            this.getString(R.string.new_item_notification_channel_name),
+            NotificationFields.NEW_ITEM_CHANNEL_ID,
+            NotificationFields.NEW_ITEM_CHANNEL_NAME,
             this
         )
     }

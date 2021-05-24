@@ -12,6 +12,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.example.sharingang.BuildConfig
 import com.example.sharingang.R
+import com.example.sharingang.utils.constants.NotificationFields
 import com.google.firebase.messaging.FirebaseMessaging
 
 private const val NOTIFICATION_ID = 0
@@ -42,7 +43,7 @@ private fun buildNotification(
 ): NotificationCompat.Builder {
     return NotificationCompat.Builder(
         applicationContext,
-        applicationContext.getString(R.string.new_item_notification_channel_id)
+        NotificationFields.NEW_ITEM_CHANNEL_ID
     ).setSmallIcon(R.drawable.ic_launcher_foreground)
         .setContentTitle(
             applicationContext.getString(R.string.new_item_notification_message)
