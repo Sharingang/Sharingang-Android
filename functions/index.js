@@ -52,7 +52,8 @@ exports.newItemNotification = functions.region(region).firestore.document('items
     var message = {
         data: {
             userId: newItem.userId,
-            deeplink: deeplink + context.params.itemId
+            deeplink: deeplink + context.params.itemId,
+            notificationType: "new_item"
         },
         notification: {
             body: newItem.title

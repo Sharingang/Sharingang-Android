@@ -80,6 +80,8 @@
     <string name="chat">Chat</string>
     <string name="new_item_notification_message">A new item has been posted!</string>
     <string name="new_item_notification_channel_description">You receive a notification when a new item that is a category you subscribed to is posted.</string>
+    <string name="chat_notification_message">You have received a new message!</string>
+    <string name="chat_notification_channel_description">You receive a notification when another user sends you a message.</string>
     <string name="not_subscribed">You are not subscribed to any category yet!</string>
     <string name="see_subscriptions">See subscriptions</string>
     <string name="sold">Sold</string>

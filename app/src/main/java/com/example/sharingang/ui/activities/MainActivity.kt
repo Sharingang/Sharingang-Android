@@ -80,6 +80,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         createChannel(
             NotificationFields.NEW_ITEM_CHANNEL_ID,
             NotificationFields.NEW_ITEM_CHANNEL_NAME,
+            getString(R.string.new_item_notification_channel_description),
             this
         )
     }
