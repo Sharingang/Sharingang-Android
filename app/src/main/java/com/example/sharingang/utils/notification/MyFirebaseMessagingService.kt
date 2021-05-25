@@ -27,7 +27,6 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
                 "chat" -> applicationContext.getString(R.string.chat_notification_message)
                 else -> ""
             }
-            val from = remoteMessage.data["fromId"]
             val to = remoteMessage.data["toId"]
             if ((userId!=null && userId != currentUserProvider.getCurrentUserId() || (to!=null && to==currentUserProvider.getCurrentUserId())) && deeplink != null) {
                 remoteMessage.notification?.let {

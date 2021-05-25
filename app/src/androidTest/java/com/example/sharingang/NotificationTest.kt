@@ -82,7 +82,7 @@ class NotificationTest {
             applicationContext,
             NotificationManager::class.java
         ) as NotificationManager
-        notificationManager.sendNotification("Test message body", deepLink, applicationContext)
+        notificationManager.sendNotification("Test message body", "Test Title", deepLink, applicationContext)
         // Wait for notification to clear up so later tests don't have the top of the screen obstructed
         Thread.sleep(6000)
     }

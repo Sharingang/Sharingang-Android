@@ -7,7 +7,7 @@ const stripe = require("stripe")(secret_key);
 const admin = require('firebase-admin');
 if (process.env.FUNCTIONS_EMULATOR === 'true') {
     const serviceAccount = require("./serviceAccountKey.json");
-	admin.initializeApp({
+    admin.initializeApp({
         credential: admin.credential.cert(serviceAccount)
     });
 } else {
@@ -71,18 +71,19 @@ exports.chatNotificationCreate = functions.region(region).firestore.document('us
 
 function onNewChat(change, context) {
     const newChat = change.data();
-    var message = {
-        data: {
-            deeplink: deeplink + context.params.chatId,
-            notificationType: "chat",
-            fromId: newChat.from,
-            toId: newChat.to
-        },
-        notification: {
-            body: newChat.message
-        }
-    };
-    pushMessage(message, "chat");
+    db.collection("users").doc(newChat.from).get().then((user) => {
+        var message = {
+            data: {
+                deeplink: deeplink + context.params.chatId,
+                notificationType: "chat",
+                toId: newChat.to
+            },
+            notification: {
+                body: user.data().name + ": " + newChat.message
+            }
+        };
+        pushMessage(message, "chat");
+    });
     return true;
 }
 /**
@@ -93,12 +94,12 @@ function onNewChat(change, context) {
  */
 function pushMessage(payload, topic) {
     admin.messaging().sendToTopic(topic, payload)
-    .then(function(response) {
-        console.log("Successfully sent notification!");
-    })
-    .catch(function(error) {
-        console.log("Error sending notification:", error);
-    });
+        .then(function (response) {
+            console.log("Successfully sent notification!");
+        })
+        .catch(function (error) {
+            console.log("Error sending notification:", error);
+        });
 }
 
 /**
