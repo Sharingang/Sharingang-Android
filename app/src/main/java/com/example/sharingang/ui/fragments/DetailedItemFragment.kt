@@ -234,6 +234,7 @@ class DetailedItemFragment : Fragment() {
                     binding.sellerVisibility = if (newQuantity == 0) View.GONE else View.VISIBLE
                     binding.buyButton.isEnabled = newQuantity != 0
                     updateBoughtItem(args.item, newQuantity)
+                    viewModel.buyItem(currentUserProvider.getCurrentUserId()!!, args.item.id!!)
                 } else {
                     binding.buyButton.isEnabled = true
                 }
