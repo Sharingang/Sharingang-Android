@@ -1,6 +1,7 @@
 package com.example.sharingang
 
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
@@ -10,12 +11,10 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.sharingang.ui.activities.MainActivity
 import com.example.sharingang.utils.navigate_to
-import com.example.sharingang.utils.navigate_up
 import com.example.sharingang.utils.waitAfterSaveItem
 import com.example.sharingang.utils.withMenuIdOrText
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import org.hamcrest.CoreMatchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -152,9 +151,7 @@ class SearchFragmentTest {
         onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
 
-        Thread.sleep(1000)
-        navigate_up()
-        Thread.sleep(1000)
+        pressBack()
 
         addSingleItemToDB(title2, bookCategory)
 
