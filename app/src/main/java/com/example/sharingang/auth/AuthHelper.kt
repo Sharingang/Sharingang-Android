@@ -68,8 +68,8 @@ class AuthHelper(
      * Sign out.
      */
     fun signOut() {
-        authUI.signOut(context)
         unsubscribeFromTopic(NotificationFields.CHAT_TOPIC)
+        authUI.signOut(context)
     }
 
     private fun addUserToDatabase(user: FirebaseUser) {
