@@ -49,6 +49,12 @@ exports.checkout = functions.region(region).https.onCall(async (data, context) =
 exports.newItemNotificationCreate = functions.region(region).firestore.document('items/{itemId}').onCreate((change, context) => onNewItem(change, context));
 exports.newItemNotificationUpdate = functions.region(region).firestore.document('items/{itemId}').onUpdate((change, context) => onNewItem(change.after, context));
 
+/**
+ * Gets called every time an item is added or updated, sends a notification to all users subscribed to the category of the item.
+ * @param change The data that has been updated or created.
+ * @param context The context of the updated/created data, contains also the variables (wildcards) used in the document path.
+ * @returns true
+ */
 function onNewItem(change, context) {
     const newItem = change.data();
 
@@ -67,8 +73,14 @@ function onNewItem(change, context) {
     return true;
 }
 exports.chatNotificationCreate = functions.region(region).firestore.document('users/{userId}/chats/{chatId}/messages/{message}').onCreate((change, context) => onNewChat(change, context));
-//exports.chatNotificationUpdate = functions.region(region).firestore.document('users/{userId}/chats/{chatId}/messages/{message}').onUpdate((change, context) => onNewChat(change.after, context));
 
+/**
+ * Gets called every time a chat is added. It obtains the username of the sender from the database, 
+ * then sends a message with the author and the content of the message.
+ * @param change The data that has been updated/created
+ * @param context The context of the updated/created data, contains also the variables (wildcards) used in the document path.
+ * @returns true
+ */
 function onNewChat(change, context) {
     const newChat = change.data();
     db.collection("users").doc(newChat.from).get().then((user) => {
