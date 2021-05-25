@@ -83,6 +83,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             getString(R.string.new_item_notification_channel_description),
             this
         )
+        createChannel(
+            NotificationFields.CHAT_CHANNEL_ID,
+            NotificationFields.CHAT_CHANNEL_NAME,
+            getString(R.string.chat_notification_channel_description),
+            this
+        )
     }
 
     override fun onResume() {

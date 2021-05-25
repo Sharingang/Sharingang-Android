@@ -46,8 +46,11 @@ exports.checkout = functions.region(region).https.onCall(async (data, context) =
     };
 });
 
-exports.newItemNotification = functions.region(region).firestore.document('items/{itemId}').onCreate((snap, context) => {
-    const newItem = snap.data();
+exports.newItemNotificationCreate = functions.region(region).firestore.document('items/{itemId}').onCreate((change, context) => onNewItem(change, context));
+exports.newItemNotificationUpdate = functions.region(region).firestore.document('items/{itemId}').onUpdate((change, context) => onNewItem(change.after, context));
+
+function onNewItem(change, context) {
+    const newItem = change.data();
 
     var message = {
         data: {
@@ -62,8 +65,26 @@ exports.newItemNotification = functions.region(region).firestore.document('items
 
     pushMessage(message, newItem.categoryString);
     return true;
-});
+}
+exports.chatNotificationCreate = functions.region(region).firestore.document('users/{userId}/chats/{chatId}/messages/{message}').onCreate((change, context) => onNewChat(change, context));
+//exports.chatNotificationUpdate = functions.region(region).firestore.document('users/{userId}/chats/{chatId}/messages/{message}').onUpdate((change, context) => onNewChat(change.after, context));
 
+function onNewChat(change, context) {
+    const newChat = change.data();
+    var message = {
+        data: {
+            deeplink: deeplink + context.params.chatId,
+            notificationType: "chat",
+            fromId: newChat.from,
+            toId: newChat.to
+        },
+        notification: {
+            body: newChat.message
+        }
+    };
+    pushMessage(message, "chat");
+    return true;
+}
 /**
  * Send a notification to users subscribed to the topic
  *

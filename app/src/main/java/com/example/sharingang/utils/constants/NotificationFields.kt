@@ -6,5 +6,6 @@ interface NotificationFields {
         const val NEW_ITEM_CHANNEL_NAME = "New Item"
         const val CHAT_CHANNEL_ID = "chat_channel"
         const val CHAT_CHANNEL_NAME = "Chat"
+        const val CHAT_TOPIC = "chat"
     }
 }

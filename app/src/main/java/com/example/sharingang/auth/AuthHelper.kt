@@ -9,6 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.example.sharingang.models.User
 import com.example.sharingang.database.repositories.UserRepository
+import com.example.sharingang.utils.constants.NotificationFields
+import com.example.sharingang.utils.notification.subscribeToTopic
+import com.example.sharingang.utils.notification.unsubscribeFromTopic
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -58,6 +61,7 @@ class AuthHelper(
             .setIsSmartLockEnabled(false)
             .build()
         resultLauncher.launch(intent)
+        subscribeToTopic(NotificationFields.CHAT_TOPIC)
     }
 
     /**
@@ -65,6 +69,7 @@ class AuthHelper(
      */
     fun signOut() {
         authUI.signOut(context)
+        unsubscribeFromTopic(NotificationFields.CHAT_TOPIC)
     }
 
     private fun addUserToDatabase(user: FirebaseUser) {
