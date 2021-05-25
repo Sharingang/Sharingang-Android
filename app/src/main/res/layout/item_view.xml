@@ -28,6 +28,16 @@
         app:cardUseCompatPadding="true"
         tools:ignore="UseCompoundDrawables">
 
+        <TextView
+            android:id="@+id/numUnread"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:background="@drawable/red_dot"
+            android:padding="10dp"
+            android:visibility="@{item.discount ? View.VISIBLE : View.GONE}"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
