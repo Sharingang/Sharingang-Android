@@ -151,7 +151,9 @@ class SearchFragmentTest {
         onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
 
+        Thread.sleep(1000)
         pressBack()
+        Thread.sleep(2000)
 
         addSingleItemToDB(title2, bookCategory)
 
