@@ -2,6 +2,7 @@ package com.example.sharingang.database.store
 
 import com.example.sharingang.models.Chat
 import com.example.sharingang.models.User
+import java.util.*
 
 /**
  * Represents a remote store of users, that we can access in some way.
@@ -85,7 +86,7 @@ interface UserStore {
      * @param message the message
      * @return the new list of messages between the two users
      */
-    suspend fun putMessage(from: String, to: String, message: String): List<Chat>
+    suspend fun putMessage(from: String, to: String, message: String, date: Date): List<Chat>
 
     /**
      * Sets up the listener on messages for a particular user with another user
