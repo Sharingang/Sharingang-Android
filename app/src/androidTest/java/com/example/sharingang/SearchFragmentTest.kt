@@ -153,6 +153,7 @@ class SearchFragmentTest {
         waitAfterSaveItem()
 
         navigate_up()
+        Thread.sleep(500)
 
         addSingleItemToDB(title2, bookCategory)
 
