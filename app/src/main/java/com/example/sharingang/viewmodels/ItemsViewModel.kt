@@ -76,8 +76,6 @@ class ItemsViewModel @Inject constructor(
     val userItemsAndRequests: LiveData<List<Item>>
         get() = _userItemsAndRequests
 
-//
-
     private val _wishlistItem: MutableLiveData<List<Item>> = MutableLiveData(ArrayList())
     val wishlistItem: LiveData<List<Item>>
         get() = _wishlistItem
@@ -86,13 +84,11 @@ class ItemsViewModel @Inject constructor(
     val reviews: LiveData<Map<String, Boolean>>
         get() = _reviews
 
-
     /**
      * The last item created
      */
     val items: LiveData<List<Item>>
         get() = itemRepository.items()
-
 
     /**
      * Add or update an item.

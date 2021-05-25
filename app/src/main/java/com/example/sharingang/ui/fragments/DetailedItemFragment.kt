@@ -230,7 +230,6 @@ class DetailedItemFragment : Fragment() {
             lifecycleScope.launch {
                 binding.buyButton.isEnabled = true
                 if (paymentProvider.requestPayment(boughtItem, quantity)) {
-                    itemViewModel.sellItem(boughtItem)
                     val newQuantity = boughtItem.quantity - quantity
                     binding.sellerVisibility = if (newQuantity == 0) View.GONE else View.VISIBLE
                     binding.buyButton.isEnabled = newQuantity != 0
