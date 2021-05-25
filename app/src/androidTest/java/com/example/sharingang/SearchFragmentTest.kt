@@ -3,15 +3,19 @@ package com.example.sharingang
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.sharingang.ui.activities.MainActivity
 import com.example.sharingang.utils.navigate_to
+import com.example.sharingang.utils.navigate_up
 import com.example.sharingang.utils.waitAfterSaveItem
+import com.example.sharingang.utils.withMenuIdOrText
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.hamcrest.CoreMatchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -115,6 +119,50 @@ class SearchFragmentTest {
         onView(withId(R.id.menuUnsubscribe)).check(matches(isDisplayed()))
         onView(withId(R.id.menuUnsubscribe)).perform(click())
         onView(withId(R.id.menuSubscribe)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun canSearchDiscountedItem() {
+        val title1 = "Test1"
+        val title2 = "Test2"
+        val price = "5"
+        val discountPrice = "2"
+        navigate_to(R.id.newEditFragment)
+        onView(withId(R.id.itemTitle)).perform(
+            typeText(title1),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.itemPrice)).perform(
+            replaceText(price),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
+        waitAfterSaveItem()
+
+        onView(withText(title1)).check(matches(isDisplayed()))
+        onView(withId(R.id.item_list_view_title)).perform(click())
+
+        onView(withMenuIdOrText(R.id.menuEdit, R.string.edit_item)).perform(click())
+
+        onView(withId(R.id.switch_is_discount)).perform(click())
+        onView(withId(R.id.discountPrice)).perform(
+            replaceText(discountPrice),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
+        waitAfterSaveItem()
+
+        navigate_up()
+
+        addSingleItemToDB(title2, bookCategory)
+
+        navigate_to(R.id.searchFragment)
+
+        onView(withId(R.id.searchDiscount)).perform(click())
+        onView(withId(R.id.sflSearchButton)).perform(click())
+        onView(withText(title1)).check(matches(isDisplayed()))
+        onView(withText(title2)).check(doesNotExist())
+
     }
 
     private fun addItemsToInventory() {

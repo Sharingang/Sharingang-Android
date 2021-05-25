@@ -181,8 +181,9 @@ class ItemsViewModel @Inject constructor(
      *
      * @param searchName string searched for
      * @param categoryID category searched for
+     * @param onlyDiscounts if we search only discounted items
      */
-    fun searchItems(searchName: String, categoryID: Int) {
+    fun searchItems(searchName: String, categoryID: Int, onlyDiscounts: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             val results = itemRepository.getAll().filter { item ->
                 // If we have a category, it should match
@@ -192,7 +193,9 @@ class ItemsViewModel @Inject constructor(
                 val matchName = searchName.isEmpty() || item.title.lowercase()
                     .contains(searchName.lowercase())
 
-                matchCategory && matchName && !item.sold
+                val matchDiscount = !onlyDiscounts || item.discount
+
+                matchCategory && matchName && matchDiscount && !item.sold
             }
             _searchResults.postValue(results)
         }
