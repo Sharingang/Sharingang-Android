@@ -1,5 +1,6 @@
 package com.example.sharingang.database.firestore
 
+import android.provider.ContactsContract
 import android.util.Log
 import com.example.sharingang.models.User
 import com.example.sharingang.database.store.UserStore
@@ -104,13 +105,13 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
             Chat(
                 it.getString(DatabaseFields.DBFIELD_FROM),
                 it.getString(DatabaseFields.DBFIELD_TO),
-                it.getString(DatabaseFields.DBFIELD_MESSAGE)!!
+                it.getString(DatabaseFields.DBFIELD_MESSAGE)!!,
+                it.getDate(DatabaseFields.DBFIELD_DATE)!!
             )
         }
     }
 
-    override suspend fun putMessage(from: String, to: String, message: String): List<Chat> {
-        val date = Date()
+    override suspend fun putMessage(from: String, to: String, message: String, date: Date): List<Chat> {
         val dataMaps = generateDataMaps(from, to, message, date)
         val data = dataMaps.first
         val lastTimeChatCurrent = dataMaps.second
@@ -189,7 +190,8 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
         val data = hashMapOf<String, Any>(
             DatabaseFields.DBFIELD_MESSAGE to message,
             DatabaseFields.DBFIELD_FROM to from,
-            DatabaseFields.DBFIELD_TO to to
+            DatabaseFields.DBFIELD_TO to to,
+            DatabaseFields.DBFIELD_DATE to date
         )
         val now = System.currentTimeMillis()
         val lastTimeChatCurrent = hashMapOf(
