@@ -152,15 +152,8 @@ class SearchFragmentTest {
         waitAfterSaveItem()
 
         pressBack()
-        pressBack()
 
-        onView(withId(R.id.itemTitle)).perform(
-            typeText(title2),
-            closeSoftKeyboard()
-        )
-
-        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
-        waitAfterSaveItem()
+        addSingleItemToDB(title2, bookCategory)
 
         navigate_to(R.id.searchFragment)
 
