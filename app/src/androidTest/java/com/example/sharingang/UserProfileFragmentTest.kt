@@ -58,24 +58,31 @@ class UserProfileFragmentTest {
     }
 
     @Test
-    fun soldItemsListWorksCorrect(){
-        val firstItemName = "Test Item"
+    fun purchaseAndSoldListWorks(){
+        val itemName = "Test Item"
         FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
-        addSingleItemToDB(firstItemName)
+        addSingleItemToDB(itemName)
         waitAfterSaveItem()
-        navigate_to(R.id.userProfileFragment)
-        onView(withText(firstItemName)).check(matches(isDisplayed()))
-        waitAfterSaveItem()
-        pressBack()
+
         FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_2
-        onView(withText(firstItemName)).perform(click())
+        onView(withText(itemName)).perform(click())
         FakePaymentProvider.paymentStatus = FakePaymentProvider.Status.ALWAYS_ACCEPT
         onView(withId(R.id.buyButton)).perform(click())
         pressBack()
+
+        navigate_to(R.id.userProfileFragment)
+        onView(withId(R.id.sold_list)).perform(click())
+        onView(withId(R.id.boughtButton)).perform(click())
+        onView(withText(itemName)).check(matches(isDisplayed()))
+        pressBack()
+        pressBack()
+
         FakeCurrentUserProvider.instance = FakeCurrentUserProvider.Instance.FAKE_USER_1
         navigate_to(R.id.userProfileFragment)
         onView(withId(R.id.sold_list)).perform(click())
-        onView(withText(firstItemName)).check(matches(isDisplayed()))
+        onView(withId(R.id.soldButton)).perform(click())
+        onView(withText(itemName)).check(matches(isDisplayed()))
+
     }
 
     @Test

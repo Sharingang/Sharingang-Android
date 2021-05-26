@@ -11,6 +11,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import com.example.sharingang.imagestore.ImageStore
 import com.example.sharingang.database.repositories.ItemRepository
+import com.example.sharingang.database.repositories.UserRepository
 import com.example.sharingang.ui.adapters.ItemListener
 import com.example.sharingang.ui.adapters.ItemsAdapter
 import com.example.sharingang.models.Item
@@ -26,6 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ItemsViewModel @Inject constructor(
     private val itemRepository: ItemRepository,
+    private val userRepository: UserRepository,
     private val imageStore: ImageStore
 ) : ViewModel() {
 
@@ -39,7 +41,7 @@ class ItemsViewModel @Inject constructor(
      * Enum class representing all lists of the viewModel that can be observed.
      */
     enum class OBSERVABLES {
-        ALL_ITEMS, SEARCH_RESULTS, USER_ITEMS_AND_REQUESTS, WISHLIST, ORDERED_ITEMS, SOLD_ITEMS
+        ALL_ITEMS, SEARCH_RESULTS, USER_ITEMS_AND_REQUESTS, WISHLIST, ORDERED_ITEMS, USER_SOLD_BOUGHT
     }
 
     /**
@@ -48,6 +50,11 @@ class ItemsViewModel @Inject constructor(
     enum class ORDERING {
         DATE, PRICE, NAME, CATEGORY
     }
+
+
+    private val _userSoldAndBought = MutableLiveData<List<Item>>()
+    val userSoldOrBought : LiveData<List<Item>>
+        get() = _userSoldAndBought
 
     private val _navigateToDetailItem = MutableLiveData<Item?>()
     val navigateToDetailItem: LiveData<Item?>
@@ -69,10 +76,6 @@ class ItemsViewModel @Inject constructor(
     val userItemsAndRequests: LiveData<List<Item>>
         get() = _userItemsAndRequests
 
-    private val _userSoldItems = MutableLiveData<List<Item>>()
-    val userSoldItems: LiveData<List<Item>>
-        get() = _userSoldItems
-
     private val _wishlistItem: MutableLiveData<List<Item>> = MutableLiveData(ArrayList())
     val wishlistItem: LiveData<List<Item>>
         get() = _wishlistItem
@@ -80,7 +83,6 @@ class ItemsViewModel @Inject constructor(
     private val _reviews: MutableLiveData<Map<String, Boolean>> = MutableLiveData()
     val reviews: LiveData<Map<String, Boolean>>
         get() = _reviews
-
 
     /**
      * The last item created
@@ -134,21 +136,56 @@ class ItemsViewModel @Inject constructor(
     }
 
     /**
+     * Function to update userSoldAndBought livedata
+     *
+     * @param[userId] the Id of the user.
+     */
+    fun updateSoldBought(userId: String?, soldWanted : Boolean){
+        if(userId == null) return
+        if(soldWanted){
+            getUserSoldItems(userId)
+        }else{
+            updatePurchaseHistory(userId)
+        }
+    }
+
+    /**
      * Get all items sold by a user.
      *
      * @param[userId] the id of the user.
      */
-    fun getUserSoldItems(userId: String?) {
-        if (userId != null) {
-            viewModelScope.launch(Dispatchers.IO) {
-                _userSoldItems.postValue(
-                    itemRepository.userItems(userId)?.filter { item ->
-                        item.sold
+    fun getUserSoldItems(userId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _userSoldAndBought.postValue(
+                itemRepository.userItems(userId)?.filter { item ->
+                    item.sold
+                }
+            )
+        }
+    }
+
+    /**
+     * Function to retrieve all objects from user purchase history
+     *
+     * @param[userId] the Id of the user
+     */
+    fun updatePurchaseHistory(userId: String){
+        viewModelScope.launch(Dispatchers.IO){
+            val user = userRepository.get(userId)
+            if(user != null){
+                val itemIdList = user.purchaseHistory
+                val itemList = ArrayList<Item>()
+                itemIdList.forEach {
+                    val tempItem = itemRepository.get(it)
+                    if(tempItem != null){
+                        itemList.add(tempItem)
                     }
-                )
+                }
+                _userSoldAndBought.postValue(itemList)
             }
         }
     }
+
 
     /**
      * Clear the results of the search.
@@ -274,7 +311,7 @@ class ItemsViewModel @Inject constructor(
             OBSERVABLES.USER_ITEMS_AND_REQUESTS -> userItemsAndRequests
             OBSERVABLES.WISHLIST -> wishlistItem
             OBSERVABLES.ORDERED_ITEMS -> orderedItemsResult
-            OBSERVABLES.SOLD_ITEMS -> userSoldItems
+            OBSERVABLES.USER_SOLD_BOUGHT -> userSoldOrBought
         }
         observable.observe(LifeCycleOwner, {
             adapter.submitList(it)
