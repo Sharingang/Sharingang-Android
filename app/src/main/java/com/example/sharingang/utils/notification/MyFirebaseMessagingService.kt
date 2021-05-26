@@ -31,7 +31,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 }
                 "chat" -> {
                     channelId = NotificationFields.CHAT_CHANNEL_ID
-                    applicationContext.getString(R.string.chat_notification_message)
+                    remoteMessage.data["fromName"]+":"
                 }
                 else -> ""
             }

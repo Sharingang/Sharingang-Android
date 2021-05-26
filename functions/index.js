@@ -88,10 +88,11 @@ function onNewChat(change, context) {
             data: {
                 deeplink: deeplink + context.params.chatId,
                 notificationType: "chat",
-                toId: newChat.to
+                toId: newChat.to,
+                fromName: user.data().name
             },
             notification: {
-                body: user.data().name + ": " + newChat.message
+                body: newChat.message
             }
         };
         pushMessage(message, "chat");
