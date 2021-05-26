@@ -21,24 +21,20 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         remoteMessage.data.let {
-            var recipient: String? = null
-            var isCorrectRecipient = false
-            var channelId = ""
             val deeplink = remoteMessage.data["deeplink"]
-            val title = when (remoteMessage.data["notificationType"]) {
+            val (title, recipient, channelId) = when (remoteMessage.data["notificationType"]) {
                 NotificationFields.NEW_ITEM_TOPIC -> {
-                    recipient = remoteMessage.data["userId"]
-                    isCorrectRecipient = recipient != currentUserProvider.getCurrentUserId()
-                    channelId = NotificationFields.NEW_ITEM_CHANNEL_ID
-                    applicationContext.getString(R.string.new_item_notification_message)
+                    onNewItemTopic(remoteMessage)
                 }
                 NotificationFields.CHAT_TOPIC -> {
-                    recipient = remoteMessage.data["toId"]
-                    isCorrectRecipient = recipient == currentUserProvider.getCurrentUserId()
-                    channelId = NotificationFields.CHAT_CHANNEL_ID
-                    remoteMessage.data["fromName"] + ":"
+                    onChatTopic(remoteMessage)
                 }
-                else -> ""
+                else -> Triple("", null, "")
+            }
+            val isCorrectRecipient = when (channelId) {
+                NotificationFields.NEW_ITEM_CHANNEL_ID -> recipient != currentUserProvider.getCurrentUserId()
+                NotificationFields.CHAT_CHANNEL_ID -> recipient == currentUserProvider.getCurrentUserId()
+                else -> false
             }
             if (recipient != null && isCorrectRecipient && deeplink != null) {
                 remoteMessage.notification?.let {
@@ -46,6 +42,22 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 }
             }
         }
+    }
+
+    private fun onNewItemTopic(remoteMessage: RemoteMessage): Triple<String, String?, String> {
+        return Triple(
+            applicationContext.getString(R.string.new_item_notification_message),
+            remoteMessage.data["userId"],
+            NotificationFields.NEW_ITEM_CHANNEL_ID
+        )
+    }
+
+    private fun onChatTopic(remoteMessage: RemoteMessage): Triple<String, String?, String> {
+        return Triple(
+            remoteMessage.data["fromName"] + ":",
+            remoteMessage.data["toId"],
+            NotificationFields.CHAT_CHANNEL_ID
+        )
     }
 
     override fun onNewToken(token: String) {
