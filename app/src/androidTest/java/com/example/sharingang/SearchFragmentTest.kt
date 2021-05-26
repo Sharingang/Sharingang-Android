@@ -123,7 +123,6 @@ class SearchFragmentTest {
     @Test
     fun canSearchDiscountedItem() {
         val title1 = "Test1"
-        val title2 = "Test2"
         val price = "5"
         val discountPrice = "2"
         navigate_to(R.id.newEditFragment)
@@ -151,19 +150,13 @@ class SearchFragmentTest {
         onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
 
-        Thread.sleep(1000)
         pressBack()
-        Thread.sleep(2000)
-
-        addSingleItemToDB(title2, bookCategory)
 
         navigate_to(R.id.searchFragment)
 
         onView(withId(R.id.searchDiscount)).perform(click())
         onView(withId(R.id.sflSearchButton)).perform(click())
         onView(withText(title1)).check(matches(isDisplayed()))
-        onView(withText(title2)).check(doesNotExist())
-
     }
 
     private fun addItemsToInventory() {
