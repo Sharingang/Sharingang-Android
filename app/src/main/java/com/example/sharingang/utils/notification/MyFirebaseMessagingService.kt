@@ -28,15 +28,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val title = when (remoteMessage.data["notificationType"]) {
                 NotificationFields.NEW_ITEM_TOPIC -> {
                     recipient = remoteMessage.data["userId"]
-                    isCorrectRecipient = recipient!=currentUserProvider.getCurrentUserId()
+                    isCorrectRecipient = recipient != currentUserProvider.getCurrentUserId()
                     channelId = NotificationFields.NEW_ITEM_CHANNEL_ID
                     applicationContext.getString(R.string.new_item_notification_message)
                 }
                 NotificationFields.CHAT_TOPIC -> {
                     recipient = remoteMessage.data["toId"]
-                    isCorrectRecipient = recipient==currentUserProvider.getCurrentUserId()
+                    isCorrectRecipient = recipient == currentUserProvider.getCurrentUserId()
                     channelId = NotificationFields.CHAT_CHANNEL_ID
-                    remoteMessage.data["fromName"]+":"
+                    remoteMessage.data["fromName"] + ":"
                 }
                 else -> ""
             }
