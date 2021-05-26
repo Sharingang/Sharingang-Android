@@ -12,7 +12,6 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.example.sharingang.BuildConfig
 import com.example.sharingang.R
-import com.example.sharingang.utils.constants.NotificationFields
 import com.google.firebase.messaging.FirebaseMessaging
 
 private const val NOTIFICATION_ID = 0
@@ -26,6 +25,7 @@ private const val NOTIFICATION_ID = 0
 fun NotificationManager.sendNotification(
     messageBody: String,
     messageTitle: String,
+    channelId: String,
     deeplink: String,
     applicationContext: Context
 ) {
@@ -38,19 +38,26 @@ fun NotificationManager.sendNotification(
         contentIntent,
         PendingIntent.FLAG_ONE_SHOT
     )
-    val builder = buildNotification(messageBody, messageTitle, applicationContext, contentPendingIntent)
+    val builder = buildNotification(
+        messageBody,
+        messageTitle,
+        channelId,
+        applicationContext,
+        contentPendingIntent
+    )
     notify(NOTIFICATION_ID, builder.build())
 }
 
 private fun buildNotification(
     messageBody: String,
     messageTitle: String,
+    channelId: String,
     applicationContext: Context,
     contentPendingIntent: PendingIntent
 ): NotificationCompat.Builder {
     return NotificationCompat.Builder(
         applicationContext,
-        NotificationFields.NEW_ITEM_CHANNEL_ID
+        channelId
     ).setSmallIcon(R.drawable.ic_launcher_foreground)
         .setContentTitle(messageTitle)
         .setContentText(messageBody)
