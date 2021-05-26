@@ -20,6 +20,7 @@ private const val NOTIFICATION_ID = 0
  * Send and display a notification
  * @param messageBody the message to be displayed in the notification
  * @param messageTitle the title of the message to be displayed
+ * @param channelId the identifier of the notification channel
  * @param applicationContext the context of the application
  */
 fun NotificationManager.sendNotification(
