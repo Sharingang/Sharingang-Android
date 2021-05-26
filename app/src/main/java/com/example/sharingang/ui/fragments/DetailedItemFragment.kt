@@ -223,19 +223,18 @@ class DetailedItemFragment : Fragment() {
 
     private fun buyItem() {
         val quantity: Int = binding.quantity?.toIntOrNull() ?: 1
-        if (quantity > args.item.quantity || quantity < 1) {
+        val boughtItem = args.item
+        if (quantity > boughtItem.quantity || quantity < 1) {
             Toast.makeText(context, getString(R.string.incorrect_quantity), Toast.LENGTH_SHORT).show()
-            binding.buyButton.isEnabled = true
         } else {
             lifecycleScope.launch {
-                if (paymentProvider.requestPayment(args.item, quantity)) {
-                    itemViewModel.sellItem(args.item)
-                    val newQuantity = args.item.quantity - quantity
+                binding.buyButton.isEnabled = true
+                if (paymentProvider.requestPayment(boughtItem, quantity)) {
+                    val newQuantity = boughtItem.quantity - quantity
                     binding.sellerVisibility = if (newQuantity == 0) View.GONE else View.VISIBLE
                     binding.buyButton.isEnabled = newQuantity != 0
-                    updateBoughtItem(args.item, newQuantity)
-                } else {
-                    binding.buyButton.isEnabled = true
+                    updateBoughtItem(boughtItem, newQuantity)
+                    viewModel.buyItem(currentUserProvider.getCurrentUserId()!!, boughtItem.id!!)
                 }
             }
         }
