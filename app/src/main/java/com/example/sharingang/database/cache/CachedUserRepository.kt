@@ -8,6 +8,7 @@ import com.example.sharingang.database.store.UserStore
 import com.example.sharingang.models.Chat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -84,8 +85,8 @@ class CachedUserRepository @Inject constructor(
         return store.getMessages(userId, with)
     }
 
-    override suspend fun putMessage(from: String, to: String, message: String): List<Chat> {
-        return store.putMessage(from, to, message)
+    override suspend fun putMessage(from: String, to: String, message: String, date: Date): List<Chat> {
+        return store.putMessage(from, to, message, date)
     }
 
     override suspend fun setupConversationRefresh(

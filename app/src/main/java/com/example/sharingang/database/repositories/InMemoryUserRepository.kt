@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.sharingang.models.Chat
 import com.example.sharingang.models.User
+import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * In-memory implementation of the UserRepository
@@ -80,8 +82,8 @@ class InMemoryUserRepository : UserRepository {
         return mutableListOf()
     }
 
-    override suspend fun putMessage(from: String, to: String, message: String): List<Chat> {
-        val chat = Chat(from, to, message)
+    override suspend fun putMessage(from: String, to: String, message: String, date: Date): List<Chat> {
+        val chat = Chat(from, to, message, date)
         updateMessages(from, to, chat)
         updateChatPartners(from, to)
         updateUnreads(from, to)

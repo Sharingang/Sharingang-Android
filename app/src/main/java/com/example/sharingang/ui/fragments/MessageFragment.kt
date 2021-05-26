@@ -19,6 +19,7 @@ import com.example.sharingang.database.repositories.UserRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 
@@ -63,7 +64,7 @@ class MessageFragment : Fragment() {
         setupFields()
         setupSendButton()
         setupUI()
-        messagesLiveData.postValue(listChats)
+        messagesLiveData.value = listChats
         lifecycleScope.launch(Dispatchers.Main) {
             setupMessageRefresh()
         }
@@ -91,7 +92,7 @@ class MessageFragment : Fragment() {
             val message = binding.messageEditText.text.toString()
             binding.messageEditText.text.clear()
             listChats.clear()
-            lifecycleScope.launch(Dispatchers.IO) {
+            lifecycleScope.launch(Dispatchers.Main) {
                 sendMessage(currentUserId, partnerId, message)
             }
         }
@@ -107,7 +108,7 @@ class MessageFragment : Fragment() {
     private suspend fun sendMessage(from: String, to: String, message: String) {
         listChats.clear()
         shouldUpdate = false
-        listChats.addAll(userRepository.putMessage(from, to, message))
+        listChats.addAll(userRepository.putMessage(from, to, message, Date()))
         shouldUpdate = true
         messagesLiveData.postValue(listChats)
     }
@@ -138,11 +139,11 @@ class MessageFragment : Fragment() {
      */
     fun getAndDisplayMessages() {
         lifecycleScope.launch(Dispatchers.Main) {
+            listChats.clear()
             shouldUpdate = false
             userRepository.clearNumUnread(currentUserId, partnerId)
-            shouldUpdate = true
-            listChats.clear()
             listChats.addAll(userRepository.getMessages(currentUserId, partnerId))
+            shouldUpdate = true
             messagesLiveData.postValue(listChats)
         }
     }

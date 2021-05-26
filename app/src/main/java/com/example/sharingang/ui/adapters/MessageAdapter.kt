@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.sharingang.R
 import com.example.sharingang.models.Chat
 import com.example.sharingang.ui.fragments.MessageFragment
+import com.example.sharingang.utils.DateHelper
 
 /**
  * MessageAdapter takes care of adapting a list of messages into a Recycler View.
@@ -39,6 +40,7 @@ class MessageAdapter(
      */
     class ViewHolder(messageEntryView: View) : RecyclerView.ViewHolder(messageEntryView) {
         var text: TextView = messageEntryView.findViewById(R.id.messageText)
+        var time: TextView = messageEntryView.findViewById(R.id.message_time)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -53,8 +55,10 @@ class MessageAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val dateHelper = DateHelper(context)
         val message: String = chats[position].message
         holder.text.text = message
+        holder.time.text = dateHelper.formatMessageDate(chats[position].date)
     }
 
     override fun getItemCount(): Int {

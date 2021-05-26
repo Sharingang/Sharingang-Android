@@ -95,6 +95,19 @@ class UserProfileViewModel @Inject constructor(
         }
     }
 
+    fun buyItem(userId: String, itemId: String){
+        viewModelScope.launch(Dispatchers.IO){
+            val userTemp = userRepository.get(userId)
+            if(userTemp != null) {
+                userRepository.update(
+                    userTemp.copy(
+                        purchaseHistory = userTemp.purchaseHistory + itemId
+                    )
+                )
+            }
+        }
+    }
+
     /**
      * Check whether the connected user is subscribed
      * to this category's notifications
