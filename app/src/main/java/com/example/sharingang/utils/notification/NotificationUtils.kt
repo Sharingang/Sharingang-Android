@@ -19,9 +19,17 @@ private const val NOTIFICATION_ID = 0
 /**
  * Send and display a notification
  * @param messageBody the message to be displayed in the notification
+ * @param messageTitle the title of the message to be displayed
+ * @param channelId the identifier of the notification channel
  * @param applicationContext the context of the application
  */
-fun NotificationManager.sendNotification(messageBody: String, deeplink: String, applicationContext: Context) {
+fun NotificationManager.sendNotification(
+    messageBody: String,
+    messageTitle: String,
+    channelId: String,
+    deeplink: String,
+    applicationContext: Context
+) {
     val contentIntent = Intent(Intent.ACTION_VIEW, Uri.parse(deeplink))
     contentIntent.setPackage(BuildConfig.APPLICATION_ID)
     contentIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -31,22 +39,28 @@ fun NotificationManager.sendNotification(messageBody: String, deeplink: String, 
         contentIntent,
         PendingIntent.FLAG_ONE_SHOT
     )
-    val builder = buildNotification(messageBody, applicationContext, contentPendingIntent)
+    val builder = buildNotification(
+        messageBody,
+        messageTitle,
+        channelId,
+        applicationContext,
+        contentPendingIntent
+    )
     notify(NOTIFICATION_ID, builder.build())
 }
 
 private fun buildNotification(
     messageBody: String,
+    messageTitle: String,
+    channelId: String,
     applicationContext: Context,
     contentPendingIntent: PendingIntent
 ): NotificationCompat.Builder {
     return NotificationCompat.Builder(
         applicationContext,
-        applicationContext.getString(R.string.new_item_notification_channel_id)
+        channelId
     ).setSmallIcon(R.drawable.ic_launcher_foreground)
-        .setContentTitle(
-            applicationContext.getString(R.string.new_item_notification_message)
-        )
+        .setContentTitle(messageTitle)
         .setContentText(messageBody)
         .setContentIntent(contentPendingIntent)
         .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -57,9 +71,15 @@ private fun buildNotification(
  * Create a notification channel, required since Android O
  * @param channelId the id of the channel
  * @param channelName the name of the channel
+ * @param channelDescription the description of the channel
  * @param activity the activity
  */
-fun createChannel(channelId: String, channelName: String, activity: Activity) {
+fun createChannel(
+    channelId: String,
+    channelName: String,
+    channelDescription: String,
+    activity: Activity
+) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val notificationChannel =
             NotificationChannel(
@@ -71,7 +91,7 @@ fun createChannel(channelId: String, channelName: String, activity: Activity) {
         notificationChannel.enableLights(true)
         notificationChannel.lightColor = Color.BLUE
         notificationChannel.enableVibration(true)
-        notificationChannel.description = activity.getString(R.string.new_item_notification_channel_description)
+        notificationChannel.description = channelDescription
         val notificationManager = activity.getSystemService(NotificationManager::class.java)
         notificationManager.createNotificationChannel(notificationChannel)
     }
@@ -89,6 +109,6 @@ fun subscribeToTopic(topic: String) {
  * Unsubscribe from the topic on FirebaseMessaging
  * @param topic the topic to unsubscribe from
  */
-fun unsubscribeFromTopic(topic:String) {
+fun unsubscribeFromTopic(topic: String) {
     FirebaseMessaging.getInstance().unsubscribeFromTopic(topic)
 }
