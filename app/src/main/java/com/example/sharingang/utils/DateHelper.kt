@@ -3,40 +3,17 @@ package com.example.sharingang.utils
 import android.annotation.SuppressLint
 import android.content.Context
 import com.example.sharingang.R
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.HashMap
+import java.text.SimpleDateFormat
+
+
 
 /**
- * Helper for date calculations and time formatting
+ * Helper for date calculations and date/time formatting
  * @property context the context
  */
 class DateHelper(private val context: Context?) {
-
-    /**
-     * Contains units of measure for time
-     */
-    enum class Measure {
-        SECONDS,
-        MINUTES,
-        HOURS,
-        DAYS,
-        WEEKS,
-        MONTHS,
-        YEARS
-    }
-
-    private var unitStringMap: HashMap<Measure, String>? =
-        hashMapOf(
-            Measure.SECONDS to (context?.getString(R.string.eng_seconds) ?: "s"),
-            Measure.MINUTES to (context?.getString(R.string.eng_seconds) ?: "min"),
-            Measure.HOURS to (context?.getString(R.string.eng_seconds) ?: "h"),
-            Measure.DAYS to (context?.getString(R.string.eng_seconds) ?: "d"),
-            Measure.WEEKS to (context?.getString(R.string.eng_seconds) ?: "w"),
-            Measure.MONTHS to (context?.getString(R.string.eng_seconds) ?: "mon"),
-            Measure.YEARS to (context?.getString(R.string.eng_seconds) ?: "y"),
-        )
 
     /*
      * Note: It is true that days can differ between years and months. Here, we are only
@@ -51,6 +28,74 @@ class DateHelper(private val context: Context?) {
     private val DAYS_PER_MONTH = 30L
     private val DAYS_PER_YEAR = 365L
 
+
+    /**
+     * Contains units of measure for time
+     */
+    enum class Measure {
+        SECONDS,
+        MINUTES,
+        HOURS,
+        DAYS,
+        WEEKS,
+        MONTHS,
+        YEARS
+    }
+
+    private val monthsMap = hashMapOf(
+        0 to (context?.getString(R.string.eng_jan) ?: "Jan"),
+        1 to (context?.getString(R.string.eng_feb) ?: "Feb"),
+        2 to (context?.getString(R.string.eng_mar) ?: "Mar"),
+        3 to (context?.getString(R.string.eng_apr) ?: "Apr"),
+        4 to (context?.getString(R.string.eng_may) ?: "May"),
+        5 to (context?.getString(R.string.eng_jun) ?: "Jun"),
+        6 to (context?.getString(R.string.eng_jul) ?: "Jul"),
+        7 to (context?.getString(R.string.eng_aug) ?: "Aug"),
+        8 to (context?.getString(R.string.eng_sep) ?: "Sep"),
+        9 to (context?.getString(R.string.eng_oct) ?: "Oct"),
+        10 to (context?.getString(R.string.eng_nov) ?: "Nov"),
+        11 to (context?.getString(R.string.eng_dec) ?: "Dec")
+    )
+
+
+    private var unitStringMap: HashMap<Measure, String>? =
+        hashMapOf(
+            Measure.SECONDS to (context?.getString(R.string.eng_seconds) ?: "s"),
+            Measure.MINUTES to (context?.getString(R.string.eng_seconds) ?: "min"),
+            Measure.HOURS to (context?.getString(R.string.eng_seconds) ?: "h"),
+            Measure.DAYS to (context?.getString(R.string.eng_seconds) ?: "d"),
+            Measure.WEEKS to (context?.getString(R.string.eng_seconds) ?: "w"),
+            Measure.MONTHS to (context?.getString(R.string.eng_seconds) ?: "mon"),
+            Measure.YEARS to (context?.getString(R.string.eng_seconds) ?: "y"),
+        )
+
+    /**
+     * formats a date for message timestamps
+     *
+     * @param date the date to format
+     * @return the formatted date
+     */
+    fun formatMessageDate(date: Date): String {
+        val currentDate = Date()
+        val today = Triple(currentDate.year, currentDate.month, currentDate.day)
+        val messageTime = Triple(date.year, date.month, date.day)
+        val monthStr = monthsMap[date.month]
+        return (
+            when {
+                today == messageTime ->
+                    context?.getString(
+                        R.string.eng_today,
+                        ", ${date.hours}:${
+                            date.minutes.toString()
+                                .padStart(2, '0')
+                        }"
+                    )
+                        ?: "${Date()}"
+                today.first == messageTime.first -> "$monthStr. ${date.day}"
+                else -> "$monthStr. ${date.day}, ${date.year}"
+            }
+        )
+    }
 
     /**
      * Gives us the formatted difference between two dates depending on how far the two dates

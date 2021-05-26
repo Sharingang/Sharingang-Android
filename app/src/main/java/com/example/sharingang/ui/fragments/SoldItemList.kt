@@ -9,9 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.sharingang.R
+import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.databinding.FragmentSoldItemListBinding
 import com.example.sharingang.viewmodels.ItemsViewModel
-import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.models.Item
 import com.example.sharingang.ui.adapters.ItemListener
 import com.example.sharingang.ui.adapters.ItemsAdapter
@@ -44,9 +44,15 @@ class SoldItemList : Fragment() {
 
     private fun setupRecyclerview() {
         val adapter = setupItemAdapter()
+        val userId = currentUserProvider.getCurrentUserId()
         binding.soldList.adapter = adapter
-        viewModel.getUserSoldItems(currentUserProvider.getCurrentUserId())
-        viewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.SOLD_ITEMS)
+        listOf(binding.soldButton, binding.boughtButton).forEach {
+            it.setOnClickListener {
+                viewModel.updateSoldBought(userId, binding.soldButton.isChecked)
+            }
+        }
+        viewModel.updateSoldBought(userId, binding.soldButton.isChecked)
+        viewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.USER_SOLD_BOUGHT)
         viewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
             {
                 SoldItemListDirections.actionSoldItemListToDetailedItemFragment(it)

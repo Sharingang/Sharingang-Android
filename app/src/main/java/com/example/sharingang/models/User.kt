@@ -32,6 +32,7 @@ data class User(
 
     var wishlist: List<String> = ArrayList(),
     var subscriptions: List<String> = ArrayList(),
+    var purchaseHistory: List<String> = ArrayList(),
 
     @ServerTimestamp
     val createdAt: Date? = null,

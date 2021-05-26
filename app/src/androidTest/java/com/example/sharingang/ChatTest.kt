@@ -12,9 +12,11 @@ import com.example.sharingang.utils.navigate_to
 import com.example.sharingang.utils.waitAfterSaveItem
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.not
 import org.junit.Rule
 import org.junit.Test
+import java.util.*
 
 @HiltAndroidTest
 class ChatTest {
@@ -65,6 +67,11 @@ class ChatTest {
         Thread.sleep(1000)
         onView(withId(R.id.btnSend)).perform(click())
         onView(withText(message1)).check(matches(isDisplayed()))
+        val currentDate = Date()
+        val currentHourStr = currentDate.hours.toString()
+        val currentMinStr = currentDate.minutes.toString().padStart(2, '0')
+        val timestamp = "Today, $currentHourStr:$currentMinStr"
+        onView(withId(R.id.message_time)).check(matches(withText(containsString(timestamp))))
         onView(withId(R.id.messageEditText)).check(matches(withText("")))
         onView(withId(R.id.btnSend)).check(matches(not(isEnabled())))
         val message2 = getRandomString(15)
