@@ -21,22 +21,26 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         remoteMessage.data.let {
-            val userId = remoteMessage.data["userId"]
-            val deeplink = remoteMessage.data["deeplink"]
+            var recipient: String? = null
+            var isCorrectRecipient = false
             var channelId = ""
+            val deeplink = remoteMessage.data["deeplink"]
             val title = when (remoteMessage.data["notificationType"]) {
-                "new_item" -> {
+                NotificationFields.NEW_ITEM_TOPIC -> {
+                    recipient = remoteMessage.data["userId"]
+                    isCorrectRecipient = recipient!=currentUserProvider.getCurrentUserId()
                     channelId = NotificationFields.NEW_ITEM_CHANNEL_ID
                     applicationContext.getString(R.string.new_item_notification_message)
                 }
-                "chat" -> {
+                NotificationFields.CHAT_TOPIC -> {
+                    recipient = remoteMessage.data["toId"]
+                    isCorrectRecipient = recipient==currentUserProvider.getCurrentUserId()
                     channelId = NotificationFields.CHAT_CHANNEL_ID
                     remoteMessage.data["fromName"]+":"
                 }
                 else -> ""
             }
-            val to = remoteMessage.data["toId"]
-            if ((userId != null && userId != currentUserProvider.getCurrentUserId() || (to != null && to == currentUserProvider.getCurrentUserId())) && deeplink != null) {
+            if (recipient != null && isCorrectRecipient && deeplink != null) {
                 remoteMessage.notification?.let {
                     sendNotification(it.body!!, title, channelId, deeplink)
                 }
