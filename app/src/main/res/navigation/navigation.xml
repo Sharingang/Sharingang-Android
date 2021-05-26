@@ -71,6 +71,9 @@
             android:id="@+id/action_detailedItemFragment_to_ARActivity"
             app:destination="@id/ARActivity"
             app:popUpTo="@id/detailedItemFragment" />
+        <action
+            android:id="@+id/action_detailedItemFragment_to_weatherFragment"
+            app:destination="@id/weatherFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -199,4 +202,16 @@
             app:argType="com.example.sharingang.models.Item"
             app:nullable="false" />
     </activity>
+    <fragment
+        android:id="@+id/weatherFragment"
+        android:name="com.example.sharingang.ui.fragments.WeatherFragment"
+        android:label="fragment_weather"
+        tools:layout="@layout/fragment_weather">
+        <argument
+            android:name="lat"
+            app:argType="float" />
+        <argument
+            android:name="lon"
+            app:argType="float" />
+    </fragment>
 </navigation>

@@ -128,4 +128,6 @@
     <string name="eng_nov">Nov</string>
     <string name="eng_dec">Dec</string>
     <string name="eng_today">Today%s</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
