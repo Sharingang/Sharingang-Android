@@ -40,10 +40,10 @@ class WeatherFragmentTest {
         waitAfterSaveItem()
         Espresso.onView(ViewMatchers.withText(testTitle)).perform(ViewActions.click())
         Espresso.onView(ViewMatchers.withId(R.id.weatherButton)).perform(ViewActions.click())
-        Espresso.onView(ViewMatchers.withId(R.id.weather_text)).check(
+        Espresso.onView(ViewMatchers.withId(R.id.weather_city)).check(
             ViewAssertions.matches(
                 ViewMatchers.withText(
-                    WEATHER.toString()
+                    WEATHER.cityName
                 )
             )
         )
