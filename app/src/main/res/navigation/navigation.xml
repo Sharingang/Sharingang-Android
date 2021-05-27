@@ -205,7 +205,7 @@
     <fragment
         android:id="@+id/weatherFragment"
         android:name="com.example.sharingang.ui.fragments.WeatherFragment"
-        android:label="fragment_weather"
+        android:label="Weather"
         tools:layout="@layout/fragment_weather">
         <argument
             android:name="lat"
