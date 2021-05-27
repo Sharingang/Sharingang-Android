@@ -121,11 +121,9 @@ class SearchFragmentTest {
     }
 
     @Test
-    fun canSearchDiscountedItem() {
+    fun canHideNonInSearchDiscountedItem() {
         val title1 = "Test1"
-        val title2 = "Test2"
         val price = "5"
-        val discountPrice = "2"
         navigate_to(R.id.newEditFragment)
         onView(withId(R.id.itemTitle)).perform(
             typeText(title1),
@@ -138,29 +136,11 @@ class SearchFragmentTest {
         onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
         waitAfterSaveItem()
 
-        onView(withText(title1)).check(matches(isDisplayed()))
-        onView(withId(R.id.item_list_view_title)).perform(click())
-
-        onView(withMenuIdOrText(R.id.menuEdit, R.string.edit_item)).perform(click())
-
-        onView(withId(R.id.switch_is_discount)).perform(click())
-        onView(withId(R.id.discountPrice)).perform(
-            replaceText(discountPrice),
-            closeSoftKeyboard()
-        )
-        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
-        waitAfterSaveItem()
-
-        pressBack()
-
-        addSingleItemToDB(title2, bookCategory)
-
         navigate_to(R.id.searchFragment)
 
         onView(withId(R.id.searchDiscount)).perform(click())
         onView(withId(R.id.sflSearchButton)).perform(click())
-        onView(withText(title1)).check(matches(isDisplayed()))
-        onView(withText(title2)).check(doesNotExist())
+        onView(withText(title1)).check(doesNotExist())
     }
 
     private fun addItemsToInventory() {
