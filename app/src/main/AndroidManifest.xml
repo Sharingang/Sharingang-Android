@@ -19,6 +19,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_api_key" />
         <meta-data
+            android:name="WEATHER_API_KEY"
+            android:value="9ea12af4e349476350e1e525049f75a8" />
+        <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 

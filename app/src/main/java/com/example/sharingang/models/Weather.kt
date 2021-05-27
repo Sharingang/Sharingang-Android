@@ -29,8 +29,37 @@ data class Weather(
         Drizzle,
         Rain,
         Snow,
-        Atmosphere,
+        Mist,
+        Smoke,
+        Haze,
+        Dust,
+        Fog,
+        Ash,
+        Squall,
+        Tornado,
         Clear,
-        Clouds
+        Clouds,
+        Other;
+
+        companion object {
+            fun fromString(condition: String): Condition = when (condition) {
+                "Thunderstorm" -> Thunderstorm
+                "Drizzle" -> Drizzle
+                "Rain" -> Rain
+                "Snow" -> Snow
+                "Mist" -> Mist
+                "Smoke" -> Smoke
+                "Haze" -> Haze
+                "Dust" -> Dust
+                "Fog" -> Fog
+                "Ash" -> Ash
+                "Squall" -> Squall
+                "Tornado" -> Tornado
+                "Clear" -> Clear
+                "Clouds" -> Clouds
+                else -> Other
+            }
+        }
     }
+
 }

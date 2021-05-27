@@ -19,10 +19,9 @@ import com.example.sharingang.database.store.ItemStore
 import com.example.sharingang.database.store.UserStore
 import com.example.sharingang.imagestore.FirebaseImageStore
 import com.example.sharingang.imagestore.ImageStore
-import com.example.sharingang.models.Weather
 import com.example.sharingang.payment.PaymentProvider
 import com.example.sharingang.payment.StripePaymentProvider
-import com.example.sharingang.weather.MockWeatherAPI
+import com.example.sharingang.weather.HTTPWeatherAPI
 import com.example.sharingang.weather.WeatherAPI
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
@@ -174,14 +173,7 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideWeatherAPI(): WeatherAPI {
-        return MockWeatherAPI(
-            Weather(
-                Weather.Condition.Clouds,
-                "very cloudy",
-                14.0,
-                "Lausanne"
-            )
-        )
+    fun provideWeatherAPI(@ApplicationContext app: Context): WeatherAPI {
+        return HTTPWeatherAPI(app)
     }
 }
