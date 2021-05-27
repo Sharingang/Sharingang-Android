@@ -1,5 +1,6 @@
 package com.example.sharingang.ui.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ class WeatherFragment : Fragment() {
     private val args: WeatherFragmentArgs by navArgs()
     private val viewModel: WeatherViewModel by viewModels()
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,7 +31,11 @@ class WeatherFragment : Fragment() {
 
         viewModel.weather.observe(viewLifecycleOwner) {
             if (it != null) {
-                binding.weatherText.text = it.toString()
+                binding.weatherLayout.visibility = View.VISIBLE
+                binding.weatherCity.text = it.cityName
+                binding.weatherDescription.text = it.description
+                binding.weatherTemp.text = "%.1f°".format(it.temperature)
+                binding.weatherCondition.text = it.condition.toString()
             }
         }
         return binding.root

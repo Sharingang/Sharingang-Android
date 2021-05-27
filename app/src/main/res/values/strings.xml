@@ -131,4 +131,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="weather">Weather</string>
+    <string name="weather_image_description">Some weather image lol</string>
 </resources>
