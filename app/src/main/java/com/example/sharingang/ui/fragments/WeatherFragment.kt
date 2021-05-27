@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.sharingang.R
 import com.example.sharingang.databinding.FragmentWeatherBinding
+import com.example.sharingang.models.Weather
 import com.example.sharingang.viewmodels.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -36,6 +37,24 @@ class WeatherFragment : Fragment() {
                 binding.weatherDescription.text = it.description
                 binding.weatherTemp.text = "%.1f°".format(it.temperature)
                 binding.weatherCondition.text = it.condition.toString()
+                val resource = when (it.condition) {
+                    Weather.Condition.Thunderstorm -> R.mipmap.thunderstorm
+                    Weather.Condition.Drizzle -> R.mipmap.drizzle
+                    Weather.Condition.Rain -> R.mipmap.rain
+                    Weather.Condition.Snow -> R.mipmap.snow
+                    Weather.Condition.Mist -> R.mipmap.mist
+                    Weather.Condition.Smoke -> R.mipmap.smoke
+                    Weather.Condition.Haze -> R.mipmap.haze
+                    Weather.Condition.Dust -> R.mipmap.dust
+                    Weather.Condition.Fog -> R.mipmap.mist
+                    Weather.Condition.Ash -> R.mipmap.ash
+                    Weather.Condition.Squall -> R.mipmap.squall
+                    Weather.Condition.Tornado -> R.mipmap.tornado
+                    Weather.Condition.Clear -> R.mipmap.clear_skies
+                    Weather.Condition.Clouds -> R.mipmap.clouds
+                    else -> R.mipmap.dunno
+                }
+                binding.weatherImage.setImageResource(resource)
             }
         }
         return binding.root
