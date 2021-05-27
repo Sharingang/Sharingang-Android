@@ -55,13 +55,9 @@ class DetailedItemFragment : Fragment() {
     private lateinit var binding: FragmentDetailedItemBinding
     private var item: Item? = null
 
-    private lateinit var observer: ImageAccess
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        observer = ImageAccess(requireActivity())
-        lifecycle.addObserver(observer)
         paymentProvider.initialize(this, requireContext())
     }
 
@@ -73,7 +69,6 @@ class DetailedItemFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_detailed_item, container, false)
         val itemId = args.item.id!!
         lifecycleScope.launch(Dispatchers.IO) { loadItem(itemId) }
-        observer.setupImageView(binding.detailedItemImage)
         args.item.image?.let {
             Glide.with(this).load(it).into(binding.detailedItemImage)
         }

@@ -7,7 +7,7 @@ const stripe = require("stripe")(secret_key);
 const admin = require('firebase-admin');
 if (process.env.FUNCTIONS_EMULATOR === 'true') {
     const serviceAccount = require("./serviceAccountKey.json");
-	admin.initializeApp({
+    admin.initializeApp({
         credential: admin.credential.cert(serviceAccount)
     });
 } else {
@@ -46,13 +46,23 @@ exports.checkout = functions.region(region).https.onCall(async (data, context) =
     };
 });
 
-exports.newItemNotification = functions.region(region).firestore.document('items/{itemId}').onCreate((snap, context) => {
-    const newItem = snap.data();
+exports.newItemNotificationCreate = functions.region(region).firestore.document('items/{itemId}').onCreate((change, context) => onNewItem(change, context));
+exports.newItemNotificationUpdate = functions.region(region).firestore.document('items/{itemId}').onUpdate((change, context) => onNewItem(change.after, context));
+
+/**
+ * Gets called every time an item is added or updated, sends a notification to all users subscribed to the category of the item.
+ * @param change The data that has been updated or created.
+ * @param context The context of the updated/created data, contains also the variables (wildcards) used in the document path.
+ * @returns true
+ */
+function onNewItem(change, context) {
+    const newItem = change.data();
 
     var message = {
         data: {
             userId: newItem.userId,
-            deeplink: deeplink + context.params.itemId
+            deeplink: deeplink + context.params.itemId,
+            notificationType: "new_item"
         },
         notification: {
             body: newItem.title
@@ -61,8 +71,34 @@ exports.newItemNotification = functions.region(region).firestore.document('items
 
     pushMessage(message, newItem.categoryString);
     return true;
-});
+}
+exports.chatNotificationCreate = functions.region(region).firestore.document('users/{userId}/chats/{chatId}/messages/{message}').onCreate((change, context) => onNewChat(change, context));
 
+/**
+ * Gets called every time a chat is added. It obtains the username of the sender from the database, 
+ * then sends a message with the author and the content of the message.
+ * @param change The data that has been updated/created
+ * @param context The context of the updated/created data, contains also the variables (wildcards) used in the document path.
+ * @returns true
+ */
+function onNewChat(change, context) {
+    const newChat = change.data();
+    db.collection("users").doc(newChat.from).get().then((user) => {
+        var message = {
+            data: {
+                deeplink: deeplink + context.params.chatId,
+                notificationType: "chat",
+                toId: newChat.to,
+                fromName: user.data().name
+            },
+            notification: {
+                body: newChat.message
+            }
+        };
+        pushMessage(message, "chat");
+    });
+    return true;
+}
 /**
  * Send a notification to users subscribed to the topic
  *
@@ -71,12 +107,12 @@ exports.newItemNotification = functions.region(region).firestore.document('items
  */
 function pushMessage(payload, topic) {
     admin.messaging().sendToTopic(topic, payload)
-    .then(function(response) {
-        console.log("Successfully sent notification!");
-    })
-    .catch(function(error) {
-        console.log("Error sending notification:", error);
-    });
+        .then(function (response) {
+            console.log("Successfully sent notification!");
+        })
+        .catch(function (error) {
+            console.log("Error sending notification:", error);
+        });
 }
 
 /**

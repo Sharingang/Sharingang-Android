@@ -15,6 +15,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.example.sharingang.ui.activities.MainActivity
+import com.example.sharingang.utils.constants.NotificationFields
 import com.example.sharingang.utils.getActivity
 import com.example.sharingang.utils.navigate_to
 import com.example.sharingang.utils.notification.sendNotification
@@ -82,7 +83,7 @@ class NotificationTest {
             applicationContext,
             NotificationManager::class.java
         ) as NotificationManager
-        notificationManager.sendNotification("Test message body", deepLink, applicationContext)
+        notificationManager.sendNotification("Test message body", "Test Title", NotificationFields.Companion.NEW_ITEM_CHANNEL_ID, deepLink, applicationContext)
         // Wait for notification to clear up so later tests don't have the top of the screen obstructed
         Thread.sleep(6000)
     }
