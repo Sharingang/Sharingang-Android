@@ -1,6 +1,8 @@
 package com.example.sharingang.database.store
 
 import com.example.sharingang.models.Item
+import com.google.firebase.firestore.ServerTimestamp
+import java.util.*
 
 /**
  * Represents a remote store of items, that we can access in some way.
@@ -35,4 +37,20 @@ interface ItemStore {
      * @return true if the deletion succeeded or there is no item with such id
      */
     suspend fun delete(id: String): Boolean
+
+    /**
+     * Get the last time a particular item was updated in days
+     *
+     * @param id the item ID
+     * @return the last time an item was updated
+     */
+    suspend fun getLastTimeUpdate(id: String): Date
+
+    /**
+     * Set the last time an item has been updated
+     *
+     * @param id the item id
+     * @param newValue the updated value
+     */
+    suspend fun setLastTimeUpdate(id: String, newValue: Date)
 }

@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.sharingang.databinding.FragmentWishlistViewBinding
 import com.example.sharingang.viewmodels.ItemsViewModel
 import com.example.sharingang.auth.CurrentUserProvider
+import com.example.sharingang.models.Item
+import com.example.sharingang.ui.adapters.ItemListener
+import com.example.sharingang.ui.adapters.ItemsAdapter
 import com.example.sharingang.viewmodels.UserProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -37,7 +40,7 @@ class WishlistViewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentWishlistViewBinding.inflate(inflater, container, false)
-        val adapter = viewModel.setupItemAdapter()
+        val adapter = setupItemAdapter()
         binding.wishlistview.adapter = adapter
         binding.wishlistview.layoutManager = GridLayoutManager(context, 2)
         viewModel.addObserver(viewLifecycleOwner, adapter, ItemsViewModel.OBSERVABLES.WISHLIST)
@@ -56,5 +59,13 @@ class WishlistViewFragment : Fragment() {
 
     private fun checkUser() {
         binding.isAuthenticated = currentUserProvider.getCurrentUserId() != null
+    }
+
+    /**
+    * Setup the item adapter for a recycler view.
+    */
+    private fun setupItemAdapter(): ItemsAdapter {
+        val onView = { item: Item -> viewModel.onViewItem(item) }
+        return ItemsAdapter(ItemListener(onView), requireContext())
     }
 }

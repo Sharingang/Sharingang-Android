@@ -7,6 +7,7 @@ import com.example.sharingang.database.repositories.ItemRepository
 import com.example.sharingang.database.store.ItemStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.Date
 import javax.inject.Inject
 
 
@@ -61,6 +62,14 @@ class CachedItemRepository @Inject constructor(
 
     override suspend fun delete(id: String): Boolean {
         return thenRefresh { store.delete(id) }
+    }
+
+    override suspend fun getLastTimeUpdate(id: String): Date {
+        return thenRefresh { store.getLastTimeUpdate(id) }
+    }
+
+    override suspend fun setLastTimeUpdate(id: String, newValue: Date) {
+        return thenRefresh { store.setLastTimeUpdate(id, newValue) }
     }
 }
 

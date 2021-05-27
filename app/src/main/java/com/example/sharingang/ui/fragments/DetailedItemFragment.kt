@@ -1,7 +1,6 @@
 package com.example.sharingang.ui.fragments
 
 import android.content.Intent
-import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
@@ -33,6 +32,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import android.graphics.Paint
+import com.example.sharingang.utils.DateHelper
+import java.util.*
 
 @AndroidEntryPoint
 class DetailedItemFragment : Fragment() {
@@ -79,6 +81,7 @@ class DetailedItemFragment : Fragment() {
         binding.locateButton.setOnClickListener { locateItem() }
         viewModel.setUser(args.item.userId)
         viewModel.user.observe(viewLifecycleOwner, this::onUserChange)
+        setLastUpdated()
         return binding.root
     }
 
@@ -178,8 +181,9 @@ class DetailedItemFragment : Fragment() {
     private fun initWishlistButton() {
         if (currentUserProvider.getCurrentUserId() != null && !args.item.request) {
             viewModel.wishlistContains.observe(viewLifecycleOwner, {
-                binding.addToWishlist.text = if (it) getString(R.string.remove_wishlist)
-                else getString(R.string.add_wishlist)
+                binding.addToWishlist.text =
+                    if(it) getString(R.string.remove_wishlist)
+                    else getString(R.string.add_wishlist)
             })
             binding.addToWishlist.setOnClickListener { updateWishlist() }
             viewModel.wishlistContains(args.item)
@@ -249,7 +253,7 @@ class DetailedItemFragment : Fragment() {
         val shareIntent = Intent.createChooser(Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, link.toString())
-            putExtra(Intent.EXTRA_TITLE, generateLinkTitle(args.item))
+            putExtra(Intent.EXTRA_TITLE, args.item.title + " - " + getString(R.string.app_name))
             type = "text/plain"
         }, null)
         startActivity(shareIntent)
@@ -267,10 +271,6 @@ class DetailedItemFragment : Fragment() {
         return Uri.parse("https://sharingang.page.link/item?id=${item.id}")
     }
 
-    private fun generateLinkTitle(item: Item): String {
-        return item.title + " - " + getString(R.string.app_name)
-    }
-
     /**
      * The callback for when a user wants to locate her item
      */
@@ -279,6 +279,21 @@ class DetailedItemFragment : Fragment() {
             view?.findNavController()?.navigate(
                 DetailedItemFragmentDirections.actionDetailedItemFragmentToARActivity(it)
             )
+        }
+    }
+
+    /**
+     * Sets the text for when the item was last updated
+     */
+    private fun setLastUpdated() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val lastUpdate = itemRepository.getLastTimeUpdate(args.item.id!!)
+            val dateHelper = DateHelper(requireContext())
+            lifecycleScope.launch(Dispatchers.Main) {
+                binding.lastUpdateText.text = dateHelper.getDateDifferenceString(
+                    startDate = lastUpdate, endDate = Date()
+                )
+            }
         }
     }
 }

@@ -35,6 +35,7 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -216,7 +217,8 @@ class NewEditFragment : Fragment() {
             localId = existingItem?.localId ?: 0,
             request = binding.switchIsRequest.isChecked,
             discount = binding.switchIsDiscount.isChecked,
-            discountPrice = binding.priceDiscount?.toDoubleOrNull() ?: 0.0
+            discountPrice = binding.priceDiscount?.toDoubleOrNull() ?: 0.0,
+            updatedAt = Date()
         )
     }
 

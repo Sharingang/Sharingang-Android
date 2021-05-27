@@ -19,6 +19,9 @@ import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.models.User
 import com.example.sharingang.database.repositories.UserRepository
 import com.example.sharingang.imagestore.ImageStore
+import com.example.sharingang.models.Item
+import com.example.sharingang.ui.adapters.ItemListener
+import com.example.sharingang.ui.adapters.ItemsAdapter
 import com.example.sharingang.utils.ImageAccess
 import com.example.sharingang.viewmodels.UserProfileViewModel
 import com.firebase.ui.auth.AuthUI
@@ -140,7 +143,7 @@ class UserProfileFragment : Fragment() {
         setupRecyclerView(shownUserProfileId)
         setupAuthenticationButtons()
         initSetup()
-        setEmailText()
+        if (userType == UserType.SELF) binding.textEmail.text = loggedInUserEmail
         setVisibilities()
         setupViews()
         setupReportButton()
@@ -202,7 +205,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupRecyclerView(userId: String?) {
-        val adapter = itemsViewModel.setupItemAdapter()
+        val adapter = setupItemAdapter()
         binding.userItemList.adapter = adapter
         listOf(binding.offersButton, binding.requestsButton).forEach {
             it.setOnClickListener {
@@ -223,11 +226,6 @@ class UserProfileFragment : Fragment() {
             })
     }
 
-    private fun setEmailText() {
-        val emailText = binding.textEmail
-        if (userType == UserType.SELF) emailText.text = loggedInUserEmail
-    }
-
     private fun setupViews() {
         val buttons = listOf(
             binding.btnOpenCamera, binding.btnOpenGallery
@@ -238,7 +236,7 @@ class UserProfileFragment : Fragment() {
             else imageAccess.openCamera()
         } }
         topInfo.text = getString(R.string.userNotLoggedInInfo)
-        setEmailText()
+        if (userType == UserType.SELF) binding.textEmail.text = loggedInUserEmail
     }
 
     private fun displayUserFields(requestedUser: User?) {
@@ -248,7 +246,7 @@ class UserProfileFragment : Fragment() {
             val userPictureUri = requestedUser.profilePicture
             val userProfilePicture = binding.imageView
             Glide.with(this).load(userPictureUri).into(userProfilePicture)
-            setEmailText()
+            if (userType == UserType.SELF) binding.textEmail.text = loggedInUserEmail
         }
     }
 
@@ -331,5 +329,13 @@ class UserProfileFragment : Fragment() {
             binding.imageView.setImageURI(currentImageUri)
             changeImage(currentImageUri)
         }
+    }
+
+    /**
+    * Setup the item adapter for a recycler view.
+    */
+    private fun setupItemAdapter(): ItemsAdapter {
+        val onView = { item: Item -> itemsViewModel.onViewItem(item) }
+        return ItemsAdapter(ItemListener(onView), requireContext())
     }
 }
