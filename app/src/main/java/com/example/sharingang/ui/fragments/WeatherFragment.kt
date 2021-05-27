@@ -14,6 +14,7 @@ import com.example.sharingang.databinding.FragmentWeatherBinding
 import com.example.sharingang.models.Weather
 import com.example.sharingang.viewmodels.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class WeatherFragment : Fragment() {
@@ -42,7 +43,11 @@ class WeatherFragment : Fragment() {
     private fun onWeatherChange(it: Weather) {
         binding.weatherLayout.visibility = View.VISIBLE
         binding.weatherCity.text = it.cityName
-        binding.weatherDescription.text = it.description
+        binding.weatherDescription.text = it.description.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(
+                Locale.getDefault()
+            ) else it.toString()
+        }
         binding.weatherTemp.text = "%.1f°".format(it.temperature)
         binding.weatherCondition.text = it.condition.toString()
         val resource = when (it.condition) {
