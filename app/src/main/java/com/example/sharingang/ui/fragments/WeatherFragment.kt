@@ -11,7 +11,9 @@ import androidx.navigation.fragment.navArgs
 import com.example.sharingang.R
 import com.example.sharingang.databinding.FragmentWeatherBinding
 import com.example.sharingang.viewmodels.WeatherViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class WeatherFragment : Fragment() {
     private val args: WeatherFragmentArgs by navArgs()
     private val viewModel: WeatherViewModel by viewModels()

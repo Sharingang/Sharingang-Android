@@ -1,6 +1,5 @@
 package com.example.sharingang.viewmodels
 
-import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -9,17 +8,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
-import com.example.sharingang.imagestore.ImageStore
 import com.example.sharingang.database.repositories.ItemRepository
 import com.example.sharingang.database.repositories.UserRepository
+import com.example.sharingang.imagestore.ImageStore
+import com.example.sharingang.models.Item
 import com.example.sharingang.ui.adapters.ItemListener
 import com.example.sharingang.ui.adapters.ItemsAdapter
-import com.example.sharingang.models.Item
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.collections.asReversed
+import kotlin.collections.filter
+import kotlin.collections.forEach
+import kotlin.collections.listOf
+import kotlin.collections.set
+import kotlin.collections.sortedWith
+import kotlin.collections.toMutableMap
 
 /**
  * ItemsViewModel models the state of the fragment for viewing items
@@ -53,7 +61,7 @@ class ItemsViewModel @Inject constructor(
 
 
     private val _userSoldAndBought = MutableLiveData<List<Item>>()
-    val userSoldOrBought : LiveData<List<Item>>
+    val userSoldOrBought: LiveData<List<Item>>
         get() = _userSoldAndBought
 
     private val _navigateToDetailItem = MutableLiveData<Item?>()
@@ -140,11 +148,11 @@ class ItemsViewModel @Inject constructor(
      *
      * @param[userId] the Id of the user.
      */
-    fun updateSoldBought(userId: String?, soldWanted : Boolean){
-        if(userId == null) return
-        if(soldWanted){
+    fun updateSoldBought(userId: String?, soldWanted: Boolean) {
+        if (userId == null) return
+        if (soldWanted) {
             getUserSoldItems(userId)
-        }else{
+        } else {
             updatePurchaseHistory(userId)
         }
     }
@@ -169,15 +177,15 @@ class ItemsViewModel @Inject constructor(
      *
      * @param[userId] the Id of the user
      */
-    fun updatePurchaseHistory(userId: String){
-        viewModelScope.launch(Dispatchers.IO){
+    fun updatePurchaseHistory(userId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
             val user = userRepository.get(userId)
-            if(user != null){
+            if (user != null) {
                 val itemIdList = user.purchaseHistory
                 val itemList = ArrayList<Item>()
                 itemIdList.forEach {
                     val tempItem = itemRepository.get(it)
-                    if(tempItem != null){
+                    if (tempItem != null) {
                         itemList.add(tempItem)
                     }
                 }
@@ -208,7 +216,7 @@ class ItemsViewModel @Inject constructor(
      * Set the value of the reviews
      * @param[item] item whose reviews to use
      */
-    fun setReviews(item: Item){
+    fun setReviews(item: Item) {
         _reviews.postValue(item.reviews)
     }
 

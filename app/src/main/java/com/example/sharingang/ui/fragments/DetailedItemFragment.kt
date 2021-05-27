@@ -1,6 +1,7 @@
 package com.example.sharingang.ui.fragments
 
 import android.content.Intent
+import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
@@ -20,7 +21,7 @@ import com.example.sharingang.databinding.FragmentDetailedItemBinding
 import com.example.sharingang.models.Item
 import com.example.sharingang.models.User
 import com.example.sharingang.payment.PaymentProvider
-import com.example.sharingang.utils.ImageAccess
+import com.example.sharingang.utils.DateHelper
 import com.example.sharingang.viewmodels.ItemsViewModel
 import com.example.sharingang.viewmodels.UserProfileViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -31,10 +32,8 @@ import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import android.graphics.Paint
-import com.example.sharingang.utils.DateHelper
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class DetailedItemFragment : Fragment() {
@@ -77,6 +76,7 @@ class DetailedItemFragment : Fragment() {
         initBuy()
         if (args.item.discount) binding.itemPrice.paintFlags =
             binding.itemPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+        binding.weatherButton.setOnClickListener { getItemWeather() }
         binding.shareButton.setOnClickListener { shareItem() }
         binding.locateButton.setOnClickListener { locateItem() }
         viewModel.setUser(args.item.userId)
@@ -182,7 +182,7 @@ class DetailedItemFragment : Fragment() {
         if (currentUserProvider.getCurrentUserId() != null && !args.item.request) {
             viewModel.wishlistContains.observe(viewLifecycleOwner, {
                 binding.addToWishlist.text =
-                    if(it) getString(R.string.remove_wishlist)
+                    if (it) getString(R.string.remove_wishlist)
                     else getString(R.string.add_wishlist)
             })
             binding.addToWishlist.setOnClickListener { updateWishlist() }
@@ -224,7 +224,8 @@ class DetailedItemFragment : Fragment() {
         val quantity: Int = binding.quantity?.toIntOrNull() ?: 1
         val boughtItem = args.item
         if (quantity > boughtItem.quantity || quantity < 1) {
-            Toast.makeText(context, getString(R.string.incorrect_quantity), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.incorrect_quantity), Toast.LENGTH_SHORT)
+                .show()
         } else {
             lifecycleScope.launch {
                 binding.buyButton.isEnabled = true
@@ -294,6 +295,17 @@ class DetailedItemFragment : Fragment() {
                     startDate = lastUpdate, endDate = Date()
                 )
             }
+        }
+    }
+
+    private fun getItemWeather() {
+        item?.let {
+            view?.findNavController()?.navigate(
+                DetailedItemFragmentDirections.actionDetailedItemFragmentToWeatherFragment(
+                    it.latitude.toFloat(),
+                    it.longitude.toFloat()
+                )
+            )
         }
     }
 }
