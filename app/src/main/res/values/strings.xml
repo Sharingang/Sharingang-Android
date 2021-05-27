@@ -102,6 +102,7 @@
     <string name="quantity">Quantity</string>
     <string name="_1">1</string>
     <string name="incorrect_quantity">Incorrect Quantity Selected</string>
+    <string name="discounts">Discounts</string>
     <string name="sold_button">Sold</string>
     <string name="bought_button">Purchased</string>
     <string name="message_time">Time</string>
