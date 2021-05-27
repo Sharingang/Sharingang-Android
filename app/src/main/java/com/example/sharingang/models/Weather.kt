@@ -1,5 +1,7 @@
 package com.example.sharingang.models
 
+import com.example.sharingang.R
+
 /**
  * Represents information about whether at some place.
  */
@@ -59,6 +61,24 @@ data class Weather(
                 "Clouds" -> Clouds
                 else -> Other
             }
+        }
+
+        fun resource(): Int = when (this) {
+            Thunderstorm -> R.mipmap.thunderstorm
+            Drizzle -> R.mipmap.drizzle
+            Rain -> R.mipmap.rain
+            Snow -> R.mipmap.snow
+            Mist -> R.mipmap.mist
+            Smoke -> R.mipmap.smoke
+            Haze -> R.mipmap.haze
+            Dust -> R.mipmap.dust
+            Fog -> R.mipmap.mist
+            Ash -> R.mipmap.ash
+            Squall -> R.mipmap.squall
+            Tornado -> R.mipmap.tornado
+            Clear -> R.mipmap.clear_skies
+            Clouds -> R.mipmap.clouds
+            else -> R.mipmap.dunno
         }
     }
 
