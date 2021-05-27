@@ -283,7 +283,7 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -293,51 +293,52 @@
                 android:id="@+id/addToWishlist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/add_wishlist" />
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:text="@string/add_wishlist"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/shareButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.49" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/shareButton"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal|top"
-                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
                 android:backgroundTint="@color/themeColor"
                 android:contentDescription="@string/share"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/weatherButton"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="?attr/actionModeShareDrawable" />
 
-            <Space
-                android:layout_width="10dp"
-                android:layout_height="wrap_content" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/weatherButton"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
                 android:backgroundTint="@color/themeColor"
                 android:contentDescription="@string/weather"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/locateButton"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/baseline_thermostat_white_24dp" />
-
-            <Space
-                android:layout_width="10dp"
-                android:layout_height="wrap_content" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/locateButton"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:layout_marginTop="16dp"
                 android:backgroundTint="@color/themeColor"
                 android:contentDescription="@string/locate_item"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/baseline_directions_white_24dp" />
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 </layout>
