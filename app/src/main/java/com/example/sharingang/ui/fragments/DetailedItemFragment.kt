@@ -78,7 +78,14 @@ class DetailedItemFragment : Fragment() {
             binding.itemPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         binding.weatherButton.setOnClickListener { getItemWeather() }
         binding.shareButton.setOnClickListener { shareItem() }
-        binding.locateButton.setOnClickListener { locateItem() }
+        binding.locateButton.setOnClickListener {
+            item?.let {
+                view?.findNavController()?.navigate(
+                    DetailedItemFragmentDirections.actionDetailedItemFragmentToARActivity(it)
+                )
+            }
+        }
+
         viewModel.setUser(args.item.userId)
         viewModel.user.observe(viewLifecycleOwner, this::onUserChange)
         setLastUpdated()
@@ -296,6 +303,10 @@ class DetailedItemFragment : Fragment() {
                 )
             }
         }
+    }
+
+    private fun generateLinkTitle(item: Item): String {
+        return item.title + " - " + getString(R.string.app_name)
     }
 
     private fun getItemWeather() {
