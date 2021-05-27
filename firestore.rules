@@ -11,7 +11,7 @@ service cloud.firestore {
 
             allow create: if isSignedInAndSelf(request.resource.data.userId);
             allow update:if isSignedInAndSelf(resource.data.userId) || (isSignedIn() && request.resource.data.diff(resource.data).affectedKeys()
-                .hasOnly(['quantity','sold','reviews']))
+                .hasOnly(['quantity','sold','reviews']));
             allow delete: if isSignedInAndSelf(resource.data.userId);
             allow read: if true;
         }
