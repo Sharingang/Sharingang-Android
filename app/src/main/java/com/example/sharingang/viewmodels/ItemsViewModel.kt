@@ -19,15 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.List
-import kotlin.collections.Map
-import kotlin.collections.asReversed
-import kotlin.collections.filter
-import kotlin.collections.forEach
-import kotlin.collections.listOf
 import kotlin.collections.set
-import kotlin.collections.sortedWith
-import kotlin.collections.toMutableMap
 
 /**
  * ItemsViewModel models the state of the fragment for viewing items
