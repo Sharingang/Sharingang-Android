@@ -79,11 +79,9 @@ class DetailedItemFragment : Fragment() {
         binding.weatherButton.setOnClickListener { getItemWeather() }
         binding.shareButton.setOnClickListener { shareItem() }
         binding.locateButton.setOnClickListener {
-            item?.let {
-                view?.findNavController()?.navigate(
-                    DetailedItemFragmentDirections.actionDetailedItemFragmentToARActivity(it)
-                )
-            }
+            if (item != null) view?.findNavController()?.navigate(
+                DetailedItemFragmentDirections.actionDetailedItemFragmentToARActivity(item!!)
+            )
         }
 
         viewModel.setUser(args.item.userId)
