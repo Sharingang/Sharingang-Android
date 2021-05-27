@@ -1,8 +1,10 @@
 package com.example.sharingang
 
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -10,6 +12,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.sharingang.ui.activities.MainActivity
 import com.example.sharingang.utils.navigate_to
 import com.example.sharingang.utils.waitAfterSaveItem
+import com.example.sharingang.utils.withMenuIdOrText
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
@@ -115,6 +118,29 @@ class SearchFragmentTest {
         onView(withId(R.id.menuUnsubscribe)).check(matches(isDisplayed()))
         onView(withId(R.id.menuUnsubscribe)).perform(click())
         onView(withId(R.id.menuSubscribe)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun canHideNonInSearchDiscountedItem() {
+        val title1 = "Test1"
+        val price = "5"
+        navigate_to(R.id.newEditFragment)
+        onView(withId(R.id.itemTitle)).perform(
+            typeText(title1),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.itemPrice)).perform(
+            replaceText(price),
+            closeSoftKeyboard()
+        )
+        onView(withId(R.id.saveItemButton)).perform(scrollTo(), click())
+        waitAfterSaveItem()
+
+        navigate_to(R.id.searchFragment)
+
+        onView(withId(R.id.searchDiscount)).perform(click())
+        onView(withId(R.id.sflSearchButton)).perform(click())
+        onView(withText(title1)).check(doesNotExist())
     }
 
     private fun addItemsToInventory() {

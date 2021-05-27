@@ -103,7 +103,8 @@ class MapFragment : Fragment() {
     private fun startSearch() {
         viewModel.searchItems(
             binding.searchOnMap.text.toString(),
-            binding.mapCategorySpinner.selectedItemPosition
+            binding.mapCategorySpinner.selectedItemPosition,
+            false
         )
     }
 

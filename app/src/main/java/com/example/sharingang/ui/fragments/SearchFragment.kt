@@ -52,7 +52,8 @@ class SearchFragment : Fragment(), AdapterView.OnItemSelectedListener {
         binding.sflSearchButton.setOnClickListener {
             viewModel.searchItems(
                 binding.searchText.text.toString(),
-                binding.searchCategorySpinner.selectedItemPosition
+                binding.searchCategorySpinner.selectedItemPosition,
+                binding.searchDiscount.isChecked
             )
         }
         viewModel.setupItemNavigation(viewLifecycleOwner, this.findNavController(),
