@@ -32,10 +32,20 @@ service cloud.firestore {
             allow update: if isSignedInAndSelf(userId) || (isSignedIn() && request.resource.data.diff(resource.data).affectedKeys()
                 .hasOnly(['rating' , 'numberOfRatings']));
             allow delete: if false;
+
+            match /blocks/{blockedId} {
+                allow read: if true;
+                allow create, write, update: if isSignedIn();
+            }
+
+            match /reports/{reportedId} {
+                allow read: if true;
+                allow create, write, update: if isSignedIn();
+            }
+
             match /{document=**} {
                 allow read: if true;
-                allow update: if isSignedInAndSelf(userId);
-                allow delete, create: if false;
+                allow update, create, delete, write: if isSignedInAndSelf(userId);
             }
         }
         match /{document=**} {

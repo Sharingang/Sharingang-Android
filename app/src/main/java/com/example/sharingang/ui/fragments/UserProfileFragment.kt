@@ -173,12 +173,10 @@ class UserProfileFragment : Fragment() {
         val visibleViews = when (userType) {
             UserType.LOGGED_OUT -> listOf(
                 binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList,
-                binding.offersRequestsGroup
-            )
+                binding.offersRequestsGroup)
             UserType.VISITOR -> listOf(
                 binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList,
-                binding.btnReport, binding.btnChat, binding.offersRequestsGroup, binding.btnBlock
-            )
+                binding.btnReport, binding.btnChat, binding.offersRequestsGroup, binding.btnBlock)
             UserType.SELF -> listOf(
                 binding.imageView,
                 binding.nameText,
@@ -188,11 +186,13 @@ class UserProfileFragment : Fragment() {
                 binding.btnLogout,
                 binding.offersRequestsGroup,
                 binding.btnOpenGallery,
-                binding.btnOpenCamera
-            )
+                binding.btnOpenCamera)
             else -> listOf(binding.upfTopinfo, binding.btnLogin)
         }
-        visibleViews.forEach { view -> view.visibility = View.VISIBLE }
+        visibleViews.forEach { view ->
+            if (view != binding.btnBlock && view != binding.btnReport)
+                view.visibility = View.VISIBLE
+        }
     }
 
     private fun setupRatingView() {
@@ -282,18 +282,7 @@ class UserProfileFragment : Fragment() {
                     )
                 )
             }
-            if(userRepository.hasBeenBlocked(shownUserProfileId, currentUserId)) {
-                binding.btnBlock.visibility = View.GONE
-                binding.btnBlock.setOnClickListener { view ->
-                    view.findNavController().navigate(
-                        UserProfileFragmentDirections.actionUserProfileFragmentToBlockFragment(
-                            blockerId = currentUserId!!, blockedId = shownUserProfileId!!,
-                            blockedName = binding.nameText.text.toString()
-                        )
-                    )
-                }
-            }
-
+            setupBlockButton()
         }
     }
 
@@ -349,5 +338,25 @@ class UserProfileFragment : Fragment() {
     private fun setupItemAdapter(): ItemsAdapter {
         val onView = { item: Item -> itemsViewModel.onViewItem(item) }
         return ItemsAdapter(ItemListener(onView), requireContext())
+    }
+
+    /**
+     * Sets up what the block button does
+     */
+    private fun setupBlockButton() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            val blocked = userRepository.hasBeenBlocked(shownUserProfileId!!, by = currentUserId!!)
+            binding.btnBlock.visibility =
+                if(blocked) View.GONE else View.VISIBLE
+            if(!blocked) {
+                binding.btnBlock.setOnClickListener { view ->
+                    view.findNavController().navigate(
+                        UserProfileFragmentDirections
+                            .actionUserProfileFragmentToBlockFragment(currentUserId!!,
+                                shownUserProfileId!!, binding.nameText.text.toString())
+                    )
+                }
+            }
+        }
     }
 }

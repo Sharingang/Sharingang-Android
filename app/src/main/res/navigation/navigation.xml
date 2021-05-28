@@ -123,7 +123,9 @@
             app:destination="@id/messageFragment" />
         <action
             android:id="@+id/action_userProfileFragment_to_blockFragment"
-            app:destination="@id/blockFragment" />
+            app:destination="@id/blockFragment"
+            app:popUpTo="@id/userProfileFragment"
+            app:popUpToInclusive="true" />
 
     </fragment>
     <fragment
@@ -209,7 +211,8 @@
         <action
             android:id="@+id/action_blockFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment"
-            app:popUpTo="@id/blockFragment" />
+            app:popUpTo="@id/blockFragment"
+            app:popUpToInclusive="true" />
         <argument
             android:name="blockerId"
             app:argType="string" />

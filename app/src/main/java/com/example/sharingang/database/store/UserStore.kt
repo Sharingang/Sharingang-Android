@@ -123,4 +123,14 @@ interface UserStore {
      * @param description the description given by the blocker
      */
     suspend fun block(blockerId: String, blockedId: String, reason: String, description: String)
+
+    /**
+     * Checks if a user has already been blocked by another particular user
+     *
+     * @param userId the user to check if they were blocked
+     * @param by the potential blocker user id
+     * @return whether the user has already been blocked
+     */
+    suspend fun hasBeenBlocked(userId: String, by: String): Boolean
+
 }

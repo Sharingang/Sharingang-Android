@@ -162,10 +162,18 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
     ) {
         val data = hashMapOf(
             DatabaseFields.DBFIELD_REASON to reason,
-            DatabaseFields.DBFIELD_DESCRIPTION to description
+            DatabaseFields.DBFIELD_DESCRIPTION to description,
+            DatabaseFields.DBFIELD_DATE to Date()
         )
         val currentUserDocument = getUserDocument(blockerId)
         currentUserDocument.collection(DatabaseFields.DBFIELD_BLOCKS).document(blockedId).set(data)
+        Log.e("xxx", "$blockerId has blocked $blockedId.")
+    }
+
+    override suspend fun hasBeenBlocked(userId: String, by: String): Boolean {
+        val blocker = getUserDocument(by)
+        return blocker.collection(DatabaseFields.DBFIELD_BLOCKS)
+            .document(userId).get().await().exists()
     }
 
     /**

@@ -132,4 +132,5 @@
     <string name="hint_block_description">Why are you blocking this user? (optional)</string>
     <string name="rude">Rudeness</string>
     <string name="scamming">Scamming</string>
+    <string name="unblock_user">Unblock User</string>
 </resources>
