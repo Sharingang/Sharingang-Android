@@ -15,12 +15,10 @@ import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.models.User
 import com.example.sharingang.ui.adapters.UserAdapter
 import com.example.sharingang.database.repositories.UserRepository
-import com.example.sharingang.utils.constants.DatabaseFields
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.sharingang.utils.RecyclerViewDecorator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 /**
@@ -54,7 +52,8 @@ class ChatsFragment : Fragment() {
                 requireContext(), listUsers, userRepository, currentUserId!!, lifecycleScope, this
             )
             binding.chatUsersList.adapter = userAdapter
-            setRecyclerViewDecoration(margin = 10)
+            val decorator = RecyclerViewDecorator()
+            decorator.setRecyclerViewDecoration(margin = 10, recyclerView = binding.chatUsersList)
             binding.chatUsersList.layoutManager = LinearLayoutManager(requireContext())
             usersLiveData.observe(viewLifecycleOwner, { newList ->
                 (binding.chatUsersList.adapter as UserAdapter).submitList(newList)
@@ -85,26 +84,5 @@ class ChatsFragment : Fragment() {
             binding.chatUsersList.visibility = View.GONE
             binding.loggedOutInfo.visibility = View.VISIBLE
         }
-    }
-
-    /**
-     * Decorates the displayed list of users with a margin between elements.
-     *
-     * @param margin the margin between items
-     */
-    private fun setRecyclerViewDecoration(margin: Int) {
-        binding.chatUsersList.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(
-                outRect: Rect,
-                view: View,
-                parent: RecyclerView,
-                state: RecyclerView.State,
-            ) {
-                super.getItemOffsets(outRect, view, parent, state)
-                if (parent.getChildAdapterPosition(view) > 0) {
-                    outRect.top = margin
-                }
-            }
-        })
     }
 }
