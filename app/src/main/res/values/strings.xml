@@ -133,4 +133,5 @@
     <string name="rude">Rudeness</string>
     <string name="scamming">Scamming</string>
     <string name="unblock_user">Unblock User</string>
+    <string name="blocked_users">Blocked Users</string>
 </resources>
