@@ -56,6 +56,12 @@
             android:inputType="textMultiLine"
             android:autofillHints="true" />
 
+        <TextView
+            android:id="@+id/blockingInformation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/blockingInformation" />
+
         <LinearLayout
             android:id="@+id/buttons_holder"
             android:layout_width="match_parent"
@@ -80,8 +86,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_weight="0"
-                android:text="@android:string/ok"
                 android:enabled="false"
+                android:text="@android:string/ok"
                 tools:ignore="ButtonStyle" />
         </LinearLayout>
     </LinearLayout>
