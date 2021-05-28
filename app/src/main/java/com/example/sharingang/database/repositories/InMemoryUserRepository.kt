@@ -125,6 +125,10 @@ class InMemoryUserRepository : UserRepository {
         TODO("Not yet implemented")
     }
 
+    override suspend fun getBlockInformation(blockerId: String, blockedId: String): String {
+        TODO("Not yet implemented")
+    }
+
     /**
      * Adds a new message to the messages list
      *

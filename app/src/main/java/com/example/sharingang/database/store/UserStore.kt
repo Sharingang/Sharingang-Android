@@ -141,4 +141,13 @@ interface UserStore {
      */
     suspend fun getBlockedUsers(userId: String): List<String>
 
+    /**
+     * Retrieves the information about a user blocking another user
+     *
+     * @param blockerId the user who blocked the other
+     * @param blockedId the blocked user
+     * @return the reason and description of the block
+     */
+    suspend fun getBlockInformation(blockerId: String, blockedId: String): String
+
 }

@@ -1,20 +1,19 @@
 package com.example.sharingang.ui.adapters
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.sharingang.R
 import com.example.sharingang.database.repositories.UserRepository
 import com.example.sharingang.models.User
-import com.example.sharingang.ui.fragments.ChatsFragment
-import com.example.sharingang.ui.fragments.ChatsFragmentDirections
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -25,7 +24,9 @@ import kotlinx.coroutines.launch
  * @property context the context
  * @property users the list of users we are adapting
  */
-class BlockedUserAdapter(private val context: Context, private var users: MutableList<User>) :
+class BlockedUserAdapter(private val context: Context, private var users: MutableList<User>,
+                         private val currentUserId: String, private val userRepository: UserRepository,
+                         private val lifecycleScope: LifecycleCoroutineScope) :
     RecyclerView.Adapter<BlockedUserAdapter.ViewHolder>() {
 
     init {
@@ -40,6 +41,9 @@ class BlockedUserAdapter(private val context: Context, private var users: Mutabl
     class ViewHolder(userEntryView: View) : RecyclerView.ViewHolder(userEntryView) {
         var username: TextView = userEntryView.findViewById(R.id.blockedUserName)
         var imageView: ImageView = userEntryView.findViewById(R.id.blockedUserPic)
+        var goToProfile: ImageView = userEntryView.findViewById(R.id.gotoProfile)
+        var blockedInfo: ImageView = userEntryView.findViewById(R.id.buttonBlockInfo)
+        var btnUnblock: ImageView = userEntryView.findViewById(R.id.btnUnblock)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -55,6 +59,14 @@ class BlockedUserAdapter(private val context: Context, private var users: Mutabl
             val user: User = users[position]
             holder.username.text = user.name
             Glide.with(context).load(user.profilePicture).into(holder.imageView)
+            holder.blockedInfo.setOnClickListener {
+                showInformation(currentUserId, user.id!!)
+            }
+            holder.btnUnblock.setOnClickListener {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    userRepository.unblock(currentUserId, user.id!!)
+                }
+            }
         }
     }
 
@@ -71,5 +83,21 @@ class BlockedUserAdapter(private val context: Context, private var users: Mutabl
         users.clear()
         users.addAll(newData)
         notifyDataSetChanged()
+    }
+
+    private fun showInformation(currentUserId: String, blockedUserId: String) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val information = userRepository.getBlockInformation(currentUserId, blockedUserId)
+            lifecycleScope.launch(Dispatchers.Main) {
+                val builder1: AlertDialog.Builder = AlertDialog.Builder(context)
+                builder1.setMessage(information)
+                builder1.setCancelable(false)
+                builder1.setPositiveButton(
+                    "OK"
+                ) { dialog, _ -> dialog.cancel() }
+                val alert11: AlertDialog = builder1.create()
+                alert11.show()
+            }
+        }
     }
 }

@@ -122,4 +122,8 @@ class CachedUserRepository @Inject constructor(
         return thenRefresh { store.getBlockedUsers(userId) }
     }
 
+    override suspend fun getBlockInformation(blockerId: String, blockedId: String): String {
+        return thenRefresh { store.getBlockInformation(blockerId, blockedId) }
+    }
+
 }
