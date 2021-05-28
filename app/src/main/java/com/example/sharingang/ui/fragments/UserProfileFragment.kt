@@ -190,7 +190,7 @@ class UserProfileFragment : Fragment() {
             else -> listOf(binding.upfTopinfo, binding.btnLogin)
         }
         visibleViews.forEach { view ->
-            if (view != binding.btnBlock && view != binding.btnReport)
+            if (view != binding.btnBlock && view != binding.btnReport && view != binding.btnChat)
                 view.visibility = View.VISIBLE
         }
     }
@@ -312,6 +312,16 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupChatButton() {
+        if(currentUserId != null) {
+            lifecycleScope.launch(Dispatchers.IO) {
+                if(!userRepository.hasBeenBlocked(shownUserProfileId!!, by = currentUserId!!)
+                    && userType == UserType.VISITOR) {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        binding.btnChat.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
         binding.btnChat.setOnClickListener {
             view?.findNavController()?.navigate(
                 UserProfileFragmentDirections

@@ -135,6 +135,6 @@
     <string name="unblock_user">Unblock User</string>
     <string name="blocked_users">Blocked Users</string>
     <string name="goToUserProfile">Go To User Profile</string>
-    <string name="blockingInformation">Note: After the block is issued, this user will not be able to send you messages or view your items anymore.</string>
+    <string name="blockingInformation">Note: After the block is issued, this user will not be able to send you messages or view your items anymore. They will be hidden from your chats as well.</string>
     <string name="unblock">unblock</string>
 </resources>

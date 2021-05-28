@@ -58,19 +58,7 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
             val user: User = users[position]
             holder.username.text = user.name
             Glide.with(context).load(user.profilePicture).into(holder.imageView)
-            holder.itemView.setOnClickListener { view ->
-                val partnerPicture = user.profilePicture
-                view.findNavController().navigate(
-                    ChatsFragmentDirections.actionChatsFragmentToMessageFragment(
-                        user.id!!, user.name, partnerPicture
-                    )
-                )
-            }
-            holder.profileButton.setOnClickListener {
-                view -> view.findNavController().navigate(ChatsFragmentDirections
-                    .actionChatsFragmentToUserProfileFragment(user.id!!)
-                )
-            }
+            setupActions(holder, user)
             lifecycleScope.launch(Dispatchers.Main) {
                 displayNumUnread(holder, user.id!!)
                 userRepository.setupConversationRefresh(currentUserId, user.id) {
@@ -101,5 +89,21 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
         users.clear()
         users.addAll(newData)
         notifyDataSetChanged()
+    }
+
+    private fun setupActions(holder: ViewHolder, user: User) {
+        holder.itemView.setOnClickListener { view ->
+            val partnerPicture = user.profilePicture
+            view.findNavController().navigate(
+                ChatsFragmentDirections.actionChatsFragmentToMessageFragment(
+                    user.id!!, user.name, partnerPicture
+                )
+            )
+        }
+        holder.profileButton.setOnClickListener {
+                view -> view.findNavController().navigate(ChatsFragmentDirections
+            .actionChatsFragmentToUserProfileFragment(user.id!!)
+        )
+        }
     }
 }

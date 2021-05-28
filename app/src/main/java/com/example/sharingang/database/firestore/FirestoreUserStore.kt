@@ -2,6 +2,7 @@ package com.example.sharingang.database.firestore
 
 import android.provider.ContactsContract
 import android.util.Log
+import androidx.room.Database
 import com.example.sharingang.models.User
 import com.example.sharingang.database.store.UserStore
 import com.example.sharingang.models.Chat
@@ -162,7 +163,7 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
         val data = hashMapOf(
             DatabaseFields.DBFIELD_REASON to reason,
             DatabaseFields.DBFIELD_DESCRIPTION to description,
-            DatabaseFields.DBFIELD_DATE to Date()
+            DatabaseFields.DBFIELD_ISBLOCKED to true
         )
         val currentUserDocument = getUserDocument(blockerId)
         currentUserDocument.collection(DatabaseFields.DBFIELD_BLOCKS).document(blockedId).set(data)
@@ -172,7 +173,7 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
     override suspend fun hasBeenBlocked(userId: String, by: String): Boolean {
         val blocker = getUserDocument(by)
         return blocker.collection(DatabaseFields.DBFIELD_BLOCKS)
-            .document(userId).get().await().exists()
+            .document(userId).get().await().getBoolean(DatabaseFields.DBFIELD_ISBLOCKED) ?: false
     }
 
     override suspend fun getBlockedUsers(userId: String): List<String> {
@@ -193,7 +194,9 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
 
     override suspend fun unblock(blockerId: String, blockedId: String) {
         getUserDocument(blockerId)
-            .collection(DatabaseFields.DBFIELD_BLOCKS).document(blockedId).delete()
+            .collection(DatabaseFields.DBFIELD_BLOCKS).document(blockedId).update(
+                DatabaseFields.DBFIELD_ISBLOCKED, false
+            )
     }
 
     /**
