@@ -123,8 +123,7 @@
             app:destination="@id/messageFragment" />
         <action
             android:id="@+id/action_userProfileFragment_to_blockFragment"
-            app:destination="@id/blockFragment"
-            app:popUpTo="com.android.tools.property.panel.api.EnumValue$Companion$LOADING$1@1ceb7c4c" />
+            app:destination="@id/blockFragment" />
 
     </fragment>
     <fragment
@@ -205,13 +204,12 @@
     </activity>
     <fragment
         android:id="@+id/blockFragment"
-        android:name="com.example.sharingang.BlockFragment"
+        android:name="com.example.sharingang.ui.fragments.BlockFragment"
         android:label="BlockFragment" >
         <action
             android:id="@+id/action_blockFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment"
-            app:popUpTo="@id/blockFragment"
-            app:popUpToInclusive="true" />
+            app:popUpTo="@id/blockFragment" />
         <argument
             android:name="blockerId"
             app:argType="string" />
