@@ -133,4 +133,12 @@ interface UserStore {
      */
     suspend fun hasBeenBlocked(userId: String, by: String): Boolean
 
+    /**
+     * Retrieves the list of blocked users of a particular user
+     *
+     * @param userId the user whose list we want to retrieve
+     * @return the list of all blocked users
+     */
+    suspend fun getBlockedUsers(userId: String): List<String>
+
 }

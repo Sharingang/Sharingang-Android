@@ -66,9 +66,8 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
         reason: String
     ): Boolean {
         return try {
-            firestore
-                .collection(DatabaseFields.DBFIELD_USERS).document(reportedUser.id!!)
-                .collection(DatabaseFields.DBFIELD_REPORTS).document(reporterUser.id!!).set(
+            getUserDocument(reportedUser.id!!).collection(DatabaseFields.DBFIELD_REPORTS)
+                .document(reporterUser.id!!).set(
                     hashMapOf(
                         DatabaseFields.DBFIELD_REPORTER to reporterUser.id,
                         DatabaseFields.DBFIELD_REASON to reason,
@@ -86,8 +85,8 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
     }
 
     override suspend fun hasBeenReported(reporterId: String, reportedId: String): Boolean {
-        val docIdRef = firestore.collection(DatabaseFields.DBFIELD_USERS).document(reportedId)
-            .collection(DatabaseFields.DBFIELD_REPORTS).document(reporterId).get().await()
+        val docIdRef = getUserDocument(reportedId).collection(DatabaseFields.DBFIELD_REPORTS)
+            .document(reporterId).get().await()
         return docIdRef.exists()
     }
 
@@ -174,6 +173,12 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
         val blocker = getUserDocument(by)
         return blocker.collection(DatabaseFields.DBFIELD_BLOCKS)
             .document(userId).get().await().exists()
+    }
+
+    override suspend fun getBlockedUsers(userId: String): List<String> {
+        val blockedUsers = getUserDocument(userId).collection(DatabaseFields.DBFIELD_BLOCKS).get()
+            .await()
+        return blockedUsers.documents.map { it.id }
     }
 
     /**
