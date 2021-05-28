@@ -191,6 +191,11 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
         return "${reasonField}: $reason\n${descField}: $description"
     }
 
+    override suspend fun unblock(blockerId: String, blockedId: String) {
+        getUserDocument(blockerId)
+            .collection(DatabaseFields.DBFIELD_BLOCKS).document(blockedId).delete()
+    }
+
     /**
      * Gets the document corresponding to a particular user
      *

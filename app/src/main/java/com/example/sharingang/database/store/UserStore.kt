@@ -150,4 +150,11 @@ interface UserStore {
      */
     suspend fun getBlockInformation(blockerId: String, blockedId: String): String
 
+    /**
+     * Unblocks a user by a particular user
+     * @param blockerId the user who wants to unblock someone
+     * @param blockedId the user to be unblocked
+     */
+    suspend fun unblock(blockerId: String, blockedId: String)
+
 }

@@ -44,7 +44,8 @@ class BlockedUsersFragment : Fragment() {
         currentUserId = currentUserProvider.getCurrentUserId()
         binding = FragmentBlockedUsersBinding.inflate(inflater, container, false)
         if (currentUserId != null) {
-            blockedUserAdapter = BlockedUserAdapter(requireContext(), listUsers)
+            blockedUserAdapter = BlockedUserAdapter(
+                requireContext(), listUsers, currentUserId!!, userRepository, lifecycleScope)
             binding.blockedUsersList.adapter = blockedUserAdapter
             val decorator = RecyclerViewDecorator()
             decorator.setRecyclerViewDecoration(margin = 10, binding.blockedUsersList)

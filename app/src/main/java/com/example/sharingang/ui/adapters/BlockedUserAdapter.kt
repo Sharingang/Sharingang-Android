@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.LifecycleCoroutineScope
@@ -41,9 +42,8 @@ class BlockedUserAdapter(private val context: Context, private var users: Mutabl
     class ViewHolder(userEntryView: View) : RecyclerView.ViewHolder(userEntryView) {
         var username: TextView = userEntryView.findViewById(R.id.blockedUserName)
         var imageView: ImageView = userEntryView.findViewById(R.id.blockedUserPic)
-        var goToProfile: ImageView = userEntryView.findViewById(R.id.gotoProfile)
-        var blockedInfo: ImageView = userEntryView.findViewById(R.id.buttonBlockInfo)
-        var btnUnblock: ImageView = userEntryView.findViewById(R.id.btnUnblock)
+        var blockedInfo: Button = userEntryView.findViewById(R.id.buttonBlockInfo)
+        var btnUnblock: Button = userEntryView.findViewById(R.id.btnUnblock)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -66,6 +66,8 @@ class BlockedUserAdapter(private val context: Context, private var users: Mutabl
                 lifecycleScope.launch(Dispatchers.IO) {
                     userRepository.unblock(currentUserId, user.id!!)
                 }
+                users.remove(user)
+                submitList(users)
             }
         }
     }
