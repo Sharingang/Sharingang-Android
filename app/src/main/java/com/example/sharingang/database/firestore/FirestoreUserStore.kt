@@ -179,7 +179,8 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
     override suspend fun getBlockedUsers(userId: String): List<String> {
         val blockedUsers = getUserDocument(userId).collection(DatabaseFields.DBFIELD_BLOCKS).get()
             .await()
-        return blockedUsers.documents.map { it.id }
+        return blockedUsers.documents.filter {
+            it.getBoolean(DatabaseFields.DBFIELD_ISBLOCKED) ?: false }.map { it.id }
     }
 
     override suspend fun getBlockInformation(blockerId: String, blockedId: String): String {

@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -44,7 +45,6 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
     class ViewHolder(userEntryView: View) : RecyclerView.ViewHolder(userEntryView) {
         var username: TextView = userEntryView.findViewById(R.id.chatPartnerUsername)
         var imageView: ImageView = userEntryView.findViewById(R.id.chatPartnerPic)
-        var profileButton: ImageButton = userEntryView.findViewById(R.id.gotoProfile)
         var indicator: TextView = userEntryView.findViewById(R.id.numUnread)
     }
 
@@ -100,7 +100,8 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
                 )
             )
         }
-        holder.profileButton.setOnClickListener {
+        holder.username.setTextColor(context.getColor(R.color.themeColor))
+        holder.username.setOnClickListener {
                 view -> view.findNavController().navigate(ChatsFragmentDirections
             .actionChatsFragmentToUserProfileFragment(user.id!!)
         )
