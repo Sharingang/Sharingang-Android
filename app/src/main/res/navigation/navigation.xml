@@ -236,5 +236,9 @@
         android:id="@+id/blockedUsersFragment"
         android:name="com.example.sharingang.ui.fragments.BlockedUsersFragment"
         android:label="@string/blocked_users"
-        tools:layout="@layout/fragment_blocked_users" />
+        tools:layout="@layout/fragment_blocked_users" >
+        <action
+            android:id="@+id/action_blockedUsersFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+    </fragment>
 </navigation>

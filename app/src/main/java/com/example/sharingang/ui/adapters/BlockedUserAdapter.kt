@@ -10,11 +10,13 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.sharingang.R
 import com.example.sharingang.database.repositories.UserRepository
 import com.example.sharingang.models.User
+import com.example.sharingang.ui.fragments.BlockedUsersFragmentDirections
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -40,7 +42,7 @@ class BlockedUserAdapter(private val context: Context, private var users: Mutabl
      * @param userEntryView the designed View for a user entry
      */
     class ViewHolder(userEntryView: View) : RecyclerView.ViewHolder(userEntryView) {
-        var username: TextView = userEntryView.findViewById(R.id.blockedUserName)
+        var username: Button = userEntryView.findViewById(R.id.blockedUserName)
         var imageView: ImageView = userEntryView.findViewById(R.id.blockedUserPic)
         var blockedInfo: Button = userEntryView.findViewById(R.id.buttonBlockInfo)
         var btnUnblock: Button = userEntryView.findViewById(R.id.btnUnblock)
@@ -68,6 +70,11 @@ class BlockedUserAdapter(private val context: Context, private var users: Mutabl
                 }
                 users.remove(user)
                 submitList(users)
+            }
+            holder.username.setOnClickListener { view -> view.findNavController().navigate(
+                BlockedUsersFragmentDirections.actionBlockedUsersFragmentToUserProfileFragment(
+                    user.id
+                ))
             }
         }
     }
