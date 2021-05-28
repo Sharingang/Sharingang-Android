@@ -129,4 +129,7 @@
     <string name="eng_dec">Dec</string>
     <string name="eng_today">Today%s</string>
     <string name="block_user">Block User</string>
+    <string name="hint_block_description">Why are you blocking this user? (optional)</string>
+    <string name="rude">Rudeness</string>
+    <string name="scamming">Scamming</string>
 </resources>

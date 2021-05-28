@@ -146,7 +146,7 @@ class UserProfileFragment : Fragment() {
         if (userType == UserType.SELF) binding.textEmail.text = loggedInUserEmail
         setVisibilities()
         setupViews()
-        setupReportButton()
+        setupReportAndBlockButton()
         setupRatingView()
         setupChatButton()
     }
@@ -165,7 +165,7 @@ class UserProfileFragment : Fragment() {
             binding.upfTopinfo, binding.imageView, binding.btnOpenCamera, binding.btnOpenGallery,
             binding.nameText, binding.textEmail, binding.ratingTextview,
             binding.offersRequestsGroup, binding.btnReport, binding.userItemList, binding.btnLogout,
-            binding.btnLogin, binding.btnChat
+            binding.btnLogin, binding.btnChat, binding.btnBlock
         ).forEach { view -> view.visibility = View.GONE }
     }
 
@@ -177,7 +177,7 @@ class UserProfileFragment : Fragment() {
             )
             UserType.VISITOR -> listOf(
                 binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList,
-                binding.btnReport, binding.btnChat, binding.offersRequestsGroup
+                binding.btnReport, binding.btnChat, binding.offersRequestsGroup, binding.btnBlock
             )
             UserType.SELF -> listOf(
                 binding.imageView,
@@ -264,7 +264,7 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    private fun setupReportButton() {
+    private fun setupReportAndBlockButton() {
         if (userType == UserType.VISITOR) {
             lifecycleScope.launch(Dispatchers.IO) {
                 val hasBeenReported =
@@ -282,6 +282,18 @@ class UserProfileFragment : Fragment() {
                     )
                 )
             }
+            if(userRepository.hasBeenBlocked(shownUserProfileId, currentUserId)) {
+                binding.btnBlock.visibility = View.GONE
+                binding.btnBlock.setOnClickListener { view ->
+                    view.findNavController().navigate(
+                        UserProfileFragmentDirections.actionUserProfileFragmentToBlockFragment(
+                            blockerId = currentUserId!!, blockedId = shownUserProfileId!!,
+                            blockedName = binding.nameText.text.toString()
+                        )
+                    )
+                }
+            }
+
         }
     }
 

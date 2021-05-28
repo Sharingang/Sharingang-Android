@@ -121,6 +121,10 @@
         <action
             android:id="@+id/action_userProfileFragment_to_messageFragment"
             app:destination="@id/messageFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_blockFragment"
+            app:destination="@id/blockFragment"
+            app:popUpTo="com.android.tools.property.panel.api.EnumValue$Companion$LOADING$1@1ceb7c4c" />
 
     </fragment>
     <fragment
@@ -199,4 +203,21 @@
             app:argType="com.example.sharingang.models.Item"
             app:nullable="false" />
     </activity>
+    <fragment
+        android:id="@+id/blockFragment"
+        android:name="com.example.sharingang.BlockFragment"
+        android:label="BlockFragment" >
+        <action
+            android:id="@+id/action_blockFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment"
+            app:popUpTo="@id/blockFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="blockerId"
+            app:argType="string" />
+        <argument android:name="blockedId"
+            app:argType="string" />
+        <argument android:name="blockedName"
+            app:argType="string" />
+    </fragment>
 </navigation>
