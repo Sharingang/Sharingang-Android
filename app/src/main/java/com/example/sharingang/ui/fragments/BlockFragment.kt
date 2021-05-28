@@ -67,13 +67,13 @@ class BlockFragment : Fragment() {
     private fun setupOkButton() {
         binding.buttonOk.setOnClickListener { view ->
             val checkedGroup = binding.blockRadioGroup.checkedRadioButtonId
-            val reason = reasonNameMap[checkedGroup]
+            val reason = reasonNameMap[checkedGroup] ?: ""
 
             val blockDescription = binding.blockDescription.text.toString()
             lifecycleScope.launch(Dispatchers.IO) {
                 userRepository.block(
-                    blockerUser = blockerId,
-                    reportedUser = blockedId,
+                    blockerId = blockerId,
+                    blockedId = blockedId,
                     reason = reason,
                     description = blockDescription,
                 )

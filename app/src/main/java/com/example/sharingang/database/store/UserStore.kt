@@ -113,4 +113,14 @@ interface UserStore {
      * @param with the target user
      */
     suspend fun clearNumUnread(userId: String, with: String)
+
+    /**
+     * Blocks a user by another particular user
+     *
+     * @param blockerId the user who wants to block the other
+     * @param blockedId the target user
+     * @param reason the reason for which a user is blocking another
+     * @param description the description given by the blocker
+     */
+    suspend fun block(blockerId: String, blockedId: String, reason: String, description: String)
 }
