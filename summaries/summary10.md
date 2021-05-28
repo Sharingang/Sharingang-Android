@@ -1,4 +1,4 @@
-# Week 2
+# Week 10
 
 ## Bastien
 This week I first worked on adding an intent to the notification so the users would go directly to the page of the new item posted when clicking on it.
