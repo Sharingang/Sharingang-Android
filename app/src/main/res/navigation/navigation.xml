@@ -195,6 +195,9 @@
             android:name="partnerProfilePictureUrl"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_messageFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/subscriptionFragment"
