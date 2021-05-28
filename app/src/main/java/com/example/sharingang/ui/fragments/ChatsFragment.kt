@@ -1,6 +1,5 @@
 package com.example.sharingang.ui.fragments
 
-import android.graphics.Rect
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,7 +8,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.sharingang.databinding.FragmentChatsBinding
 import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.models.User
