@@ -216,7 +216,7 @@
     <fragment
         android:id="@+id/blockFragment"
         android:name="com.example.sharingang.ui.fragments.BlockFragment"
-        android:label="BlockFragment" >
+        android:label="Block a User">
         <action
             android:id="@+id/action_blockFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment"
@@ -225,9 +225,11 @@
         <argument
             android:name="blockerId"
             app:argType="string" />
-        <argument android:name="blockedId"
+        <argument
+            android:name="blockedId"
             app:argType="string" />
-        <argument android:name="blockedName"
+        <argument
+            android:name="blockedName"
             app:argType="string" />
     </fragment>
     <fragment

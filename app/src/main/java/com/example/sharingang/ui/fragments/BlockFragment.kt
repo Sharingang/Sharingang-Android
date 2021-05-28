@@ -39,6 +39,7 @@ class BlockFragment : Fragment() {
         blockerId = args.blockerId
         blockedId = args.blockedId
         blockedName = args.blockedName
+        binding.textBlockedUsername.text = blockedName
         reasonNameMap = hashMapOf(
             binding.radioRude.id to getString(R.string.rude),
             binding.radioScam.id to getString(R.string.scamming),
