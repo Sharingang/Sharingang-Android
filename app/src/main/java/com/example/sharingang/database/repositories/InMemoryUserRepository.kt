@@ -108,6 +108,15 @@ class InMemoryUserRepository : UserRepository {
         numUnreadMap[userId] = hashMapOf(with to 0)
     }
 
+    override suspend fun block(
+        blockerId: String,
+        blockedId: String,
+        reason: String,
+        description: String
+    ) {
+        TODO("Not yet implemented")
+    }
+
     /**
      * Adds a new message to the messages list
      *

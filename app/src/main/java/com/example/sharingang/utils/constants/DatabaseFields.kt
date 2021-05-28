@@ -6,6 +6,7 @@ package com.example.sharingang.utils.constants
  */
 interface DatabaseFields {
     companion object {
+        const val DBFIELD_BLOCKS = "blocks"
         const val DBFIELD_UPDATED_AT = "updatedAt"
         const val DBFIELD_ITEMS = "items"
         const val DBFIELD_DATE = "date"

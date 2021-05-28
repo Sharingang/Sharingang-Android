@@ -104,4 +104,13 @@ class CachedUserRepository @Inject constructor(
     override suspend fun clearNumUnread(userId: String, with: String) {
         return store.clearNumUnread(userId, with)
     }
+
+    override suspend fun block(
+        blockerId: String,
+        blockedId: String,
+        reason: String,
+        description: String
+    ) {
+        return thenRefresh { store.block(blockerId, blockedId, reason, description) }
+    }
 }

@@ -154,6 +154,20 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
             .document(with).update(DatabaseFields.DBFIELD_NUM_UNREAD, 0)
     }
 
+    override suspend fun block(
+        blockerId: String,
+        blockedId: String,
+        reason: String,
+        description: String
+    ) {
+        val data = hashMapOf(
+            DatabaseFields.DBFIELD_REASON to reason,
+            DatabaseFields.DBFIELD_DESCRIPTION to description
+        )
+        val currentUserDocument = getUserDocument(blockerId)
+        currentUserDocument.collection(DatabaseFields.DBFIELD_BLOCKS).document(blockedId).set(data)
+    }
+
     /**
      * Gets the document corresponding to a particular user
      *
