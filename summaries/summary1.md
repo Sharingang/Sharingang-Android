@@ -11,7 +11,7 @@ My time estimate was way off because I had to look up a lot of resources to unde
 
 Next time, I'll know where some specific resources are so that I won't spend as much time looking for it.
 
-## Ben
+## Benedek
 
 Another feature added this week was setting the price of an item in a separate view. By clicking on "Set Price" from the Main Activity, we are prompted to another activity where we can type in the price. If nothing is typed then the default price set will be 0.0. After clicking on OK when having typed on the price, a new activity prompts (a summary of setting the price) that shows the price we typed in previously.
 

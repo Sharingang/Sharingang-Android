@@ -7,7 +7,7 @@ I then added a discount filter to the search fragment. My estimate was off for t
 
 Finally I spent most of my time to fix the bug where we couldn't edit images anymore. This took me around 5 hours, as estimated.
 
-## Ben
+## Benedek
 This week, I added two things. First, I added the message timestamps, so that users know when they have sent/received a particular message. Second, I added an indicator on the item which tells the user when a last item was updated (seconds, minutes, etc) to inform the potential buyer about some potentially outdated items (if the offer has been posted too long ago).
 I didn't have much trouble this week, except from the fact that I had to create a DateHelper, which makes some date calculations for us, and I also needed to access string resources from that class, which was a pain in the neck as I needed to provide a Context (hence changing many things here and there). My times estimates were accurate. I really didn't enjoy working on these features however.
 

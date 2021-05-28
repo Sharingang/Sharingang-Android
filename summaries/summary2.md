@@ -8,7 +8,7 @@ The feature is not finished because I needed to refactor the code, but I can't f
 
 My time estimate was again far from reality.
 
-## Ben
+## Benedek
 A feature that has been added this week is putting the price into the New and Edit item view. Therefore, when a user wants to create a new item or edit an already existing one, they can now also set the price and edit it, not only the title and the description. When the field for the price is left blank, a default price of 0.0 is set for that particular item.
 
 Overall this task was not too difficult and did not take a huge amount of time, however, issues have occurred with Cirrus which did not help us merge the pull request as fast as planned.

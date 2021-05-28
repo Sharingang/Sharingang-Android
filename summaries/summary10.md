@@ -6,7 +6,7 @@ This took a little bit longer than expected because I had to receive some help f
 I then added the possibility for users to put their items on sale to attract more buyers.
 My time estimates were pretty good this week, I just went a little bit overboard on the first task.
 
-## Ben
+## Benedek
 First of all, I improved the UI so that it does not look like the default Android UI, and added a global theme to the app. I also corrected two things related to the profile picture: (1) I removed the "Apply" button so that now the user choosing their picture don't need to apply their changes anymore (they are applied straightaway), and (2) I changed the style of the buttons for changing the profile picture to make it more visible to the user (it used to blend in sometimes when the chosen picture was too light/dark). I also added a feature where users can see the number of unread messages they have with another particular users (shown as a red indicator containing the number of unread messages). This feature also implied refactoring the code for the chat as it was not clean and it was depending on Firestore (which might be undesirable), for better modularity. My time estimates were pretty accurate this week, and I managed to finish everything I wanted to do.
 
 ## Lúcás
