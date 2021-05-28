@@ -16,10 +16,12 @@ import com.example.sharingang.models.User
 import com.example.sharingang.ui.adapters.BlockedUserAdapter
 import com.example.sharingang.ui.adapters.UserAdapter
 import com.example.sharingang.utils.RecyclerViewDecorator
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class BlockedUsersFragment : Fragment() {
 
     private lateinit var blockedUserAdapter: BlockedUserAdapter
@@ -45,10 +47,10 @@ class BlockedUsersFragment : Fragment() {
             blockedUserAdapter = BlockedUserAdapter(requireContext(), listUsers)
             binding.blockedUsersList.adapter = blockedUserAdapter
             val decorator = RecyclerViewDecorator()
-            decorator.setRecyclerViewDecoration(margin = 10,binding.blockedUsersList)
+            decorator.setRecyclerViewDecoration(margin = 10, binding.blockedUsersList)
             binding.blockedUsersList.layoutManager = LinearLayoutManager(requireContext())
             blockedUsersLiveData.observe(viewLifecycleOwner, { newList ->
-                (binding.blockedUsersList.adapter as UserAdapter).submitList(newList)
+                (binding.blockedUsersList.adapter as BlockedUserAdapter).submitList(newList)
             })
         }
         setupUI()

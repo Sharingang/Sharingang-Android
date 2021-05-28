@@ -4,7 +4,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.fragments.BlockedUsersFragment">
+        tools:context=".ui.fragments.BlockedUsersFragment"
+        android:padding="5dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/blockedUsersList"
