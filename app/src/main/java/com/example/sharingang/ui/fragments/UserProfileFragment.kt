@@ -355,8 +355,10 @@ class UserProfileFragment : Fragment() {
                 binding.btnBlock.setOnClickListener { view ->
                     view.findNavController().navigate(
                         UserProfileFragmentDirections
-                            .actionUserProfileFragmentToBlockFragment(currentUserId!!,
-                                shownUserProfileId!!, binding.nameText.text.toString())
+                            .actionUserProfileFragmentToBlockFragment(
+                                blockedName =  binding.nameText.text.toString(),
+                                blockedId = shownUserProfileId!!,
+                                blockerId = currentUserId!!)
                     )
                 }
             }
