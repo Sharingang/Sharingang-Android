@@ -31,7 +31,8 @@
             app:destination="@id/wishlistViewFragment" />
         <action
             android:id="@+id/action_itemsListFragment_to_chatsFragment"
-            app:destination="@id/chatsFragment" />
+            app:destination="@id/chatsFragment"
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_itemsListFragment_to_blockedUsersFragment2"
             app:destination="@id/blockedUsersFragment" />
@@ -177,9 +178,6 @@
         <action
             android:id="@+id/action_chatsFragment_to_messageFragment"
             app:destination="@id/messageFragment" />
-        <action
-            android:id="@+id/action_chatsFragment_to_userProfileFragment"
-            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/messageFragment"
@@ -197,7 +195,9 @@
             app:nullable="true" />
         <action
             android:id="@+id/action_messageFragment_to_userProfileFragment"
-            app:destination="@id/userProfileFragment" />
+            app:destination="@id/userProfileFragment"
+            app:popUpTo="@id/messageFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/subscriptionFragment"

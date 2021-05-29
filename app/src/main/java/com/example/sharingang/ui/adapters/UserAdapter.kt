@@ -100,11 +100,5 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
                 )
             )
         }
-        holder.username.setTextColor(context.getColor(R.color.themeColor))
-        holder.username.setOnClickListener {
-                view -> view.findNavController().navigate(ChatsFragmentDirections
-            .actionChatsFragmentToUserProfileFragment(user.id!!)
-        )
-        }
     }
 }
