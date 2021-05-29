@@ -167,7 +167,6 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
         )
         val currentUserDocument = getUserDocument(blockerId)
         currentUserDocument.collection(DatabaseFields.DBFIELD_BLOCKS).document(blockedId).set(data)
-        Log.e("xxx", "$blockerId has blocked $blockedId.")
     }
 
     override suspend fun hasBeenBlocked(userId: String, by: String): Boolean {

@@ -18,6 +18,8 @@ class InMemoryUserRepository : UserRepository {
     private val chatPartnersMap = hashMapOf<String, MutableList<String>>()
     private val messagesMap = hashMapOf<String, HashMap<String, MutableList<Chat>>>()
     private val numUnreadMap = hashMapOf<String, HashMap<String, Long>>()
+    private val blocks = hashMapOf<String, MutableList<String>>()
+    private val blockInfo = hashMapOf<String, HashMap<String, Pair<String, String>>>()
 
     override suspend fun get(id: String): User? {
         return usersMap[id]
@@ -126,23 +128,29 @@ class InMemoryUserRepository : UserRepository {
         reason: String,
         description: String
     ) {
-        TODO("Not yet implemented")
+        if(blocks[blockerId] == null) {
+            blocks[blockerId] = mutableListOf(blockedId)
+        }
+        else blocks[blockerId]!!.add(blockedId)
+        blockInfo[blockerId] = hashMapOf(blockedId to Pair(reason, description))
     }
 
     override suspend fun hasBeenBlocked(userId: String, by: String): Boolean {
-        TODO("Not yet implemented")
+        return if(blocks[by] == null) false else blocks[by]!!.contains(userId)
     }
 
     override suspend fun getBlockedUsers(userId: String): List<String> {
-        TODO("Not yet implemented")
+        return if(blocks[userId] == null) listOf() else blocks[userId]!!
     }
 
     override suspend fun getBlockInformation(blockerId: String, blockedId: String): String {
-        TODO("Not yet implemented")
+        val reason = blockInfo[blockerId]!![blockedId]!!.first
+        val description = blockInfo[blockerId]!![blockedId]!!.second
+        return "${reason}: $reason\n${description}: $description"
     }
 
     override suspend fun unblock(blockerId: String, blockedId: String) {
-        TODO("Not yet implemented")
+        blocks[blockerId]!!.remove(blockedId)
     }
 
     /**
