@@ -205,7 +205,8 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupRecyclerView(userId: String?) {
-        val adapter = setupItemAdapter()
+        val onView = { item: Item -> itemsViewModel.onViewItem(item) }
+        val adapter =  ItemsAdapter(ItemListener(onView), requireContext())
         binding.userItemList.adapter = adapter
         listOf(binding.offersButton, binding.requestsButton).forEach {
             it.setOnClickListener {
@@ -340,14 +341,6 @@ class UserProfileFragment : Fragment() {
             binding.imageView.setImageURI(currentImageUri)
             changeImage(currentImageUri)
         }
-    }
-
-    /**
-    * Setup the item adapter for a recycler view.
-    */
-    private fun setupItemAdapter(): ItemsAdapter {
-        val onView = { item: Item -> itemsViewModel.onViewItem(item) }
-        return ItemsAdapter(ItemListener(onView), requireContext())
     }
 
     /**
