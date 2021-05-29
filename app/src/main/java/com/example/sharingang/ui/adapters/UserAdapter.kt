@@ -27,10 +27,12 @@ import kotlinx.coroutines.launch
  * @property context the context
  * @property users the list of users we are adapting
  */
-class UserAdapter(private val context: Context, private var users: MutableList<User>,
-                  private val userRepository: UserRepository, private val currentUserId: String,
-                  private val lifecycleScope: LifecycleCoroutineScope,
-                  private val attachedFragment: ChatsFragment) :
+class UserAdapter(
+    private val context: Context, private var users: MutableList<User>,
+    private val userRepository: UserRepository, private val currentUserId: String,
+    private val lifecycleScope: LifecycleCoroutineScope,
+    private val attachedFragment: ChatsFragment
+) :
     RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
     init {
@@ -62,7 +64,9 @@ class UserAdapter(private val context: Context, private var users: MutableList<U
             lifecycleScope.launch(Dispatchers.Main) {
                 displayNumUnread(holder, user.id!!)
                 userRepository.setupConversationRefresh(currentUserId, user.id) {
-                    if(attachedFragment.isAdded) { displayNumUnread(holder, user.id) }
+                    if (attachedFragment.isAdded) {
+                        displayNumUnread(holder, user.id)
+                    }
                 }
             }
         }

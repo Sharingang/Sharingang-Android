@@ -72,8 +72,9 @@ class ChatsFragment : Fragment() {
                 val chatPartners = userRepository.getChatPartners(currentUserId!!)
                 chatPartners.forEach {
                     val user = userRepository.get(it)
-                    if(!userRepository.hasBeenBlocked(currentUserId!!, by = user!!.id!!) &&
-                            !userRepository.hasBeenBlocked(user.id!!, by = currentUserId!!)) {
+                    if (!userRepository.hasBeenBlocked(currentUserId!!, by = user!!.id!!) &&
+                        !userRepository.hasBeenBlocked(user.id!!, by = currentUserId!!)
+                    ) {
                         listUsers.add(user)
                     }
                 }

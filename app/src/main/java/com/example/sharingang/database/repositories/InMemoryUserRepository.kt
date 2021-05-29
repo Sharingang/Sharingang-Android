@@ -84,7 +84,12 @@ class InMemoryUserRepository : UserRepository {
         return mutableListOf()
     }
 
-    override suspend fun putMessage(from: String, to: String, message: String, date: Date): List<Chat> {
+    override suspend fun putMessage(
+        from: String,
+        to: String,
+        message: String,
+        date: Date
+    ): List<Chat> {
         val chat = Chat(from, to, message, date)
         if (!messagesMap.containsKey(from) || !messagesMap.containsKey(to)) {
             messagesMap[from] = hashMapOf(to to mutableListOf(chat))
@@ -128,19 +133,18 @@ class InMemoryUserRepository : UserRepository {
         reason: String,
         description: String
     ) {
-        if(blocks[blockerId] == null) {
+        if (blocks[blockerId] == null) {
             blocks[blockerId] = mutableListOf(blockedId)
-        }
-        else blocks[blockerId]!!.add(blockedId)
+        } else blocks[blockerId]!!.add(blockedId)
         blockInfo[blockerId] = hashMapOf(blockedId to Pair(reason, description))
     }
 
     override suspend fun hasBeenBlocked(userId: String, by: String): Boolean {
-        return if(blocks[by] == null) false else blocks[by]!!.contains(userId)
+        return if (blocks[by] == null) false else blocks[by]!!.contains(userId)
     }
 
     override suspend fun getBlockedUsers(userId: String): List<String> {
-        return if(blocks[userId] == null) listOf() else blocks[userId]!!
+        return if (blocks[userId] == null) listOf() else blocks[userId]!!
     }
 
     override suspend fun getBlockInformation(blockerId: String, blockedId: String): String {

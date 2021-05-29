@@ -92,8 +92,9 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
     }
 
     override suspend fun getChatPartners(userId: String): List<String> {
-        val chatPartners = getUserDocument(userId).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).get()
-            .await()
+        val chatPartners =
+            getUserDocument(userId).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).get()
+                .await()
         return chatPartners.documents.map { it.id }
     }
 
@@ -111,7 +112,12 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
         }
     }
 
-    override suspend fun putMessage(from: String, to: String, message: String, date: Date): List<Chat> {
+    override suspend fun putMessage(
+        from: String,
+        to: String,
+        message: String,
+        date: Date
+    ): List<Chat> {
         val dataMaps = generateDataMaps(from, to, message, date)
         val data = dataMaps.first
         val lastTimeChatCurrent = dataMaps.second
@@ -179,7 +185,8 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
         val blockedUsers = getUserDocument(userId).collection(DatabaseFields.DBFIELD_BLOCKS).get()
             .await()
         return blockedUsers.documents.filter {
-            it.getBoolean(DatabaseFields.DBFIELD_ISBLOCKED) ?: false }.map { it.id }
+            it.getBoolean(DatabaseFields.DBFIELD_ISBLOCKED) ?: false
+        }.map { it.id }
     }
 
     override suspend fun getBlockInformation(blockerId: String, blockedId: String): String {

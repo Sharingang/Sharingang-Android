@@ -60,8 +60,10 @@ class BlockFragment : Fragment() {
 
     private fun setupCancelButton() {
         binding.buttonCancel.setOnClickListener { view ->
-            view.findNavController().navigate(BlockFragmentDirections
-                .actionBlockFragmentToUserProfileFragment(blockedId))
+            view.findNavController().navigate(
+                BlockFragmentDirections
+                    .actionBlockFragmentToUserProfileFragment(blockedId)
+            )
         }
     }
 

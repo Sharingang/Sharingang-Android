@@ -163,10 +163,11 @@ class MessageFragment : Fragment() {
      */
     private fun setupUserProfileButton() {
         binding.chatPartnerUsername.setTextColor(requireContext().getColor(R.color.themeColor))
-        binding.chatPartnerUsername.setOnClickListener {
-                view -> view.findNavController().navigate(MessageFragmentDirections
-            .actionMessageFragmentToUserProfileFragment(partnerId)
-        )
+        binding.chatPartnerUsername.setOnClickListener { view ->
+            view.findNavController().navigate(
+                MessageFragmentDirections
+                    .actionMessageFragmentToUserProfileFragment(partnerId)
+            )
         }
     }
 }

@@ -343,9 +343,6 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    /**
-     * Sets up what the block button does
-     */
     private fun setupBlockButton() {
         lifecycleScope.launch(Dispatchers.Main) {
             val blocked = userRepository.hasBeenBlocked(shownUserProfileId!!, by = currentUserId!!)

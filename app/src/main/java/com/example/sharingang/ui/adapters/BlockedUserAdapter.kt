@@ -27,9 +27,11 @@ import kotlinx.coroutines.launch
  * @property context the context
  * @property users the list of users we are adapting
  */
-class BlockedUserAdapter(private val context: Context, private var users: MutableList<User>,
-                         private val currentUserId: String, private val userRepository: UserRepository,
-                         private val lifecycleScope: LifecycleCoroutineScope) :
+class BlockedUserAdapter(
+    private val context: Context, private var users: MutableList<User>,
+    private val currentUserId: String, private val userRepository: UserRepository,
+    private val lifecycleScope: LifecycleCoroutineScope
+) :
     RecyclerView.Adapter<BlockedUserAdapter.ViewHolder>() {
 
     init {
@@ -49,9 +51,11 @@ class BlockedUserAdapter(private val context: Context, private var users: Mutabl
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(
-            R.layout.blocked_user_entry, parent, false
-        ))
+        return ViewHolder(
+            LayoutInflater.from(context).inflate(
+                R.layout.blocked_user_entry, parent, false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -69,10 +73,12 @@ class BlockedUserAdapter(private val context: Context, private var users: Mutabl
                 users.remove(user)
                 submitList(users)
             }
-            holder.username.setOnClickListener { view -> view.findNavController().navigate(
-                BlockedUsersFragmentDirections.actionBlockedUsersFragmentToUserProfileFragment(
-                    user.id
-                ))
+            holder.username.setOnClickListener { view ->
+                view.findNavController().navigate(
+                    BlockedUsersFragmentDirections.actionBlockedUsersFragmentToUserProfileFragment(
+                        user.id
+                    )
+                )
             }
         }
     }
