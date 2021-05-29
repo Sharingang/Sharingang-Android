@@ -189,6 +189,8 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
             .document(blockedId).get().await()
         val reason = document.getString(reasonField)
         val description = document.getString(descField)
+        reasonField[0].uppercase()
+        descField[0].uppercase()
         return "${reasonField}: $reason\n${descField}: $description"
     }
 

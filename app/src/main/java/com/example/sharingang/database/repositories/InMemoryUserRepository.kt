@@ -146,7 +146,7 @@ class InMemoryUserRepository : UserRepository {
     override suspend fun getBlockInformation(blockerId: String, blockedId: String): String {
         val reason = blockInfo[blockerId]!![blockedId]!!.first
         val description = blockInfo[blockerId]!![blockedId]!!.second
-        return "${reason}: $reason\n${description}: $description"
+        return "Reason: $reason\nDescription: $description"
     }
 
     override suspend fun unblock(blockerId: String, blockedId: String) {
