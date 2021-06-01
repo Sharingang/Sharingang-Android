@@ -1,4 +1,4 @@
-# Week 2
+# Week 9
 
 ## Bastien
 This week I started by finishing my last draft PR to subscribe to different categories.
@@ -7,7 +7,7 @@ Then I added logic to be able to receive push notifications when a new item is c
 My time estimates were pretty much on point for this week's tasks.
 
 
-## Ben
+## Benedek
 This week I added the chat to the app.
 Now the users are able to chat in order to communicate about 
 items or meeting points.
