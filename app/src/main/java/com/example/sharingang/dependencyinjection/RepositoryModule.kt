@@ -46,6 +46,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
 
+    private const val emulatorIP = "10.0.2.2"
+
     private val useEmulator: Boolean
         get() {
             return BuildConfig.DEBUG
@@ -101,7 +103,7 @@ object RepositoryModule {
             Log.d("RepositoryModule", "Using Firestore emulator.")
             // 10.0.2.2 is the special IP address to connect to the 'localhost' of
             // the host computer from an Android emulator.
-            firestore.useEmulator("10.0.2.2", 8080)
+            firestore.useEmulator(emulatorIP, 8080)
 
             // Because the Firebase emulator doesn't persist data, we disable the local persistence
             // to avoid conflicting data.
@@ -121,7 +123,7 @@ object RepositoryModule {
         val storage = Firebase.storage
         if (useEmulator) {
             Log.d("RepositoryModule", "Using FirebaseStorage emulator.")
-            storage.useEmulator("10.0.2.2", 9199)
+            storage.useEmulator(emulatorIP, 9199)
         } else {
             Log.d("RepositoryModule", "Using production FirebaseStorage.")
         }
@@ -134,7 +136,7 @@ object RepositoryModule {
         val auth = Firebase.auth
         if (useEmulator) {
             Log.d("RepositoryModule", "Using FirebaseAuth emulator.")
-            auth.useEmulator("10.0.2.2", 9099)
+            auth.useEmulator(emulatorIP, 9099)
         } else {
             Log.d("RepositoryModule", "Using production FirebaseAuth.")
         }
@@ -147,7 +149,7 @@ object RepositoryModule {
         val authUI = AuthUI.getInstance()
         if (useEmulator) {
             Log.d("RepositoryModule", "Using FirebaseAuth emulator.")
-            authUI.useEmulator("10.0.2.2", 9099)
+            authUI.useEmulator(emulatorIP, 9099)
         } else {
             Log.d("RepositoryModule", "Using production FirebaseAuth.")
         }
@@ -160,7 +162,7 @@ object RepositoryModule {
         val functions = Firebase.functions("europe-west6") // Zurich
         if (useEmulator) {
             Log.d("RepositoryModule", "Using FirebaseFunctions emulator.")
-            functions.useEmulator("10.0.2.2", 5001)
+            functions.useEmulator(emulatorIP, 5001)
         } else {
             Log.d("RepositoryModule", "Using production FirebaseFunctions.")
         }
