@@ -2,6 +2,7 @@ package com.example.sharingang.database.firestore
 
 import android.provider.ContactsContract
 import android.util.Log
+import androidx.room.Database
 import com.example.sharingang.models.User
 import com.example.sharingang.database.store.UserStore
 import com.example.sharingang.models.Chat
@@ -66,9 +67,8 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
         reason: String
     ): Boolean {
         return try {
-            firestore
-                .collection(DatabaseFields.DBFIELD_USERS).document(reportedUser.id!!)
-                .collection(DatabaseFields.DBFIELD_REPORTS).document(reporterUser.id!!).set(
+            getUserDocument(reportedUser.id!!).collection(DatabaseFields.DBFIELD_REPORTS)
+                .document(reporterUser.id!!).set(
                     hashMapOf(
                         DatabaseFields.DBFIELD_REPORTER to reporterUser.id,
                         DatabaseFields.DBFIELD_REASON to reason,
@@ -86,14 +86,15 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
     }
 
     override suspend fun hasBeenReported(reporterId: String, reportedId: String): Boolean {
-        val docIdRef = firestore.collection(DatabaseFields.DBFIELD_USERS).document(reportedId)
-            .collection(DatabaseFields.DBFIELD_REPORTS).document(reporterId).get().await()
+        val docIdRef = getUserDocument(reportedId).collection(DatabaseFields.DBFIELD_REPORTS)
+            .document(reporterId).get().await()
         return docIdRef.exists()
     }
 
     override suspend fun getChatPartners(userId: String): List<String> {
-        val chatPartners = getUserDocument(userId).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).get()
-            .await()
+        val chatPartners =
+            getUserDocument(userId).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).get()
+                .await()
         return chatPartners.documents.map { it.id }
     }
 
@@ -111,7 +112,12 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
         }
     }
 
-    override suspend fun putMessage(from: String, to: String, message: String, date: Date): List<Chat> {
+    override suspend fun putMessage(
+        from: String,
+        to: String,
+        message: String,
+        date: Date
+    ): List<Chat> {
         val dataMaps = generateDataMaps(from, to, message, date)
         val data = dataMaps.first
         val lastTimeChatCurrent = dataMaps.second
@@ -152,6 +158,52 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
         val currentUserDocument = getUserDocument(userId)
         currentUserDocument.collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS)
             .document(with).update(DatabaseFields.DBFIELD_NUM_UNREAD, 0)
+    }
+
+    override suspend fun block(
+        blockerId: String,
+        blockedId: String,
+        reason: String,
+        description: String
+    ) {
+        val data = hashMapOf(
+            DatabaseFields.DBFIELD_REASON to reason,
+            DatabaseFields.DBFIELD_DESCRIPTION to description,
+            DatabaseFields.DBFIELD_ISBLOCKED to true
+        )
+        val currentUserDocument = getUserDocument(blockerId)
+        currentUserDocument.collection(DatabaseFields.DBFIELD_BLOCKS).document(blockedId).set(data)
+    }
+
+    override suspend fun hasBeenBlocked(userId: String, by: String): Boolean {
+        val blocker = getUserDocument(by)
+        return blocker.collection(DatabaseFields.DBFIELD_BLOCKS)
+            .document(userId).get().await().getBoolean(DatabaseFields.DBFIELD_ISBLOCKED) ?: false
+    }
+
+    override suspend fun getBlockedUsers(userId: String): List<String> {
+        val blockedUsers = getUserDocument(userId).collection(DatabaseFields.DBFIELD_BLOCKS).get()
+            .await()
+        return blockedUsers.documents.filter {
+            it.getBoolean(DatabaseFields.DBFIELD_ISBLOCKED) ?: false
+        }.map { it.id }
+    }
+
+    override suspend fun getBlockInformation(blockerId: String, blockedId: String): String {
+        val reasonField = DatabaseFields.DBFIELD_REASON
+        val descField = DatabaseFields.DBFIELD_DESCRIPTION
+        val document = getUserDocument(blockerId).collection(DatabaseFields.DBFIELD_BLOCKS)
+            .document(blockedId).get().await()
+        val reason = document.getString(reasonField)
+        val description = document.getString(descField)
+        return "Reason: $reason ($description)"
+    }
+
+    override suspend fun unblock(blockerId: String, blockedId: String) {
+        getUserDocument(blockerId)
+            .collection(DatabaseFields.DBFIELD_BLOCKS).document(blockedId).update(
+                DatabaseFields.DBFIELD_ISBLOCKED, false
+            )
     }
 
     /**

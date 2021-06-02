@@ -18,6 +18,8 @@ class InMemoryUserRepository : UserRepository {
     private val chatPartnersMap = hashMapOf<String, MutableList<String>>()
     private val messagesMap = hashMapOf<String, HashMap<String, MutableList<Chat>>>()
     private val numUnreadMap = hashMapOf<String, HashMap<String, Long>>()
+    private val blocks = hashMapOf<String, MutableList<String>>()
+    private val blockInfo = hashMapOf<String, HashMap<String, Pair<String, String>>>()
 
     override suspend fun get(id: String): User? {
         return usersMap[id]
@@ -82,10 +84,27 @@ class InMemoryUserRepository : UserRepository {
         return mutableListOf()
     }
 
-    override suspend fun putMessage(from: String, to: String, message: String, date: Date): List<Chat> {
+    override suspend fun putMessage(
+        from: String,
+        to: String,
+        message: String,
+        date: Date
+    ): List<Chat> {
         val chat = Chat(from, to, message, date)
-        updateMessages(from, to, chat)
-        updateChatPartners(from, to)
+        if (!messagesMap.containsKey(from) || !messagesMap.containsKey(to)) {
+            messagesMap[from] = hashMapOf(to to mutableListOf(chat))
+            messagesMap[to] = hashMapOf(from to mutableListOf(chat))
+        } else {
+            messagesMap[from]!![to]!!.add(chat)
+            messagesMap[to]!![from]!!.add(chat)
+        }
+        if (!chatPartnersMap.containsKey(from) || !messagesMap.containsKey(to)) {
+            chatPartnersMap[from] = mutableListOf(to)
+            chatPartnersMap[to] = mutableListOf(from)
+        } else if (!chatPartnersMap[from]!!.contains(to) && !chatPartnersMap[to]!!.contains(from)) {
+            chatPartnersMap[from]!!.add(to)
+            chatPartnersMap[to]!!.add(from)
+        }
         updateUnreads(from, to)
         return messagesMap[from]!![to]!!
     }
@@ -108,37 +127,34 @@ class InMemoryUserRepository : UserRepository {
         numUnreadMap[userId] = hashMapOf(with to 0)
     }
 
-    /**
-     * Adds a new message to the messages list
-     *
-     * @param from the sender
-     * @param to the receiver
-     * @param chat the chat element
-     */
-    private fun updateMessages(from: String, to: String, chat: Chat) {
-        if (!messagesMap.containsKey(from) || !messagesMap.containsKey(to)) {
-            messagesMap[from] = hashMapOf(to to mutableListOf(chat))
-            messagesMap[to] = hashMapOf(from to mutableListOf(chat))
-        } else {
-            messagesMap[from]!![to]!!.add(chat)
-            messagesMap[to]!![from]!!.add(chat)
-        }
+    override suspend fun block(
+        blockerId: String,
+        blockedId: String,
+        reason: String,
+        description: String
+    ) {
+        if (blocks[blockerId] == null) {
+            blocks[blockerId] = mutableListOf(blockedId)
+        } else blocks[blockerId]!!.add(blockedId)
+        blockInfo[blockerId] = hashMapOf(blockedId to Pair(reason, description))
     }
 
-    /**
-     * Updates the chat partners of two messaging users
-     *
-     * @param from the sender
-     * @param to the receiver
-     */
-    private fun updateChatPartners(from: String, to: String) {
-        if (!chatPartnersMap.containsKey(from) || !messagesMap.containsKey(to)) {
-            chatPartnersMap[from] = mutableListOf(to)
-            chatPartnersMap[to] = mutableListOf(from)
-        } else if (!chatPartnersMap[from]!!.contains(to) && !chatPartnersMap[to]!!.contains(from)) {
-            chatPartnersMap[from]!!.add(to)
-            chatPartnersMap[to]!!.add(from)
-        }
+    override suspend fun hasBeenBlocked(userId: String, by: String): Boolean {
+        return if (blocks[by] == null) false else blocks[by]!!.contains(userId)
+    }
+
+    override suspend fun getBlockedUsers(userId: String): List<String> {
+        return if (blocks[userId] == null) listOf() else blocks[userId]!!
+    }
+
+    override suspend fun getBlockInformation(blockerId: String, blockedId: String): String {
+        val reason = blockInfo[blockerId]!![blockedId]!!.first
+        val description = blockInfo[blockerId]!![blockedId]!!.second
+        return "Reason: $reason\nDescription: $description"
+    }
+
+    override suspend fun unblock(blockerId: String, blockedId: String) {
+        blocks[blockerId]!!.remove(blockedId)
     }
 
     /**

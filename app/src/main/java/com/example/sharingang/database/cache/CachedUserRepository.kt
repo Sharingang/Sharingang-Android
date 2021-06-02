@@ -26,17 +26,13 @@ class CachedUserRepository @Inject constructor(
         return userDao.getUserLiveData(id)
     }
 
-    private suspend fun doRefreshUsers(): List<User> =
-        // This is necessary, since you want to avoid doing this work on the main thread
+
+    override suspend fun refreshUsers() {
         withContext(Dispatchers.IO) {
             val newUsers = store.getAll()
             userDao.replace(newUsers)
             newUsers
         }
-
-
-    override suspend fun refreshUsers() {
-        doRefreshUsers()
     }
 
     private suspend fun <T> thenRefresh(fn: suspend () -> T): T {
@@ -57,7 +53,11 @@ class CachedUserRepository @Inject constructor(
     }
 
     override suspend fun getAll(): List<User> {
-        return doRefreshUsers()
+        return withContext(Dispatchers.IO) {
+            val newUsers = store.getAll()
+            userDao.replace(newUsers)
+            newUsers
+        }
     }
 
     override suspend fun update(user: User): Boolean {
@@ -104,4 +104,30 @@ class CachedUserRepository @Inject constructor(
     override suspend fun clearNumUnread(userId: String, with: String) {
         return store.clearNumUnread(userId, with)
     }
+
+    override suspend fun block(
+        blockerId: String,
+        blockedId: String,
+        reason: String,
+        description: String
+    ) {
+        return thenRefresh { store.block(blockerId, blockedId, reason, description) }
+    }
+
+    override suspend fun hasBeenBlocked(userId: String, by: String): Boolean {
+        return thenRefresh { store.hasBeenBlocked(userId, by) }
+    }
+
+    override suspend fun getBlockedUsers(userId: String): List<String> {
+        return thenRefresh { store.getBlockedUsers(userId) }
+    }
+
+    override suspend fun getBlockInformation(blockerId: String, blockedId: String): String {
+        return thenRefresh { store.getBlockInformation(blockerId, blockedId) }
+    }
+
+    override suspend fun unblock(blockerId: String, blockedId: String) {
+        return thenRefresh { store.unblock(blockerId, blockedId) }
+    }
+
 }

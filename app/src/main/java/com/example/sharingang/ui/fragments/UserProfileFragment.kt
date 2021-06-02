@@ -146,7 +146,7 @@ class UserProfileFragment : Fragment() {
         if (userType == UserType.SELF) binding.textEmail.text = loggedInUserEmail
         setVisibilities()
         setupViews()
-        setupReportButton()
+        setupReportAndBlockButton()
         setupRatingView()
         setupChatButton()
     }
@@ -165,7 +165,7 @@ class UserProfileFragment : Fragment() {
             binding.upfTopinfo, binding.imageView, binding.btnOpenCamera, binding.btnOpenGallery,
             binding.nameText, binding.textEmail, binding.ratingTextview,
             binding.offersRequestsGroup, binding.btnReport, binding.userItemList, binding.btnLogout,
-            binding.btnLogin, binding.btnChat
+            binding.btnLogin, binding.btnChat, binding.btnBlock
         ).forEach { view -> view.visibility = View.GONE }
     }
 
@@ -173,12 +173,10 @@ class UserProfileFragment : Fragment() {
         val visibleViews = when (userType) {
             UserType.LOGGED_OUT -> listOf(
                 binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList,
-                binding.offersRequestsGroup
-            )
+                binding.offersRequestsGroup)
             UserType.VISITOR -> listOf(
                 binding.imageView, binding.nameText, binding.ratingTextview, binding.userItemList,
-                binding.btnReport, binding.btnChat, binding.offersRequestsGroup
-            )
+                binding.btnReport, binding.btnChat, binding.offersRequestsGroup, binding.btnBlock)
             UserType.SELF -> listOf(
                 binding.imageView,
                 binding.nameText,
@@ -188,11 +186,13 @@ class UserProfileFragment : Fragment() {
                 binding.btnLogout,
                 binding.offersRequestsGroup,
                 binding.btnOpenGallery,
-                binding.btnOpenCamera
-            )
+                binding.btnOpenCamera)
             else -> listOf(binding.upfTopinfo, binding.btnLogin)
         }
-        visibleViews.forEach { view -> view.visibility = View.VISIBLE }
+        visibleViews.forEach { view ->
+            if (view != binding.btnBlock && view != binding.btnReport && view != binding.btnChat)
+                view.visibility = View.VISIBLE
+        }
     }
 
     private fun setupRatingView() {
@@ -205,7 +205,8 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupRecyclerView(userId: String?) {
-        val adapter = setupItemAdapter()
+        val onView = { item: Item -> itemsViewModel.onViewItem(item) }
+        val adapter =  ItemsAdapter(ItemListener(onView), requireContext())
         binding.userItemList.adapter = adapter
         listOf(binding.offersButton, binding.requestsButton).forEach {
             it.setOnClickListener {
@@ -264,7 +265,7 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    private fun setupReportButton() {
+    private fun setupReportAndBlockButton() {
         if (userType == UserType.VISITOR) {
             lifecycleScope.launch(Dispatchers.IO) {
                 val hasBeenReported =
@@ -282,6 +283,7 @@ class UserProfileFragment : Fragment() {
                     )
                 )
             }
+            setupBlockButton()
         }
     }
 
@@ -311,6 +313,16 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setupChatButton() {
+        if(currentUserId != null) {
+            lifecycleScope.launch(Dispatchers.IO) {
+                if(!userRepository.hasBeenBlocked(shownUserProfileId!!, by = currentUserId!!)
+                    && userType == UserType.VISITOR) {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        binding.btnChat.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
         binding.btnChat.setOnClickListener {
             view?.findNavController()?.navigate(
                 UserProfileFragmentDirections
@@ -331,11 +343,22 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    /**
-    * Setup the item adapter for a recycler view.
-    */
-    private fun setupItemAdapter(): ItemsAdapter {
-        val onView = { item: Item -> itemsViewModel.onViewItem(item) }
-        return ItemsAdapter(ItemListener(onView), requireContext())
+    private fun setupBlockButton() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            val blocked = userRepository.hasBeenBlocked(shownUserProfileId!!, by = currentUserId!!)
+            binding.btnBlock.visibility =
+                if(blocked) View.GONE else View.VISIBLE
+            if(!blocked) {
+                binding.btnBlock.setOnClickListener { view ->
+                    view.findNavController().navigate(
+                        UserProfileFragmentDirections
+                            .actionUserProfileFragmentToBlockFragment(
+                                blockedName =  binding.nameText.text.toString(),
+                                blockedId = shownUserProfileId!!,
+                                blockerId = currentUserId!!)
+                    )
+                }
+            }
+        }
     }
 }

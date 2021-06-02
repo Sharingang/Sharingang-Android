@@ -113,4 +113,48 @@ interface UserStore {
      * @param with the target user
      */
     suspend fun clearNumUnread(userId: String, with: String)
+
+    /**
+     * Blocks a user by another particular user
+     *
+     * @param blockerId the user who wants to block the other
+     * @param blockedId the target user
+     * @param reason the reason for which a user is blocking another
+     * @param description the description given by the blocker
+     */
+    suspend fun block(blockerId: String, blockedId: String, reason: String, description: String)
+
+    /**
+     * Checks if a user has already been blocked by another particular user
+     *
+     * @param userId the user to check if they were blocked
+     * @param by the potential blocker user id
+     * @return whether the user has already been blocked
+     */
+    suspend fun hasBeenBlocked(userId: String, by: String): Boolean
+
+    /**
+     * Retrieves the list of blocked users of a particular user
+     *
+     * @param userId the user whose list we want to retrieve
+     * @return the list of all blocked users
+     */
+    suspend fun getBlockedUsers(userId: String): List<String>
+
+    /**
+     * Retrieves the information about a user blocking another user
+     *
+     * @param blockerId the user who blocked the other
+     * @param blockedId the blocked user
+     * @return the reason and description of the block
+     */
+    suspend fun getBlockInformation(blockerId: String, blockedId: String): String
+
+    /**
+     * Unblocks a user by a particular user
+     * @param blockerId the user who wants to unblock someone
+     * @param blockedId the user to be unblocked
+     */
+    suspend fun unblock(blockerId: String, blockedId: String)
+
 }
