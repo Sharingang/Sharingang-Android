@@ -61,12 +61,12 @@ class DateHelper(private val context: Context?) {
     private var unitStringMap: HashMap<Measure, String>? =
         hashMapOf(
             Measure.SECONDS to (context?.getString(R.string.eng_seconds) ?: "s"),
-            Measure.MINUTES to (context?.getString(R.string.eng_seconds) ?: "min"),
-            Measure.HOURS to (context?.getString(R.string.eng_seconds) ?: "h"),
-            Measure.DAYS to (context?.getString(R.string.eng_seconds) ?: "d"),
-            Measure.WEEKS to (context?.getString(R.string.eng_seconds) ?: "w"),
-            Measure.MONTHS to (context?.getString(R.string.eng_seconds) ?: "mon"),
-            Measure.YEARS to (context?.getString(R.string.eng_seconds) ?: "y"),
+            Measure.MINUTES to (context?.getString(R.string.eng_minutes) ?: "min"),
+            Measure.HOURS to (context?.getString(R.string.eng_hours) ?: "h"),
+            Measure.DAYS to (context?.getString(R.string.eng_days) ?: "d"),
+            Measure.WEEKS to (context?.getString(R.string.eng_weeks) ?: "w"),
+            Measure.MONTHS to (context?.getString(R.string.eng_months) ?: "mon"),
+            Measure.YEARS to (context?.getString(R.string.eng_years) ?: "y"),
         )
 
     /**

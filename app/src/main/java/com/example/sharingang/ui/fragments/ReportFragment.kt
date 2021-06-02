@@ -64,7 +64,7 @@ class ReportFragment : Fragment() {
     private fun setupButtonOk() {
         binding.buttonOk.setOnClickListener { view ->
             val checkedGroup = binding.reportRadioGroup.checkedRadioButtonId
-            val reason = getReasonName(checkedGroup)
+            val reason = getReportReasonName(checkedGroup)
 
             val reportDescription = binding.reportDescription.text.toString()
             lifecycleScope.launch(Dispatchers.IO) {
@@ -85,7 +85,7 @@ class ReportFragment : Fragment() {
         }
     }
 
-    private fun getReasonName(radioButtonId: Int): String {
+    private fun getReportReasonName(radioButtonId: Int): String {
         return when (radioButtonId) {
             binding.radioUsername.id -> getString(R.string.eng_inappropriate_username)
             binding.radioProfilePicture.id -> getString(R.string.eng_inappropriate_profile_picture)
