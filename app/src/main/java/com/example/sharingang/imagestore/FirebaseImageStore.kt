@@ -2,8 +2,7 @@ package com.example.sharingang.imagestore
 
 import android.net.Uri
 import com.example.sharingang.auth.CurrentUserProvider
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
@@ -13,9 +12,9 @@ import javax.inject.Inject
  * @property currentUserProvider the current user provider
  */
 class FirebaseImageStore @Inject constructor(
-    private val currentUserProvider: CurrentUserProvider
+    private val currentUserProvider: CurrentUserProvider,
+    private val storage: FirebaseStorage
 ) : ImageStore {
-    private val storage = Firebase.storage
 
     override suspend fun store(imageUri: Uri): Uri? {
         val userId = currentUserProvider.getCurrentUserId() ?: return null

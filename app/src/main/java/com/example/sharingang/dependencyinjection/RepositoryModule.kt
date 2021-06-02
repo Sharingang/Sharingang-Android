@@ -30,6 +30,8 @@ import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -43,6 +45,8 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
+
+    private const val emulatorIP = "10.0.2.2"
 
     private val useEmulator: Boolean
         get() {
@@ -99,7 +103,7 @@ object RepositoryModule {
             Log.d("RepositoryModule", "Using Firestore emulator.")
             // 10.0.2.2 is the special IP address to connect to the 'localhost' of
             // the host computer from an Android emulator.
-            firestore.useEmulator("10.0.2.2", 8080)
+            firestore.useEmulator(emulatorIP, 8080)
 
             // Because the Firebase emulator doesn't persist data, we disable the local persistence
             // to avoid conflicting data.
@@ -115,11 +119,24 @@ object RepositoryModule {
 
     @Singleton
     @Provides
+    fun provideFirebaseStorage(): FirebaseStorage {
+        val storage = Firebase.storage
+        if (useEmulator) {
+            Log.d("RepositoryModule", "Using FirebaseStorage emulator.")
+            storage.useEmulator(emulatorIP, 9199)
+        } else {
+            Log.d("RepositoryModule", "Using production FirebaseStorage.")
+        }
+        return storage
+    }
+
+    @Singleton
+    @Provides
     fun provideFirebaseAuth(): FirebaseAuth {
         val auth = Firebase.auth
         if (useEmulator) {
             Log.d("RepositoryModule", "Using FirebaseAuth emulator.")
-            auth.useEmulator("10.0.2.2", 9099)
+            auth.useEmulator(emulatorIP, 9099)
         } else {
             Log.d("RepositoryModule", "Using production FirebaseAuth.")
         }
@@ -132,7 +149,7 @@ object RepositoryModule {
         val authUI = AuthUI.getInstance()
         if (useEmulator) {
             Log.d("RepositoryModule", "Using FirebaseAuth emulator.")
-            authUI.useEmulator("10.0.2.2", 9099)
+            authUI.useEmulator(emulatorIP, 9099)
         } else {
             Log.d("RepositoryModule", "Using production FirebaseAuth.")
         }
@@ -145,7 +162,7 @@ object RepositoryModule {
         val functions = Firebase.functions("europe-west6") // Zurich
         if (useEmulator) {
             Log.d("RepositoryModule", "Using FirebaseFunctions emulator.")
-            functions.useEmulator("10.0.2.2", 5001)
+            functions.useEmulator(emulatorIP, 5001)
         } else {
             Log.d("RepositoryModule", "Using production FirebaseFunctions.")
         }
