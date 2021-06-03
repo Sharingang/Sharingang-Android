@@ -286,14 +286,9 @@ class DetailedItemFragment : Fragment() {
      * Sets the text for when the item was last updated
      */
     private fun setLastUpdated() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            val lastUpdate = itemRepository.getLastTimeUpdate(args.item.id!!)
-            val dateHelper = DateHelper(requireContext())
-            lifecycleScope.launch(Dispatchers.Main) {
-                binding.lastUpdateText.text = dateHelper.getDateDifferenceString(
-                    startDate = lastUpdate, endDate = Date()
-                )
-            }
-        }
+        val dateHelper = DateHelper(requireContext())
+        binding.lastUpdateText.text = dateHelper.getDateDifferenceString(
+            startDate = args.item.updatedAt ?: args.item.createdAt!!, endDate = Date()
+        )
     }
 }
