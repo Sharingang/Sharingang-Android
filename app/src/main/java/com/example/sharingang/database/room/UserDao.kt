@@ -45,6 +45,7 @@ interface UserDao {
      */
     @Transaction
     fun replace(users: List<User>) {
+        if (users.isEmpty()) return
         clear()
         insert(users)
     }
