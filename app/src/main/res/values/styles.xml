@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="blueButton" parent="Widget.AppCompat.Button">
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:backgroundTint">@color/themeColor</item>
-    </style>
-</resources>
