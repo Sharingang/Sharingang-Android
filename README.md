@@ -6,7 +6,7 @@
 ## Project setup
 - Download the `google-services.json` file from the [Firebase console](https://console.firebase.google.com/u/0/project/sharingang-app/settings/general/android:com.example.sharingang) and place it under in the `app/` folder
 - Install [Firebase CLI](https://firebase.google.com/docs/cli?hl=en)
-- Copy the `.runtimeconfig.json` file in the `functions` directory
+- Copy the `.runtimeconfig.json` and `serviceAccountKey.json` files into the `functions` directory
 - Run `npm install` in the `functions` directory
 - Launch the Firebase emulator `firebase emulators:start`
 
