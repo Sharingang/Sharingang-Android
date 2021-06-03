@@ -86,9 +86,13 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
     }
 
     override suspend fun hasBeenReported(reporterId: String, reportedId: String): Boolean {
-        val docIdRef = firestore.collection(DatabaseFields.DBFIELD_USERS).document(reportedId)
-            .collection(DatabaseFields.DBFIELD_REPORTS).document(reporterId).get().await()
-        return docIdRef.exists()
+        return try {
+            val docIdRef = firestore.collection(DatabaseFields.DBFIELD_USERS).document(reportedId)
+                .collection(DatabaseFields.DBFIELD_REPORTS).document(reporterId).get().await()
+            docIdRef.exists()
+        } catch(_: Exception) {
+            true
+        }
     }
 
     override suspend fun getChatPartners(userId: String): List<String> {
