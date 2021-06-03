@@ -104,12 +104,6 @@ object RepositoryModule {
             // 10.0.2.2 is the special IP address to connect to the 'localhost' of
             // the host computer from an Android emulator.
             firestore.useEmulator(emulatorIP, 8080)
-
-            // Because the Firebase emulator doesn't persist data, we disable the local persistence
-            // to avoid conflicting data.
-            firestore.firestoreSettings = firestoreSettings {
-                isPersistenceEnabled = false
-            }
         } else {
             Log.d("RepositoryModule", "Using production Firestore.")
         }
