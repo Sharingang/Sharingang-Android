@@ -7,12 +7,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.sharingang.R
 import com.example.sharingang.databinding.ItemViewBinding
 import com.example.sharingang.models.Item
 import com.example.sharingang.utils.DateHelper
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 /**
  * Adapter to display items in a recycler view.
