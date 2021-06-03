@@ -31,8 +31,4 @@
         android:icon="@drawable/baseline_casino_black_24dp"
         android:onClick="onRandomItem"
         android:title="@string/i_feel_lucky" />
-    <item
-        android:id="@+id/blockedUsersFragment"
-        android:icon="@android:drawable/ic_lock_lock"
-        android:title="@string/blocked_users" />
 </menu>

@@ -127,29 +127,11 @@
             android:layout_width="match_parent"
             android:layout_height="10dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/btn_report"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btn_report"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/report_user"
-                android:visibility="gone"
-                tools:ignore="ButtonStyle" />
-
-            <Button
-                android:id="@+id/btn_block"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/faded_red"
-                android:text="@string/block_user"
-                android:visibility="gone"
-                tools:ignore="ButtonStyle" />
-        </LinearLayout>
+            android:text="@string/report_user" />
 
         <Space
             android:layout_width="match_parent"

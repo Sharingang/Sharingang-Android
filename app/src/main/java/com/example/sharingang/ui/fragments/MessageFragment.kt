@@ -8,11 +8,9 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.example.sharingang.R
 import com.example.sharingang.models.Chat
 import com.example.sharingang.ui.adapters.MessageAdapter
 import com.example.sharingang.databinding.FragmentMessageBinding
@@ -63,7 +61,6 @@ class MessageFragment : Fragment() {
         partnerUsername = args.partnerUsername
         partnerProfilePic = args.partnerProfilePictureUrl
         currentUserId = currentUserProvider.getCurrentUserId()!!
-        setupUserProfileButton()
         setupFields()
         setupSendButton()
         setupUI()
@@ -156,18 +153,5 @@ class MessageFragment : Fragment() {
      */
     fun scrollToEnd() {
         binding.history.scrollToPosition(listChats.size - 1)
-    }
-
-    /**
-     * Set up what the user profile button does
-     */
-    private fun setupUserProfileButton() {
-        binding.chatPartnerUsername.setTextColor(requireContext().getColor(R.color.themeColor))
-        binding.chatPartnerUsername.setOnClickListener { view ->
-            view.findNavController().navigate(
-                MessageFragmentDirections
-                    .actionMessageFragmentToUserProfileFragment(partnerId)
-            )
-        }
     }
 }

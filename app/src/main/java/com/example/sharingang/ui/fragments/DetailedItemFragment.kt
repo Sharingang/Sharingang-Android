@@ -1,7 +1,6 @@
 package com.example.sharingang.ui.fragments
 
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
@@ -34,7 +33,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import android.graphics.Paint
-import com.example.sharingang.database.repositories.UserRepository
 import com.example.sharingang.utils.DateHelper
 import java.util.*
 
@@ -48,9 +46,6 @@ class DetailedItemFragment : Fragment() {
 
     @Inject
     lateinit var itemRepository: ItemRepository
-
-    @Inject
-    lateinit var userRepository: UserRepository
 
     @Inject
     lateinit var paymentProvider: PaymentProvider
@@ -100,18 +95,6 @@ class DetailedItemFragment : Fragment() {
                 currentUserId != null && args.item.userId != currentUserId
         binding.sellerVisibility = if (availableForSale) View.VISIBLE else View.GONE
         binding.buyButton.setOnClickListener { buyItem() }
-        lifecycleScope.launch(Dispatchers.IO) {
-            if (currentUserId != null &&
-                userRepository.hasBeenBlocked(currentUserId, by = args.item.userId)
-            ) {
-                lifecycleScope.launch(Dispatchers.Main) {
-                    binding.buyButton.visibility = View.GONE
-                    binding.buyQuantity.visibility = View.GONE
-                    binding.itemPostedBy.isEnabled = false
-                    binding.itemPostedBy.setTextColor(Color.GRAY)
-                }
-            }
-        }
     }
 
     private fun onUserChange(user: User?) {
@@ -199,7 +182,7 @@ class DetailedItemFragment : Fragment() {
         if (currentUserProvider.getCurrentUserId() != null && !args.item.request) {
             viewModel.wishlistContains.observe(viewLifecycleOwner, {
                 binding.addToWishlist.text =
-                    if (it) getString(R.string.remove_wishlist)
+                    if(it) getString(R.string.remove_wishlist)
                     else getString(R.string.add_wishlist)
             })
             binding.addToWishlist.setOnClickListener { updateWishlist() }
@@ -241,8 +224,7 @@ class DetailedItemFragment : Fragment() {
         val quantity: Int = binding.quantity?.toIntOrNull() ?: 1
         val boughtItem = args.item
         if (quantity > boughtItem.quantity || quantity < 1) {
-            Toast.makeText(context, getString(R.string.incorrect_quantity), Toast.LENGTH_SHORT)
-                .show()
+            Toast.makeText(context, getString(R.string.incorrect_quantity), Toast.LENGTH_SHORT).show()
         } else {
             lifecycleScope.launch {
                 binding.buyButton.isEnabled = true

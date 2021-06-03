@@ -1,5 +1,6 @@
 package com.example.sharingang.ui.fragments
 
+import android.graphics.Rect
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,15 +9,18 @@ import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.sharingang.databinding.FragmentChatsBinding
 import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.models.User
 import com.example.sharingang.ui.adapters.UserAdapter
 import com.example.sharingang.database.repositories.UserRepository
-import com.example.sharingang.utils.RecyclerViewDecorator
+import com.example.sharingang.utils.constants.DatabaseFields
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 /**
@@ -50,8 +54,7 @@ class ChatsFragment : Fragment() {
                 requireContext(), listUsers, userRepository, currentUserId!!, lifecycleScope, this
             )
             binding.chatUsersList.adapter = userAdapter
-            val decorator = RecyclerViewDecorator()
-            decorator.setRecyclerViewDecoration(margin = 10, recyclerView = binding.chatUsersList)
+            setRecyclerViewDecoration(margin = 10)
             binding.chatUsersList.layoutManager = LinearLayoutManager(requireContext())
             usersLiveData.observe(viewLifecycleOwner, { newList ->
                 (binding.chatUsersList.adapter as UserAdapter).submitList(newList)
@@ -72,11 +75,7 @@ class ChatsFragment : Fragment() {
                 val chatPartners = userRepository.getChatPartners(currentUserId!!)
                 chatPartners.forEach {
                     val user = userRepository.get(it)
-                    if (!userRepository.hasBeenBlocked(currentUserId!!, by = user!!.id!!) &&
-                        !userRepository.hasBeenBlocked(user.id!!, by = currentUserId!!)
-                    ) {
-                        listUsers.add(user)
-                    }
+                    listUsers.add(user!!)
                 }
                 lifecycleScope.launch(Dispatchers.Main) {
                     usersLiveData.postValue(listUsers)
@@ -86,5 +85,26 @@ class ChatsFragment : Fragment() {
             binding.chatUsersList.visibility = View.GONE
             binding.loggedOutInfo.visibility = View.VISIBLE
         }
+    }
+
+    /**
+     * Decorates the displayed list of users with a margin between elements.
+     *
+     * @param margin the margin between items
+     */
+    private fun setRecyclerViewDecoration(margin: Int) {
+        binding.chatUsersList.addItemDecoration(object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(
+                outRect: Rect,
+                view: View,
+                parent: RecyclerView,
+                state: RecyclerView.State,
+            ) {
+                super.getItemOffsets(outRect, view, parent, state)
+                if (parent.getChildAdapterPosition(view) > 0) {
+                    outRect.top = margin
+                }
+            }
+        })
     }
 }
