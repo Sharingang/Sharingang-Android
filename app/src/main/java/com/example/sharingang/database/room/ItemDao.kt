@@ -47,6 +47,7 @@ interface ItemDao {
      */
     @Transaction
     fun replace(items: List<Item>) {
+        if (items.isEmpty()) return
         clear()
         insert(items)
     }

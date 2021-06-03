@@ -14,7 +14,6 @@ class InMemoryItemRepository : ItemRepository {
 
     private val itemsMap = HashMap<String, Item>()
     private val itemsLiveData = MutableLiveData<List<Item>>()
-    private val lastUpdates = HashMap<String, Date>()
 
     init {
         itemsLiveData.value = itemsMap.values.toList()
@@ -34,7 +33,7 @@ class InMemoryItemRepository : ItemRepository {
 
     override suspend fun userItems(userId: String): List<Item> {
         return itemsMap.values.filter { item ->
-            item.userId.equals(userId)
+            item.userId == userId
         }
     }
 
@@ -74,13 +73,5 @@ class InMemoryItemRepository : ItemRepository {
         itemsMap.remove(id)
         itemsLiveData.postValue(itemsMap.values.toList())
         return true
-    }
-
-    override suspend fun getLastTimeUpdate(id: String): Date {
-        return lastUpdates[id] ?: Date()
-    }
-
-    override suspend fun setLastTimeUpdate(id: String, newValue: Date) {
-        lastUpdates[id] = newValue
     }
 }

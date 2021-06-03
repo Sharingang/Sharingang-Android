@@ -1,11 +1,9 @@
 package com.example.sharingang.database.firestore
 
-import android.provider.ContactsContract
 import android.util.Log
-import androidx.room.Database
-import com.example.sharingang.models.User
 import com.example.sharingang.database.store.UserStore
 import com.example.sharingang.models.Chat
+import com.example.sharingang.models.User
 import com.example.sharingang.utils.constants.DatabaseFields
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -13,7 +11,6 @@ import kotlinx.coroutines.tasks.await
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.HashMap
 
 
 private const val TAG = "FirestoreUserStore"
@@ -86,9 +83,13 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
     }
 
     override suspend fun hasBeenReported(reporterId: String, reportedId: String): Boolean {
-        val docIdRef = getUserDocument(reportedId).collection(DatabaseFields.DBFIELD_REPORTS)
-            .document(reporterId).get().await()
-        return docIdRef.exists()
+        return try {
+            val docIdRef = getUserDocument(reportedId).collection(DatabaseFields.DBFIELD_REPORTS)
+                .document(reporterId).get().await()
+            docIdRef.exists()
+        } catch (_: Exception) {
+            true
+        }
     }
 
     override suspend fun getChatPartners(userId: String): List<String> {
