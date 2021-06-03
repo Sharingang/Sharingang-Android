@@ -101,7 +101,7 @@ class ItemsViewModel @Inject constructor(
     fun setItem(item: Item, callback: ((String?) -> Unit)? = null) {
         viewModelScope.launch(Dispatchers.IO) {
             val uploadUrl = item.image?.let {
-                if (!it.startsWith("https://")) {
+                if (!it.startsWith("https://") && !it.startsWith("http://")) {
                     imageStore.store(it.toUri())?.toString()
                 } else {
                     it
