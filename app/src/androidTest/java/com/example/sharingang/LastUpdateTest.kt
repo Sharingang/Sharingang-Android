@@ -16,6 +16,7 @@ import com.example.sharingang.utils.navigate_to
 import com.example.sharingang.utils.waitAfterSaveItem
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.hamcrest.core.AnyOf.anyOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -44,8 +45,15 @@ class LastUpdateTest {
             click()
         )
         waitAfterSaveItem()
-        onView(withText("0s")).check(matches(isDisplayed()))
+        val zeroToFiveSecondsMatcher = anyOf(
+            withText("0s"),
+            withText("1s"),
+            withText("2s"),
+            withText("3s"),
+            withText("4s"),
+            withText("5s"))
+        onView(zeroToFiveSecondsMatcher).check(matches(isDisplayed()))
         onView(withId(R.id.item_list_view_title)).perform(click())
-        onView(withText("0s")).check(matches(isDisplayed()))
+        onView(zeroToFiveSecondsMatcher).check(matches(isDisplayed()))
     }
 }
