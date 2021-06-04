@@ -2,6 +2,7 @@ package com.example.sharingang.ui.fragments
 
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
@@ -17,11 +18,12 @@ import com.bumptech.glide.Glide
 import com.example.sharingang.R
 import com.example.sharingang.auth.CurrentUserProvider
 import com.example.sharingang.database.repositories.ItemRepository
+import com.example.sharingang.database.repositories.UserRepository
 import com.example.sharingang.databinding.FragmentDetailedItemBinding
 import com.example.sharingang.models.Item
 import com.example.sharingang.models.User
 import com.example.sharingang.payment.PaymentProvider
-import com.example.sharingang.utils.ImageAccess
+import com.example.sharingang.utils.DateHelper
 import com.example.sharingang.viewmodels.ItemsViewModel
 import com.example.sharingang.viewmodels.UserProfileViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -32,11 +34,8 @@ import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import android.graphics.Paint
-import com.example.sharingang.database.repositories.UserRepository
-import com.example.sharingang.utils.DateHelper
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class DetailedItemFragment : Fragment() {

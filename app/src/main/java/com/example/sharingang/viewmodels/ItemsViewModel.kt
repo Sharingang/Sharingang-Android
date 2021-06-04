@@ -1,6 +1,5 @@
 package com.example.sharingang.viewmodels
 
-import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -9,17 +8,25 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
-import com.example.sharingang.imagestore.ImageStore
 import com.example.sharingang.database.repositories.ItemRepository
 import com.example.sharingang.database.repositories.UserRepository
-import com.example.sharingang.ui.adapters.ItemListener
-import com.example.sharingang.ui.adapters.ItemsAdapter
+import com.example.sharingang.imagestore.ImageStore
 import com.example.sharingang.models.Item
+import com.example.sharingang.ui.adapters.ItemsAdapter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.collections.asReversed
+import kotlin.collections.filter
+import kotlin.collections.forEach
+import kotlin.collections.listOf
+import kotlin.collections.set
+import kotlin.collections.sortedWith
+import kotlin.collections.toMutableMap
 
 /**
  * ItemsViewModel models the state of the fragment for viewing items
@@ -57,7 +64,7 @@ class ItemsViewModel @Inject constructor(
         get() = _userSoldAndBought
 
     private val _navigateToDetailItem = MutableLiveData<Item?>()
-    val navigateToDetailItem: LiveData<Item?>
+    private val navigateToDetailItem: LiveData<Item?>
         get() = _navigateToDetailItem
 
     private val _refreshing = MutableLiveData(false)
@@ -77,7 +84,7 @@ class ItemsViewModel @Inject constructor(
         get() = _userItemsAndRequests
 
     private val _wishlistItem: MutableLiveData<List<Item>> = MutableLiveData(ArrayList())
-    val wishlistItem: LiveData<List<Item>>
+    private val wishlistItem: LiveData<List<Item>>
         get() = _wishlistItem
 
     private val _reviews: MutableLiveData<Map<String, Boolean>> = MutableLiveData()
@@ -169,7 +176,7 @@ class ItemsViewModel @Inject constructor(
      *
      * @param[userId] the Id of the user
      */
-    fun updatePurchaseHistory(userId: String){
+    private fun updatePurchaseHistory(userId: String){
         viewModelScope.launch(Dispatchers.IO){
             val user = userRepository.get(userId)
             if(user != null){

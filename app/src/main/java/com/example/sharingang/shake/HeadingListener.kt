@@ -28,7 +28,7 @@ class HeadingListener(private val headingCallback: HeadingCallback) : SensorEven
         )
     }
 
-    // Our current reading of the acceloremeter
+    // Our current reading of the accelerometer
     private var gravity: FloatArray? = null
 
     // Our current reading of the magnetic field

@@ -102,6 +102,7 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
     override suspend fun getMessages(userId: String, with: String): List<Chat> {
         val documents = getUserDocument(userId).collection(DatabaseFields.DBFIELD_CHATS)
             .document(with).collection(DatabaseFields.DBFIELD_MESSAGES)
+            .orderBy(DatabaseFields.DBFIELD_DATE)
             .get().await().documents
         return documents.map {
             Chat(
