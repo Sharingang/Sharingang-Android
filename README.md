@@ -8,7 +8,7 @@
 - Install [Firebase CLI](https://firebase.google.com/docs/cli?hl=en)
 - Copy the `.runtimeconfig.json` and `serviceAccountKey.json` files into the `functions` directory
 - Run `npm install` in the `functions` directory
-- Launch the Firebase emulator `firebase emulators:start`
+- Launch the Firebase emulator `firebase emulators:start --import=./sample-data`
 
 ### Release build
 When building the app in release mode, it will automatically use the real Firebase servers instead of the emulator. Your signing key needs to be added on the [Firebase console](https://console.firebase.google.com/u/0/project/sharingang-app/settings/general/android:com.example.sharingang).
