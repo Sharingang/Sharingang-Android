@@ -45,6 +45,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
 
+    // 10.0.2.2 is the special IP address to connect to the 'localhost' of
+    // the host computer from an Android emulator.
     private const val emulatorIP = "10.0.2.2"
 
     private val useEmulator: Boolean
@@ -100,8 +102,6 @@ object RepositoryModule {
         val firestore = Firebase.firestore
         if (useEmulator) {
             Log.d("RepositoryModule", "Using Firestore emulator.")
-            // 10.0.2.2 is the special IP address to connect to the 'localhost' of
-            // the host computer from an Android emulator.
             firestore.useEmulator(emulatorIP, 8080)
         } else {
             Log.d("RepositoryModule", "Using production Firestore.")
