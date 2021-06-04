@@ -131,9 +131,7 @@
     <string name="hint_block_description">Why are you blocking this user? (optional)</string>
     <string name="rude">Rudeness</string>
     <string name="scamming">Scamming</string>
-    <string name="unblock_user">Unblock User</string>
     <string name="blocked_users">Blocked Users</string>
-    <string name="goToUserProfile">Go To User Profile</string>
     <string name="blockingInformation">Note: After the block is issued, this user will not be able to send you messages or buy your items. They will be hidden from your chats as well. You can unblock them anytime in the Blocked Users tab.</string>
     <string name="unblock">unblock</string>
 </resources>

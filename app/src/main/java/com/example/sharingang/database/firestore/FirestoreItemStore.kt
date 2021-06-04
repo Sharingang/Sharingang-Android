@@ -12,7 +12,7 @@ import javax.inject.Singleton
  * During development it requires running the Firebase emulator (see README.md)
  */
 @Singleton
-class FirestoreItemStore @Inject constructor(private val firestore: FirebaseFirestore) :
+class FirestoreItemStore @Inject constructor(firestore: FirebaseFirestore) :
     ItemStore, AbstractFirestoreStore<Item>("items", Item::class.java, firestore) {
 
     override suspend fun set(item: Item): String? {
