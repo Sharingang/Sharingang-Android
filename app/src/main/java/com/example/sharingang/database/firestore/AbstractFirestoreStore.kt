@@ -24,15 +24,19 @@ abstract class AbstractFirestoreStore<T : Any>(
      * @return The item corresponding to the id.
      */
     open suspend fun get(id: String): T? {
-        val document = firestore.collection(collectionName)
-            .document(id)
-            .get()
-            .await()
+        return try {
+            val document = firestore.collection(collectionName)
+                .document(id)
+                .get()
+                .await()
 
-        if (document == null) {
-            Log.d(tag, "No $collectionName with ID = $id")
+            if (document == null) {
+                Log.d(tag, "No $collectionName with ID = $id")
+            }
+            document?.toObject(typeClass)
+        } catch (_: Exception) {
+            null
         }
-        return document?.toObject(typeClass)
     }
 
     /**
@@ -40,11 +44,15 @@ abstract class AbstractFirestoreStore<T : Any>(
      * @return List of all elements in the database.
      */
     open suspend fun getAll(): List<T> {
-        val result = firestore.collection(collectionName)
-            .get()
-            .await()
+        return try {
+            val result = firestore.collection(collectionName)
+                .get()
+                .await()
 
-        return result.map { it.toObject(typeClass) }
+            result.map { it.toObject(typeClass) }
+        } catch (_: Exception) {
+            emptyList()
+        }
     }
 
     /**

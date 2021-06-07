@@ -93,24 +93,32 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
     }
 
     override suspend fun getChatPartners(userId: String): List<String> {
-        val chatPartners =
-            getUserDocument(userId).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).get()
-                .await()
-        return chatPartners.documents.map { it.id }
+        return try {
+            val chatPartners =
+                getUserDocument(userId).collection(DatabaseFields.DBFIELD_MESSAGEPARTNERS).get()
+                    .await()
+            chatPartners.documents.map { it.id }
+        } catch (_: Exception) {
+            emptyList()
+        }
     }
 
     override suspend fun getMessages(userId: String, with: String): List<Chat> {
-        val documents = getUserDocument(userId).collection(DatabaseFields.DBFIELD_CHATS)
-            .document(with).collection(DatabaseFields.DBFIELD_MESSAGES)
-            .orderBy(DatabaseFields.DBFIELD_DATE)
-            .get().await().documents
-        return documents.map {
-            Chat(
-                it.getString(DatabaseFields.DBFIELD_FROM),
-                it.getString(DatabaseFields.DBFIELD_TO),
-                it.getString(DatabaseFields.DBFIELD_MESSAGE)!!,
-                it.getDate(DatabaseFields.DBFIELD_DATE)!!
-            )
+        return try {
+            val documents = getUserDocument(userId).collection(DatabaseFields.DBFIELD_CHATS)
+                .document(with).collection(DatabaseFields.DBFIELD_MESSAGES)
+                .orderBy(DatabaseFields.DBFIELD_DATE)
+                .get().await().documents
+            return documents.map {
+                Chat(
+                    it.getString(DatabaseFields.DBFIELD_FROM),
+                    it.getString(DatabaseFields.DBFIELD_TO),
+                    it.getString(DatabaseFields.DBFIELD_MESSAGE)!!,
+                    it.getDate(DatabaseFields.DBFIELD_DATE)!!
+                )
+            }
+        } catch (_: Exception) {
+            emptyList()
         }
     }
 
@@ -178,9 +186,13 @@ class FirestoreUserStore @Inject constructor(private val firestore: FirebaseFire
     }
 
     override suspend fun hasBeenBlocked(userId: String, by: String): Boolean {
-        val blocker = getUserDocument(by)
-        return blocker.collection(DatabaseFields.DBFIELD_BLOCKS)
-            .document(userId).get().await().getBoolean(DatabaseFields.DBFIELD_ISBLOCKED) ?: false
+        return try {
+            val blocker = getUserDocument(by)
+            blocker.collection(DatabaseFields.DBFIELD_BLOCKS)
+                .document(userId).get().await().getBoolean(DatabaseFields.DBFIELD_ISBLOCKED) ?: false
+        } catch (_: Exception) {
+            true
+        }
     }
 
     override suspend fun getBlockedUsers(userId: String): List<String> {
